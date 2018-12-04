@@ -1,0 +1,199 @@
+@import 'styles/variables.css';
+
+.hiddenOverlay {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-color: transparent;
+  transition:
+    transform 0.2s linear,
+    opacity 0.2s linear;
+}
+
+.hiddenModal {
+  display: none;
+}
+
+.overlay {
+  composes: hiddenOverlay;
+  pointer-events: auto;
+  z-index: 5000;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 16px;
+  background-color: transparent;
+}
+
+.scrollContainer {
+  display: flex;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  padding: 30px 0;
+  overflow-y: auto;
+}
+
+.small {
+  composes: scrollContainer;
+  padding-left: calc(50% - 220px);
+  padding-right: calc(50% - 220px);
+}
+
+.medium {
+  composes: scrollContainer;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+.large {
+  composes: scrollContainer;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.full {
+  composes: scrollContainer;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.root {
+  transition: all 100ms linear;
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  border: solid 1px var(--trood-light-gray);
+  border-radius: 2px;
+  background-color: var(--trood-white);
+  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.15);
+  flex-direction: column;
+  margin: auto 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  padding: 0 15px;
+  height: 55px;
+  font-weight: bold;
+  background-color: var(--trood-gray);
+  border-bottom: solid 1px var(--trood-gray-bg);
+  position: relative;
+}
+
+.children {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.titleText {
+  margin-right: auto;
+}
+
+.toolBarIcon,
+.close {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--trood-gray-extra-dark);
+}
+
+.closeAbsolute {
+  composes: close;
+  position: absolute !important;
+  top: 10px;
+  right: 10px;
+}
+
+.delimeter {
+  width: 1px;
+  height: 16px;
+  margin: 0 15px;
+  background-color: var(--trood-gray-extra-dark);
+}
+
+.full .root {
+  height: 100%;
+  background-color: var(--trood-gray);
+}
+
+.full .children {
+  overflow: auto;
+}
+
+.full .title {
+  height: 72px;
+  padding: 0;
+  background-color: var(--trood-white);
+  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.15);
+}
+
+.full .toolBarIcon,
+.full .close {
+  order: 0;
+  width: 72px;
+  height: 100%;
+  border-right: 1px solid var(--trood-gray-bg);
+}
+
+.full .titleText {
+  order: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullButtons {
+  order: 2;
+  height: 100%;
+  margin-left: auto;
+}
+
+@media (--trood-phone) {
+  .overlay {
+    min-height: 100%;
+  }
+
+  .root {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-height: 100%;
+    padding: 1rem;
+  }
+
+  .root > form {
+    height: 100%;
+  }
+}

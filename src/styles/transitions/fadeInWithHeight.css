@@ -1,0 +1,25 @@
+@import 'styles/variables.css';
+
+/*
+  For absolutely unknown reason if we write classes together, like: .enter, .leaveActive it doesn't work
+  Only works for separate classes
+*/
+.enter {
+  opacity: 0;
+  max-height: 0;
+}
+
+.enterActive {
+  opacity: 1;
+  max-height: 1000px;
+}
+
+.leave {
+  opacity: 1;
+  max-height: 1000px;
+}
+
+.leaveActive {
+  opacity: 0;
+  max-height: 0;
+}

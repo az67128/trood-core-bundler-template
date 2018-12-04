@@ -1,0 +1,13 @@
+@import 'styles/variables.css';
+
+.root {
+}
+
+.folder {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.folder:hover {
+  background-color: var(--trood-gray-bg);
+}

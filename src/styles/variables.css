@@ -1,0 +1,82 @@
+:root {
+  --trood-black: #333;
+  --trood-black-hover: #2a2a2a;
+  --trood-black-hover-light: #3a3a3a;
+  --trood-black-light: #1b1b1b;
+  --trood-black-border: #323232;
+
+  --trood-background: #fafafa;
+  --trood-background-dark: #ebf0f1;
+  --trood-background-light: #f6f6f6;
+
+  --trood-white: #fff;
+  --trood-white-hover: #f4f4f4;
+
+  --trood-light-gray: #f9f9f9;
+  --trood-gray: #f0f0f0;
+  --trood-grat-lighter: #f5f5f5;
+  --trood-gray-hover: #dcdcdc;
+  --trood-gray-dark: #c7cacd;
+  --trood-gray-text: #555;
+  --trood-gray-text-2: #c0c0c0;
+  --trood-gray-text-3: #cacaca;
+  --trood-gray-extra-dark: #787878;
+  --trood-gray-icon: #979797;
+  --trood-gray-super-dark: #9a9a9a;
+  --trood-gray-border-light: #999;
+  --trood-gray-bg: #e8e8e8;
+  --trood-gray-bg-light: #d8d8d8;
+  --trood-gray-medium-dark: #eee;
+  --trood-gray-border: #e3e3e3;
+
+  --trood-gray-blue-background: #efeff8;
+
+  --trood-blue: #0070d2;
+  --trood-blue-hover: #0060b2;
+  --trood-blue-extra-light: #e0f0ff;
+  --trood-blue-gray: #54698d;
+  --trood-blue-dark: #2e3e4e;
+  --trood-blue-dark-hover: #37495a;
+  --trood-blue-bg: #e3e7eb;
+  --trood-blue-icon: #95aec5;
+  --trood-blue-border: #22e;
+
+  --trood-red: #eb6258;
+  --trood-red-hover: #d74439;
+  --trood-magenta-extra-light: #f6effc;
+
+  --trood-pink: #fff7f6;
+
+  --trood-orange: #f63;
+  --trood-orange-hover: #e55905;
+
+  --trood-yellow: #f9e825;
+
+  --trood-green: #4dad33;
+  --trood-green-hover: #53b338;
+  --trood-green-icon: #53b338;
+  --trood-green-dark: #0e964c;
+  --trood-green-blue: #48c3cc;
+
+  --trood-phone: 800px;
+  --trood-tablet: 1000px;
+  --trood-lg: 1400px;
+  --trood-sides: 100px;
+  --trood-sides-small: 50px;
+  --trood-menu-width: 220px;
+  --trood-menu-width-small: 80px;
+  --trood-grid-gap: 20px;
+  --trood-page-padding: 60px;
+  --trood-header-height: 60px;
+}
+
+@custom-media --trood-less-1500 only screen and (width <= 1500px);
+@custom-media --trood-lg-and-tablet-and-phone only screen and (width <= 1400px);
+@custom-media --trood-tablet-and-phone only screen and (width <= 1100px);
+@custom-media --trood-phone only screen and (width <= 800px);
+@custom-media --trood-phone-horizontal only screen and (width <= 800px) and (orientation: landscape);
+@custom-media --trood-lg-and-tablet only screen and (width > 800px) and (width <= 1400px);
+@custom-media --trood-lg only screen and (width > 1000px) and (width <= 1400px);
+@custom-media --trood-tablet only screen and (width > 800px) and (width <= 1000px);
+@custom-media --trood-big-tablet only screen and (width > 800px) and (width <= 1100px);
+@custom-media --trood-very-big-tablet only screen and (width > 1100px) and (width <= 1500px);

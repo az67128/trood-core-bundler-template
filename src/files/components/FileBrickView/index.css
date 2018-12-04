@@ -1,0 +1,25 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 32px;
+  color: var(--trood-blue);
+  cursor: pointer;
+}
+
+.info {
+  margin-left: 10px;
+  overflow: hidden;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.size {
+  font-size: 12px;
+  color: var(--trood-gray-extra-dark);
+}

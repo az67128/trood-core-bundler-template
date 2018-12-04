@@ -1,0 +1,1 @@
+export HistoryEntryBrickView from './HistoryEntryBrickView'

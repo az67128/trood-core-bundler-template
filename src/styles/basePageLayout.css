@@ -1,0 +1,74 @@
+@import 'styles/variables.css';
+
+.root {
+  background-color: var(--trood-white);
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  padding: 20px var(--trood-sides);
+}
+
+.children {
+  width: 100%;
+}
+
+.block {
+  border: 1px solid var(--trood-gray-bg);
+  border-radius: 3px;
+  background-color: var(--trood-white);
+}
+
+.blockHeaderContainer {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  height: 55px;
+  border-bottom: 1px solid var(--trood-gray-bg);
+  justify-content: space-between;
+}
+
+.blockHeaderSubContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.blockHeaderButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blockHeaderButton:not(:first-child) {
+  margin-left: 10px;
+}
+
+.blockTypeButton {
+  color: var(--trood-gray-extra-dark);
+  margin-right: 25px;
+  cursor: pointer;
+}
+
+.selectedBlockTypeButton {
+  composes: blockTypeButton;
+  color: var(--trood-black);
+  font-weight: 500;
+}
+
+.blockTitle {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.blockChildren {
+  padding: 20px;
+}
+
+.delimeter {
+  height: 20px;
+  width: 1px;
+  margin: 0 20px;
+  background-color: var(--trood-gray-bg);
+}

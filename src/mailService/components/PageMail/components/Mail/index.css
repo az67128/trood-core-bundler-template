@@ -1,0 +1,139 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+  flex-shrink: 0;
+  border: 1px solid var(--trood-gray-bg);
+  border-radius: 3px;
+  background-color: var(--trood-white);
+}
+
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--trood-header-height);
+  border-bottom: 1px solid var(--trood-gray-bg);
+  padding: 0 20px;
+}
+
+.left {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  width: calc(100% - 30px);
+  height: 100%;
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.root.short .title {
+  align-items: flex-start;
+}
+
+.subject {
+  font-weight: 500;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--trood-gray-extra-dark);
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.contacts {
+  margin-top: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--trood-gray-extra-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.root.short .contacts {
+  margin-top: 0;
+}
+
+.contacts > span:not(:last-child) {
+  margin-right: 10px;
+}
+
+.plus {
+  color: var(--trood-blue);
+}
+
+.dotMenu {
+  color: var(--trood-gray-extra-dark);
+}
+
+.dotMenuItem {
+  height: 30px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.dotMenuItem:hover {
+  background-color: var(--trood-white-hover);
+}
+
+.root.short > :not(.header) {
+  display: none;
+}
+
+.root.short .header {
+  border-bottom-width: 0;
+}
+
+.body {
+  padding: 20px;
+  line-height: 1.33;
+}
+
+.shortBody {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  margin-top: 8px;
+  color: var(--trood-gray-extra-dark);
+}
+
+.body b,
+.body strong {
+  font-weight: bold;
+}
+
+.body i,
+.body em {
+  font-style: italic;
+}
+
+.body u,
+.body ins {
+  text-decoration: underline;
+}
+
+.body ul {
+  list-style: disc inside;
+  padding-left: 20px;
+}
+
+.body ol {
+  list-style: decimal inside;
+  padding-left: 20px;
+}

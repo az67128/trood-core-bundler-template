@@ -1,0 +1,11 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  align-items: center;
+}
+
+a.root {
+  cursor: pointer;
+  color: var(--trood-blue);
+}

@@ -1,0 +1,88 @@
+@import 'styles/variables.css';
+
+.overlay {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.root {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  overflow-y: auto;
+  outline: none;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.imageWrapper {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.root img {
+  display: block;
+  flex: none;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.icon {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--trood-white);
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0.5;
+  transition: opacity 0.2s ease-out;
+}
+
+.icon:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0.7;
+}
+
+.prev {
+  composes: icon;
+}
+
+.next {
+  composes: icon;
+}
+
+.close {
+  composes: icon;
+  flex: none;
+  height: 10%;
+  padding: 15px;
+}
+
+@media (--trood-phone) {
+  .overlay {
+    min-height: 100%;
+  }
+}

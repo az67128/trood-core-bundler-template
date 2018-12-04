@@ -1,0 +1,19 @@
+@import 'styles/variables.css';
+
+.root {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.indicator {
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+}
+
+.hidden {
+  display: none !important;
+}

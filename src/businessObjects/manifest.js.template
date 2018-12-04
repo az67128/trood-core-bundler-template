@@ -1,0 +1,10 @@
+/* eslint-disable */
+
+import Loadable from 'react-loadable'
+
+import LoadingIndicator from '$trood/components/LoadingIndicator'
+
+
+export default {
+  <%= models %>
+}

@@ -1,0 +1,68 @@
+@import 'styles/variables.css';
+
+.root {
+}
+
+.mailboxes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 27px;
+  padding: 5px 0;
+  border-top: 1px solid var(--trood-black-border);
+}
+
+.mailboxes:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.mailboxesName {
+  cursor: pointer;
+}
+
+.mailboxesName:hover {
+  color: var(--trood-gray-text);
+}
+
+.delete {
+  display: none;
+  cursor: pointer;
+}
+
+.mailboxes:hover .delete {
+  display: flex;
+}
+
+.selectBlock {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.mailboxesAdd {
+  display: flex;
+  flex-direction: column;
+}
+
+.control {
+  margin-bottom: 10px;
+}
+
+.buttonWrap {
+  display: flex;
+  justify-content: space-between;
+  flex: 1 1 auto;
+  margin-top: 10px;
+}
+
+.buttonAdd,
+.buttonCancel {
+  height: 38px;
+}
+
+.error {
+  border: 1px solid var(--trood-red);
+  color: var(--trood-red);
+  padding: 5px;
+  margin: 5px 0;
+}

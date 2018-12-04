@@ -1,0 +1,64 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: url('/static/img/login-bg.jpg') 0 0 no-repeat;
+  background-size: cover;
+}
+
+.form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  background: var(--trood-white);
+  width: 468px;
+  border-radius: 2px;
+  padding: 44px;
+  margin: 0 90px;
+}
+
+.title {
+  color: var(--trood-black);
+  font-size: 34px;
+  font-weight: bold;
+  height: 34px;
+  margin-bottom: 44px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.footer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 100%;
+}
+
+.left {
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+  align-items: flex-end;
+  margin-left: 20px;
+}
+
+.link {
+  color: var(--trood-blue);
+  font-weight: 500;
+}
+
+.error {
+  color: var(--trood-red);
+}

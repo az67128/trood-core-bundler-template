@@ -1,0 +1,83 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+  flex-shrink: 0;
+}
+
+.label {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  align-self: flex-start;
+  font-size: 12px;
+  margin-bottom: 10px;
+  color: var(--trood-black);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.avatarBox {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarBox img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 25%;
+  width: 25%;
+  cursor: pointer;
+}
+
+.clear svg {
+  fill: var(--trood-black);
+  stroke: var(--trood-white);
+}
+
+.round {
+  border-radius: 50%;
+}
+
+.uploadButton {
+  margin-top: 10px;
+}
+
+.uploadButton label {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--trood-orange);
+  font-size: 14px;
+  padding: 0;
+}
+
+.uploadButton label:hover {
+  background-color: transparent;
+  color: var(--trood-orange);
+}
+
+.uploadLabel {
+  height: 32px;
+  width: 100%;
+  background-color: color(var(--trood-blue) a(10%));
+  color: var(--trood-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

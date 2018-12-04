@@ -1,0 +1,47 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.avatarConteiner {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  min-height: 320px;
+}
+
+.avatarConteiner > canvas {
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin: 32px;
+}
+
+.footer {
+  margin-top: 48px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  min-height: 40px;
+}
+
+@media (--trood-phone-horizontal) {
+  .root {
+    justify-content: flex-start;
+  }
+
+  .avatarConteiner {
+    min-height: 256px;
+  }
+
+  .avatarConteiner > canvas {
+    margin: 8px;
+  }
+
+  .footer {
+    margin: 16px 0;
+  }
+}

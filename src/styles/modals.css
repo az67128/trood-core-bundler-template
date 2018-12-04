@@ -1,0 +1,79 @@
+@import 'styles/variables.css';
+
+.root {
+  padding: 20px;
+}
+
+.buttonsContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding: 20px;
+}
+
+.leftButton {
+  margin-right: auto;
+}
+
+.button {
+  height: 100%;
+}
+
+.button:only-child {
+  flex: 1;
+}
+
+.button:not(:first-child) {
+  margin-left: 10px;
+}
+
+.noPaddingChildren {
+  padding: 0 !important;
+}
+
+.fullContainer {
+  margin: 30px auto;
+  max-width: 980px;
+}
+
+.control {
+  margin-bottom: 20px;
+}
+
+.label {
+  margin-bottom: 10px;
+}
+
+.controlsContainer {
+  display: flex;
+}
+
+.controlsContainer .control:not(:first-child) {
+  margin-left: 20px;
+  flex: 1;
+}
+
+.thinControl {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.thinControl .thinControlLabel {
+  margin-bottom: 0;
+  margin-right: 10px;
+  align-self: auto;
+  flex-grow: 0;
+}
+
+.thinControl .thinControlControl {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  box-shadow: none !important;
+  flex-grow: 1;
+}

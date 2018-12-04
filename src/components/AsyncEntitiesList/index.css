@@ -1,0 +1,8 @@
+@import 'styles/variables.css';
+
+.root {
+}
+
+.hidden {
+  display: none !important;
+}

@@ -1,0 +1,88 @@
+@import 'styles/variables.css';
+
+.root {
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--trood-white);
+  border-right: 1px solid var(--trood-gray-bg);
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--trood-gray-bg);
+  height: var(--trood-header-height);
+  padding: 0 10px;
+}
+
+.searchInput {
+  width: 100%;
+}
+
+.chainsList {
+  width: 100%;
+  height: calc(100% - 60px);
+  overflow: auto;
+}
+
+.chain {
+  display: block;
+  border-bottom: 1px solid var(--trood-gray-bg);
+  padding: 10px;
+}
+
+.chain:not(.unreadChain) {
+  color: var(--trood-gray-extra-dark);
+}
+
+.chain:hover,
+.active {
+  background-color: var(--trood-background-light);
+}
+
+.chainHeader {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.chainCounter {
+  background-color: var(--trood-gray-extra-dark);
+  color: var(--trood-white);
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 3px;
+  padding: 3px;
+  margin-right: 5px;
+}
+
+.chain.unreadChain .chainCounter {
+  background-color: var(--trood-blue);
+}
+
+.chainSubject {
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: auto;
+}
+
+.chainDate {
+  display: flex;
+  flex-shrink: 0;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.chainContacts {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--trood-gray-extra-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
