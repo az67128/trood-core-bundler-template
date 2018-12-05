@@ -38,6 +38,7 @@ class TRange extends PureComponent {
       <input {...{
         className: `${style.root} ${className}`,
         type: 'range',
+        'data-cy': 'input_range',
         onChange: e => onChange(e.target.value),
         min,
         max,

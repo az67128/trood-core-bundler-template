@@ -21,6 +21,7 @@ const reducePages = (modelType) => (memo, page) => {
     },
   }
 }
+
 const urlSchema = systemConfig.pages.reduce(reducePages(), {
   ...Object.keys(systemConfig.entityPages).reduce((memo, key) => {
     const currentConfig = systemConfig.entityPages[key]

@@ -11,15 +11,15 @@ import style from './index.css'
 const FileBrickView = ({
   className,
   model = {},
+  filesActions = {},
 }) => {
+  let href = model.fileUrl
+  if (!/^https?:\/\//.test(href)) {
+    href = `${FILE_API_HOST}${href}`
+  }
+  const canOpen = filesActions.canOpenFile(model)
   return (
-    <a {...{
-      className: classNames(style.root, className),
-      href: `${FILE_API_HOST}${model.fileUrl}`,
-      download: true,
-      target: '_blank',
-      rel: 'nofollow noopener',
-    }}>
+    <div className={classNames(style.root, className)}>
       <TIcon {...{
         size: 24,
         type: ICONS_TYPES.doc,
@@ -32,7 +32,30 @@ const FileBrickView = ({
           {formatSize(model.size)}
         </div>
       </div>
-    </a>
+      <div className={style.controls}>
+        {canOpen &&
+          <TIcon {...{
+            className: style.control,
+            size: 18,
+            type: ICONS_TYPES.search,
+            onClick: () => filesActions.openFile(model),
+          }} />
+        }
+        <a {...{
+          className: style.control,
+          href,
+          download: true,
+          target: '_blank',
+          rel: 'nofollow noopener',
+        }}>
+          <TIcon {...{
+            size: 18,
+            type: ICONS_TYPES.arrowWithTail,
+            rotate: -90,
+          }} />
+        </a>
+      </div>
+    </div>
   )
 }
 

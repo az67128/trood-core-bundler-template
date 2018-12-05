@@ -39,6 +39,7 @@ class ModalWrapper extends PureComponent {
 
   render() {
     const {
+      name,
       show,
       shouldCloseOnOverlayClick,
       closeAction,
@@ -114,7 +115,7 @@ class ModalWrapper extends PureComponent {
       }} >
         <div className={style.closeOverlay} onClick={(shouldCloseOnOverlayClick ? closeAndCancel : undefined)} />
         <CSSTransitionGroup {...transitionProps}>
-          <div className={classNames(style.root, className)}>
+          <div className={classNames(style.root, className)} data-cy={name}>
             {title &&
               <div className={style.title}>
                 <div className={style.titleText}>{title}</div>

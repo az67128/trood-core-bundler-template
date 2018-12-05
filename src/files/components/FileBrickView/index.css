@@ -1,12 +1,36 @@
 @import 'styles/variables.css';
 
 .root {
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   height: 32px;
   color: var(--trood-blue);
-  cursor: pointer;
+}
+
+.root:hover {
+  background-color: var(--trood-gray);
+}
+
+.controls {
+  display: none;
+  align-items: center;
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  top: 0;
+  height: 100%;
+  color: var(--trood-gray-extra-dark);
+}
+
+.root:hover .controls {
+  display: flex;
+  background-color: var(--trood-gray);
+}
+
+.control:not(:last-child) {
+  margin-right: 10px;
 }
 
 .info {

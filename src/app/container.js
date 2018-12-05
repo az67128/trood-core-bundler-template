@@ -16,7 +16,7 @@ const stateToProps = state => ({
   authData: auth.selectors.getAuthData(state),
   permissions: auth.selectors.getPermissions(state),
   authLinkedObject: auth.selectors.getLinkedObject(state),
-  isAuthenticated: true || auth.selectors.getIsAuthenticated(state),
+  isAuthenticated: auth.selectors.getIsAuthenticated(state),
   isLoading: api.selectors.loadsManager.getIsLoading(state),
 })
 

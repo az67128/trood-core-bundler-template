@@ -29,6 +29,8 @@ const PageMail = ({
   actionsForCreateFormFromService = {},
   createFormFromEntitiesActions = {},
 
+  filesActions = {},
+
   match,
   location,
 }) => {
@@ -79,6 +81,8 @@ const PageMail = ({
           mailsEntities,
           mailsApiActions,
           mailServiceActions,
+
+          filesActions,
 
           modelsForCreateFormFromService,
           actionsForCreateFormFromService,

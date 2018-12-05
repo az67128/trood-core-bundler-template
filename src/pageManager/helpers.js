@@ -40,7 +40,6 @@ const checkRule = (value, rule) => {
 }
 
 const getIsAllowPage = (pageId, permission) => {
-  return true
   const pageRules = (permission.rules || {})[pageId] || {}
   return (pageRules[pageViewAction] || [])
     .some(viewRule => {
@@ -62,7 +61,7 @@ export const getPagesRouteShemaRenderers = (
   } = {},
   permission,
 ) => {
-  // if (permission && permission.sbj && !permission.sbj.id) return {}
+  if (permission && permission.sbj && !permission.sbj.id) return {}
 
   const hash = objectHash({
     pages: pages.map(p => p.title),

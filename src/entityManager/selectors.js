@@ -14,6 +14,7 @@ import {
   getAttachMailActionName,
   getAttachMailActionCheckName,
   getModelApiActionsName,
+  getAttachedEntityActionName,
 } from './constants'
 
 import * as actions from './actions'
@@ -136,6 +137,7 @@ export const getModelsForCreateFormFromService = serviceName => {
 
   const attachMailActionName = getAttachMailActionName('entity')
   const attachMailActionCheckName = getAttachMailActionCheckName('entity')
+  const attachedEntityActionName = getAttachedEntityActionName('entity')
   const { registeredModels } = RESTIFY_CONFIG
   return Object.keys(registeredModels).reduce((memo, modelName) => {
     const currentModelActions = registeredModels[modelName].actions || {}
@@ -145,15 +147,19 @@ export const getModelsForCreateFormFromService = serviceName => {
 
       const currentAttachMailActionName = getAttachMailActionName(modelName)
       const currentAttachMailActionCheckName = getAttachMailActionCheckName(modelName)
+
+      const currentAttachedEntityActionName = getAttachedEntityActionName(modelName)
       return {
         models: memo.models.concat([{
           modelName,
+          modelTitle: registeredModels[modelName].name,
           createEntityActionTitle: `Создать ${registeredModels[modelName].name.toLowerCase()}`,
-          attachMailActionTitle: `Прикрепить к сущности ${registeredModels[modelName].name.toLowerCase()}`,
+          attachMailActionTitle: `Прикрепить ${registeredModels[modelName].name.toLowerCase()}`,
           createEntityActionName: currentActionName,
           createEntityActionCheckName: currentActionCheckName,
           attachMailActionName: currentAttachMailActionName,
           attachMailActionCheckName: currentAttachMailActionCheckName,
+          getAttachedEntityActionName: currentAttachedEntityActionName,
         }]),
         actions: {
           ...memo.actions,
@@ -161,6 +167,7 @@ export const getModelsForCreateFormFromService = serviceName => {
           [currentActionCheckName]: registeredModels[modelName].actions[actionCheckName],
           [currentAttachMailActionName]: registeredModels[modelName].actions[attachMailActionName],
           [currentAttachMailActionCheckName]: registeredModels[modelName].actions[attachMailActionCheckName],
+          [currentAttachedEntityActionName]: registeredModels[modelName].actions[attachedEntityActionName],
         },
       }
     }

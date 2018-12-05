@@ -80,18 +80,11 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
     return memo.concat(componentsManifest.services[component.type])
   }, [])
 
-  let entitiesCache
   const stateToProps = (state, props) => {
     let modelId
     let model
     if (entityPageModelName) {
-      let entityPageEntities
-      if (typeof window !== 'undefined' && window.isSubmitting && entitiesCache) {
-        entityPageEntities = entitiesCache
-      } else {
-        entityPageEntities = api.selectors.entityManager[entityPageModelName].getEntities(state)
-        entitiesCache = entityPageEntities
-      }
+      const entityPageEntities = api.selectors.entityManager[entityPageModelName].getEntities(state)
       // TODO this is hack for inherit modelId sleector(now only personalAccount page case),
       // rework after more thoughtfull nested page logic will be implemented
       const idSelector = props.entityPageModelIdSelector || entityPageModelIdSelector

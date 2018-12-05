@@ -5,6 +5,7 @@ export const FULL_FORMAT_WITH_TIME = 'fullWithTime'
 export const ONLY_TIME = 'onlyTime'
 export const FULL_FORMAT = 'full'
 export const SHORT_FORMAT = 'short'
+export const SHORT_WITH_TIME_FORMAT = 'shortWithTime'
 export const NO_SAME_YEAR_FULL_FORMAT = 'noSameYearFull'
 export const NO_SAME_YEAR_SHORT_FORMAT = 'noSameYearShort'
 export const RELATIVE_FULL_FORMAT = 'relativeFull'
@@ -17,6 +18,7 @@ export const SMART_DATE_FORMATS = {
   [ONLY_TIME]: ONLY_TIME,
   [FULL_FORMAT]: FULL_FORMAT,
   [SHORT_FORMAT]: SHORT_FORMAT,
+  [SHORT_WITH_TIME_FORMAT]: SHORT_WITH_TIME_FORMAT,
   [NO_SAME_YEAR_FULL_FORMAT]: NO_SAME_YEAR_FULL_FORMAT,
   [NO_SAME_YEAR_SHORT_FORMAT]: NO_SAME_YEAR_SHORT_FORMAT,
   [RELATIVE_FULL_FORMAT]: RELATIVE_FULL_FORMAT,
@@ -38,6 +40,7 @@ export const SMART_DATE_FORMATS_FUNCTIONS = {
   [FULL_FORMAT_WITH_TIME]: value => value.format('DD MMMM YYYY в HH:mm'),
   [FULL_FORMAT]: value => value.format('DD MMMM YYYY'),
   [SHORT_FORMAT]: value => value.format('DD.MM.YY'),
+  [SHORT_WITH_TIME_FORMAT]: value => value.format('DD.MM.YY HH:mm'),
   [ONLY_TIME]: value => value.format('HH:mm'),
   [NO_SAME_YEAR_FULL_FORMAT]: value => {
     if (moment().isSame(value, 'year')) return value.format('DD MMMM')

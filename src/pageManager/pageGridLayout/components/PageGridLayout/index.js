@@ -44,6 +44,7 @@ import {
 
 
 const PageGridLayout = ({
+  history,
   page: {
     components = [],
     pages,
@@ -76,6 +77,7 @@ const PageGridLayout = ({
         if (comp.type === GRID_COMPONENT_TYPE) {
           compToRender = (
             <PageGridLayout {...{
+              history,
               page: {
                 components: comp.components,
                 url,
@@ -122,6 +124,7 @@ const PageGridLayout = ({
               [currentApiActionsName]: other[currentApiActionsName],
             }
           }, {
+            history,
             model: other.model,
             form: other[getFormPropName(comp.type)],
             formActions: other[getFormActionsName(comp.type)],
@@ -129,9 +132,11 @@ const PageGridLayout = ({
           })
 
           compToRender = (
-            <CurrentComponent {...{
-              ...currentComponentProps,
-            }} />
+            <div data-cy={comp.type}>
+              <CurrentComponent {...{
+                ...currentComponentProps,
+              }} />
+            </div>
           )
         }
 

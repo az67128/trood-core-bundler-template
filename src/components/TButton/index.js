@@ -120,6 +120,7 @@ class TButton extends PureComponent {
       )}>
         {!link &&
           <button {...{
+            'data-cy': this.props.label,
             className: style.button,
             disabled,
             onClick: () => onClick(),
@@ -129,6 +130,7 @@ class TButton extends PureComponent {
         }
         {link &&
           <Link {...{
+            'data-cy': this.props.label,
             to: link,
             className: style.link,
             onClick: () => onClick(),

@@ -43,34 +43,24 @@ export const writeMail = (to) => (dispatch, getState) => {
   dispatch(modals.actions.showModal(true, EDIT_MAIL_MODAL))
 }
 
-export const forwardMail = (mail) => (dispatch, getState) => {
-  const state = getState()
-  const formName = getMailFormName(mail.to)
-  const mailForm = forms.selectors.getForm(formName)(state)
-  if (!mailForm) {
-    dispatch(createMailForm({
-      attachedMail: `${getHtmlMailInfo(mail)}${mail.body}`,
-      subject: `FWD: ${mail.subject}`,
-      attachments: mail.attachmentsIds,
-    }))
-  }
+export const forwardMail = (mail) => (dispatch) => {
+  dispatch(createMailForm({
+    attachedMail: `${getHtmlMailInfo(mail)}${mail.body}`,
+    subject: `FWD: ${mail.subject}`,
+    attachments: mail.attachmentsIds,
+  }))
+  dispatch(forms.actions.mailServiceConfigForm.changeField('startingToAddress', undefined))
   dispatch(modals.actions.showModal(true, EDIT_MAIL_MODAL))
 }
 
-export const replayMail = (mail) => (dispatch, getState) => {
-  const state = getState()
+export const replayMail = (mail) => (dispatch) => {
   const to = mail.fromAddress[0]
-  const formName = getMailFormName(mail.to)
-  const mailForm = forms.selectors.getForm(formName)(state)
-  if (!mailForm) {
-    dispatch(createMailForm({
-      attachedMail: `${getHtmlMailInfo(mail)}${mail.body}`,
-      subject: `RE: ${mail.subject}`,
-      attachments: mail.attachmentsIds,
-      inReplyTo: mail.id,
-      to,
-    }))
-  }
+  dispatch(createMailForm({
+    attachedMail: `${getHtmlMailInfo(mail)}${mail.body}`,
+    subject: `RE: ${mail.subject}`,
+    inReplyTo: mail.id,
+    to,
+  }))
   dispatch(forms.actions.mailServiceConfigForm.changeField('startingToAddress', to))
   dispatch(modals.actions.showModal(true, EDIT_MAIL_MODAL))
 }

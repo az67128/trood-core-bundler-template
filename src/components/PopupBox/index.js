@@ -77,6 +77,8 @@ class PopupBox extends PureComponent {
       open,
     } = this.state
 
+    const getChildren = typeof children === 'function' ? children : () => children
+
     return (
       <div className={classNames(style.root, className, arrow && style.arrow)} ref={tRef}>
         <TClickOutside {...{
@@ -92,7 +94,7 @@ class PopupBox extends PureComponent {
               className: style[position],
               onClose: () => this.toggleOpen(false),
             }}>
-              {children}
+              {getChildren()}
             </FlexiblePopup>
           }
         </TClickOutside>

@@ -151,6 +151,7 @@ class TFileInput extends PureComponent {
           <input {...{
             className: style.fileInput,
             type: 'file',
+            'data-cy': 'upload_button',
             accept,
             multiple,
             disabled: disabled || isUploading,

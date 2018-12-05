@@ -19,7 +19,7 @@ const PageNavLink = ({
     <PageManagerContext.Consumer>
       {({ match, registeredRoutesPaths }) => {
         const to = getUrl(getNestedObjectField(baseUrl, navKey), match.params)
-        // if (!getIsAllowPath(to, registeredRoutesPaths)) return null
+        if (!getIsAllowPath(to, registeredRoutesPaths)) return null
         return (
           <NavLink {...{
             key: navKey,

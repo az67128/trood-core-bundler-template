@@ -30,7 +30,7 @@ describe('<TIcon />', () => {
       }
       const wrapper = mount(<TIcon {...props} />)
       labelPositionTypes.forEach(labelPosition =>
-        expect(wrapper.find(dotStyle[labelPosition])).not.toExist())
+        expect(wrapper.find(dotStyle[labelPosition])).not.toBePresent())
     })
 
     labelPositionTypes.forEach(labelPosition =>
@@ -43,9 +43,9 @@ describe('<TIcon />', () => {
             label: 'label',
           }
           const wrapper = mount(<TIcon {...props} />)
-          expect(wrapper.find('svg')).toExist()
-          expect(wrapper.find(dotStyle.svgWrapper)).toExist()
-          expect(wrapper.find(dotStyle[labelPosition])).toExist()
+          expect(wrapper.find('svg')).toBePresent()
+          expect(wrapper.find(dotStyle.svgWrapper)).toBePresent()
+          expect(wrapper.find(dotStyle[labelPosition])).toBePresent()
           const expectedRotate = typeof rotate === 'string' ? ROTATE_VALUES[rotate] : rotate
           expect(wrapper.find(dotStyle.svgWrapper)).toHaveStyle('transform', `rotate(${expectedRotate}deg)`)
         })

@@ -11,6 +11,7 @@ const FileListView = ({
   className,
   type = LIST_TYPES.horizontal,
   files = [],
+  filesActions = {},
 }) => (
   <div className={classNames(style.root, style[type], className)}>
     {files.map(model => (
@@ -18,6 +19,7 @@ const FileListView = ({
         key: model.id,
         className: style.file,
         model,
+        filesActions,
       }} />
     ))}
   </div>

@@ -26,8 +26,10 @@ class Mail extends PureComponent {
 
     model: PropTypes.object,
 
+    onMailAttach: PropTypes.func,
     modelsForCreateFormFromService: PropTypes.arrayOf(PropTypes.object),
     mailServiceActions: PropTypes.object,
+    filesActions: PropTypes.object,
     actionsForCreateFormFromService: PropTypes.object,
     createFormFromEntitiesActions: PropTypes.object,
   }
@@ -38,7 +40,9 @@ class Mail extends PureComponent {
 
     model: {},
 
+    onMailAttach: () => {},
     mailServiceActions: {},
+    filesActions: {},
 
     modelsForCreateFormFromService: [],
     actionsForCreateFormFromService: {},
@@ -51,6 +55,7 @@ class Mail extends PureComponent {
       open: props.open,
     }
     this.toggleOpen = this.toggleOpen.bind(this)
+    this.onMailAttach = this.onMailAttach.bind(this)
   }
 
   componentDidMount() {
@@ -99,6 +104,14 @@ class Mail extends PureComponent {
     this.willUnmount = true
   }
 
+  onMailAttach(model) {
+    this.props.onMailAttach()
+    this.setState({
+      [createFromMailAvailableName(model.createEntityActionCheckName)]: false,
+      [attachMailAvailableName(model.attachMailActionCheckName)]: false,
+    })
+  }
+
   toggleOpen() {
     this.setState({
       open: !this.state.open,
@@ -111,6 +124,7 @@ class Mail extends PureComponent {
       model,
 
       mailServiceActions,
+      filesActions,
 
       modelsForCreateFormFromService,
       actionsForCreateFormFromService,
@@ -185,7 +199,11 @@ class Mail extends PureComponent {
                     type: ICONS_TYPES.plus,
                     size: 15,
                     label: item.createEntityActionTitle,
-                    onClick: () => createAction(model, createFormFromEntitiesActions[item.modelName]),
+                    onClick: () => createAction(
+                      model,
+                      createFormFromEntitiesActions[item.modelName],
+                      () => this.onMailAttach(item),
+                    ),
                   }} />
                   }
                   {isAttachMailAvailable && attachMailAction &&
@@ -194,7 +212,10 @@ class Mail extends PureComponent {
                     type: ICONS_TYPES.plus,
                     size: 15,
                     label: item.attachMailActionTitle,
-                    onClick: () => attachMailAction(model),
+                    onClick: () => attachMailAction(
+                      model,
+                      () => this.onMailAttach(item),
+                    ),
                   }} />
                   }
                 </React.Fragment>
@@ -233,6 +254,7 @@ class Mail extends PureComponent {
         {!!model.attachments.length &&
           <FileListView {...{
             files: model.attachments,
+            filesActions,
           }} />
         }
       </div>

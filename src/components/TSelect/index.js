@@ -238,6 +238,7 @@ class TSelect extends PureComponent {
       newSelectValues = [value]
     }
     if (!newSelectValues.length && this.props.defaultValue) newSelectValues.push(this.props.defaultValue)
+    this.onSearch(undefined)
     this.setState({
       open: this.props.multi, // don't hide list if component in multi mode
       selectValues: newSelectValues,
@@ -302,6 +303,7 @@ class TSelect extends PureComponent {
       if (open && type === SELECT_TYPES.filterDropdown) {
         return (
           <TInput {...{
+            'data-cy': `${label}_search`,
             inputClassName: style.search,
             autoFocus: true,
             onSearch: this.onSearch,
@@ -345,7 +347,11 @@ class TSelect extends PureComponent {
           <div className={style.row}>
             {!!label && currentLabel }
             {!open && realSelectedValues.length &&
-              <div className={style.selectedTile} onClick={this.open}>
+              <div {...{
+                className: style.selectedTile,
+                onClick: this.open,
+                'data-cy': label || placeHolder,
+              }}>
                 {displayValue()}
               </div>
             }
@@ -356,6 +362,7 @@ class TSelect extends PureComponent {
                 <li {...{
                   key: item.value,
                   onClick: disabled ? undefined : () => this.select(item.value),
+                  'data-cy': item.label || item.value,
                   className: classNames(style.tileItem, isSelected(item) && style.active),
                 }} >
                   <span>{item.label || item.value}</span>
@@ -382,6 +389,7 @@ class TSelect extends PureComponent {
                 type: radioType,
                 key: item.value,
                 onChange: disabled ? undefined : () => this.select(item.value),
+                'data-cy': item.label || item.value,
                 value: isSelected(item),
                 label: item.label || item.value,
                 className: radioGroupType === RADIO_GROUP_TYPES.vertical ? style.radioVertical : style.radioHorizontal,
@@ -409,6 +417,7 @@ class TSelect extends PureComponent {
               <SelectComp {...{
                 key: item.value,
                 onChange: disabled ? undefined : () => this.select(item.value),
+                'data-cy': item.label || item.value,
                 value: isSelected(item),
                 label: item.label || item.value,
                 className: classNames(style.radioVertical, selectItemClassName),
@@ -436,6 +445,7 @@ class TSelect extends PureComponent {
             <span {...{
               className: style.content,
               onClick: type === SELECT_TYPES.filterDropdown && open ? undefined : this.open,
+              'data-cy': label || placeHolder,
             }}>
               <span className={realSelectedValues.length ? style.input : style.placeholder}>
                 {displayValue()}
@@ -469,6 +479,7 @@ class TSelect extends PureComponent {
                   <li {...{
                     key: item.value === undefined ? 'undefined' : item.value,
                     onClick: () => this.select(item.value),
+                    'data-cy': item.label || item.value,
                     ref: (node) => {
                       this[`option${item.value}`] = node
                     },

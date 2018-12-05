@@ -159,7 +159,16 @@ class DateTimePicker extends PureComponent {
       wasBlured,
     } = this.state
 
-    const weekInMonth = moment(value).endOf('month').week() - moment(value).startOf('month').week() + 1
+    const firstWeek = moment(value).startOf('month').week()
+    let lastWeek = moment(value).endOf('month').week()
+    if (lastWeek < firstWeek) {
+      let lastWeekOfYear = moment(value).endOf('year').week()
+      if (lastWeekOfYear === 1) {
+        lastWeekOfYear = moment(value).endOf('year').add({ week: -1 }).week()
+      }
+      lastWeek += lastWeekOfYear
+    }
+    const weekInMonth = lastWeek - firstWeek + 1
 
     const startOfMonth = moment(value).startOf('month')
     const startOfFirstMonthWeek = startOfMonth.startOf('week')
@@ -184,16 +193,21 @@ class DateTimePicker extends PureComponent {
         <TInput {...{
           className: classNames(
             style.timeTInput,
-            type === PICKER_TYPES.time && (validate.checkBeforeBlur || wasBlured) && innerErrors.length && style.error,
             type === PICKER_TYPES.time && className,
           ),
           disabled,
           type: INPUT_TYPES.time,
-          placeHolder: '00:00',
-          defaultValue: this.state.timeValue,
-          replaceValue: this.state.timeValue,
+          placeholder: '00:00',
+          value: this.state.timeValue,
+          errors: innerErrors,
           onChange: v => this.changeValue(v, 'time'),
-          onBlur: type === PICKER_TYPES.time ? () => this.setState({ wasBlured: true }) : () => {},
+          onValid: () => this.setState({ innerErrors: [] }),
+          onInvalid: err => this.setState({ innerErrors: err }),
+          showTextErrors: false,
+          validate: {
+            checkOnBlur: !validate.checkBeforeBlur,
+            requaired: validate.requaired,
+          },
         }} />
       )
     }
@@ -203,16 +217,20 @@ class DateTimePicker extends PureComponent {
 
     return (
       <TClickOutside onClick={() => this.toggleOpen(false)}>
-        <div className={classNames(
-          style.root,
-          className,
-          disabled && style.disabled,
-          open && style.open,
-          (validate.checkBeforeBlur || wasBlured) && innerErrors.length && style.error,
-          )}>
+        <div {...{
+          className: classNames(
+            style.root,
+            className,
+            disabled && style.disabled,
+            open && style.open,
+            (validate.checkBeforeBlur || wasBlured) && innerErrors.length && style.error,
+          ),
+          'data-cy': placeHolder,
+        }}>
           <div {...{
             className: style.header,
             onClick: disabled ? () => {} : () => this.toggleOpen(),
+            'data-cy': 'dateTimePickerControl',
           }}>
             {value &&
               <div className={style.value}>
@@ -241,7 +259,7 @@ class DateTimePicker extends PureComponent {
                 <div {...{
                   key: i,
                   className: classNames(style.month, i === 0 && style.monthActive),
-                  onClick: () => this.changeValue(moment(value).month() + 1, 'month'),
+                  onClick: () => this.changeValue(moment(value).month() + i, 'month'),
                 }}>
                   {moment(value).add({ month: i }).format('MMMM')}
                 </div>
@@ -269,6 +287,11 @@ class DateTimePicker extends PureComponent {
                     return (
                       <div {...{
                         key: j,
+                        'data-cy': `dateTimePicker${
+                          cellDisabled ? 'Inactive' : 'Active'
+                        }Day_${
+                          moment(item).isSame(value, 'month') ? moment(item).date() : moment(item).format('MM_D')
+                        }`,
                         className: classNames(
                           style.calendarCell,
                           style.calendarBodyCell,

@@ -33,7 +33,6 @@
 .phoneCode {
   margin-right: 0.2rem;
   color: var(--trood-gray-extra-dark);
-  padding-left: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,10 +63,6 @@
 
 .input:-ms-input-placeholder {
   color: var(--trood-gray-extra-dark);
-}
-
-.phoneCode + .input {
-  padding-left: 0;
 }
 
 .textarea {

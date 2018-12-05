@@ -71,8 +71,7 @@ class ModalEditMail extends PureComponent {
       className: modalsStyle.thinControl,
       labelClassName: modalsStyle.thinControlLabel,
       inputClassName: modalsStyle.thinControlControl,
-      defaultValue: getNestedObjectField(model, name),
-      replaceValue: getNestedObjectField(model, name),
+      value: getNestedObjectField(model, name),
       onChange: value => mailFormActions.changeField(name, value),
       onInvalid: errs => mailFormActions.setFieldError(name, errs),
       onValid: () => mailFormActions.resetFieldError(name),
@@ -182,6 +181,10 @@ class ModalEditMail extends PureComponent {
             className: style.wysiwygWrapper,
             inputClassName: style.wysiwyg,
             placeholder: 'Текст письма...',
+            validate: {
+              required: false,
+              checkOnBlur: true,
+            },
           }} />
           {model.attachedMail &&
             <HideableContent {...{

@@ -16,7 +16,7 @@ import style from './index.css'
 class TIcon extends PureComponent {
   static propTypes = {
     size: PropTypes.number,
-    type: PropTypes.oneOf(Object.keys(ICONS_TYPES)).isRequired,
+    type: PropTypes.oneOf(Object.keys(ICONS_TYPES)),
     rotate: PropTypes.oneOfType([
       PropTypes.oneOf(Object.values(ROTATE_TYPES)),
       PropTypes.number,
@@ -56,6 +56,7 @@ class TIcon extends PureComponent {
     return (
       <div {...{
         className: classNames(style.root, className),
+        'data-cy': type,
         onClick: disabled ? undefined : onClick,
         style: {
           cursor: onClick && 'pointer',
@@ -66,7 +67,7 @@ class TIcon extends PureComponent {
           className: style.svgWrapper,
           style: inlineStyle,
         }} >
-          {React.createElement(ICON_COMPS[type])}
+          {!!type && React.createElement(ICON_COMPS[type])}
         </div>
         {label &&
           <div {...{

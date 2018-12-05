@@ -123,6 +123,7 @@ class EnchancedSwitch extends PureComponent {
       <div {...{
         tabIndex: 0,
         className: classNames(style.root, className, disabled && style.disabled),
+        'data-cy': label,
         onClick: !disabled && ((e) => {
           if (stopPropagation) {
             e.stopPropagation()

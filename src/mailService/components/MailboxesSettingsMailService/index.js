@@ -9,7 +9,7 @@ import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import TSelect from '$trood/components/TSelect'
 import TCheckbox from '$trood/components/TCheckbox'
-import { ENCRYPTION_TYPES } from '../../constants'
+import { ENCRYPTION_TYPES, ERROR_MESSAGES } from '../../constants'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
@@ -50,11 +50,16 @@ class MailboxesSettingsMailService extends PureComponent {
       mailServiceActions,
     } = this.props
 
+    if (editMailboxesFormErrors) {
+      Object.keys(editMailboxesFormErrors).forEach(field => {
+        editMailboxesFormErrors[field] = (editMailboxesFormErrors[field]).map(error => ERROR_MESSAGES[error] || error)
+      })
+    }
+
     const getFormChangeInputProps = (name) => ({
       className: style.control,
       labelClassName: style.label,
-      defaultValue: getNestedObjectField(editMailboxesForm, name),
-      replaceValue: getNestedObjectField(editMailboxesForm, name),
+      value: getNestedObjectField(editMailboxesForm, name),
       onChange: value => editMailboxesFormActions.changeField(name, value),
       onInvalid: errs => editMailboxesFormActions.setFieldError(name, errs),
       onValid: () => editMailboxesFormActions.resetFieldError(name),
@@ -85,7 +90,7 @@ class MailboxesSettingsMailService extends PureComponent {
         className: style.error,
         key,
       }}>
-        {item}
+        {ERROR_MESSAGES[item] || item}
       </div>
     ))
 
@@ -149,7 +154,7 @@ class MailboxesSettingsMailService extends PureComponent {
             <TInput {...{
               label: 'Imap Port',
               ...getFormChangeInputProps('imapPort'),
-              type: INPUT_TYPES.number,
+              type: INPUT_TYPES.int,
             }} />
             <TSelect {...{
               ...getFormChangeSelectProps('imapSecure'),
@@ -162,7 +167,7 @@ class MailboxesSettingsMailService extends PureComponent {
             <TInput {...{
               label: 'Smtp Port',
               ...getFormChangeInputProps('smtpPort'),
-              type: INPUT_TYPES.number,
+              type: INPUT_TYPES.int,
             }} />
             <TSelect {...{
               ...getFormChangeSelectProps('smtpSecure'),

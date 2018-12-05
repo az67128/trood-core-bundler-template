@@ -36,10 +36,6 @@ import {
 
 import { applySelectors } from '$trood/helpers/selectors'
 
-if (typeof window !== 'undefined') {
-  window.isSubmitting = false
-}
-
 const linkChildWithParent = (modelName, parentName, parentId, formActions, form) => (dispatch) => {
   const currentParentModel = RESTIFY_CONFIG.registeredModels[parentName]
   const currentModel = RESTIFY_CONFIG.registeredModels[modelName]
@@ -143,10 +139,6 @@ const getEntityFormSubmit = (modelName, formActions, entityId, isEditing, state,
 
   // Create redux action for submitting
   const result = (formName) => async (dispatch, getState) => {
-    if (typeof window !== 'undefined') {
-      window.isSubmitting = true
-    }
-
     let parentForm = forms.selectors.getForm(formName)(getState())
     // Use map here, so Promise.all works correctly
     await Promise.all(Object.keys(submitChildForms).map(async childModelName => {
@@ -166,11 +158,6 @@ const getEntityFormSubmit = (modelName, formActions, entityId, isEditing, state,
       // Apply all changes before submitting root parent
       dispatch(formActions.changeSomeFields(parentForm))
       const { data: model, status } = await dispatch(submitEntityForm(formName))
-      // TODO by @deylak this is a hack for chain entity creation updating sets of entities
-      // Should be removed, after custodian chain entity creation released
-      if (typeof window !== 'undefined' && !isNested) {
-        window.isSubmitting = false
-      }
       if (onSuccess) {
         dispatch(onSuccess({ data: model, status }))
       }
@@ -205,9 +192,6 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
   const EntityComponent = currentModel[entityComponentName]
 
   const entitiesToGet = getEntitiesToGet(modelName, currentModel)
-  // Each modal has entitites cache, to use them, while submitting nested forms
-  // and do not recalculate a lot of selectors
-  let prevEntities
 
   class EntityModal extends PureComponent {
     render() {
@@ -275,13 +259,7 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
   }
 
   const stateToProps = (state, props) => {
-    let currentEntities
-    if (!prevEntities || (typeof window !== 'undefined' && !window.isSubmitting)) {
-      currentEntities = applySelectors('entityModal')(state, entitiesToGet)
-    } else {
-      currentEntities = prevEntities
-    }
-    prevEntities = currentEntities
+    const currentEntities = applySelectors('entityModal')(state, entitiesToGet)
     const currentPropsEntities = getCurrentPropsEntities(currentEntities)
     let modelFormName
     let model

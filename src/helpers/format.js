@@ -1,12 +1,16 @@
+import { allCountries, iso2Lookup, allCountryCodes } from 'country-telephone-data'
+import memoizeOne from 'memoize-one'
+
 import { isDef, isDefAndNotNull } from '$trood/helpers/def'
-import { DEFAULT_PHONE_LENGTH } from '$trood/mainConstants'
 
 
 const dimRegexp = /\B(?=(\d{3})+(?!\d))/g
 
 export const toNumber = (value, trim) => {
-  let parts = (isDefAndNotNull(value) ? value.toString() : '').replace(/[^-\d.,]/g, '').split(/\.|,/)
-  parts[0] = parts[0].replace(dimRegexp, ' ')
+  const strValue = (isDefAndNotNull(value) ? value.toString() : '')
+  const isNegative = strValue.indexOf('-') === 0
+  let parts = strValue.replace(/[^\d\u002c\u002e]/g, '').split(/\u002c|\u002e/)
+  parts[0] = `${isNegative ? '-' : ''}${parts[0].replace(dimRegexp, ' ')}`
   parts[1] = parts.slice(1, parts.length).join('')
   if (parts[1] && isDef(trim)) parts[1] = parts[1].slice(0, trim)
   parts = parts.slice(0, 2).filter(p => p.length)
@@ -14,9 +18,13 @@ export const toNumber = (value, trim) => {
 }
 
 export const fromNumber = (value, trim) => {
-  let parts = (isDefAndNotNull(value) ? value.toString() : '').replace('.', ',').replace(/[^\d,]/g, '').split(',')
+  const strValue = (isDefAndNotNull(value) ? value.toString() : '')
+  const isNegative = strValue.indexOf('-') === 0
+  let parts = strValue.replace(/[^\d\u002c\u002e]/g, '').split(/\u002c|\u002e/)
+  parts[0] = `${isNegative ? '-' : ''}${parts[0]}`
+  parts[1] = parts.slice(1, parts.length).join('')
   if (parts[1] && isDef(trim)) parts[1] = parts[1].slice(0, trim)
-  parts = parts.filter(p => p.length)
+  parts = parts.slice(0, 2).filter(p => p.length)
   return parts.join('.')
 }
 
@@ -35,9 +43,9 @@ export const prettyNumber = (number, round, trimDim) => {
   return result
 }
 
-const phoneFormat = '(...) ...-..-..'
 const timeFormat = '..:..'
 const timeRangeFormat = `${timeFormat}-${timeFormat}`
+const noDots = /[^\u002e]/g
 
 const noDigitsRegexp = /[^\d]/g
 
@@ -63,9 +71,50 @@ const toFormat = (format) => (value = '') => {
   }).formattedText
 }
 
-const fromFormat = (replacementRegex, len, fromEnd) => value => {
-  if (fromEnd) return value.replace(replacementRegex, '').slice(-len)
-  return value.replace(replacementRegex, '').slice(0, len)
+const fromFormat = (replacementRegex, len, fromEnd) => (value = '') => {
+  const formatted = value.toString().replace(replacementRegex, '')
+  if (fromEnd) return formatted.slice(-len)
+  return formatted.slice(0, len)
+}
+
+const getPhoneFormat = (value = '', ext = true) => {
+  let countries = []
+  for (let i = value.length; i > 0; i -= 1) {
+    const subValue = value.substr(0, i)
+    countries = (allCountryCodes[subValue] || []).map(countryCode => {
+      const countryIndex = iso2Lookup[countryCode]
+      return allCountries[countryIndex]
+    }).sort((a, b) => a.order - b.order)
+    countries = countries.filter(c => c.format)
+    if (countries.length) break
+  }
+  if (countries.length) {
+    const countryFormat = (countries[0].format || '').replace(/^\+/, '')
+    if (!countryFormat) return undefined
+    if (!ext) return countryFormat
+    return `${countryFormat} доб ${Array(15).fill('.').join('')}`
+  }
+  return undefined
+}
+
+const memoizedGetPhoneFormat = memoizeOne(getPhoneFormat)
+
+const maxPhoneCodeLength = Object.keys(allCountryCodes).reduce((memo, code) => {
+  const codeLength = code.toString().length
+  return codeLength > memo ? codeLength : memo
+}, 0)
+
+const minPhoneLength = allCountries.reduce((memo, country) => {
+  const { length } = fromFormat(noDots)(country.format || '')
+  if (length > 0 && length < memo) return length
+  return memo
+}, Infinity)
+
+export const getPhoneFormatLength = (value = '') => {
+  let length = minPhoneLength
+  const format = memoizedGetPhoneFormat(value.substr(0, maxPhoneCodeLength), false)
+  if (format) length = fromFormat(noDots)(format).length
+  return length
 }
 
 /**
@@ -74,15 +123,26 @@ const fromFormat = (replacementRegex, len, fromEnd) => value => {
  * @param {String} value
  * @return {String} String in phone format
  */
-export const toPhone = toFormat(phoneFormat)
+export const toPhone = value => {
+  const digitValue = fromFormat(noDigitsRegexp)(value)
+  const phoneFormat = memoizedGetPhoneFormat(digitValue.substr(0, maxPhoneCodeLength))
+  if (!phoneFormat) return digitValue
+  return toFormat(phoneFormat)(digitValue)
+}
 
 /**
  * @func fromPhone
  * @description Unformat string from phone
  * @param {String} value
+ * @param {Integer} maxLength
  * @return {String}
  */
-export const fromPhone = fromFormat(noDigitsRegexp, DEFAULT_PHONE_LENGTH)
+export const fromPhone = (value, maxLength) => {
+  const digitValue = fromFormat(noDigitsRegexp)(value)
+  if (maxLength < 0) return digitValue
+  const length = getPhoneFormatLength(digitValue)
+  return fromFormat(noDigitsRegexp, maxLength || length)(value)
+}
 
 export const toTime = toFormat(timeFormat)
 export const fromTime = fromFormat(noDigitsRegexp, 4, true)

@@ -40,14 +40,43 @@
   text-overflow: ellipsis;
 }
 
+.dotMenuWrapper {
+  position: relative;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .dotMenu {
   color: var(--trood-gray-extra-dark);
+}
+
+.attachesCount {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color: var(--trood-white);
+  font-size: 10px;
+  font-weight: 500;
+  background-color: var(--trood-blue);
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+  text-align: center;
 }
 
 .dotMenuItem {
   height: 30px;
   padding: 0 10px;
   white-space: nowrap;
+  color: var(--trood-gray-extra-dark);
+}
+
+.entityLink > .dotMenuItem {
+  width: 100%;
 }
 
 .dotMenuItem:hover {

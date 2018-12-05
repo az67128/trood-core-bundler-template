@@ -9,6 +9,15 @@ import { getEntityPageUrl } from '../../urlSchema'
 import { getIsAllowPath } from '../../helpers'
 
 
+const getEntityPageLink = (
+  model,
+  registeredRoutesPaths,
+) => {
+  if (!model.$modelType) return undefined
+  const to = getEntityPageUrl(model.$modelType, model.id)
+  return getIsAllowPath(to, registeredRoutesPaths) ? to : undefined
+}
+
 const EntityPageLink = ({
   model = {},
   className,
@@ -17,17 +26,13 @@ const EntityPageLink = ({
   return (
     <PageManagerContext.Consumer>
       {({ registeredRoutesPaths }) => {
-        let to
-        let isAllowPath = !!model.$modelType
-        if (isAllowPath) {
-          to = getEntityPageUrl(model.$modelType, model.id)
-          isAllowPath = getIsAllowPath(to, registeredRoutesPaths)
-        }
-        const Component = isAllowPath ? Link : props => <div {...props} />
+        const to = getEntityPageLink(model, registeredRoutesPaths)
+        const Component = to ? Link : props => <div {...props} />
         return (
           <Component {...{
-            to: isAllowPath ? to : undefined,
+            to,
             className: classNames(style.root, className),
+            'data-cy': `${model.$modelType}Link_${model.id}`,
           }}>
             {children}
           </Component>
@@ -36,6 +41,8 @@ const EntityPageLink = ({
     </PageManagerContext.Consumer>
   )
 }
+
+export { getEntityPageLink }
 
 export default EntityPageLink
 

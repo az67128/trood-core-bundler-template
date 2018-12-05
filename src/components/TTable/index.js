@@ -198,7 +198,7 @@ class TTable extends PureComponent {
                 ),
               }}>
                 {checking &&
-                  <td className={style.checkCell}>
+                  <td className={style.checkCell} data-cy={`table_cell_${r}_checkbox`}>
                     <TCheckbox {...{
                       value: check[r],
                       onChange: () => this.checkItem(r),
@@ -209,6 +209,7 @@ class TTable extends PureComponent {
                 }
                 {header.filter(item => item.show !== false).map((item, i) => (
                   <td {...{
+                    'data-cy': `table_cell_${r}_${i}`,
                     key: i,
                     className: item.className,
                     colSpan: item.colSpan && item.colSpan(row, r, body),

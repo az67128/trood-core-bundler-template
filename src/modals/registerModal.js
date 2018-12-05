@@ -96,6 +96,7 @@ const registerModal = (
       } = this.props
       return (
         <ConnectedModalWrapper {...{
+          name,
           key: 'modal',
           show: !!openByNameMap[name],
           ...paramsByNameMap[name],

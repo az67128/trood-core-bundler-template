@@ -107,7 +107,6 @@ export const logout = () => async (dispatch) => {
 }
 
 export const restoreAuthData = () => dispatch => {
-  return
   dispatch(forms.actions.sendQuickForm({
     apiName: AUTH_API_NAME,
     endpoint: VERIFY_TOKEN_ENDPOINT,

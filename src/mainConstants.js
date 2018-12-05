@@ -8,10 +8,12 @@ export const WHOLE_STRING_UUID_REGEXP = new RegExp(`^${UUID_REGEXP.source}$`)
 export const DEFAULT_PHONE_LENGTH = 10
 
 export const KEY_CODES = {
+  backspace: 8,
   enter: 13,
   esc: 27,
   arrowLeft: 37,
   arrowRight: 39,
+  delete: 46,
 }
 
 export const SEARCH_DEBOUNCE = 500

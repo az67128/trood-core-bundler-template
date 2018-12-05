@@ -29,8 +29,7 @@ const ChainsList = ({
       <div className={style.searchContainer}>
         <TInput {...{
           className: style.searchInput,
-          defaultValue: mailServiceConfigForm.chainSearch,
-          replaceValue: mailServiceConfigForm.chainSearch,
+          value: mailServiceConfigForm.chainSearch,
           type: INPUT_TYPES.search,
           onChange: value => mailServiceConfigFormActions.changeField('chainSearch', value),
           onSearch: value => mailServiceConfigFormActions.changeField('chainActualSearch', value),
@@ -38,6 +37,8 @@ const ChainsList = ({
         }} />
       </div>
       <AsyncEntitiesList {...{
+        id: 'ChainsList',
+        scrollContainer: '#ChainsList',
         className: style.chainsList,
         nextPage: chainsNextPage,
         isLoading: chainsIsLoading,

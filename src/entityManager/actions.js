@@ -1,6 +1,6 @@
 import uuidV4 from 'uuid/v4'
 
-import { api, forms, RESTIFY_CONFIG } from 'redux-restify'
+import { api, forms, RESTIFY_CONFIG, RestifyForeignKeysArray } from 'redux-restify'
 
 import modals from '$trood/modals'
 
@@ -144,10 +144,34 @@ export const deleteEntity = (modelName, parents = []) => (model) => (dispatch, g
       const currentModelActions = currentModelConfig.actions
 
       let deleteAction
+      let afterDeleteAction = () => {}
       if (typeof currentModelActions.deleteEntity === 'function') {
         deleteAction = currentModelActions.deleteEntity(idToDelete, modelObject)
       } else {
         deleteAction = api.actions.entityManager[modelName].deleteById(idToDelete)
+
+        if (parents.length) {
+          const lastParent = parents[parents.length - 1]
+          const parentFormName = getEditFormName({
+            ...lastParent,
+            parents: parents.slice(0, parents.length - 1),
+          })
+          const parentForm = forms.selectors.getForm(parentFormName)(state)
+
+          if (parentForm) {
+            const parentFormActions = forms.getFormActions(parentFormName)
+            const parentModelConfig = RESTIFY_CONFIG.registeredModels[lastParent.modelName]
+            const parentModelField = Object.keys(parentModelConfig.defaults).find(key => {
+              const parentModelDefault = parentModelConfig.defaults[key]
+              return parentModelDefault instanceof RestifyForeignKeysArray &&
+                parentModelDefault.modelType === modelName
+            })
+            const newParentFormFieldValue = parentForm[parentModelField]
+              .filter(v => v !== model[currentModelConfig.idField])
+
+            afterDeleteAction = () => dispatch(parentFormActions.changeField(parentModelField, newParentFormFieldValue))
+          }
+        }
       }
 
       if (currentModelConfig.deletion && currentModelConfig.deletion.confirm) {
@@ -156,11 +180,13 @@ export const deleteEntity = (modelName, parents = []) => (model) => (dispatch, g
           acceptButtonText: 'Да',
           onAccept: async () => {
             await dispatch(deleteAction)
+              .then(afterDeleteAction)
             resolve()
           },
         }))
       } else {
         await dispatch(deleteAction)
+          .then(afterDeleteAction)
         resolve()
       }
     } else {

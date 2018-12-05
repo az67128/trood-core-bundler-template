@@ -58,3 +58,18 @@ export const SETTINGS_FOR = {
   [FOLDERS]: FOLDERS,
   [MAILBOXES]: MAILBOXES,
 }
+
+export const ERROR_MESSAGES = {
+  'This field must be unique.': 'Такой Email уже существует',
+  'Enter a valid email address.': 'Введите корректный электронный адрес.',
+  'SMTP server login error: invalid email or password':
+    'Неверный Email или пароль',
+  'Smtp Connection settings wrong: [Errno -2] Name or service not known':
+    'Убедитесь, что поле Host правильно.',
+  'Smtp Connection settings wrong: [Errno 99] Cannot assign requested address':
+    'Убедитесь, что поле Port правильно.',
+  'Smtp Connection settings wrong: Connection unexpectedly closed: timed out':
+    'Не удалось подключится к почтовому серверу, проверьте настройки smpt/imap',
+  'Ensure this value is less than or equal to 64535.':
+    'Убедитесь, что это значение поля Port меньше или равно 64535.',
+}

@@ -8,6 +8,8 @@ import entityManager from '$trood/entityManager'
 
 import PageMail from './components/PageMail'
 
+import files from '$trood/files'
+
 import * as actions from './actions'
 import { SERVICE_NAME, FOLDER_INBOX } from './constants'
 
@@ -52,6 +54,7 @@ const getPageContainer = () => {
     return {
       chainsApiActions: bindActionCreators(api.actions.entityManager.chains, dispatch),
       mailsApiActions: bindActionCreators(api.actions.entityManager.mails, dispatch),
+      filesActions: bindActionCreators(files.actions, dispatch),
       mailServiceActions: bindActionCreators(actions, dispatch),
       mailServiceConfigFormActions: bindActionCreators(forms.actions.mailServiceConfigForm, dispatch),
 

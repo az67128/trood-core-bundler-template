@@ -4,11 +4,13 @@ import { EMAIL_REGEXP } from '$trood/mainConstants'
 
 
 const TEXT = 'text'
-const NUMBER = 'number'
+const INT = 'int'
+const FLOAT = 'float'
 const MULTI = 'multi'
 const WYSIWYG = 'wysiwyg'
 const PASSWORD = 'password'
 const PHONE = 'phone'
+const PHONE_WITH_EXT = 'phoneWithExt'
 const MONEY = 'money'
 const MONEY_NUMBER = 'moneyNumber'
 const EMAIL = 'email'
@@ -20,11 +22,13 @@ const TIME = 'time'
 
 export const INPUT_TYPES = {
   [TEXT]: TEXT,
-  [NUMBER]: NUMBER,
+  [INT]: INT,
+  [FLOAT]: FLOAT,
   [MULTI]: MULTI,
   [WYSIWYG]: WYSIWYG,
   [PASSWORD]: PASSWORD,
   [PHONE]: PHONE,
+  [PHONE_WITH_EXT]: PHONE_WITH_EXT,
   [MONEY]: MONEY,
   [MONEY_NUMBER]: MONEY_NUMBER,
   [EMAIL]: EMAIL,
@@ -37,9 +41,11 @@ export const INPUT_TYPES = {
 
 export const INNER_INPUT_TYPES = {
   [TEXT]: TEXT,
-  [NUMBER]: TEXT,
+  [INT]: TEXT,
+  [FLOAT]: TEXT,
   [PASSWORD]: PASSWORD,
   [PHONE]: TEXT,
+  [PHONE_WITH_EXT]: TEXT,
   [MONEY]: TEXT,
   [MONEY_NUMBER]: TEXT,
   [EMAIL]: TEXT,
@@ -53,6 +59,7 @@ export const INNER_INPUT_TYPES = {
 export const VALIDATION_FORMATS = {
   [EMAIL]: EMAIL_REGEXP,
   [COLOR]: /^#?((\d|[a-f]){3}|(\d|[a-f]){6})?$/i,
+  [TIME]: /([0-1]\d[0-5]\d)|(2[0-3][0-5]\d)/,
 }
 
 export const ERROR_TYPES = {
@@ -65,20 +72,22 @@ export const ERROR_TYPES = {
   required: 'Это поле обязательно!',
 }
 
-export const MAX_FRACTIONALS = 2
+export const FLOAT_MAX_FRACTIONALS = 6
+export const MONEY_MAX_FRACTIONALS = 2
 export const formatToFunctions = {
-  [NUMBER]: value => value.toString(),
-  [PHONE]: format.toPhone,
-  [MONEY]: value => {
-    let number = format.toNumber(value, MAX_FRACTIONALS)
-    if (value.endsWith(',') || value.endsWith('.')) {
+  [FLOAT]: (value, maxFractionals = FLOAT_MAX_FRACTIONALS) => {
+    const valueString = value.toString()
+    let number = format.toNumber(value, maxFractionals)
+    if (maxFractionals > 0 && (valueString.endsWith(',') || valueString.endsWith('.'))) {
       number = `${number},`
     }
     return number
   },
-  [MONEY_NUMBER]: value => {
-    return formatToFunctions[MONEY](value ? value.toString() : '0')
-  },
+  [INT]: value => formatToFunctions[FLOAT](value, 0),
+  [MONEY]: value => formatToFunctions[FLOAT](value, MONEY_MAX_FRACTIONALS),
+  [MONEY_NUMBER]: value => formatToFunctions[FLOAT](value, MONEY_MAX_FRACTIONALS),
+  [PHONE]: format.toPhone,
+  [PHONE_WITH_EXT]: format.toPhone,
   [DATE]: format.toDate,
   [URL]: value => {
     return value.replace(/https?:\/\//ig, '')
@@ -90,28 +99,40 @@ export const formatToFunctions = {
 }
 
 export const formatFromFunctions = {
+  [FLOAT]: (value, toType = true, maxFractionals = FLOAT_MAX_FRACTIONALS) => {
+    const formatted = format.fromNumber(value, maxFractionals)
+    if (!toType) return formatted
+    return formatted === '-' ? 0 : +formatted
+  },
+  [INT]: (value, toType = true) => formatFromFunctions[FLOAT](value, toType, 0),
+  [MONEY]: value => formatFromFunctions[FLOAT](value, false, MONEY_MAX_FRACTIONALS),
+  [MONEY_NUMBER]: (value, toType = true) => formatFromFunctions[FLOAT](value, toType, MONEY_MAX_FRACTIONALS),
   [PHONE]: format.fromPhone,
-  [NUMBER]: value => {
-    return (value === '' || value === '-') ? value : +value
-  },
-  [MONEY]: value => format.fromNumber(value, MAX_FRACTIONALS),
-  [MONEY_NUMBER]: (value) => {
-    const formatted = formatFromFunctions[MONEY](value)
-    return parseFloat(formatted || 0)
-  },
+  [PHONE_WITH_EXT]: value => format.fromPhone(value, -1),
   [DATE]: format.fromDate,
   [URL]: value => `http://${value.replace(/https?:\/\//ig, '')}`,
   [COLOR]: value => `#${value.replace(/#/ig, '')}`,
   [TIME]: format.fromTime,
 }
 
+export const formatLengthFunctions = {
+  [PHONE]: format.getPhoneFormatLength,
+  [PHONE_WITH_EXT]: format.getPhoneFormatLength,
+}
+
+const intRegexp = /[\d\u002d]/
+const floatRegexp = /[\d\u002c\u002d\u002e]/
+
 export const includeForTypes = {
-  [NUMBER]: /\d|-/,
+  [INT]: intRegexp,
+  [FLOAT]: floatRegexp,
   [PHONE]: /\d/,
-  [MONEY]: /\d|\.|,/,
-  [DATE]: /\d|\.| /,
-  [COLOR]: /\d|[a-f]/i,
-  [TIME]: /[\d]/,
+  [PHONE_WITH_EXT]: /\d/,
+  [MONEY]: floatRegexp,
+  [MONEY_NUMBER]: floatRegexp,
+  [DATE]: /\d/,
+  [COLOR]: /[\da-f]/i,
+  [TIME]: /\d/,
 }
 
 export const excludeForTypes = {}

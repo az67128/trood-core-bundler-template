@@ -1,8 +1,7 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux'
-import { enableBatching } from 'redux-batched-actions'
 import thunk from 'redux-thunk'
 
-const tokenKey = 'redux-restify-storage-key'
+import { tokenKey } from 'storage'
 
 
 export const createStorageTokenSpy = () => {
@@ -30,18 +29,6 @@ const mockGlobalReducer = (moduleName, submoduleName) => reducer => {
   })
 }
 
-export const actionsStack = []
-
-const actionsLogger = () => next => action => {
-  actionsStack.push(action.type)
-  return next(action)
-}
-
-const middlewareList = [
-  thunk,
-  actionsLogger,
-]
-
 export const createMockStore = (moduleName, submoduleName) => (reducer, init = {}) => {
   const mockReducer = mockGlobalReducer(moduleName, submoduleName)(reducer)
   return createStore(
@@ -49,17 +36,6 @@ export const createMockStore = (moduleName, submoduleName) => (reducer, init = {
     {
       [moduleName]: submoduleName ? { [submoduleName]: { ...init } } : { ...init },
     },
-    applyMiddleware(...middlewareList),
-  )
-}
-
-export const createRestifyStore = (apiReducer, formsReducer) => {
-  return createStore(
-    enableBatching(combineReducers({
-      api: apiReducer,
-      forms: formsReducer,
-    })),
-    {},
-    applyMiddleware(...middlewareList),
+    applyMiddleware(thunk),
   )
 }

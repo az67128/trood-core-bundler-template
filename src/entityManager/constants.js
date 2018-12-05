@@ -52,6 +52,9 @@ export const getAttachMailActionName = (modelName = '') => (
 export const getAttachMailActionCheckName = (modelName = '') => (
   `${getAttachMailActionName(modelName)}Check`
 )
+export const getAttachedEntityActionName = (modelName = '') => (
+  `getAttached${capitalize(modelName)}`
+)
 
 export const ENTITY_COMPONENT_EDIT = 'editComponent'
 export const ENTITY_COMPONENT_VIEW = 'viewComponent'

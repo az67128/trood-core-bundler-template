@@ -89,8 +89,7 @@ class FoldersSettingsMailService extends PureComponent {
             <TInput {...{
               className: style.input,
               label: 'Название папки',
-              defaultValue: getNestedObjectField(editFolderForm, 'name'),
-              replaceValue: getNestedObjectField(editFolderForm, 'name'),
+              value: getNestedObjectField(editFolderForm, 'name'),
               onChange: value => editFolderFormActions.changeField('name', value),
               onInvalid: errs => editFolderFormActions.setFieldError('name', errs),
               onValid: () => editFolderFormActions.resetFieldError('name'),

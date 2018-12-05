@@ -265,6 +265,12 @@ input.button {
   color: var(--trood-orange);
 }
 
+.border.blue,
+.text.blue {
+  border-color: var(--trood-blue);
+  color: var(--trood-blue);
+}
+
 .border.orange:not(.disabled):hover,
 .text.orange:not(.disabled):hover {
   color: var(--trood-orange-hover);

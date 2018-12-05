@@ -1,4 +1,3 @@
-export TFilesGallery from './TFilesGallery'
 export TAvatar from './TAvatar'
 export TFileInput from './TFileInput'
 export FileListView from './FileListView'

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import style from './index.css'
 
-import TButton, { BUTTON_TYPES } from '$trood/components/TButton'
+import TButton, { BUTTON_TYPES, BUTTON_COLORS } from '$trood/components/TButton'
 import QueryLink from '$trood/components/QueryLink'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 
@@ -81,6 +81,7 @@ class Menu extends PureComponent {
         <TButton {...{
           className: style.buttonSettings,
           type: BUTTON_TYPES.text,
+          color: BUTTON_COLORS.white,
           label: (
             <TIcon {...{
               type: ICONS_TYPES.settings,

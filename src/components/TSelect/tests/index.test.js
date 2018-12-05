@@ -32,6 +32,27 @@ describe('<TSelect />', () => {
     expect(wrapper.find('li').length).toBe(100)
   })
 
+  it('disable and open work normaly', () => {
+    const wrapper = mount(<TSelect />)
+    // enabled test start
+    expect(wrapper.find(dotStyle.root)).not.toHaveClassName(dotStyle.disabled)
+    expect(wrapper.find(dotStyle.optionsContainer)).not.toBePresent()
+    expect(wrapper.find(dotStyle.optionsContainerHide)).toBePresent()
+    wrapper.instance().open()
+    expect(wrapper.find(dotStyle.optionsContainer)).toBePresent()
+    expect(wrapper.find(dotStyle.optionsContainerHide)).not.toBePresent()
+    // enabled test end
+    // disabled test start
+    wrapper.setProps({ disabled: true })
+    expect(wrapper.find(dotStyle.root)).toHaveClassName(dotStyle.disabled)
+    expect(wrapper.find(dotStyle.optionsContainer)).not.toBePresent()
+    expect(wrapper.find(dotStyle.optionsContainerHide)).toBePresent()
+    wrapper.instance().open()
+    expect(wrapper.find(dotStyle.optionsContainer)).not.toBePresent()
+    expect(wrapper.find(dotStyle.optionsContainerHide)).toBePresent()
+    // disabled test end
+  })
+
   it('has onChange event', () => {
     const wrapper = mount(<TSelect {...{
       onChange,

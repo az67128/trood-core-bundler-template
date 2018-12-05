@@ -28,8 +28,7 @@ const PageAuth = ({
   const serverErrorMessage = AUTH_MESSAGES[serverError] || serverError
   const defaultInputProps = (path) => ({
     key: `${pageType.type}_${path}`,
-    defaultValue: form[path],
-    replaceValue: form[path],
+    value: form[path],
     className: style.input,
     onChange: value => formActions.changeField(path, value),
     onInvalid: errs => formActions.setFieldError(path, errs),

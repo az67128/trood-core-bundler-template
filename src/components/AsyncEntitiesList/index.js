@@ -15,6 +15,7 @@ const INFINITE_SCROLL_LOAD_HEIGHT_DELTA = 100
 
 class AsyncEntitiesList extends PureComponent {
   static propTypes = {
+    id: PropTypes.string,
     className: PropTypes.string,
 
     nextPage: PropTypes.number,
@@ -93,7 +94,9 @@ class AsyncEntitiesList extends PureComponent {
 
   render() {
     const {
+      id,
       className = '',
+      contentClassName = '',
 
       nextPage,
       isLoading,
@@ -104,7 +107,12 @@ class AsyncEntitiesList extends PureComponent {
       children,
     } = this.props
     const childrenArray = Array.isArray(children) ? children : [children]
-    let content = childrenArray
+    if (reverse) childrenArray.reverse()
+    let content = [
+      <div key="content" className={classNames(style.content, contentClassName)}>
+        {childrenArray}
+      </div>,
+    ]
 
     if (type === LIST_TYPES.loadMoreButton) {
       content = content.concat((
@@ -130,6 +138,7 @@ class AsyncEntitiesList extends PureComponent {
 
     return (
       <div {...{
+        id,
         className: classNames(style.root, className),
       }} >
         {content}
