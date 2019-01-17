@@ -3,7 +3,13 @@ import * as selectors from './selectors'
 
 
 export * from './constants'
+export * from './components'
+export * from './selectors'
 
-export { getEditEntityModal, getViewEntityModal } from './getEntityModal'
+export {
+  getInlineEntityEditComponent,
+  getEditEntityModal,
+  getViewEntityModal,
+} from './getEntityModal'
 
 export default { actions, selectors }

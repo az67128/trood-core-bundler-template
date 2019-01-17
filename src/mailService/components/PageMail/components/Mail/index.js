@@ -163,7 +163,7 @@ class Mail extends PureComponent {
               <SmartDate {...{
                 className: style.date,
                 date: model.createdAt,
-                format: SMART_DATE_FORMATS.relativeShortWithTime,
+                format: SMART_DATE_FORMATS.shortWithTime,
               }} />
             </div>
             {open &&

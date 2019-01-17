@@ -1,0 +1,36 @@
+@import 'styles/variables.css';
+
+.root {
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.itemWrapper {
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 10px;
+}
+
+.tileItemWrapper {
+  composes: itemWrapper;
+  height: 2rem;
+}
+
+.vertical .itemWrapper {
+  width: 100%;
+}
+
+.item {
+  width: 100%;
+  height: 100%;
+}
+
+.empty {
+  composes: itemWrapper;
+  color: var(--trood-gray-extra-dark);
+  cursor: default;
+}

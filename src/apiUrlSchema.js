@@ -17,10 +17,11 @@ export const API_TYPES = {
       modelEndpoint,
       entityId,
       crudAction,
+      specialAction,
     }) => {
       let requestType = entityId ? 'single' : 'bulk'
       if (crudAction !== CRUD_ACTIONS.read) {
-        requestType = 'single'
+        requestType = specialAction || 'single'
       }
       const url = `${apiHost}${apiPrefix}${requestType}/${modelEndpoint}${entityId ? `/${entityId}` : ''}`
       if (crudAction === CRUD_ACTIONS.read || crudAction === CRUD_ACTIONS.delete) return url

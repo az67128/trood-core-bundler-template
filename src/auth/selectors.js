@@ -29,6 +29,12 @@ export const getLinkedObject = state => {
   return api.selectors.entityManager[linkedObject].getEntities(state).getById(linkedObjectId)
 }
 
+export const getLinkedObjectIsLoading = state => {
+  const { linkedObject } = mainConfig.services.auth
+  const linkedObjectId = getLinkedObjectId(state)
+  return api.selectors.entityManager[linkedObject].getEntities(state).getIsLoadingById(linkedObjectId)
+}
+
 export const getPermissions = state => {
   return forms.selectors.authDataForm.getField('abac')(state)
 }

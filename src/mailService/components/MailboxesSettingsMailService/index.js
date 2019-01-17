@@ -73,7 +73,7 @@ class MailboxesSettingsMailService extends PureComponent {
     const getFormChangeSelectProps = (name) => ({
       className: style.selectBlock,
       placeHolder: 'Не выбрано',
-      replaceSelectValues: editMailboxesForm[name] && [editMailboxesForm[name]],
+      values: editMailboxesForm[name] && [editMailboxesForm[name]],
       items: Object.keys(ENCRYPTION_TYPES).map(item => ({ value: item, label: item })),
       onInvalid: errs => editMailboxesFormActions.setFieldError(name, errs),
       onValid: () => editMailboxesFormActions.resetFieldError(name),

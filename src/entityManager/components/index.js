@@ -1,0 +1,1 @@
+export InlineEntityEditor from './InlineEntityEditor'

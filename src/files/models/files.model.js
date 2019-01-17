@@ -20,6 +20,9 @@ export default {
       medium: undefined,
       small: undefined,
       xlarge: undefined,
+      resized: {
+        thumb: undefined,
+      },
     },
   },
 }

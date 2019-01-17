@@ -83,7 +83,7 @@ class InputModal extends PureComponent {
             items: options,
             className: modalsStyle.control,
             placeHolder: 'Не выбрано',
-            replaceSelectValues: selected && [selected],
+            values: selected && [selected],
             onChange: values => this.setState({ selected: values[0] }),
           }} />
         </div>

@@ -65,7 +65,7 @@ const ChainsList = ({
                 <SmartDate {...{
                   className: style.chainDate,
                   date: chain.last,
-                  format: SMART_DATE_FORMATS.relativeShortWithTime,
+                  format: SMART_DATE_FORMATS.shortWithTime,
                 }} />
               </div>
               <div className={style.chainContacts}>

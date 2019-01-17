@@ -91,7 +91,7 @@ export const viewEntity = (modelName, parents) => (model) => (dispatch) => {
  * Start edit entity, shows modal
  * @param {number|string|Object} [model] - can be either restify model, restify form or entity id to edit
  */
-const generalEditEntity = (modelName, parents = []) => (model, config = {}) => async (dispatch) => {
+const generalEditEntity = (showModal) => (modelName, parents = []) => (model, config = {}) => async (dispatch) => {
   let currentForm
   let idToEdit = model
   let prevForm
@@ -102,8 +102,16 @@ const generalEditEntity = (modelName, parents = []) => (model, config = {}) => a
       idToEdit = model.id
     } else {
       // TODO by @deylak return actions and name here
+      const formName = getEditFormName({
+        modelName,
+        id: model.tempId,
+        parents,
+      })
+      const formActions = forms.getFormActions(formName)
       currentForm = {
         form: model,
+        formName,
+        formActions,
       }
       prevForm = { ...model }
       isEditing = true
@@ -112,26 +120,41 @@ const generalEditEntity = (modelName, parents = []) => (model, config = {}) => a
   if (!currentForm) {
     currentForm = await dispatch(createEntityForm(modelName, parents)(idToEdit, config))
   }
-  dispatch(modals.actions.showModal(true, getEditModalName(modelName), {
-    onSuccess: config.onSuccess,
-    entityId: currentForm.form.id || currentForm.form.tempId,
-    isEditing: isEditing || !!currentForm.form.id,
-    parents,
-    prevForm,
-  }))
+  if (showModal) {
+    dispatch(modals.actions.showModal(true, getEditModalName(modelName), {
+      title: config.title,
+      onSuccess: config.onSuccess,
+      onDelete: config.onDelete,
+      entityId: currentForm.form.id || currentForm.form.tempId,
+      isEditing: isEditing || !!currentForm.form.id,
+      parents,
+      prevForm,
+    }))
+  } else {
+    dispatch(currentForm.formActions.changeSomeFields({
+      isSubmitted: false,
+      prevForm,
+    }, true))
+  }
   return currentForm
 }
 
-export const editEntity = (modelName) => generalEditEntity(modelName)
-export const editChildEntity = generalEditEntity
+const generalEditModalEntity = generalEditEntity(true)
+const generalEditInlineEntity = generalEditEntity(false)
 
-export const deleteEntity = (modelName, parents = []) => (model) => (dispatch, getState) => {
+export const editEntity = (modelName) => generalEditModalEntity(modelName)
+export const editChildEntity = generalEditModalEntity
+export const editInlineEntity = (modelName) => generalEditInlineEntity(modelName)
+export const editInlineChildEntity = generalEditInlineEntity
+
+export const deleteEntity = (modelName, parents = []) => (model, onDelete) => (dispatch, getState) => {
   return new Promise(async (resolve) => {
+    const currentModelConfig = RESTIFY_CONFIG.registeredModels[modelName]
     const state = getState()
     let idToDelete
     if (typeof model === 'object') {
-      if (model.id) {
-        idToDelete = model.id
+      if (model[currentModelConfig.idField]) {
+        idToDelete = model[currentModelConfig.idField]
       }
     } else {
       idToDelete = model
@@ -140,37 +163,38 @@ export const deleteEntity = (modelName, parents = []) => (model) => (dispatch, g
     const modelObject = await api.selectors.entityManager[modelName].getEntities(state).asyncGetById(idToDelete)
 
     if (idToDelete) {
-      const currentModelConfig = RESTIFY_CONFIG.registeredModels[modelName]
       const currentModelActions = currentModelConfig.actions
 
       let deleteAction
-      let afterDeleteAction = () => {}
-      if (typeof currentModelActions.deleteEntity === 'function') {
+      if (typeof onDelete === 'function') {
+        deleteAction = onDelete(idToDelete, modelObject)
+      } else if (typeof currentModelActions.deleteEntity === 'function') {
         deleteAction = currentModelActions.deleteEntity(idToDelete, modelObject)
       } else {
         deleteAction = api.actions.entityManager[modelName].deleteById(idToDelete)
+      }
 
-        if (parents.length) {
-          const lastParent = parents[parents.length - 1]
-          const parentFormName = getEditFormName({
-            ...lastParent,
-            parents: parents.slice(0, parents.length - 1),
+      let afterDeleteAction = () => {}
+      if (parents.length) {
+        const lastParent = parents[parents.length - 1]
+        const parentFormName = getEditFormName({
+          ...lastParent,
+          parents: parents.slice(0, parents.length - 1),
+        })
+        const parentForm = forms.selectors.getForm(parentFormName)(state)
+
+        if (parentForm) {
+          const parentFormActions = forms.getFormActions(parentFormName)
+          const parentModelConfig = RESTIFY_CONFIG.registeredModels[lastParent.modelName]
+          const parentModelField = Object.keys(parentModelConfig.defaults).find(key => {
+            const parentModelDefault = parentModelConfig.defaults[key]
+            return parentModelDefault instanceof RestifyForeignKeysArray &&
+              parentModelDefault.modelType === modelName
           })
-          const parentForm = forms.selectors.getForm(parentFormName)(state)
+          const newParentFormFieldValue = parentForm[parentModelField]
+            .filter(v => v !== idToDelete)
 
-          if (parentForm) {
-            const parentFormActions = forms.getFormActions(parentFormName)
-            const parentModelConfig = RESTIFY_CONFIG.registeredModels[lastParent.modelName]
-            const parentModelField = Object.keys(parentModelConfig.defaults).find(key => {
-              const parentModelDefault = parentModelConfig.defaults[key]
-              return parentModelDefault instanceof RestifyForeignKeysArray &&
-                parentModelDefault.modelType === modelName
-            })
-            const newParentFormFieldValue = parentForm[parentModelField]
-              .filter(v => v !== model[currentModelConfig.idField])
-
-            afterDeleteAction = () => dispatch(parentFormActions.changeField(parentModelField, newParentFormFieldValue))
-          }
+          afterDeleteAction = () => dispatch(parentFormActions.changeField(parentModelField, newParentFormFieldValue))
         }
       }
 

@@ -1,0 +1,13 @@
+@import 'styles/variables.css';
+
+.root {
+  display: flex;
+  align-items: center;
+  color: var(--trood-gray-dark);
+  cursor: pointer;
+}
+
+.root:hover,
+.root.selected {
+  color: var(--trood-black);
+}

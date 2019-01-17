@@ -1,4 +1,5 @@
 import React from 'react'
+import memoizeOne from 'memoize-one'
 
 import style from './index.css'
 
@@ -36,12 +37,28 @@ import {
   getModelConstantsName,
   getModelEntitiesName,
   getModelApiActionsName,
+  getChildEntityName,
+  EntityManagerContext,
 } from '$trood/entityManager'
 
 import {
   SERVICES_PROPS_NAMES,
 } from '$trood/serviceManager'
 
+
+const getEntityManagerContext = (modelName, entityId) => {
+  const parents = [{
+    modelName,
+    id: entityId,
+    skipSubmit: true,
+  }]
+  return {
+    parents,
+    nextParents: parents,
+    prevForm: undefined,
+  }
+}
+const memoizedGetEntityManagerContext = memoizeOne(getEntityManagerContext)
 
 const PageGridLayout = ({
   history,
@@ -54,12 +71,13 @@ const PageGridLayout = ({
   nestLevel = 0,
   isFirstColumn = true,
   isLastColumn = true,
+  modelId,
   entityPageModelName,
   entityPageModelIdSelector,
   ...other
 }) => {
   let prevColumn = 0
-  return (
+  const pageComponent = (
     <div {...{
       className: nestLevel > 0 ? style.nestedRoot : style.root,
       style: {
@@ -82,6 +100,7 @@ const PageGridLayout = ({
                 components: comp.components,
                 url,
               },
+              modelId,
               parentPath,
               nestLevel,
               isFirstColumn: currentColumnIndex === 0,
@@ -113,6 +132,7 @@ const PageGridLayout = ({
             const currentComponentsName = getModelComponentsName(key)
             const currentConstantsName = getModelConstantsName(key)
             const currentEntitiesName = getModelEntitiesName(key)
+            const currentChildEntitiesName = getChildEntityName(key)
             return {
               ...memo,
               [key]: other[key],
@@ -122,6 +142,7 @@ const PageGridLayout = ({
               [currentConstantsName]: other[currentConstantsName],
               [currentEntitiesName]: other[currentEntitiesName],
               [currentApiActionsName]: other[currentApiActionsName],
+              [currentChildEntitiesName]: other[currentChildEntitiesName],
             }
           }, {
             history,
@@ -208,6 +229,17 @@ const PageGridLayout = ({
       }
     </div>
   )
+
+  if (nestLevel === 0 && entityPageModelName) {
+    const contextValue = memoizedGetEntityManagerContext(entityPageModelName, modelId)
+    return (
+      <EntityManagerContext.Provider value={contextValue}>
+        {pageComponent}
+      </EntityManagerContext.Provider>
+    )
+  }
+
+  return pageComponent
 }
 
 export default PageGridLayout

@@ -40,7 +40,7 @@ export const SMART_DATE_FORMATS_FUNCTIONS = {
   [FULL_FORMAT_WITH_TIME]: value => value.format('DD MMMM YYYY в HH:mm'),
   [FULL_FORMAT]: value => value.format('DD MMMM YYYY'),
   [SHORT_FORMAT]: value => value.format('DD.MM.YY'),
-  [SHORT_WITH_TIME_FORMAT]: value => value.format('DD.MM.YY HH:mm'),
+  [SHORT_WITH_TIME_FORMAT]: value => value.format('DD.MM.YY в HH:mm'),
   [ONLY_TIME]: value => value.format('HH:mm'),
   [NO_SAME_YEAR_FULL_FORMAT]: value => {
     if (moment().isSame(value, 'year')) return value.format('DD MMMM')

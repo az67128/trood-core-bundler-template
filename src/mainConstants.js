@@ -17,7 +17,7 @@ export const KEY_CODES = {
 }
 
 export const SEARCH_DEBOUNCE = 500
-export const DISPATCH_DEBOUNCE = 100
+export const DISPATCH_DEBOUNCE = 50
 
 export const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SZ'
 export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD'

@@ -1,4 +1,6 @@
 import React from 'react'
+import classNames from 'classnames'
+
 import modalsStyle from '$trood/styles/modals.css'
 import style from './index.css'
 
@@ -29,11 +31,11 @@ const ConfirmModal = ({
   return (
     <div className={style.root}>
       {other.title &&
-        <div className={style.title}>
+        <div className={classNames(style.title, style.firstRowPadding)}>
           {other.title}
         </div>
       }
-      <div className={style.text}>
+      <div className={classNames(style.text, !other.title && style.firstRowPadding)}>
         {text}
       </div>
       <div className={modalsStyle.buttonsContainer}>

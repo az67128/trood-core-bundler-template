@@ -43,6 +43,10 @@
   padding: 0;
 }
 
+.attach {
+  composes: add;
+}
+
 .arrowLeft,
 .arrowRight {
   composes: arrow;

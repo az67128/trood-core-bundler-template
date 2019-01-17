@@ -13,6 +13,8 @@ import {
   ROW_HEIGHT,
   INNER_INPUT_TYPES,
   DEFAULT_MAX_ROWS,
+  FULL_ZERO_TIME,
+  checkTime,
 } from './constants'
 
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
@@ -106,13 +108,17 @@ class Input extends PureComponent {
       value,
       settings: { formatValue },
     } = props
-    const formattedValue = formatValue(value.toString())
+    let formattedValue = formatValue(value.toString())
     let stateFormatedValue = state.formattedValue
     if (type === INPUT_TYPES.moneyNumber || type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
       stateFormatedValue = stateFormatedValue || '0' // don`t state change on empty number
       const parts = stateFormatedValue.split(/\u002c|\u002e/)
       const fraction = +(parts[1] || '0')
       if (!fraction) stateFormatedValue = parts[0] // don`t state change on zero fraction
+    }
+    if (type === INPUT_TYPES.time) {
+      formattedValue = `${formattedValue}${FULL_ZERO_TIME.substr(formattedValue.length)}`
+      stateFormatedValue = `${stateFormatedValue}${FULL_ZERO_TIME.substr(stateFormatedValue.length)}`
     }
     if (formattedValue !== stateFormatedValue) {
       return {
@@ -151,12 +157,10 @@ class Input extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.type === INPUT_TYPES.multi) this.heightChange()
     this.handleValidate()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.type !== INPUT_TYPES.multi && this.props.type === INPUT_TYPES.multi) this.heightChange()
     if (this.props.value !== prevProps.value || objectHash(this.props.settings) !== objectHash(prevProps.settings)) {
       this.handleValidate()
     }
@@ -196,7 +200,7 @@ class Input extends PureComponent {
     const errors = []
 
     const regexpToMatch = format && format.regexp || format
-    if (regexpToMatch && !regexpToMatch.test(value)) {
+    if (value && regexpToMatch && !regexpToMatch.test(value)) {
       errors.push(format.error || ERROR_TYPES.format)
     }
 
@@ -235,17 +239,24 @@ class Input extends PureComponent {
       settings: { getValue, formatValue },
     } = this.props
     const formattedValue = formatValue(e.target.value)
+    if (type === INPUT_TYPES.time) {
+      const isValid = checkTime(formattedValue)
+      if (!isValid) {
+        e.preventDefault()
+        return false
+      }
+    }
     this.setState({
       caretPosition: this.selectionStart,
       formattedValue,
     }, () => {
       const newValue = getValue(formattedValue)
-      if (type === INPUT_TYPES.multi) this.heightChange()
       if (value !== newValue) {
         this.throttledOnChangeEvent(newValue)
         this.debouncedOnSearchEvent(newValue)
       }
     })
+    return true
   }
 
   handleSelect(e) {
@@ -445,10 +456,11 @@ class Input extends PureComponent {
             <textarea {...{
               ref: (node) => {
                 this.shadow = node
+                this.heightChange()
               },
               className: style.shadow,
               style: {
-                height: ROW_HEIGHT,
+                height: 0,
                 width: this.inputWidth,
                 lineHeight: `${ROW_HEIGHT}px`,
               },

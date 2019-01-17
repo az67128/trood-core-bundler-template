@@ -23,6 +23,7 @@ const modals = (state = init, action) => {
       }
     }
     case ROUTER_LOCATION_CHANGE_ACTION:
+      if (action.payload.action === 'REPLACE') return state
       return init
     default:
       return state

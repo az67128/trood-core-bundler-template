@@ -13,6 +13,14 @@
   background-color: var(--trood-gray);
 }
 
+.icon {
+  width: 24px;
+  height: 24px;
+  background: transparent center no-repeat;
+  background-size: cover;
+  border-radius: 2px;
+}
+
 .controls {
   display: none;
   align-items: center;

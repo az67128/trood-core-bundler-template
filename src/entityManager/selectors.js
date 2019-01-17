@@ -60,16 +60,14 @@ export const getChildEntitiesByModel =
       return {
         ...memo,
         [getChildEntityName(currentModelName)]: {
-          getChildArray: () => {
+          getChildArray: (filterSubmitted = false) => {
             let currentArray = []
             // By checking model type, we define, if the model is form, or restify model
-            if (model && !model.$modelType) {
-              if (model.id && model[currentChildModelField]) {
-                currentArray = model[currentChildModelField]
-                  // Filter out temporary forms, while submitting entitites
-                  .filter(form => typeof form !== 'object')
-                  .map(id => currentEntities[currentModelName].getById(id))
-              }
+            if (model && !model.$modelType && model[currentChildModelField]) {
+              currentArray = model[currentChildModelField]
+                // Filter out temporary forms, while submitting entitites
+                .filter(form => typeof form !== 'object')
+                .map(id => currentEntities[currentModelName].getById(id))
             } else if (model && model[currentChildModelField]) {
               currentArray = model[currentChildModelField]
             }
@@ -77,10 +75,22 @@ export const getChildEntitiesByModel =
             const editedArray = currentArray
               .filter(item => !item.$deleted)
               .map(item => {
-                const editChildForm = currentChildForms.find(form => item.id === form.id && form.isSubmitted)
+                const editChildForm = currentChildForms.find(form => {
+                  if (!filterSubmitted) {
+                    return item.id === form.id && form.isSubmitted
+                  }
+                  return item.id === form.id
+                })
                 return editChildForm || item
               })
-            return currentChildForms.filter(form => !form.id && form.isSubmitted).concat(editedArray)
+            return currentChildForms
+              .filter(form => {
+                if (!filterSubmitted) {
+                  return !form.id && form.isSubmitted
+                }
+                return !form.id
+              })
+              .concat(editedArray)
           },
           getIsLoadingChildArray: () => {
             if (model && !model.$modelType && model.id && model[currentChildModelField]) {
@@ -88,11 +98,16 @@ export const getChildEntitiesByModel =
             }
             return false
           },
-          getChildArrayCount: () => {
+          getChildArrayCount: (filterSubmitted = false) => {
             const entities = (model && model[currentChildModelField] ? model[currentChildModelField] : [])
               .filter(item => !item.$deleted)
             const entitiesCount = entities.length
-            const formsCount = currentChildForms.filter(form => !form.id && form.isSubmitted)
+            const formsCount = currentChildForms.filter(form => {
+              if (!filterSubmitted) {
+                return !form.id && form.isSubmitted
+              }
+              return !form.id
+            }).length
             return entitiesCount + formsCount
           },
         },

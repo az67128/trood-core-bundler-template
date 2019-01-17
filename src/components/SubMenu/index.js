@@ -22,6 +22,7 @@ const SubMenu = ({
           return (
             <div {...{
               key: item.id,
+              'data-cy': item.id,
               className: classNames(style.link, item.id === selectedItem && style.active),
               onClick: () => onChange(item.id),
             }}>

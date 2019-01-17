@@ -133,13 +133,3 @@ export const registerUser = ({
     },
   }))
 }
-
-export const changeAccountActive = (id, active) => dispatch => {
-  return dispatch(forms.actions.sendQuickForm({
-    model: 'account',
-    defaults: {
-      id,
-      active,
-    },
-  }))
-}

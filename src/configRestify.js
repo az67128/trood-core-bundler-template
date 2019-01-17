@@ -45,7 +45,13 @@ import { initRestify } from 'redux-restify'
 
 import auth from '$trood/auth'
 import modals, { MODAL_SIZES, addRegisteredModal } from '$trood/modals'
-import { getBaseFormName, getEditEntityModal, getViewEntityModal } from '$trood/entityManager'
+import {
+  getBaseFormName,
+  getEditEntityModal,
+  getViewEntityModal,
+  getInlineEntityEditComponent,
+  addRegisteredEntityInlineEditor,
+} from '$trood/entityManager'
 
 import systemConfig from '$trood/config'
 import modelsManifest from '$trood/businessObjects/manifest'
@@ -61,7 +67,7 @@ const configRestify = () => {
       })
     }
     return {
-      403: auth.actions.logoutFront,
+      401: auth.actions.logoutFront,
     }
   }
 
@@ -106,6 +112,7 @@ const configRestify = () => {
           // Custom trood properties of business objects
           // TODO by @deylak find out some better way of storing this, not in restify model
           editComponent: currentModelManifestModule.editComponent,
+          inlineEditComponent: currentModelManifestModule.inlineEditComponent,
           viewComponent: currentModelManifestModule.viewComponent,
           actions: currentModelManifestModule.actions || {},
           dependsOn: currentModelManifestConfig.dependsOn,
@@ -125,6 +132,9 @@ const configRestify = () => {
         }
         if (currentModelManifestModule.viewComponent) {
           addRegisteredModal(getViewEntityModal(key, currentModel))
+        }
+        if (currentModelManifestModule.inlineEditComponent || currentModelManifestModule.editComponent) {
+          addRegisteredEntityInlineEditor(key, getInlineEntityEditComponent(key, currentModel))
         }
       })
   })

@@ -29,6 +29,17 @@
   margin-left: 10px;
 }
 
+.deleteButton {
+  composes: button;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--trood-gray-extra-dark);
+}
+
 .noPaddingChildren {
   padding: 0 !important;
 }

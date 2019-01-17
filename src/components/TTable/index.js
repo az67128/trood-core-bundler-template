@@ -158,6 +158,7 @@ class TTable extends PureComponent {
                 <th key={i} className={item.className}>
                   <div {...{
                     className: item.sortable ? style.headerWrapperSortable : style.headerWrapper,
+                    'data-cy': item.title,
                     onClick: () => {
                       if (item.sortable) {
                         onSort(item.name, sortingOrder === -1 ? 1 : -1)

@@ -1,336 +1,233 @@
 import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import momentPropTypes from 'react-moment-proptypes'
 import classNames from 'classnames'
 import moment from 'moment'
-import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
-import TClickOutside from '$trood/components/TClickOutside'
-import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
-import TInput, { INPUT_TYPES } from '$trood/components/TInput'
-import TButton, { BUTTON_TYPES, BUTTON_COLORS } from '$trood/components/TButton'
+import DatePicker from './DatePicker'
+import TimePicker from './TimePicker'
 
-import { PICKER_TYPES, PICKER_ERRORS } from './constants'
+import { PICKER_ERRORS, PICKER_TYPES, TIME_FORMAT } from './constants'
+import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
 
 
-const getDateTimeFormat = type => {
-  switch (type) {
-    case PICKER_TYPES.dateTime:
-      return 'DD.MM.YYYY HH:mm'
-    case PICKER_TYPES.date:
-      return 'DD.MM.YYYY'
-    default:
-      return 'DD.MM.YYYY HH:mm'
-  }
-}
-
-const returnFormat = 'YYYY-MM-DD[T]HH:mm:00ZZ'
+const allMomentPropTypes = PropTypes.oneOfType([
+  momentPropTypes.momentObj,
+  momentPropTypes.momentString,
+  momentPropTypes.momentDurationObj,
+])
 
 class DateTimePicker extends PureComponent {
+  static propTypes = {
+    type: PropTypes.oneOf(Object.values(PICKER_TYPES)),
+    value: allMomentPropTypes,
+    validate: PropTypes.shape({
+      checkOnBlur: PropTypes.bool,
+      dateRequired: PropTypes.bool,
+      timeRequired: PropTypes.bool,
+      minDate: allMomentPropTypes,
+      maxDate: allMomentPropTypes,
+    }),
+    showTextErrors: PropTypes.bool,
+    onChange: PropTypes.func,
+    onValid: PropTypes.func,
+    onInvalid: PropTypes.func,
+  }
+
   static defaultProps = {
     type: PICKER_TYPES.dateTime,
     validate: {},
+    showTextErrors: true,
     onChange: () => {},
     onValid: () => {},
     onInvalid: () => {},
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    let dateValue
+    let timeValue = ''
+    if (props.value) {
+      const dateTime = moment(props.value)
+      dateValue = dateTime.format(DEFAULT_DATE_FORMAT)
+      timeValue = dateTime.format(TIME_FORMAT)
+    }
+    if (dateValue !== state.dateValue || timeValue !== state.timeValue) {
+      return {
+        dateValue,
+        timeValue,
+      }
+    }
+    return null
   }
 
   constructor(props) {
     super(props)
 
     this.state = {
-      value: props.value,
-      timeValue: props.value ? moment(props.value).format('HHmm') : '',
-      innerErrors: [],
+      dateTimeErrors: [],
+      dateErrors: [],
+      timeErrors: [],
     }
 
-    this.toggleOpen = this.toggleOpen.bind(this)
-    this.changeValue = this.changeValue.bind(this)
-    this.sendOnChange = this.sendOnChange.bind(this)
-    this.validate = this.validate.bind(this)
+    this.handleChangeDate = this.handleChangeDate.bind(this)
+    this.handleChangeTime = this.handleChangeTime.bind(this)
+    this.handleOnChange = this.handleOnChange.bind(this)
+    this.handleOnInvalid = this.handleOnInvalid.bind(this)
+    this.getAllErrors = this.getAllErrors.bind(this)
+    this.callOnInvalid = this.callOnInvalid.bind(this)
   }
 
   componentDidMount() {
-    this.validate(this.props.validate)
+    this.handleValidate()
   }
 
-  componentWillReceiveProps(nextProps) {
-    const validateChanged = !deepEqual(this.props.validate, nextProps.validate)
-    let { value } = this.state
-    if (typeof this.props.value !== typeof nextProps.value) {
-      this.setState({
-        timeValue: nextProps.value === undefined ? '' : moment(nextProps.value).format('HHmm'),
+  componentDidUpdate(prevProps) {
+    if (prevProps.value && this.props.value && !moment(prevProps.value).isSame(this.props.value)) {
+      this.handleValidate()
+    }
+  }
+
+  getAllErrors() {
+    const { dateTimeErrors, dateErrors, timeErrors } = this.state
+    const allErrors = [...dateTimeErrors, ...dateErrors, ...timeErrors]
+    return allErrors.reduce((memo, curr, i) => {
+      if (allErrors.indexOf(curr) === i) return [...memo, curr]
+      return memo
+    }, [])
+  }
+
+  handleChangeDate(value) {
+    let dateValue = value
+    let { timeValue } = this.state
+    if (!value) {
+      dateValue = undefined
+      timeValue = ''
+    }
+    this.handleOnChange({ dateValue, timeValue })
+  }
+
+  handleChangeTime(value) {
+    const { dateValue } = this.state
+    this.handleOnChange({ timeValue: value || '', dateValue })
+  }
+
+  handleOnChange({ dateValue, timeValue } = this.state) {
+    const { type, onChange } = this.props
+    if (type !== PICKER_TYPES.time && !dateValue || type === PICKER_TYPES.time && !timeValue) {
+      onChange()
+    } else {
+      const date = moment(dateValue, dateValue && DEFAULT_DATE_FORMAT)
+      let fullTimeValue = TIME_FORMAT.replace(/[^:]/g, '0')
+      fullTimeValue = `${timeValue}${fullTimeValue.substr(timeValue.length)}`
+      const timeFormatSplit = TIME_FORMAT.split(':')
+      const timeValueSplit = fullTimeValue.split(':')
+      timeFormatSplit.forEach((format, i) => {
+        date.set({ [format.substr(0, 1)]: timeValueSplit[i] })
       })
-    }
-    if (value !== nextProps.value &&
-      moment(value).format(returnFormat) !== moment(nextProps.value).format(returnFormat)) {
-      value = nextProps.value
-      this.setState({ value }, () => this.validate(nextProps.validate))
-    } else if (validateChanged) {
-      this.validate(nextProps.validate)
+
+      onChange(date.format(DEFAULT_DATE_TIME_FORMAT))
     }
   }
 
-  componentWillUnmount() {
-    this.props.onValid()
+  handleOnInvalid(component, errors = []) {
+    this.setState({ [`${component}Errors`]: errors }, this.callOnInvalid)
   }
 
-  sendOnChange(date, type) {
-    if (date) {
-      this.props.onChange(moment(date), type)
+  handleValidate(value = this.props.value) {
+    const { minDate, maxDate } = this.props.validate
+    const errors = []
+    if (minDate && moment(value).isBefore(minDate) || maxDate && moment(value).isAfter(maxDate)) {
+      errors.push(PICKER_ERRORS.outOfRange)
+    }
+    this.setState({ dateTimeErrors: errors }, this.callOnInvalid)
+  }
+
+  callOnInvalid() {
+    const errors = this.getAllErrors()
+    const { onValid, onInvalid } = this.props
+    if (errors.length) {
+      onInvalid(errors)
     } else {
-      this.props.onChange(undefined, type)
+      onValid()
     }
-  }
-
-  validate(validate) {
-    const innerErrors = []
-    if (!this.state.value) {
-      if (validate.required) innerErrors.push(PICKER_ERRORS.required)
-    } else if (validate.minDate && moment(this.state.value).isBefore(validate.minDate) ||
-      validate.maxDate && moment(this.state.value).isAfter(validate.maxDate)
-    ) {
-      innerErrors.push(PICKER_ERRORS.outOfRange)
-    }
-    this.setState({ innerErrors })
-    if (innerErrors.length) {
-      this.props.onInvalid(innerErrors)
-    } else {
-      this.props.onValid()
-    }
-  }
-
-  toggleOpen(open) {
-    let newOpen = open
-    let { value } = this.state
-    if (newOpen === undefined) newOpen = !this.state.open
-    if (newOpen && !value) value = this.props.validate.minDate || moment().format(returnFormat)
-    const afterSetState = this.state.open && !newOpen ?
-      () => {
-        this.validate(this.props.validate)
-        this.setState({ wasBlured: true })
-        this.sendOnChange(value, 'date')
-      }
-      :
-      () => {}
-    this.setState({ open: newOpen, value }, afterSetState)
-  }
-
-  changeValue(value, type) {
-    let {
-      value: newValue,
-      timeValue,
-    } = this.state
-    if (type === 'date') {
-      newValue = moment(newValue).format(`${moment(value).format('YYYY-MM-DD')}[T]HH:mm:00ZZ`)
-    } else if (type === 'time') {
-      timeValue = value
-      const fullTimeValue = timeValue.concat('0000'.slice(0, 4 - timeValue.length))
-      newValue = moment(newValue).set({
-        hour: fullTimeValue.slice(0, 2),
-        minute: fullTimeValue.slice(2),
-      }).format(returnFormat)
-    } else {
-      newValue = moment(newValue).set({ [type]: value }).format(returnFormat)
-    }
-    this.setState({
-      value: newValue,
-      timeValue,
-    }, () => {
-      if (type === 'time') {
-        this.validate(this.props.validate)
-        this.sendOnChange(this.state.value)
-      }
-    })
   }
 
   render() {
     const {
-      type,
-      disabled,
-      validate,
-      placeHolder,
       className,
+      placeholder,
+      type,
+      validate,
+      showTextErrors,
     } = this.props
+
     const {
-      value,
-      innerErrors,
-      open,
+      dateTimeErrors,
+      dateValue,
+      dateErrors,
+      timeValue,
+      timeErrors,
       wasBlured,
     } = this.state
 
-    const firstWeek = moment(value).startOf('month').week()
-    let lastWeek = moment(value).endOf('month').week()
-    if (lastWeek < firstWeek) {
-      let lastWeekOfYear = moment(value).endOf('year').week()
-      if (lastWeekOfYear === 1) {
-        lastWeekOfYear = moment(value).endOf('year').add({ week: -1 }).week()
-      }
-      lastWeek += lastWeekOfYear
-    }
-    const weekInMonth = lastWeek - firstWeek + 1
+    const showDate = type === PICKER_TYPES.date || type === PICKER_TYPES.dateTime
+    const showTime = type === PICKER_TYPES.time || type === PICKER_TYPES.dateTime
 
-    const startOfMonth = moment(value).startOf('month')
-    const startOfFirstMonthWeek = startOfMonth.startOf('week')
-
-    let calendarArray = (new Array(weekInMonth)).fill((new Array(7)).fill(0))
-
-    let day = -1
-    calendarArray = calendarArray.map(weekItem => weekItem.map(() => {
-      day += 1
-      return moment(startOfFirstMonthWeek).add({ day }).format(returnFormat)
-    }))
-    const calendarFirstWeek = calendarArray[0]
-
-    const isCellDisabled = date => {
-      if (validate.minDate && moment(validate.minDate).startOf('day').isAfter(date) ||
-        validate.maxDate && moment(validate.maxDate).endOf('day').isBefore(date)) return true
-      return false
-    }
-    let timePicker
-    if (type !== PICKER_TYPES.date) {
-      timePicker = (
-        <TInput {...{
-          className: classNames(
-            style.timeTInput,
-            type === PICKER_TYPES.time && className,
-          ),
-          disabled,
-          type: INPUT_TYPES.time,
-          placeholder: '00:00',
-          value: this.state.timeValue,
-          errors: innerErrors,
-          onChange: v => this.changeValue(v, 'time'),
-          onValid: () => this.setState({ innerErrors: [] }),
-          onInvalid: err => this.setState({ innerErrors: err }),
-          showTextErrors: false,
-          validate: {
-            checkOnBlur: !validate.checkBeforeBlur,
-            requaired: validate.requaired,
-          },
-        }} />
-      )
-    }
-    if (type === PICKER_TYPES.time) {
-      return timePicker
+    let errors = this.getAllErrors()
+    if (validate.checkOnBlur && !wasBlured) {
+      errors = []
     }
 
     return (
-      <TClickOutside onClick={() => this.toggleOpen(false)}>
-        <div {...{
-          className: classNames(
-            style.root,
-            className,
-            disabled && style.disabled,
-            open && style.open,
-            (validate.checkBeforeBlur || wasBlured) && innerErrors.length && style.error,
-          ),
-          'data-cy': placeHolder,
-        }}>
-          <div {...{
-            className: style.header,
-            onClick: disabled ? () => {} : () => this.toggleOpen(),
-            'data-cy': 'dateTimePickerControl',
-          }}>
-            {value &&
-              <div className={style.value}>
-                {moment(value).format(getDateTimeFormat(type))}
-              </div>
-              ||
-              <span>{placeHolder}</span>
-            }
-            <TIcon {...{
-              size: 28,
-              type: ICONS_TYPES.triangleArrow,
-              rotate: open ? ROTATE_TYPES.up : ROTATE_TYPES.down,
-              className: style.icon,
+      <div className={classNames(className, style.root)}>
+        <div className={style.wrapper}>
+          {showDate &&
+            <DatePicker {...{
+              value: dateValue,
+              placeholder,
+              errors: [...dateTimeErrors, ...dateErrors],
+              className: style.date,
+              validate: {
+                checkOnBlur: validate.checkOnBlur,
+                required: validate.dateRequired,
+                minDate: validate.minDate,
+                maxDate: validate.maxDate,
+              },
+              onChange: this.handleChangeDate,
+              onValid: () => this.handleOnInvalid('date'),
+              onInvalid: err => this.handleOnInvalid('date', err),
+              onBlur: () => this.setState({ wasBlured: true }),
             }} />
-          </div>
-          {open &&
-          <div className={classNames(style.body, style[type])}>
-            <div className={style.bodyHeader}>
-              <TIcon {...{
-                type: ICONS_TYPES.arrowWithTail,
-                size: 40,
-                className: style.calendarArrow,
-                onClick: () => this.changeValue(moment(value).month() - 3, 'month'),
-              }} />
-              {(new Array(3)).fill(0).map((_, i) => (
-                <div {...{
-                  key: i,
-                  className: classNames(style.month, i === 0 && style.monthActive),
-                  onClick: () => this.changeValue(moment(value).month() + i, 'month'),
-                }}>
-                  {moment(value).add({ month: i }).format('MMMM')}
-                </div>
-              ))}
-              <TIcon {...{
-                type: ICONS_TYPES.arrowWithTail,
-                rotate: 180,
-                size: 40,
-                className: style.calendarArrow,
-                onClick: () => this.changeValue(moment(value).month() + 3, 'month'),
-              }} />
-            </div>
-            <div className={style.calendar}>
-              <div className={classNames(style.calendarRow, style.calendarHeader)}>
-                {calendarFirstWeek.map((item, i) => (
-                  <div className={style.calendarCell} key={i}>
-                    {moment(item).format('dd')}
-                  </div>
-                ))}
-              </div>
-              {calendarArray.map((week, i) => (
-                <div className={style.calendarRow} key={i}>
-                  {week.map((item, j) => {
-                    const cellDisabled = isCellDisabled(item)
-                    return (
-                      <div {...{
-                        key: j,
-                        'data-cy': `dateTimePicker${
-                          cellDisabled ? 'Inactive' : 'Active'
-                        }Day_${
-                          moment(item).isSame(value, 'month') ? moment(item).date() : moment(item).format('MM_D')
-                        }`,
-                        className: classNames(
-                          style.calendarCell,
-                          style.calendarBodyCell,
-                          cellDisabled && style.disabledCell,
-                          !moment(item).isSame(value, 'month') && style.otherMonthCell,
-                          moment(item).isSame(value, 'day') && style.activeCell,
-                        ),
-                        onClick: cellDisabled ? () => {} : () => this.changeValue(item, 'date'),
-                      }}>
-                        {moment(item).date()}
-                      </div>
-                    )
-                  })}
-                </div>
-              ))}
-            </div>
-            <div className={style.bodyFooter}>
-              {type === PICKER_TYPES.dateTime && timePicker}
-              <TButton {...{
-                type: BUTTON_TYPES.border,
-                color: BUTTON_COLORS.gray,
-                className: style.button,
-                label: 'Очистить дату',
-                onClick: () => {
-                  this.setState({ value: undefined }, () => {
-                    this.toggleOpen(false)
-                  })
-                },
-              }} />
-              <TButton {...{
-                className: style.button,
-                label: 'Сохранить',
-                onClick: () => this.toggleOpen(false),
-              }} />
-            </div>
-          </div>
+          }
+          {showTime &&
+            <TimePicker {...{
+              value: timeValue,
+              errors: [...dateTimeErrors, ...timeErrors],
+              className: style.time,
+              disabled: !dateValue && showDate,
+              validate: {
+                checkOnBlur: validate.checkOnBlur,
+                required: validate.timeRequired,
+              },
+              onChange: this.handleChangeTime,
+              onValid: () => this.handleOnInvalid('time'),
+              onInvalid: err => this.handleOnInvalid('time', err),
+              onBlur: () => this.setState({ wasBlured: true }),
+            }} />
           }
         </div>
-      </TClickOutside>
+        {showTextErrors &&
+          <div className={style.errors}>
+            {errors.map((error, index) => (
+              <div className={style.errorText} key={index}>
+                {error}
+              </div>
+            ))}
+          </div>
+        }
+      </div>
     )
   }
 }

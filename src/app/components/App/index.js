@@ -2,6 +2,8 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import memoizeOne from 'memoize-one'
+import objectGet from 'lodash/get'
+import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
@@ -24,7 +26,31 @@ import {
 import { DEFAULT_SCROLLING_CONTAINER_ID } from '$trood/mainConstants'
 
 import { MailServiceContext } from '$trood/mailService'
+import {
+  EntityManagerContext,
+  getModelEditorActionsName,
+  getModelEntitiesName,
+  parseModalQuery,
+} from '$trood/entityManager'
 
+
+const getLinkedObjectNeededFields = (permissions = {}) => {
+  let frontendPermissions = permissions.frontend || {}
+  frontendPermissions = Object.values(frontendPermissions)
+  frontendPermissions = frontendPermissions.reduce((memo, curr) => {
+    return {
+      ...memo,
+      ...Object.values(curr).reduce((memo1, item) => {
+        return {
+          ...memo1,
+          ...item.reduce((memo2, rule) => ({ ...memo2, ...rule.rule }), {}),
+        }
+      }, {}),
+    }
+  }, {})
+  const fields = Object.keys(frontendPermissions)
+  return fields.map(field => field.split('.').slice(1))
+}
 
 const getRenderers = (sbj, permissions = {}) => {
   return getPagesRouteShemaRenderers(
@@ -44,7 +70,14 @@ const getPageManagerContext = registeredRoutesPaths => ({
   registeredRoutesPaths,
 })
 
-const memoizedGetRenderers = memoizeOne(getRenderers)
+const memoizedGetLinkedObjectNeededFields = memoizeOne(getLinkedObjectNeededFields)
+const memoizedGetRenderers = memoizeOne(getRenderers, (a, b) => {
+  if (a[1] !== b[1]) return false
+  const neededField = memoizedGetLinkedObjectNeededFields(a[1])
+  return neededField.reduce((memo, field) => {
+    return memo && deepEqual(objectGet(a[0], field), objectGet(b[0], field))
+  }, true)
+})
 const memoizedGetAllPaths = memoizeOne(getAllPaths)
 const memoizedGetPageManagerContext = memoizeOne(getPageManagerContext)
 
@@ -71,14 +104,39 @@ class App extends Component {
     }
 
     this.restoreAuthData = this.restoreAuthData.bind(this)
+    this.openLinkedModal = this.openLinkedModal.bind(this)
   }
 
   componentDidMount() {
     this.restoreAuthData()
+    this.openLinkedModal()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.restoreAuthData()
+    if (prevProps.location.query.modal !== this.props.location.query.modal) {
+      this.openLinkedModal()
+    }
+  }
+
+  openLinkedModal() {
+    const { linkedModals, isAuthenticated } = this.props
+    if (isAuthenticated) {
+      const firstLinkedModal = linkedModals[0]
+      if (firstLinkedModal) {
+        const {
+          modalType,
+          modelName,
+          modelId,
+        } = parseModalQuery(firstLinkedModal)
+        this.props[getModelEntitiesName(modelName)].asyncGetById(modelId)
+          .then(model => {
+            if (model && !model.$error) {
+              this.props[getModelEditorActionsName(modelName)][`${modalType}Entity`](model)
+            }
+          })
+      }
+    }
   }
 
   restoreAuthData() {
@@ -97,6 +155,7 @@ class App extends Component {
     const {
       isAuthenticated,
       authLinkedObject,
+      authLinkedObjectIsLoading,
       permissions,
 
       authData = {},
@@ -105,7 +164,10 @@ class App extends Component {
       match,
     } = this.props
 
-    // TODO restify getById memoized; authLinkedObject changed on every render
+    /* TODO authLinkedObjectIsLoading always true
+    if (authLinkedObjectIsLoading) return null */
+    if (authLinkedObject.$loading) return null
+
     const renderers = memoizedGetRenderers(authLinkedObject, permissions)
     const registeredRoutesPaths = memoizedGetAllPaths(renderers)
     const pageManagerContextValue = memoizedGetPageManagerContext(registeredRoutesPaths)
@@ -114,56 +176,58 @@ class App extends Component {
       <AuthManagerContext.Provider value={authData}>
         <PageManagerContext.Provider value={pageManagerContextValue}>
           <MailServiceContext.Provider value={this.mailServiceContext}>
-            <div className={style.root}>
-              {React.createElement(modals.container)}
-              {!isAuthenticated &&
-                <Switch>
-                  <Route {...{
-                    path: LOGIN_PAGE_URL,
-                    component: auth.container,
-                  }} />
-                  <Route {...{
-                    path: RECOVERY_PAGE_URL,
-                    component: auth.container,
-                  }} />
-                  <Route {...{
-                    render: ({ location }) => (
-                      <Redirect {...{
-                        to: {
-                          pathname: LOGIN_PAGE_URL,
-                          state: {
-                            nextUrl: location.pathname,
-                          },
-                        },
-                      }} />
-                    ),
-                  }} />
-                </Switch>
-              }
-              {isAuthenticated &&
-                <React.Fragment>
-                  <Route {...{
-                    path: LOGIN_PAGE_URL,
-                    render: () => <Redirect to="/" />,
-                  }} />
-                  <Route {...{
-                    path: RECOVERY_PAGE_URL,
-                    render: () => <Redirect to="/" />,
-                  }} />
-                  <Header {...{
-                    authActions,
-                  }} />
-                  <div id={DEFAULT_SCROLLING_CONTAINER_ID} className={style.components}>
-                    <PageHeader />
-                    <RouteSchema {...{
-                      renderers,
-                      registeredRoutesPaths,
-                      prevMatch: match,
+            <EntityManagerContext.Provider>
+              <div className={style.root}>
+                {React.createElement(modals.container)}
+                {!isAuthenticated &&
+                  <Switch>
+                    <Route {...{
+                      path: LOGIN_PAGE_URL,
+                      component: auth.container,
                     }} />
-                  </div>
-                </React.Fragment>
-              }
-            </div>
+                    <Route {...{
+                      path: RECOVERY_PAGE_URL,
+                      component: auth.container,
+                    }} />
+                    <Route {...{
+                      render: ({ location }) => (
+                        <Redirect {...{
+                          to: {
+                            pathname: LOGIN_PAGE_URL,
+                            state: {
+                              nextUrl: `${location.pathname}${location.search}`,
+                            },
+                          },
+                        }} />
+                      ),
+                    }} />
+                  </Switch>
+                }
+                {isAuthenticated &&
+                  <React.Fragment>
+                    <Route {...{
+                      path: LOGIN_PAGE_URL,
+                      render: () => <Redirect to="/" />,
+                    }} />
+                    <Route {...{
+                      path: RECOVERY_PAGE_URL,
+                      render: () => <Redirect to="/" />,
+                    }} />
+                    <Header {...{
+                      authActions,
+                    }} />
+                    <div id={DEFAULT_SCROLLING_CONTAINER_ID} className={style.components}>
+                      <PageHeader />
+                      <RouteSchema {...{
+                        renderers,
+                        registeredRoutesPaths,
+                        prevMatch: match,
+                      }} />
+                    </div>
+                  </React.Fragment>
+                }
+              </div>
+            </EntityManagerContext.Provider>
           </MailServiceContext.Provider>
         </PageManagerContext.Provider>
       </AuthManagerContext.Provider>

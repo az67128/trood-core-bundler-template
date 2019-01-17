@@ -141,18 +141,17 @@ export const ROW_HEIGHT = 18
 
 export const DEFAULT_MAX_ROWS = 5
 
-export const checkTime = (timeStr) => {
-  const hoursStr = timeStr.slice(0, 2)
-  const minutesStr = timeStr.slice(2, 4)
-  const hours = Number(hoursStr)
-  const minutes = Number(minutesStr)
+export const FULL_ZERO_TIME = formatToFunctions[TIME]('000000000')
 
-  const isValidHour = Number.isInteger(hours) && hours >= 0 && hours < 24
-  if (!isValidHour) return false
+export const checkTime = (time) => {
+  const fullTime = `${time}${FULL_ZERO_TIME.substr(time.length)}`
+  const fullTimeSplit = fullTime.split(':')
+  const maxHours = 24
+  const maxOther = 60
+  const validateTimeArray = (new Array(fullTimeSplit.length)).fill(maxOther)
+  validateTimeArray[0] = maxHours
 
-  if (!Number.isNaN(minutes) && minutes > 10 && Number(minutesStr[0]) > 5) {
-    return false
-  }
-
-  return true
+  return fullTimeSplit.reduce((memo, curr, i) => {
+    return memo && curr >= 0 && curr < validateTimeArray[i]
+  }, true)
 }

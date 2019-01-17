@@ -88,7 +88,7 @@ class ModalEditMail extends PureComponent {
       labelClassName: modalsStyle.thinControlLabel,
       controlClassName: modalsStyle.thinControlControl,
       placeHolder: 'Не выбрано',
-      replaceSelectValues: model[name] && [model[name]],
+      values: model[name] && [model[name]],
       onChange: values => mailFormActions.changeField(name, values[0]),
       onInvalid: errs => mailFormActions.setFieldError(name, errs),
       onValid: () => mailFormActions.resetFieldError(name),
@@ -219,7 +219,8 @@ class ModalEditMail extends PureComponent {
               },
             }} />
             {attachments.map(file => {
-              const fileModel = filesEntities.getById(file.id || file)
+              const fileId = typeof file === 'object' ? file.id : file
+              const fileModel = filesEntities.getById(fileId)
               return (
                 <FileBrickView {...{
                   key: fileModel.id,

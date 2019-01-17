@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import memoizeOne from 'memoize-one'
 
 import {
   api,
@@ -16,6 +18,7 @@ import { registerModal, MODAL_SIZES } from '$trood/modals'
 
 import TButton from '$trood/components/TButton'
 import { BUTTON_COLORS } from '$trood/components/TButton/constants'
+import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 
 import {
   getEditFormName,
@@ -23,7 +26,9 @@ import {
   getModelNameFromFormName,
   ENTITY_COMPONENT_EDIT,
   ENTITY_COMPONENT_VIEW,
+  ENTITY_COMPONENT_INLINE_EDIT,
   MODAL_NAME_FUNCS,
+  EntityManagerContext,
 } from './constants'
 
 import {
@@ -164,52 +169,67 @@ const getEntityFormSubmit = (modelName, formActions, entityId, isEditing, state,
     }
 
     return parentForm
-
-
-    // const { data: model, status } = await dispatch(submitEntityForm(formName))
-    // if (onSuccess) {
-    //   dispatch(onSuccess({ data: model, status }))
-    // }
-    // return Promise.all(submitChildForms.map(item => {
-    //   dispatch(linkChildWithParent(item.modelName, modelName, model.id, item.formActions, item.form))
-    //   // Submit child form
-    //   return dispatch(item.func(item.formName))
-    // })).then(async () => {
-    //   // TODO by @deylak this is a hack for chain entity creation updating sets of entities
-    //   // Should be removed, after custodian chain entity creation released
-    //   if (typeof window !== 'undefined' && !isNested) {
-    //     window.isSubmitting = false
-    //   }
-    //   // Clear pages, so all filters in components will be updated, according to new entity data
-    //   return dispatch(api.actions.entityManager[modelName].clearPages())
-    // })
   }
   return result
 }
 
-const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
+
+const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig) => {
   const currentModel = modelConfig || RESTIFY_CONFIG.registeredModels[modelName]
-  const EntityComponent = currentModel[entityComponentName]
+  let EntityComponent = currentModel[entityComponentName]
+  if (!EntityComponent && entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
+    EntityComponent = currentModel[ENTITY_COMPONENT_EDIT]
+  }
 
   const entitiesToGet = getEntitiesToGet(modelName, currentModel)
 
-  class EntityModal extends PureComponent {
+  const getEntityManagerContext = (entityId, parents, prevForm, nextParents) => {
+    let realNextParents = nextParents
+    if (!realNextParents) {
+      realNextParents = parents
+    }
+    const currentNewParents = {
+      modelName,
+      id: entityId,
+      skipSubmit: entityComponentName === ENTITY_COMPONENT_VIEW,
+    }
+    const newNextParents = realNextParents.concat(currentNewParents)
+    return {
+      parents: realNextParents,
+      nextParents: newNextParents,
+      prevForm,
+    }
+  }
+  const memoizedGetEntityManagerContext = memoizeOne(getEntityManagerContext)
+
+  class EntityComponentWrapper extends PureComponent {
     render() {
       const {
         className,
+        dataCyName,
+        entityId,
+        parents,
+        nextParents,
+        prevForm,
+        buttons,
       } = this.props
+      const contextValue = memoizedGetEntityManagerContext(entityId, parents, prevForm, nextParents)
       return (
         <div {...{
           className,
+          'data-cy': dataCyName,
         }} >
-          <EntityComponent {...this.props} />
+          <EntityManagerContext.Provider value={contextValue}>
+            <EntityComponent {...this.props} />
+          </EntityManagerContext.Provider>
+          {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
         </div>
       )
     }
   }
 
   let ModalSaveButton
-  if (entityComponentName === ENTITY_COMPONENT_EDIT) {
+  if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
     // TODO by @deylak may be refactor and split this in different files
     // eslint-disable-next-line react/no-multi-comp
     ModalSaveButton = class extends PureComponent {
@@ -227,11 +247,13 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
           modelValid,
           modelFormName,
           submitAction,
+          deleteAction,
+          cancelAction,
         } = this.props
-        return (
+        const saveButton = (
           <TButton {...{
             className: modalsStyle.button,
-            label: 'Сохранить изменения',
+            label: entityComponentName === ENTITY_COMPONENT_EDIT ? 'Сохранить изменения' : 'Сохранить',
             disabled: !modelValid || this.state.buttonLocked,
             color: BUTTON_COLORS.blue,
             onClick: () => {
@@ -245,40 +267,68 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
               }
               modelActions.submitEntityForm(modelFormName)
                 .then(() => {
-                  returnButtonState()
+                  if (entityComponentName !== ENTITY_COMPONENT_INLINE_EDIT) {
+                    returnButtonState()
+                  }
                   submitAction()
                 })
                 .catch(() => {
-                  returnButtonState()
+                  if (entityComponentName !== ENTITY_COMPONENT_INLINE_EDIT) {
+                    returnButtonState()
+                  }
                 })
             },
           }} />
         )
+
+        if (entityComponentName === ENTITY_COMPONENT_EDIT) {
+          return saveButton
+        }
+        return (
+          <div className={modalsStyle.buttonsContainer}>
+            {
+              deleteAction &&
+              <TIcon {...{
+                type: ICONS_TYPES.trashBin,
+                className: modalsStyle.deleteButton,
+                onClick: deleteAction,
+                size: 17,
+              }} />
+            }
+            {saveButton}
+            <TButton {...{
+              className: modalsStyle.button,
+              label: 'Отменить',
+              color: BUTTON_COLORS.gray,
+              onClick: cancelAction,
+            }} />
+          </div>
+        )
       }
     }
   }
+
+  const dataCyName = MODAL_NAME_FUNCS[entityComponentName](modelName)
 
   const stateToProps = (state, props) => {
     const currentEntities = applySelectors('entityModal')(state, entitiesToGet)
     const currentPropsEntities = getCurrentPropsEntities(currentEntities)
     let modelFormName
     let model
-    let childForms = []
     let title
     let modelErrors
     let modelValid
+    const currentChildFormRegexp = getChildFormRegexp({ parentModel: modelName, parentId: props.entityId })
+    const childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
     // Calc props for editing modal
-    if (entityComponentName === ENTITY_COMPONENT_EDIT) {
-      title = `${props.isEditing ? 'Редактировать' : 'Создать'} "${currentModel.name}"`
+    if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
+      title = props.title || `${props.isEditing ? 'Редактировать' : 'Создать'} "${currentModel.name}"`
       modelFormName = getEditFormName({
         modelName,
         id: props.entityId,
         parents: props.parents,
       })
-      const currentChildFormRegexp = getChildFormRegexp({ parentModel: modelName, parentId: props.entityId })
-      childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
       model = forms.selectors.getForm(modelFormName)(state)
-
       modelErrors = forms.selectors.getErrors(modelFormName)(state)
       modelValid = forms.selectors.getIsValid(modelFormName)(state)
     // Calc props for viewing modal
@@ -308,6 +358,7 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
       size: modalSize,
       shouldCloseOnOverlayClick: entityComponentName === ENTITY_COMPONENT_VIEW,
 
+      dataCyName,
       modelFormName,
       model,
       modelErrors,
@@ -341,11 +392,12 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
     // Delete action is needed only for existing entities
     let deleteAction
     if (stateProps.isEditing && !(currentModel.modal || {}).deleteActionDisabled) {
-      deleteAction = () => dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model))
+      deleteAction = () =>
+        dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model, stateProps.onDelete))
     }
     let editAction
     if (entityComponentName === ENTITY_COMPONENT_VIEW) {
-      editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editEntity(stateProps.model))
+      editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editChildEntity(stateProps.model))
     }
 
     let unbindedFormActions
@@ -353,15 +405,20 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
     let cancelAction
     let submitEntityForm = () => () => Promise.resolve()
     // Calc form actions only for edit view
-    if (entityComponentName === ENTITY_COMPONENT_EDIT) {
+    if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
       unbindedFormActions = forms.getFormActions(stateProps.modelFormName)
       modelFormActions = bindActionCreators(
         unbindedFormActions,
         dispatchProps.dispatch,
       )
       // Define cancel action only for editing modal, cause in view modal we just close it
-      if (stateProps.isEditing && stateProps.model && !stateProps.model.id) {
-        cancelAction = () => dispatchProps.dispatch(unbindedFormActions.changeSomeFields(stateProps.prevForm))
+      if (
+        stateProps.isEditing && stateProps.model && !stateProps.model.id &&
+        (stateProps.prevForm || stateProps.model.prevForm)
+      ) {
+        cancelAction = () => {
+          dispatchProps.dispatch(unbindedFormActions.changeSomeFields(stateProps.model.prevForm || stateProps.prevForm))
+        }
       } else {
         // TODO by @deylak here we should also delete all child forms
         cancelAction = () => dispatchProps.dispatch(unbindedFormActions.deleteForm())
@@ -425,7 +482,7 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
       }, dispatchProps.dispatch),
     }
 
-    if (entityComponentName === ENTITY_COMPONENT_EDIT) {
+    if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
       return {
         ...finalProps,
         buttons: modalProps => React.createElement(ModalSaveButton, {
@@ -438,13 +495,22 @@ const getEntityModal = (entityComponentName) => (modelName, modelConfig) => {
     return finalProps
   }
 
+  if (entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
+    return connect(
+      stateToProps,
+      dispatchToProps,
+      mergeProps,
+    )(EntityComponentWrapper)
+  }
+
   return registerModal(
-    MODAL_NAME_FUNCS[entityComponentName](modelName),
+    dataCyName,
     stateToProps,
     dispatchToProps,
     mergeProps,
-  )(EntityModal)
+  )(EntityComponentWrapper)
 }
 
-export const getEditEntityModal = getEntityModal(ENTITY_COMPONENT_EDIT)
-export const getViewEntityModal = getEntityModal(ENTITY_COMPONENT_VIEW)
+export const getEditEntityModal = getEntityEditComponent(ENTITY_COMPONENT_EDIT)
+export const getViewEntityModal = getEntityEditComponent(ENTITY_COMPONENT_VIEW)
+export const getInlineEntityEditComponent = getEntityEditComponent(ENTITY_COMPONENT_INLINE_EDIT)

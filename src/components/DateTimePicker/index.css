@@ -1,178 +1,32 @@
 @import 'styles/variables.css';
 
 .root {
-  position: relative;
-  display: flex;
-  width: 100%;
-  flex-flow: row nowrap;
-  height: 38px;
-  max-height: 100%;
-  max-width: 100%;
-  border: 1px solid var(--trood-gray-bg);
-  border-radius: 3px;
-  padding: 0 5px 0 15px;
-  background-color: var(--trood-white);
 }
 
-.error {
-  border-color: var(--trood-red);
-}
-
-.header {
+.wrapper {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
   justify-content: space-between;
-  color: var(--trood-gray-extra-dark);
+}
+
+.date {
+  flex: 0 0 calc(100% - 115px);
+}
+
+.date:last-child {
+  flex-basis: 100%;
+}
+
+.time {
+  flex: 0 0 100px;
+}
+
+.time:first-child {
+  flex-basis: 100%;
+}
+
+.errorText {
+  margin-top: 5px;
+  color: var(--trood-red);
   font-size: 12px;
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-}
-
-.value {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--trood-black);
-}
-
-.icon svg {
-  width: 10px;
-  height: 10px;
-}
-
-.body {
-  position: absolute;
-  z-index: 1000;
-  top: calc(100% + 12px);
-  left: 0;
-  width: 280px;
-  border: 1px solid var(--trood-gray-bg);
-  border-radius: 3px;
-  background-color: var(--trood-white);
-  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
-}
-
-.body:before {
-  content: '';
-  position: absolute;
-  top: -16px;
-  left: 30px;
-  border: 10px solid transparent;
-  border-top-width: 8px;
-  border-bottom-width: 8px;
-  border-bottom-color: var(--trood-gray-bg);
-}
-
-.body:after {
-  content: '';
-  position: absolute;
-  top: -15px;
-  left: 30px;
-  border: 10px solid transparent;
-  border-top-width: 8px;
-  border-bottom-width: 8px;
-  border-bottom-color: var(--trood-white);
-}
-
-.bodyHeader {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
-  height: 50px;
-}
-
-.calendarArrow {
-  cursor: pointer;
-}
-
-.calendarArrow svg {
-  width: 16px;
-  height: 16px;
-}
-
-.month {
-  text-transform: uppercase;
-  font-size: 12px;
-  color: var(--trood-gray-extra-dark);
-  cursor: pointer;
-}
-
-.monthActive {
-  color: var(--trood-blue);
-  font-weight: 500;
-  pointer-events: none;
-  cursor: default;
-}
-
-.calendar {
-  display: flex;
-  flex-flow: column nowrap;
-  font-size: 12px;
-  background-color: var(--trood-background-light);
-}
-
-.calendarRow {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-}
-
-.calendarHeader {
-  font-weight: 500;
-  text-transform: capitalize;
-  color: var(--trood-gray-extra-dark);
-}
-
-.calendarCell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-}
-
-.calendarBodyCell.otherMonthCell {
-  color: var(--trood-gray-text-3);
-}
-
-.calendarBodyCell:not(.disabledCell):hover {
-  background-color: var(--trood-blue-extra-light);
-  font-weight: 500;
-  color: var(--trood-black);
-  cursor: pointer;
-}
-
-.calendar .disabledCell {
-  color: var(--trood-gray-bg);
-}
-
-.calendar .calendarBodyCell.activeCell {
-  background-color: var(--trood-blue);
-  font-weight: 500;
-  color: var(--trood-white);
-  pointer-events: none;
-  cursor: default;
-}
-
-.bodyFooter {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  height: 50px;
-}
-
-.button {
-  height: 32px;
-}
-
-.timeInput {
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 10px 12px;
 }

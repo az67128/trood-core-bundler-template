@@ -39,6 +39,12 @@ const BUTTON_SPECIAL_ICONS = {
       className: style.textIcon,
     }} />
   ),
+  [BUTTON_SPECIAL_TYPES.attach]: (
+    <TIcon {...{
+      type: ICONS_TYPES.attachment,
+      className: style.textIcon,
+    }} />
+  ),
   [BUTTON_SPECIAL_TYPES.icon]: null,
   [BUTTON_SPECIAL_TYPES.arrowLeft]: (
     <TIcon {...{

@@ -20,7 +20,10 @@ export const OPENING_FILE_TYPES = [
   FILE_TYPES.pdf,
   FILE_TYPES.office,
   FILE_TYPES.docs,
+  FILE_TYPES.image,
 ]
 
 export const GOOGLE_DOCS_VIEWER = 'https://docs.google.com/viewer?url='
 export const MS_OFFICE_VIEWER = 'https://view.officeapps.live.com/op/view.aspx?src='
+
+export const IMAGE_VIEWER_MODAL = 'imageViewerModal'

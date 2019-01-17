@@ -9,11 +9,13 @@ import entityManager, {
   getModelEditorActionsName,
   getFormActionsName,
   getFormPropName,
+  getChildFormRegexp,
   getModelComponentsName,
   getModelActionsName,
   getModelConstantsName,
   getModelEntitiesName,
   getModelApiActionsName,
+  getChildEntitiesByModel,
 } from '$trood/entityManager'
 
 import { withService } from '$trood/serviceManager'
@@ -26,6 +28,7 @@ import componentsManifest from '$trood/componentLibraries/manifest'
 const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSelector) => {
   // Here we recursively get all components inside the config(case with nested grids)
   const currentEntitiesSelectors = applySelectors(`pageContainerCurrentEntities${Math.random()}`)
+  const currentEntitiyListsSelectors = applySelectors(`pageContainerEntityLists${Math.random()}`)
   const currentFormsSelectors = applySelectors(`pageContainerCurrentForms${Math.random()}`)
   const reduceComponents = (memo, component) => {
     if (component.components) {
@@ -36,15 +39,19 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
   const currentComponents = (pageConfig.components || []).reduce(reduceComponents, [])
   // Getting selectors for restify entities selectors
   const entitiesToBusinessObjectsDict = {}
+  // Used for accessing entities by their names, not with `entities` suffix
+  const entityListsGetters = {}
   const entitiesToGet = currentComponents.reduce((memo, component) => {
     if (!component.models) return memo
     const currentComponentEntities = Object.keys(component.models).reduce((prevEntities, model) => {
       const currentBusinessObject = component.models[model]
       entitiesToBusinessObjectsDict[model] = currentBusinessObject
+      const entititiesListGetter = (state) => api.selectors.entityManager[currentBusinessObject].getEntities(state)
+      entityListsGetters[model] = entititiesListGetter
       return {
         ...prevEntities,
         // Here we map component defined entities names to business object, wich are defined in system config
-        [getModelEntitiesName(model)]: (state) => api.selectors.entityManager[currentBusinessObject].getEntities(state),
+        [getModelEntitiesName(model)]: entititiesListGetter,
         [getModelComponentsName(model)]: () => {
           const currentModel = RESTIFY_CONFIG.registeredModels[currentBusinessObject]
           return currentModel.components
@@ -81,8 +88,14 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
   }, [])
 
   const stateToProps = (state, props) => {
+    const currentEntities = currentEntitiesSelectors(state, entitiesToGet)
+    const currentEntityLists = currentEntitiyListsSelectors(state, entityListsGetters)
+    const currentForms = currentFormsSelectors(state, formsToGet, getFormPropName)
+
     let modelId
     let model
+    let childForms = []
+    let childEntitiesByModel = {}
     if (entityPageModelName) {
       const entityPageEntities = api.selectors.entityManager[entityPageModelName].getEntities(state)
       // TODO this is hack for inherit modelId sleector(now only personalAccount page case),
@@ -93,14 +106,21 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
         modelId = parseInt(modelId, 10)
       }
       model = entityPageEntities.getById(modelId)
+
+      const currentChildFormRegexp = getChildFormRegexp({ parentModel: entityPageModelName, parentId: modelId })
+      childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
+      const currentModel = RESTIFY_CONFIG.registeredModels[entityPageModelName]
+      childEntitiesByModel =
+        getChildEntitiesByModel(entityPageModelName, currentModel, currentEntityLists, modelId, { childForms, model })
     }
-    const currentEntities = currentEntitiesSelectors(state, entitiesToGet)
-    const currentForms = currentFormsSelectors(state, formsToGet, getFormPropName)
+
+
     return {
       modelId,
       model,
       ...props,
       ...currentEntities,
+      ...childEntitiesByModel,
       ...currentForms,
       entityPageModelName,
     }

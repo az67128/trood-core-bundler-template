@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { capitalize, lowerize } from '$trood/helpers/namingNotation'
 
 
@@ -30,6 +32,7 @@ export const getModelNameFromFormName = (formName) => {
   return lowerize(formName.match(/edit(.+?)(\/|_parents_)/)[1])
 }
 export const getEditModalName = modelName => `modalEdit${capitalize(modelName)}`
+export const getInlineEditComponentName = modelName => `inlineEditComponent${capitalize(modelName)}`
 export const getViewModalName = modelName => `modalView${capitalize(modelName)}`
 export const getModelEditorActionsName = modelName => `${modelName}EditorActions`
 export const getModelApiActionsName = modelName => `${modelName}ApiActions`
@@ -56,10 +59,37 @@ export const getAttachedEntityActionName = (modelName = '') => (
   `getAttached${capitalize(modelName)}`
 )
 
+const MODAL_QUERY_DELIMITER = ':'
+export const parseModalQuery = (modalQuery = '') => {
+  const modalQuerySplit = modalQuery.split(MODAL_QUERY_DELIMITER)
+  if (modalQuerySplit.length !== 3) return undefined
+  return {
+    modalType: modalQuerySplit[0],
+    modelName: modalQuerySplit[1],
+    modelId: modalQuerySplit[2],
+  }
+}
+
 export const ENTITY_COMPONENT_EDIT = 'editComponent'
+export const ENTITY_COMPONENT_INLINE_EDIT = 'inlineEditComponent'
 export const ENTITY_COMPONENT_VIEW = 'viewComponent'
 
 export const MODAL_NAME_FUNCS = {
   [ENTITY_COMPONENT_EDIT]: getEditModalName,
   [ENTITY_COMPONENT_VIEW]: getViewModalName,
+  [ENTITY_COMPONENT_INLINE_EDIT]: getEditModalName,
 }
+
+export const registeredEntityInlineEditors = {}
+
+export const addRegisteredEntityInlineEditor = (modelName, comp) => {
+  registeredEntityInlineEditors[modelName] = comp
+}
+
+export const defaultEntityManagerContext = {
+  parents: [],
+  nextParents: [],
+  prevForm: undefined,
+}
+
+export const EntityManagerContext = React.createContext(defaultEntityManagerContext)
