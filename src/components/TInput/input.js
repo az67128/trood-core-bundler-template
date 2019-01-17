@@ -110,22 +110,27 @@ class Input extends PureComponent {
     } = props
     let formattedValue = formatValue(value.toString())
     let stateFormatedValue = state.formattedValue
-    if (type === INPUT_TYPES.moneyNumber || type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
-      stateFormatedValue = stateFormatedValue || '0' // don`t state change on empty number
-      const parts = stateFormatedValue.split(/\u002c|\u002e/)
-      const fraction = +(parts[1] || '0')
-      if (!fraction) stateFormatedValue = parts[0] // don`t state change on zero fraction
-    }
     if (type === INPUT_TYPES.time) {
       formattedValue = `${formattedValue}${FULL_ZERO_TIME.substr(formattedValue.length)}`
       stateFormatedValue = `${stateFormatedValue}${FULL_ZERO_TIME.substr(stateFormatedValue.length)}`
     }
+    if (formattedValue === state.prevPropsFormattedValue) return null
+    if (type === INPUT_TYPES.moneyNumber || type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
+      stateFormatedValue = stateFormatedValue || '0'
+      const parts = stateFormatedValue.split(/\u002c|\u002e/)
+      const fraction = +(parts[1] || '0')
+      if (!fraction) stateFormatedValue = parts[0] // don`t state change on zero fraction
+      stateFormatedValue = stateFormatedValue.replace(/^[0\s]*/g, '') || '0'
+    }
     if (formattedValue !== stateFormatedValue) {
       return {
         formattedValue,
+        prevPropsFormattedValue: formattedValue,
       }
     }
-    return null
+    return {
+      prevPropsFormattedValue: formattedValue,
+    }
   }
 
   constructor(props) {
@@ -266,9 +271,21 @@ class Input extends PureComponent {
 
   changeSelection(delta = 0, additional = '') {
     const { formattedValue } = this.state
-    const { formatValue } = this.props.settings
+    const { type, settings: { getValue, formatValue } } = this.props
     const splitFormattedValue = `${formattedValue.substr(0, this.selectionStart - delta)}${additional}`
-    const newSplitFormattedValue = formatValue(splitFormattedValue)
+    let newSplitFormattedValue = formatValue(splitFormattedValue)
+    if (type === INPUT_TYPES.money || type === INPUT_TYPES.moneyNumber ||
+      type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
+      const splitValue = getValue(splitFormattedValue, false)
+      const splitValueLength = splitValue.length
+      const newFormattedValue = formatValue(`${splitFormattedValue}${formattedValue.substr(this.selectionStart)}`)
+      newSplitFormattedValue = newFormattedValue.substr(0, splitValueLength)
+      let i = 0
+      while (getValue(newSplitFormattedValue, false).length < splitValueLength) {
+        i += 1
+        newSplitFormattedValue = newFormattedValue.substr(0, splitValueLength + 1)
+      }
+    }
     this.selectionStart = newSplitFormattedValue.length
     this.selectionEnd = newSplitFormattedValue.length
   }

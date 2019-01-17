@@ -23,6 +23,8 @@ import {
   getAllPaths,
 } from '$trood/pageManager'
 
+import LoadingIndicator from '$trood/components/LoadingIndicator'
+
 import { DEFAULT_SCROLLING_CONTAINER_ID } from '$trood/mainConstants'
 
 import { MailServiceContext } from '$trood/mailService'
@@ -165,8 +167,12 @@ class App extends Component {
     } = this.props
 
     /* TODO authLinkedObjectIsLoading always true
-    if (authLinkedObjectIsLoading) return null */
-    if (authLinkedObject.$loading) return null
+    if (authLinkedObjectIsLoading) {
+      return <LoadingIndicator className={style.loading} />
+    } */
+    if (authLinkedObject.$loading) {
+      return <LoadingIndicator className={style.loading} />
+    }
 
     const renderers = memoizedGetRenderers(authLinkedObject, permissions)
     const registeredRoutesPaths = memoizedGetAllPaths(renderers)
