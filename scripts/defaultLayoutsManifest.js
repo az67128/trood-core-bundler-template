@@ -1,5 +1,5 @@
 export default {
   'TroodCoreDefaultLayout': {
-    module: require('./TroodCoreDefaultLayout').default,
+    module: require('../src/layouts/TroodCoreDefaultLayout').default,
   },
 }
