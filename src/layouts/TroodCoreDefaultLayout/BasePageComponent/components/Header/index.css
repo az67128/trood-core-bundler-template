@@ -1,0 +1,9 @@
+@import 'styles/variables.css';
+
+.root {
+  height: 100%;
+}
+
+.logot {
+  margin-top: auto;
+}

@@ -15,11 +15,13 @@ class BackButton extends PureComponent {
     className: PropTypes.string,
     type: PropTypes.oneOf(Object.values(BACK_BUTTON_TYPES)),
     onClick: PropTypes.func,
+    withLabel: PropTypes.bool,
   }
 
   static defaultProps = {
     className: '',
     type: BACK_BUTTON_TYPES.button,
+    withLabel: true,
   }
 
   render() {
@@ -27,6 +29,7 @@ class BackButton extends PureComponent {
       className,
       type,
       onClick,
+      withLabel,
     } = this.props
 
     return (
@@ -52,7 +55,7 @@ class BackButton extends PureComponent {
               className: style.icon,
               type: ICONS_TYPES.arrowWithTail,
               rotate: ROTATE_TYPES.bottom,
-              label: 'Назад',
+              label: withLabel ? 'Назад' : undefined,
               size: 16,
             }} />
           }

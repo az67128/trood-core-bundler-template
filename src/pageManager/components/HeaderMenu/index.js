@@ -26,6 +26,9 @@ const HeaderMenu = ({
   menuRenderers = {},
 
   additionalLinks = [],
+  LinkComponent,
+  linkClassName,
+  linkActiveClassName,
 }) => {
   if (Object.keys(menuRenderers).length < MIN_MENU_RENDERERS && !additionalLinks.length) return null
   const preAdditionalLinks = additionalLinks.filter(link => link && link.pre)
@@ -36,19 +39,33 @@ const HeaderMenu = ({
         key,
         onClick: link.onClick && (() => link.onClick()),
         className: classNames(
+          linkClassName,
           style.url,
           link.active && style.active,
+          link.active && linkActiveClassName,
           link.className,
           link.active && link.activeClassName,
-          ),
+        ),
       }}>
-        {link.iconType &&
-          <TIcon {...{
-            className: style.icon,
-            type: link.iconType,
+        {
+          !LinkComponent &&
+          <React.Fragment>
+            {link.iconType &&
+              <TIcon {...{
+                className: style.icon,
+                type: link.iconType,
+              }} />
+            }
+            <span>{link.label}</span>
+          </React.Fragment>
+        }
+        {
+          LinkComponent &&
+          <LinkComponent {...{
+            icon: link.iconType,
+            label: link.label,
           }} />
         }
-        <span>{link.label}</span>
       </div>
     )
   }
@@ -85,13 +102,25 @@ const HeaderMenu = ({
                 key,
                 navKey: key,
                 baseUrl: currentBaseUrl,
-                activeClassName: style.active,
-                className: style.url,
+                activeClassName: classNames(style.active, linkActiveClassName),
+                className: classNames(style.url, linkClassName),
               }}>
-                {currentIconType &&
-                  <TIcon className={style.icon} type={currentIconType} />
+                {
+                  !LinkComponent &&
+                  <React.Fragment>
+                    {currentIconType &&
+                      <TIcon className={style.icon} type={currentIconType} />
+                    }
+                    {currentLabel}
+                  </React.Fragment>
                 }
-                {currentLabel}
+                {
+                  LinkComponent &&
+                  <LinkComponent {...{
+                    icon: currentIconType,
+                    label: currentLabel,
+                  }} />
+                }
               </PageNavLink>
             )
           })}

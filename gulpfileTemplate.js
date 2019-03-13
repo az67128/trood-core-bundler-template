@@ -36,6 +36,12 @@ const getModelTemplate = (libraryName, modelName, modelConfig, currentComponents
   }`
 }
 
+const getLayoutTemplate = (layoutName) => {
+  return `'${layoutName}': {
+    module: require('./${layoutName}').default,
+  }`
+}
+
 const getComponentFormTemplate = (formName, path) => {
   return `'${formName}': require('${path}').default`
 }
@@ -109,5 +115,26 @@ gulp.task('make-business-objects', () => {
       .pipe(gulp.dest('./src/businessObjects'))
 })
 
-gulp.task('default', ['make-components', 'make-business-objects'], () => {
+gulp.task('make-layouts', () => {
+  const context = require.context('./src/layouts/', true, /index\.js$/)
+
+  const configs = context.keys().reduce((memo, key) => ({
+    ...memo,
+    [key.replace(/\.?\/|index\.js/g, '')]: context(key).default || context(key),
+  }), {})
+
+  return gulp.src('./src/layouts/manifest.js.template')
+      .pipe(template({
+        layouts: Object.keys(configs).map(layoutKey => {
+          return getLayoutTemplate(layoutKey)
+        }).join(',\n'),
+      }))
+      .pipe(rename(path => {
+        path.basename = 'manifest'
+        path.extname = '.js'
+      }))
+      .pipe(gulp.dest('./src/layouts'))
+})
+
+gulp.task('default', ['make-components', 'make-business-objects', 'make-layouts'], () => {
 })

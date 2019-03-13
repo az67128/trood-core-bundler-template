@@ -45,6 +45,8 @@ import {
   SERVICES_PROPS_NAMES,
 } from '$trood/serviceManager'
 
+import { currentLayout } from '$trood/layoutsManager'
+
 
 const getEntityManagerContext = (modelName, entityId) => {
   const parents = [{
@@ -66,6 +68,7 @@ const PageGridLayout = ({
     components = [],
     pages,
     url,
+    columns,
   },
   parentPath,
   nestLevel = 0,
@@ -77,11 +80,12 @@ const PageGridLayout = ({
   ...other
 }) => {
   let prevColumn = 0
+  const currentGridColumns = columns || GRID_COLUMNS
   const pageComponent = (
     <div {...{
       className: nestLevel > 0 ? style.nestedRoot : style.root,
       style: {
-        grid: `auto-flow auto / repeat(${GRID_COLUMNS}, 1fr)`,
+        grid: `auto-flow auto / repeat(${currentGridColumns}, 1fr)`,
       },
     }}>
       {components.map((comp, index) => {
@@ -89,7 +93,7 @@ const PageGridLayout = ({
         const currentId = comp.id || index
 
         const currentColumnIndex = prevColumn
-        prevColumn = (prevColumn + currentSpan) % GRID_COLUMNS
+        prevColumn = (prevColumn + currentSpan) % currentGridColumns
 
         let compToRender
         if (comp.type === GRID_COMPONENT_TYPE) {
@@ -202,19 +206,18 @@ const PageGridLayout = ({
             <React.Fragment>
               <div {...{
                 style: {
-                  gridColumn: `1 / span ${GRID_COLUMNS}`,
+                  gridColumn: `1 / span ${currentGridColumns}`,
                 },
                 className: style.secondaryMenu,
               }}>
-                <HeaderMenu {...{
-                  type: HEADER_TYPES.primary,
+                {React.createElement(currentLayout.nestedPageMenuComponent, {
                   menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
                   basePath,
-                }} />
+                })}
               </div>
 
               <div style={{
-                gridColumn: `1 / span ${GRID_COLUMNS}`,
+                gridColumn: `1 / span ${currentGridColumns}`,
               }}>
                 <RouteSchema {...{
                   basePath,

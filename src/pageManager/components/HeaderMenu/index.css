@@ -21,7 +21,6 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: var(--trood-gray-extra-dark);
   text-transform: uppercase;
   transition:
     color 0.1s linear,
@@ -29,17 +28,18 @@
 }
 
 .url svg {
-  fill: var(--trood-gray-extra-dark);
   transition: fill 0.1s linear;
 }
 
 .primary .url {
   height: 50px;
   color: var(--trood-gray-extra-dark);
+  fill: var(--trood-gray-extra-dark);
 }
 
 .vertical .url {
   display: flex;
+  color: var(--trood-gray-extra-dark);
   align-items: center;
   justify-content: flex-start;
   width: 100%;
@@ -66,6 +66,11 @@
   width: 30px;
   height: 30px;
   margin-right: 30px;
+}
+
+.verticalCustom {
+  flex-flow: column nowrap;
+  align-items: flex-start;
 }
 
 .vertical {
