@@ -38,7 +38,7 @@ const getModelTemplate = (libraryName, modelName, modelConfig, currentComponents
 
 const getLayoutTemplate = (layoutName) => {
   return `'${layoutName}': {
-    module: require('./${layoutName}').default,
+    module: require('./${layoutName}/config').default,
   }`
 }
 
