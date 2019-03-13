@@ -10,8 +10,6 @@ import style from './index.css'
 import modals from '$trood/modals'
 import auth, { AuthManagerContext, LOGIN_PAGE_URL, RECOVERY_PAGE_URL } from '$trood/auth'
 
-import Header from '../Header'
-import PageHeader from '../PageHeader'
 
 import systemConfig from '$trood/config'
 
@@ -20,6 +18,7 @@ import {
   PageManagerContext,
   defaultPageManagerContext,
   getPagesRouteShemaRenderers,
+  getPagesHeaderRenderers,
   getAllPaths,
 } from '$trood/pageManager'
 
@@ -34,7 +33,10 @@ import {
   getModelEntitiesName,
   parseModalQuery,
 } from '$trood/entityManager'
+import { currentLayout } from '$trood/layoutsManager'
 
+
+const menuRenderers = getPagesHeaderRenderers(systemConfig.pages)
 
 const getLinkedObjectNeededFields = (permissions = {}) => {
   let frontendPermissions = permissions.frontend || {}
@@ -220,17 +222,13 @@ class App extends Component {
                       path: RECOVERY_PAGE_URL,
                       render: () => <Redirect to="/" />,
                     }} />
-                    <Header {...{
+                    {React.createElement(currentLayout.basePageComponent, {
                       authActions,
-                    }} />
-                    <div id={DEFAULT_SCROLLING_CONTAINER_ID} className={style.components}>
-                      <PageHeader />
-                      <RouteSchema {...{
-                        renderers,
-                        registeredRoutesPaths,
-                        prevMatch: match,
-                      }} />
-                    </div>
+                      renderers,
+                      registeredRoutesPaths,
+                      match,
+                      menuRenderers,
+                    })}
                   </React.Fragment>
                 }
               </div>
