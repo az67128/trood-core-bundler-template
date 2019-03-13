@@ -116,11 +116,11 @@ gulp.task('make-business-objects', () => {
 })
 
 gulp.task('make-layouts', () => {
-  const context = require.context('./src/layouts/', true, /index\.js$/)
+  const context = require.context('./src/layouts/', true, /config\.js$/)
 
   const configs = context.keys().reduce((memo, key) => ({
     ...memo,
-    [key.replace(/\.?\/|index\.js/g, '')]: context(key).default || context(key),
+    [key.replace(/\.?\/|config\.js/g, '')]: context(key).default || context(key),
   }), {})
 
   return gulp.src('./src/layouts/manifest.js.template')
