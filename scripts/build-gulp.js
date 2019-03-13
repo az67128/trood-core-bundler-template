@@ -28,7 +28,7 @@ webpack({
     alias: {
       '$trood/componentLibraries/manifest': paths.appSrc + '/config.js',
       '$trood/businessObjects/manifest': paths.appSrc + '/config.js',
-      '$trood/layouts/manifest': paths.appSrc + '/config.js',
+      '$trood/layouts/manifest': path.join(__dirname, '../scripts/defaultLayoutsManifest.js'),
       $trood: paths.appSrc,
     },
   },
