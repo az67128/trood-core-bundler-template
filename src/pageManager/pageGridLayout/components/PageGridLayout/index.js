@@ -88,6 +88,24 @@ const PageGridLayout = ({
         grid: `auto-flow auto / repeat(${currentGridColumns}, 1fr)`,
       },
     }}>
+      {
+        !nestLevel && (!pages || !pages.length) &&
+        <PageManagerContext.Consumer>
+          {({ basePath }) => (
+            <div {...{
+              style: {
+                gridColumn: `1 / span ${currentGridColumns}`,
+              },
+              className: style.secondaryMenu,
+            }}>
+              {React.createElement(currentLayout.nestedPageMenuComponent, {
+                menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
+                basePath,
+              })}
+            </div>
+          )}
+        </PageManagerContext.Consumer>
+      }
       {components.map((comp, index) => {
         const currentSpan = comp.span || DEFAULT_SPAN
         const currentId = comp.id || index
@@ -103,6 +121,7 @@ const PageGridLayout = ({
               page: {
                 components: comp.components,
                 url,
+                columns: comp.columns,
               },
               modelId,
               parentPath,
@@ -200,7 +219,8 @@ const PageGridLayout = ({
           </div>
         )
       })}
-      {pages &&
+      {
+        pages && !!pages.length &&
         <PageManagerContext.Consumer>
           {({ match, basePath, registeredRoutesPaths }) => (
             <React.Fragment>

@@ -11,7 +11,7 @@ import { api, setRestifyStore } from 'redux-restify'
 import moment from 'moment'
 import 'moment/locale/ru'
 
-import createHistory from 'history/createBrowserHistory'
+import history from 'history'
 import { stringify, parse } from 'qs'
 import qhistory from 'qhistory'
 
@@ -27,13 +27,14 @@ import registerServiceWorker from './registerServiceWorker'
 
 
 if (!process.env.TEST) {
-  const history = qhistory(
+  const createHistory = history.createBrowserHistory
+  const newHistory = qhistory(
     createHistory(),
     stringify,
     parse,
   )
   configRestify()
-  const store = getStore(history)
+  const store = getStore(newHistory)
   setRestifyStore(store)
   addStorageWriter(store.getState)
 
@@ -45,7 +46,7 @@ if (!process.env.TEST) {
 
   const getWrappedRoot = (CurrentRoot) => {
     return (
-      <CurrentRoot {...{ store, history }} />
+      <CurrentRoot {...{ store, history: newHistory }} />
     )
   }
 

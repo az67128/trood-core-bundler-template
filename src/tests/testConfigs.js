@@ -2,7 +2,7 @@ import flow from 'lodash/flow'
 
 import { RESTIFY_CONFIG, api, setRestifyStore } from 'redux-restify'
 
-import createHistory from 'history/createBrowserHistory'
+import history from 'history'
 import { stringify, parse } from 'qs'
 import qhistory from 'qhistory'
 
@@ -19,14 +19,15 @@ const currentLibraryApiName = flow(
   array => array.find(library => library.name === LIBRARY_FOR_TEST),
   library => library.name + library.endpoint,
 )(config.businessObjects)
+const createHistory = history.createBrowserHistory
 
-export const history = qhistory(
+export const newHistory = qhistory(
   createHistory(),
   stringify,
   parse,
 )
 configRestify()
-export const store = getStore(history)
+export const store = getStore(newHistory)
 setRestifyStore(store)
 
 export const registeredBusinessObjects = Object.keys(RESTIFY_CONFIG.registeredModels).filter(key => {

@@ -165,18 +165,18 @@ class TTable extends PureComponent {
                       }
                     },
                   }}>
+                    {item.title}
                     {item.sortable && sortingColumn === item.name &&
                       <TIcon {...{
                         type: ICONS_TYPES.arrow,
                         rotate: sortingOrder === -1 ? ROTATE_TYPES.up : ROTATE_TYPES.down,
                         className: style.sortIcon,
-                        size: 20,
+                        size: 17,
                       }} />
                     }
                     {item.sortable && sortingColumn !== item.name &&
                       <div className={style.sortingPlaceholder} />
                     }
-                    {item.title}
                   </div>
                 </th>
               )

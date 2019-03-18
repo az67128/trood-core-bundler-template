@@ -207,9 +207,9 @@ class DropDown extends PureComponent {
           </span>
           <TIcon {...{
             className: style.control,
-            size: 40,
-            type: ICONS_TYPES.arrow,
-            rotate: open ? ROTATE_TYPES.down : ROTATE_TYPES.up,
+            size: 8,
+            type: ICONS_TYPES.triangleArrow,
+            rotate: open ? ROTATE_TYPES.up : ROTATE_TYPES.down,
             onClick: () => this.toggleOpen(),
           }} />
           <div className={classNames(style.optionsContainer, !open && style.hide)}>

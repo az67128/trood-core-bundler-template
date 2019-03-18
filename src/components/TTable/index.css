@@ -15,6 +15,10 @@
   border-bottom: 1px solid var(--trood-gray-border);
 }
 
+.table thead tr {
+  border-bottom: 1px solid var(--trood-blue);
+}
+
 .table th {
   text-align: left;
   vertical-align: middle;
@@ -60,6 +64,11 @@
   display: flex;
   align-items: center;
   flex-flow: row nowrap;
+}
+
+.sortIcon {
+  color: var(--trood-blue);
+  margin-left: 10px;
 }
 
 @media (--trood-tablet) {

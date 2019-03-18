@@ -18,6 +18,7 @@
   cursor: pointer;
   text-transform: uppercase;
   user-select: none;
+  border-radius: var(--trood-border-radius);
 }
 
 .thin {

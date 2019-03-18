@@ -20,6 +20,8 @@ class NestedPageMenuComponent extends PureComponent {
       basePath,
     } = this.props
 
+    if (!menuRenderers || !Object.keys(menuRenderers).length) return null
+
     return (
       <HeaderMenu {...{
         type: HEADER_TYPES.primary,
