@@ -125,7 +125,7 @@ const PageGridLayout = ({
               },
               modelId,
               parentPath,
-              nestLevel,
+              nestLevel: nestLevel + 1,
               isFirstColumn: currentColumnIndex === 0,
               isLastColumn: prevColumn === 0,
               entityPageModelName,
