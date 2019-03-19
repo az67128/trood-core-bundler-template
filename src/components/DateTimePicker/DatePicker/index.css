@@ -18,6 +18,11 @@
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.3);
 }
 
+.rootWrapper {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
 .header {
   display: flex;
   flex-flow: row nowrap;

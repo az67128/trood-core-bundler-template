@@ -176,11 +176,9 @@ const PageGridLayout = ({
           })
 
           compToRender = (
-            <div data-cy={comp.type}>
-              <CurrentComponent {...{
-                ...currentComponentProps,
-              }} />
-            </div>
+            <CurrentComponent {...{
+              ...currentComponentProps,
+            }} />
           )
         }
 
@@ -205,7 +203,9 @@ const PageGridLayout = ({
         }
         return (
           <div {...{
+            'data-cy': comp.type,
             key: currentId,
+            className: style.gridCell,
             style: {
               // We add 1, because css grid columns starts from 1
               gridColumn: `${currentColumnIndex + 1} / span ${currentSpan}`,

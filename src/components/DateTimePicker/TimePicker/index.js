@@ -9,6 +9,7 @@ import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 
 const TimePicker = ({
   value,
+  label,
   errors,
   disabled,
   validate,
@@ -23,6 +24,7 @@ const TimePicker = ({
     disabled,
     type: INPUT_TYPES.time,
     placeholder: '00:00',
+    label,
     value: fromTime(value),
     errors,
     onChange: v => onChange(toTime(v)),

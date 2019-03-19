@@ -23,6 +23,8 @@ class DateTimePicker extends PureComponent {
   static propTypes = {
     type: PropTypes.oneOf(Object.values(PICKER_TYPES)),
     value: allMomentPropTypes,
+    label: PropTypes.node,
+    timeLabel: PropTypes.node,
     validate: PropTypes.shape({
       checkOnBlur: PropTypes.bool,
       dateRequired: PropTypes.bool,
@@ -84,7 +86,7 @@ class DateTimePicker extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.value && this.props.value && !moment(prevProps.value).isSame(this.props.value)) {
+    if (prevProps.value !== this.props.value) {
       this.handleValidate()
     }
   }
@@ -158,6 +160,8 @@ class DateTimePicker extends PureComponent {
     const {
       className,
       placeholder,
+      label,
+      timeLabel,
       type,
       validate,
       showTextErrors,
@@ -187,6 +191,7 @@ class DateTimePicker extends PureComponent {
             <DatePicker {...{
               value: dateValue,
               placeholder,
+              label,
               errors: [...dateTimeErrors, ...dateErrors],
               className: style.date,
               validate: {
@@ -204,6 +209,7 @@ class DateTimePicker extends PureComponent {
           {showTime &&
             <TimePicker {...{
               value: timeValue,
+              label: timeLabel || type === PICKER_TYPES.time && label,
               errors: [...dateTimeErrors, ...timeErrors],
               className: style.time,
               disabled: !dateValue && showDate,

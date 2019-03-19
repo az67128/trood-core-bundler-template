@@ -13,3 +13,7 @@
 .secondaryMenu {
   padding: 0 var(--trood-page-padding);
 }
+
+.gridCell:empty {
+  display: none;
+}

@@ -8,6 +8,7 @@ import style from './index.css'
 
 import TClickOutside from '$trood/components/TClickOutside'
 import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
+import TLabel from '$trood/components/TLabel'
 
 import { DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
 
@@ -23,6 +24,7 @@ const allMomentPropTypes = PropTypes.oneOfType([
 class DatePicker extends PureComponent {
   static propTypes = {
     value: allMomentPropTypes,
+    label: PropTypes.node,
     validate: PropTypes.shape({
       minDate: allMomentPropTypes,
       maxDate: allMomentPropTypes,
@@ -204,8 +206,10 @@ class DatePicker extends PureComponent {
     const {
       value,
       placeholder,
+      label,
       validate: {
         checkOnBlur,
+        required,
       },
       disabled,
       errors,
@@ -225,99 +229,108 @@ class DatePicker extends PureComponent {
     const nextType = DatePicker.getNextType(type)
 
     return (
-      <TClickOutside onClick={() => this.toggleOpen(false)}>
-        <div {...{
-          'data-cy': placeholder,
-          className: classNames(
-            style.root,
-            className,
-            (!checkOnBlur || wasBlured) && errors && errors.length && style.error,
-            disabled && style.disabled,
-            open && style.open,
-          ),
-        }}>
+      <div className={classNames(className, style.rootWrapper)}>
+        {
+          !!label &&
+          <TLabel {...{
+            className: style.label,
+            required,
+            label,
+          }} />
+        }
+        <TClickOutside onClick={() => this.toggleOpen(false)}>
           <div {...{
-            className: style.header,
-            onClick: disabled ? () => {} : () => this.toggleOpen(),
-            'data-cy': 'dateTimePickerControl',
+            'data-cy': placeholder,
+            className: classNames(
+              style.root,
+              (!checkOnBlur || wasBlured) && errors && errors.length && style.error,
+              disabled && style.disabled,
+              open && style.open,
+            ),
           }}>
-            <div className={classNames(style.value, !value && style.placeholder)}>
-              {value ? moment(value).format('DD.MM.YYYY') : placeholder}
+            <div {...{
+              className: style.header,
+              onClick: disabled ? () => {} : () => this.toggleOpen(),
+              'data-cy': 'dateTimePickerControl',
+            }}>
+              <div className={classNames(style.value, !value && style.placeholder)}>
+                {value ? moment(value).format('DD.MM.YYYY') : placeholder}
+              </div>
+              <TIcon {...{
+                size: 28,
+                type: ICONS_TYPES.triangleArrow,
+                rotate: open ? ROTATE_TYPES.up : ROTATE_TYPES.down,
+                className: style.icon,
+              }} />
             </div>
-            <TIcon {...{
-              size: 28,
-              type: ICONS_TYPES.triangleArrow,
-              rotate: open ? ROTATE_TYPES.up : ROTATE_TYPES.down,
-              className: style.icon,
-            }} />
-          </div>
-          {open &&
-            <div className={style.body}>
-              <div className={style.bodyHeader}>
-                <TIcon {...{
-                  type: ICONS_TYPES.arrowWithTail,
-                  size: 40,
-                  className: style.calendarArrow,
-                  onClick: () => this.handleOnScroll(-(type === CALENDAR_TYPES.year ? 6 : 1)),
-                }} />
-                <div {...{
-                  className: style.bodyHeaderTitle,
-                  onClick: this.toggleCalendarType,
-                }}>
-                  {nextType && moment(value).format(CALENDAR_TYPES_FORMAT[nextType])}
+            {open &&
+              <div className={style.body}>
+                <div className={style.bodyHeader}>
+                  <TIcon {...{
+                    type: ICONS_TYPES.arrowWithTail,
+                    size: 40,
+                    className: style.calendarArrow,
+                    onClick: () => this.handleOnScroll(-(type === CALENDAR_TYPES.year ? 6 : 1)),
+                  }} />
+                  <div {...{
+                    className: style.bodyHeaderTitle,
+                    onClick: this.toggleCalendarType,
+                  }}>
+                    {nextType && moment(value).format(CALENDAR_TYPES_FORMAT[nextType])}
+                  </div>
+                  <TIcon {...{
+                    type: ICONS_TYPES.arrowWithTail,
+                    rotate: 180,
+                    size: 40,
+                    className: style.calendarArrow,
+                    onClick: () => this.handleOnScroll(type === CALENDAR_TYPES.year ? 6 : 1),
+                  }} />
                 </div>
-                <TIcon {...{
-                  type: ICONS_TYPES.arrowWithTail,
-                  rotate: 180,
-                  size: 40,
-                  className: style.calendarArrow,
-                  onClick: () => this.handleOnScroll(type === CALENDAR_TYPES.year ? 6 : 1),
-                }} />
-              </div>
-              <div className={style.calendar}>
-                {type === CALENDAR_TYPES.day &&
-                  <div className={classNames(style.calendarRow, style.calendarHeader)}>
-                    {calendarFirstWeek.map((item, i) => (
-                      <div className={style.calendarCell} key={i}>
-                        {moment(item).format('dd')}
-                      </div>
-                    ))}
-                  </div>
-                }
-                {calendarArray.map((row, i) => (
-                  <div className={style.calendarRow} key={i}>
-                    {row.map((item, j) => {
-                      const isSameAsValue = !!value && DatePicker.getIsSameAsValue(value, item, type)
-                      const isCurrentDate = DatePicker.getIsSameAsValue(moment(), item, type)
-                      const isSameAsPeriod = DatePicker.getIsSameAsPeriod(value, item, type)
-                      const cellDisabled = this.getIsOutOfRange(item)
-                      return (
-                        <div {...{
-                          key: j,
-                          'data-cy': `dateTimePickerCell_${type}${cellDisabled ? 'Inactive' : 'Active'}_${
-                            moment(item).format(DEFAULT_DATE_FORMAT)}`,
-                          className: classNames(
-                            style[type],
-                            style.calendarCell,
-                            style.calendarBodyCell,
-                            cellDisabled && style.disabledCell,
-                            !isSameAsPeriod && style.otherCell,
-                            isSameAsValue && style.activeCell,
-                            isCurrentDate && style.currentCell,
-                          ),
-                          onClick: !cellDisabled ? () => this.handleOnChange(item) : undefined,
-                        }}>
-                          {moment(item).format(CALENDAR_TYPES_FORMAT[type])}
+                <div className={style.calendar}>
+                  {type === CALENDAR_TYPES.day &&
+                    <div className={classNames(style.calendarRow, style.calendarHeader)}>
+                      {calendarFirstWeek.map((item, i) => (
+                        <div className={style.calendarCell} key={i}>
+                          {moment(item).format('dd')}
                         </div>
-                      )
-                    })}
-                  </div>
-                ))}
+                      ))}
+                    </div>
+                  }
+                  {calendarArray.map((row, i) => (
+                    <div className={style.calendarRow} key={i}>
+                      {row.map((item, j) => {
+                        const isSameAsValue = !!value && DatePicker.getIsSameAsValue(value, item, type)
+                        const isCurrentDate = DatePicker.getIsSameAsValue(moment(), item, type)
+                        const isSameAsPeriod = DatePicker.getIsSameAsPeriod(value, item, type)
+                        const cellDisabled = this.getIsOutOfRange(item)
+                        return (
+                          <div {...{
+                            key: j,
+                            'data-cy': `dateTimePickerCell_${type}${cellDisabled ? 'Inactive' : 'Active'}_${
+                              moment(item).format(DEFAULT_DATE_FORMAT)}`,
+                            className: classNames(
+                              style[type],
+                              style.calendarCell,
+                              style.calendarBodyCell,
+                              cellDisabled && style.disabledCell,
+                              !isSameAsPeriod && style.otherCell,
+                              isSameAsValue && style.activeCell,
+                              isCurrentDate && style.currentCell,
+                            ),
+                            onClick: !cellDisabled ? () => this.handleOnChange(item) : undefined,
+                          }}>
+                            {moment(item).format(CALENDAR_TYPES_FORMAT[type])}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          }
-        </div>
-      </TClickOutside>
+            }
+          </div>
+        </TClickOutside>
+      </div>
     )
   }
 }
