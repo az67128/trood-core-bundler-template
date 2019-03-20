@@ -1,6 +1,6 @@
 /* stylelint-disable */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Trood';
   src: url('/static/fonts/Ubuntu-L.eot');
   src: url('/static/fonts/Ubuntu-L.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-L.woff2') format('woff2'),
@@ -12,7 +12,7 @@
 }
 
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Trood';
   src: url('/static/fonts/Ubuntu-R.eot');
   src: url('/static/fonts/Ubuntu-R.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-R.woff2') format('woff2'),
@@ -24,7 +24,7 @@
 }
 
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Trood';
   src: url('/static/fonts/Ubuntu-RI.eot');
   src: url('/static/fonts/Ubuntu-RI.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-RI.woff2') format('woff2'),
@@ -36,7 +36,7 @@
 }
 
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Trood';
   src: url('/static/fonts/Ubuntu-M.eot');
   src: url('/static/fonts/Ubuntu-M.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-M.woff2') format('woff2'),
@@ -48,7 +48,7 @@
 }
 
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Trood';
   src: url('/static/fonts/Ubuntu-MI.eot');
   src: url('/static/fonts/Ubuntu-MI.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-MI.woff2') format('woff2'),
@@ -60,7 +60,7 @@
 }
 
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Trood';
   src: url('/static/fonts/Ubuntu-B.eot');
   src: url('/static/fonts/Ubuntu-B.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-B.woff2') format('woff2'),
