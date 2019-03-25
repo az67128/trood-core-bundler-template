@@ -18,16 +18,18 @@ const SmartDate = ({
   className = '',
   date,
   format = FULL_FORMAT,
+  defaultEmptyMessage = 'Неизвестно',
 }) => {
   let realDate = date
   if (typeof realDate === 'number' && realDate / MS_IN_SEC < UNIX_TIMESTAMP_CHECKER) {
     realDate *= MS_IN_SEC
   }
   const dateToDisplay = moment(realDate)
-  const defaultDateMsg = 'Неизвестно'
+  const hasDate = realDate && dateToDisplay.isValid()
+
   return (
     <div className={classNames(style.root, className)}>
-      {(realDate && dateToDisplay.isValid()) ? SMART_DATE_FORMATS_FUNCTIONS[format](dateToDisplay) : defaultDateMsg}
+      {hasDate ? SMART_DATE_FORMATS_FUNCTIONS[format](dateToDisplay) : defaultEmptyMessage}
     </div>
   )
 }
