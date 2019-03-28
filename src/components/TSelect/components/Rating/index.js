@@ -23,6 +23,7 @@ class Rating extends PureComponent {
 
     label: PropTypes.node,
     value: PropTypes.number,
+    maxRating: PropTypes.number,
     icon: PropTypes.shape({
       type: PropTypes.oneOf(Object.values(ICONS_TYPES)),
       size: PropTypes.number,
@@ -35,6 +36,7 @@ class Rating extends PureComponent {
 
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
+    onFocus: PropTypes.func,
   }
 
   static defaultProps = {

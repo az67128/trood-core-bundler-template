@@ -16,6 +16,7 @@ const getPageGlobalId = (id, baseId) => snakeToCamel(`${baseId ? `${baseId}_` : 
 export const getPagesHeaderRenderers = (pages, entityPageModelName) => {
   return pages.reduce((memo, page) => {
     const pageConfig = getPageLayoutProps(page, entityPageModelName)
+    if (pageConfig.pageConfig.hideMenu) return memo
     return {
       ...memo,
       [pageConfig.id]: pageConfig.headerRenderer,
