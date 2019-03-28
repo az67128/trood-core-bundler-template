@@ -181,6 +181,7 @@ class App extends Component {
       authActions = {},
 
       match,
+      getLinkedObject,
     } = this.props
 
     /* TODO authLinkedObjectIsLoading always true
@@ -196,7 +197,7 @@ class App extends Component {
     const pageManagerContextValue = memoizedGetPageManagerContext(registeredRoutesPaths)
 
     return (
-      <AuthManagerContext.Provider value={authData}>
+      <AuthManagerContext.Provider value={{ ...authData, getLinkedObject }}>
         <PageManagerContext.Provider value={pageManagerContextValue}>
           <MailServiceContext.Provider value={this.mailServiceContext}>
             <EntityManagerContext.Provider>

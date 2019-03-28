@@ -52,6 +52,7 @@ const stateToProps = (state, props) => {
     authLinkedObjectIsLoading: auth.selectors.getLinkedObjectIsLoading(state),
     isAuthenticated: auth.selectors.getIsAuthenticated(state),
     isLoading: api.selectors.loadsManager.getIsLoading(state),
+    getLinkedObject: () => auth.selectors.getLinkedObject(state),
     getModalOpen: modalName => modals.selectors.getModalOpen(modalName)(state),
   }
 }
