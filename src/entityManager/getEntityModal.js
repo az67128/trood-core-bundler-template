@@ -15,6 +15,7 @@ import {
 import modalsStyle from '$trood/styles/modals.css'
 
 import { registerModal, MODAL_SIZES } from '$trood/modals'
+import auth from '$trood/auth'
 
 import TButton from '$trood/components/TButton'
 import { BUTTON_COLORS } from '$trood/components/TButton/constants'
@@ -363,6 +364,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       model,
       modelErrors,
       modelValid,
+      authData: auth.selectors.getAuthData(state),
 
       ...childEntitiesByModel,
       ...currentPropsEntities,
