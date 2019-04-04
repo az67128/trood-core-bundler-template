@@ -56,6 +56,12 @@ class DateTimePicker extends PureComponent {
       dateValue = dateTime.format(DEFAULT_DATE_FORMAT)
       timeValue = dateTime.format(TIME_FORMAT)
     }
+    if (!state.timeValue && timeValue) {
+      const startDayTimeValue = moment().startOf('day').format(TIME_FORMAT)
+      if (timeValue === startDayTimeValue) {
+        timeValue = state.timeValue
+      }
+    }
     if (dateValue !== state.dateValue || timeValue !== state.timeValue) {
       return {
         dateValue,
@@ -189,7 +195,8 @@ class DateTimePicker extends PureComponent {
     return (
       <div className={classNames(className, style.root)}>
         <div className={style.wrapper}>
-          {showDate &&
+          {
+            showDate &&
             <DatePicker {...{
               calendarPosition,
               value: dateValue,
@@ -209,7 +216,8 @@ class DateTimePicker extends PureComponent {
               onBlur: () => this.setState({ wasBlured: true }),
             }} />
           }
-          {showTime &&
+          {
+            showTime &&
             <TimePicker {...{
               value: timeValue,
               label: timeLabel || type === PICKER_TYPES.time && label,
@@ -227,7 +235,8 @@ class DateTimePicker extends PureComponent {
             }} />
           }
         </div>
-        {showTextErrors &&
+        {
+          showTextErrors &&
           <div className={style.errors}>
             {errors.map((error, index) => (
               <div className={style.errorText} key={index}>
