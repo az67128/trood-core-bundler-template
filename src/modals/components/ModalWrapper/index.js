@@ -42,6 +42,7 @@ class ModalWrapper extends PureComponent {
       name,
       show,
       shouldCloseOnOverlayClick,
+      closeOnEdit,
       closeAction,
       className,
       children,
@@ -126,7 +127,7 @@ class ModalWrapper extends PureComponent {
                       className: style.toolBarIcon,
                       onClick: async () => {
                         await editAction()
-                        closeAction()
+                        if (closeOnEdit) closeAction()
                       },
                       size: 17,
                     }} />
