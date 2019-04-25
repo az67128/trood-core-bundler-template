@@ -29,6 +29,7 @@ webpack({
       '$trood/componentLibraries/manifest': paths.appSrc + '/config.js',
       '$trood/businessObjects/manifest': paths.appSrc + '/config.js',
       '$trood/layouts/manifest': path.join(__dirname, '../scripts/defaultLayoutsManifest.js'),
+      '$trood/configMessages': path.join(__dirname, '../scripts/defaultConfigMessages.js'),
       $trood: paths.appSrc,
     },
   },
@@ -36,7 +37,7 @@ webpack({
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules|manifest\.js/,
+        exclude: /node_modules|manifest\.js|configMessages\.js/,
         loader: require.resolve('babel-loader'),
         options: {
           // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -48,7 +49,7 @@ webpack({
     ],
   },
   plugins: [
-    // We will try to load a lot of npm modules, when parsin project structure,
+    // We will try to load a lot of npm modules, when parsing project structure,
     // but we don't really need them , we need only local requires
     // new EmptyModulePlugin(/^[^.](?!.*(ulp-|abel-polyfill|trood))|\.css$/),
     new EmptyModulePlugin(/\.css$/),

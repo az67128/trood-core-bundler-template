@@ -41,6 +41,13 @@ import {
   JOURNAL_API_HOST,
 } from './journalApiUrlSchema'
 
+import {
+  STATIC_API_NAME,
+  STATIC_ALLOWED_NO_TOKEN_ENDPOINTS,
+  STATIC_API_PREFIX,
+  STATIC_API_HOST,
+} from './staticApiUrlSchema'
+
 import { initRestify } from 'redux-restify'
 
 import auth from '$trood/auth'
@@ -62,7 +69,7 @@ const configRestify = () => {
   const defaultHttpCodesAllbacks = (code) => {
     if (code >= 500) {
       return () => modals.actions.showMessageBoxModal({
-        text: 'Ошибка сервера! Попробуйте обновить страницу!',
+        text: 'Server error! Try to refresh page!',
         size: MODAL_SIZES.mediumSmall,
       })
     }
@@ -180,6 +187,12 @@ const configRestify = () => {
     apiHost: REPORTING_API_HOST,
     apiPrefix: REPORTING_API_PREFIX,
     allowedNoTokenEndpoints: REPORTING_ALLOWED_NO_TOKEN_ENDPOINTS,
+    httpCodesCallbacks: defaultHttpCodesAllbacks,
+  }
+  apiDefinitions[STATIC_API_NAME] = {
+    apiHost: STATIC_API_HOST,
+    apiPrefix: STATIC_API_PREFIX,
+    allowedNoTokenEndpoints: STATIC_ALLOWED_NO_TOKEN_ENDPOINTS,
     httpCodesCallbacks: defaultHttpCodesAllbacks,
   }
 

@@ -12,7 +12,6 @@ import urlSchema, { getBaseUrl } from './urlSchema'
 
 const getPageGlobalId = (id, baseId) => snakeToCamel(`${baseId ? `${baseId}_` : ''}${id}_page`)
 
-
 export const getPagesHeaderRenderers = (pages, entityPageModelName) => {
   return pages.reduce((memo, page) => {
     const pageConfig = getPageLayoutProps(page, entityPageModelName)

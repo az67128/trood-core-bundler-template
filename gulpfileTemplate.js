@@ -46,6 +46,13 @@ const getComponentFormTemplate = (formName, path) => {
   return `'${formName}': require('${path}').default`
 }
 
+const getPageIntlMessage = (pageId, pageTitle) => {
+  return `'${pageId}': {
+    id: '${pageId}',
+    defaultMessage: '${pageTitle}',
+  }`
+}
+
 gulp.task('make-components', () => {
   const configsContext = require.context('./src/componentLibraries/', true, /config\.js(on)?$/)
   const formsContext = require.context('./src/componentLibraries/', true, /form\.js$/)
@@ -136,5 +143,69 @@ gulp.task('make-layouts', () => {
       .pipe(gulp.dest('./src/layouts'))
 })
 
-gulp.task('default', ['make-components', 'make-business-objects', 'make-layouts'], () => {
+// TODO by @deylak import this from trood-core
+const getPageId = (page, entityModelName) => `${page.url}${entityModelName ? `_${entityModelName}` : ''}`
+
+gulp.task('make-locale', () => {
+  const config = require('./src/config').default
+
+  const reducePages = (modelType) => (memo, page) => {
+    let currentPageTitles = [
+      {
+        id: getPageId(page, modelType),
+        title: page.title,
+      },
+    ]
+    if (page.pages) {
+      currentPageTitles = [
+        ...currentPageTitles,
+        ...page.pages.reduce(
+          reducePages(page.modelType || modelType),
+          [],
+        ),
+      ]
+    }
+    return memo.concat(currentPageTitles)
+  }
+  const flattenPages = config.pages.reduce(
+    reducePages(),
+    Object.keys(config.entityPages).reduce((memo, key) => {
+      const currentPage = config.entityPages[key]
+      let currentPageTitles = [
+        {
+          id: getPageId(currentPage, key),
+          title: currentPage.title,
+        },
+      ]
+      if (currentPage.pages) {
+        currentPageTitles = [
+          ...currentPageTitles,
+          ...currentPage.pages.reduce(
+            reducePages(key),
+            [],
+          ),
+        ]
+      }
+      return memo.concat(currentPageTitles)
+    }, []),
+  )
+  return gulp.src('./src/configMessages.js.template')
+      .pipe(template({
+        pages: flattenPages
+          .map(page => getPageIntlMessage(page.id, page.title))
+          .join(',\n'),
+      }))
+      .pipe(rename(path => {
+        path.basename = 'configMessages'
+        path.extname = '.js'
+      }))
+      .pipe(gulp.dest('./src'))
+})
+
+gulp.task('default', [
+  'make-components',
+  'make-business-objects',
+  'make-layouts',
+  'make-locale',
+], () => {
 })

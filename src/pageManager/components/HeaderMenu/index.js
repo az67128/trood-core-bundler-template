@@ -13,6 +13,7 @@ import urlSchema, {
 import TIcon from '$trood/components/TIcon'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
+import localeService, { intlObject } from '$trood/localeService'
 
 import PageNavLink from '../PageNavLink'
 import { HEADER_TYPES, MIN_MENU_RENDERERS } from './constants'
@@ -95,7 +96,11 @@ const HeaderMenu = ({
           {headerKeysToRender.map(key => {
             const currentRenderer = getNestedObjectField(menuRenderers, key) || menuRenderers[key[key.length - 1]]
             if (!currentRenderer) return null
-            const currentLabel = currentRenderer.label
+            let currentLabel = currentRenderer.label
+            const currentMessage = localeService.localeMessages[currentRenderer.localeMessageId]
+            if (currentRenderer.localeMessageId && intlObject.intl && currentMessage) {
+              currentLabel = intlObject.intl.formatMessage(currentMessage)
+            }
             const currentIconType = currentRenderer.iconType
             return (
               <PageNavLink {...{

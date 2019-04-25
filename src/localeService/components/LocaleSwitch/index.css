@@ -1,0 +1,23 @@
+@import 'styles/variables.css';
+
+.root {
+}
+
+.flag {
+  border: 1px solid transparent;
+  cursor: pointer;
+  height: 11px;
+}
+
+.flag:hover {
+  border-color: var(--trood-gray-extra-dark);
+}
+
+.selectedFlag:hover,
+.selectedFlag {
+  border-color: var(--trood-black);
+}
+
+.flag:not(:first-child) {
+  margin-left: 5px;
+}

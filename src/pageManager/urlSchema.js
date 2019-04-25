@@ -8,8 +8,8 @@ import { getPageLayoutProps } from './pageLayouts'
 export const HEADER_SHOW = 'show'
 export const HEADER_HIDE = 'hide'
 
-const reducePages = (modelType) => (memo, page) => {
-  const currentPageProps = getPageLayoutProps(page, modelType)
+const reducePages = (modelType, prevPageId) => (memo, page) => {
+  const currentPageProps = getPageLayoutProps(page, modelType, prevPageId)
   const realConfig = currentPageProps.pageConfig
   const pageModelType = currentPageProps.modelType
   return {
@@ -17,7 +17,10 @@ const reducePages = (modelType) => (memo, page) => {
     [currentPageProps.id]: {
       header: HEADER_SHOW,
       url: realConfig.url,
-      pages: realConfig.pages && realConfig.pages.reduce(reducePages(pageModelType || modelType), {}),
+      pages:realConfig.pages && realConfig.pages.reduce(
+        reducePages(pageModelType || modelType, currentPageProps.baseId),
+        {},
+      ),
     },
   }
 }
@@ -33,7 +36,7 @@ const urlSchema = systemConfig.pages.reduce(reducePages(), {
         modelType: key,
         header: HEADER_HIDE,
         url: `${realConfig.url || key}/:id(\\d+)`,
-        pages: realConfig.pages && realConfig.pages.reduce(reducePages(key), {}),
+        pages: realConfig.pages && realConfig.pages.reduce(reducePages(key, currentPageProps.baseId), {}),
       },
     }
   }, {}),

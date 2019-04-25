@@ -26,12 +26,14 @@ const pageTypesLayoutsDict = {
 // Also these services recieve an instance of default pageGridLayout, so they can inherit it's behaviour
 //
 // Later this is a possibility for defining full custom user services and pages
-export const getPageLayoutProps = (page, entityPageName) => {
+export const getPageLayoutProps = (page, entityPageName, prevPageId) => {
   const currentPageService = pageTypesLayoutsDict[page.type]
-  const propsArgs = [page, entityPageName, pageGridLayout]
+  const propsArgs = [page, entityPageName, pageGridLayout, prevPageId]
   return {
     pageConfig: currentPageService.getPageConfig(...propsArgs),
     id: currentPageService.getPageId(...propsArgs),
+    // TODO by @deylak add getPageBaseId to other pages and ideally refactor all pages in urlSchema to use baseId
+    baseId: currentPageService.getPageBaseId && currentPageService.getPageBaseId(...propsArgs),
     headerRenderer: currentPageService.getPageHeaderRendererConfig(...propsArgs),
     container: currentPageService.getPageContainer(...propsArgs),
     modelType: currentPageService.getModelType(...propsArgs),

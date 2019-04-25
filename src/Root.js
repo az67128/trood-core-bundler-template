@@ -7,6 +7,8 @@ import { DragDropContextProvider } from 'react-dnd'
 
 import app from '$trood/app'
 
+import { LocalizeServiceProvider } from '$trood/localeService'
+
 
 const Root = ({
   store,
@@ -15,9 +17,11 @@ const Root = ({
   return (
     <DragDropContextProvider backend={HTML5Backend}>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
-          {React.createElement(app.container)}
-        </ConnectedRouter>
+        <LocalizeServiceProvider>
+          <ConnectedRouter history={history}>
+            {React.createElement(app.container)}
+          </ConnectedRouter>
+        </LocalizeServiceProvider>
       </Provider>
     </DragDropContextProvider>
   )

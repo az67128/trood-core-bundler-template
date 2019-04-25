@@ -62,3 +62,18 @@ export const API_TYPES = {
     }),
   },
 }
+
+export const noSlashEnforceUrl = ({
+  apiHost,
+  apiPrefix,
+  modelEndpoint,
+  entityId,
+  specialAction,
+}) => {
+  let slashAfterId = ''
+  if (entityId && (typeof entityId === 'number' || typeof entityId === 'string' && !entityId.endsWith('/'))) {
+    slashAfterId = '/'
+  }
+  const baseUrl = `${modelEndpoint}${entityId || ''}${slashAfterId}${specialAction || ''}`
+  return `${apiHost}${apiPrefix}${baseUrl}`
+}
