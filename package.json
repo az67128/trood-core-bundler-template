@@ -99,7 +99,7 @@
   "scripts": {
     "build-gulp": "node scripts/build-gulp.js",
     "build-manifest": "npm run build-gulp && gulp",
-    "start": "npm run build-manifest && node scripts/start.js",
+    "start": "npm run build-manifest && npm run po && node scripts/start.js",
     "build": "npm run build-manifest && node --max_old_space_size=800 scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "lint": "npm run jslint && npm run stylelint",
