@@ -78,7 +78,7 @@ export default (
         <WrappedComponent {...{
           ...other,
           reportingServiceData,
-          [propName]: reportingServiceData[propName] || [],
+          [propName]: reportingServiceData[propName],
           [reportLoadingPropName]: reportingServiceData[reportLoadingPropName],
         }} />
       )
