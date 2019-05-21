@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { createSelector } from 'reselect'
+import deepEqual from 'deep-equal'
 
 import { REPORT_TYPES, getReportingLoadingPropName } from './constants'
 
@@ -49,8 +50,9 @@ export default (
       const currentFilter = memoizedFilter(this.props)
       const type = connectionCode ? REPORT_TYPES.config : REPORT_TYPES.prepared
 
-      const hasChanges =
-        this.prevQuery !== currentQuery || this.prevFilter !== currentFilter || this.prevType !== type
+      const hasChanges = !deepEqual(this.prevQuery, currentQuery) ||
+        !deepEqual(this.prevFilter, currentFilter) ||
+        !deepEqual(this.prevType, type)
 
       if (hasChanges) {
         this.props.reportingActions.getReportByQuery({
