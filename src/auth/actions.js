@@ -103,6 +103,7 @@ export const logout = () => async (dispatch) => {
     apiName: AUTH_API_NAME,
     endpoint: LOGOUT_ENDPOINT,
   }))
+    .catch(() => {})
   dispatch(logoutFront())
 }
 
