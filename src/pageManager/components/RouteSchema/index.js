@@ -10,6 +10,23 @@ import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 import NotFound from '$trood/components/NotFound'
 
 
+const getRouteUrlParams = url => {
+  const urlArray = url.split('/')
+  return {
+    length: urlArray.length,
+    lastPath: urlArray[urlArray.length - 1],
+  }
+}
+
+const sortRoutesByUrl = (aRoute, bRoute) => {
+  const a = getRouteUrlParams(aRoute.currentUrl)
+  const b = getRouteUrlParams(bRoute.currentUrl)
+  if (a.length !== b.length) return b.length - a.length
+  const aIsParametr = /^:/.test(a.lastPath)
+  const bIsParametr = /^:/.test(b.lastPath)
+  return aIsParametr - bIsParametr
+}
+
 const extraSlashRegex = /\/\/+/g
 
 const RouteSchema = ({
@@ -20,7 +37,7 @@ const RouteSchema = ({
   registeredRoutesPaths,
 }) => {
   const currentBaseUrl = getNestedObjectField(urlSchema, basePath)
-  const mappedRoutes = Object.keys(renderers).map(key => {
+  let mappedRoutes = Object.keys(renderers).map(key => {
     const currentRenderer = getNestedObjectField(renderers, key) || renderers[key[key.length - 1]]
     if (!currentRenderer) return null
     const CurrentComponent = currentRenderer.component
@@ -45,9 +62,13 @@ const RouteSchema = ({
   }).filter(v => v)
 
   const redirectRoute = mappedRoutes.find(route => !route.currentRenderer.isExtra)
+
+  mappedRoutes = mappedRoutes.sort(sortRoutesByUrl)
+
   return (
     <Switch>
-      {redirectRoute &&
+      {
+        redirectRoute &&
         <Redirect {...{
           push: false,
           exact: true,
