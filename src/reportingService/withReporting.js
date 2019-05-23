@@ -52,7 +52,8 @@ export default (
 
       const hasChanges = !deepEqual(this.prevQuery, currentQuery) ||
         !deepEqual(this.prevFilter, currentFilter) ||
-        !deepEqual(this.prevType, type)
+        !deepEqual(this.reportId, reportId) ||
+        !deepEqual(this.connectionCode, connectionCode)
 
       if (hasChanges) {
         this.props.reportingActions.getReportByQuery({
@@ -65,7 +66,8 @@ export default (
         })
         this.prevQuery = currentQuery
         this.prevFilter = currentFilter
-        this.prevType = type
+        this.reportId = reportId
+        this.connectionCode = connectionCode
       }
     }
 
