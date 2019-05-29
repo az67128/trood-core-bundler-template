@@ -1,4 +1,5 @@
 import { api, forms } from 'redux-restify'
+import moment from 'moment'
 
 import { REPORT_TYPES, getReportingId, getReportingLoadingPropName } from './constants'
 
@@ -35,7 +36,10 @@ export const getReportByQuery = ({
     url,
     apiName: REPORTING_API_NAME,
     urlHash: getReportingId(propName),
-    query: isConfigReport ? { name: propName } : { ...filter },
+    query: isConfigReport ? { name: propName } : {
+      timezone: moment().utcOffset() / 60,
+      ...filter,
+    },
     data: isConfigReport ? { query } : undefined,
     convertToCamelCase: false,
     onXhrReady: (xhr) => {
