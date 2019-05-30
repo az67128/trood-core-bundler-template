@@ -75,7 +75,7 @@ class TSelect extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (!deepEqual(prevProps.values, this.props.values)) {
+    if (!deepEqual(prevProps.values, this.props.values) || !deepEqual(prevProps.validate, this.props.validate)) {
       this.handleValidate(this.props.values)
     }
   }
