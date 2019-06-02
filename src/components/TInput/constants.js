@@ -6,6 +6,7 @@ import { EMAIL_REGEXP } from '$trood/mainConstants'
 const TEXT = 'text'
 const INT = 'int'
 const FLOAT = 'float'
+const NUMBER = 'number'
 const MULTI = 'multi'
 const WYSIWYG = 'wysiwyg'
 const PASSWORD = 'password'
@@ -24,6 +25,7 @@ export const INPUT_TYPES = {
   [TEXT]: TEXT,
   [INT]: INT,
   [FLOAT]: FLOAT,
+  [NUMBER]: NUMBER,
   [MULTI]: MULTI,
   [WYSIWYG]: WYSIWYG,
   [PASSWORD]: PASSWORD,
@@ -43,6 +45,7 @@ export const INNER_INPUT_TYPES = {
   [TEXT]: TEXT,
   [INT]: TEXT,
   [FLOAT]: TEXT,
+  [NUMBER]: TEXT,
   [PASSWORD]: PASSWORD,
   [PHONE]: TEXT,
   [PHONE_WITH_EXT]: TEXT,
@@ -126,6 +129,7 @@ const floatRegexp = /[\d\u002c\u002d\u002e]/
 export const includeForTypes = {
   [INT]: intRegexp,
   [FLOAT]: floatRegexp,
+  [NUMBER]: floatRegexp,
   [PHONE]: /\d/,
   [PHONE_WITH_EXT]: /\d/,
   [MONEY]: floatRegexp,

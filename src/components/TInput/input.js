@@ -189,6 +189,7 @@ class Input extends PureComponent {
 
   validate() {
     const {
+      type,
       value,
       settings: {
         format,
@@ -200,7 +201,14 @@ class Input extends PureComponent {
     } = this.props
 
     // Required validation, overrides all other errors
-    if (required && /^\s*$/.test(value)) return [requiredError || ERROR_TYPES.required]
+    if (required) {
+      if (/^\s*$/.test(value)) {
+        return [requiredError || ERROR_TYPES.required]
+      }
+      if (type === INPUT_TYPES.int || type === INPUT_TYPES.float || type === INPUT_TYPES.moneyNumber) {
+        if (value === 0 || value === '0') return [requiredError || ERROR_TYPES.required]
+      }
+    }
 
     const errors = []
 
