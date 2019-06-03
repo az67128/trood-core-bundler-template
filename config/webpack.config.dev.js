@@ -13,6 +13,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -229,12 +230,12 @@ module.exports = {
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
     new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-    // Moment.js is an extremely popular library that bundles large locale files
-    // by default due to how Webpack interprets its code. This is a practical
-    // solution that requires the user to opt into importing specific locales.
-    // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-    // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // By default, webpack bundles all Moment.js locales
+    // (in Moment.js 2.18.1, that’s 160 minified KBs).
+    // To strip unnecessary locales and bundle only the used ones
+    new MomentLocalesPlugin({
+      localesToKeep: ['ru'],
+    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

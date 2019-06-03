@@ -14,6 +14,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -330,12 +331,12 @@ module.exports = {
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }),
-    // Moment.js is an extremely popular library that bundles large locale files
-    // by default due to how Webpack interprets its code. This is a practical
-    // solution that requires the user to opt into importing specific locales.
-    // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-    // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // By default, webpack bundles all Moment.js locales
+    // (in Moment.js 2.18.1, that’s 160 minified KBs).
+    // To strip unnecessary locales and bundle only the used ones
+    new MomentLocalesPlugin({
+      localesToKeep: ['ru'],
+    }),
     new webpack.ExtendedAPIPlugin(),
   ],
   // Some libraries import Node modules but don't use them in the browser.
