@@ -21,6 +21,7 @@ class TCurrency extends PureComponent {
     short: PropTypes.bool,
     showSign: PropTypes.bool,
     className: PropTypes.string,
+    sign: PropTypes.string,
   }
 
   static defaultProps = {
@@ -28,6 +29,7 @@ class TCurrency extends PureComponent {
     short: false,
     showSign: true,
     className: '',
+    sign: 'p',
   }
 
   constructor(props) {
@@ -59,13 +61,15 @@ class TCurrency extends PureComponent {
   render() {
     const {
       className,
+      signClassName,
       showSign,
+      sign,
     } = this.props
     return (
       <span className={classNames(style.root, className)}>
         {this.getFormatValue()}
         {showSign &&
-          <span className={style.rub}>p</span>
+          <span className={classNames(style.rub, signClassName)}>{sign}</span>
         }
       </span>
     )

@@ -22,8 +22,8 @@ export const CALENDAR_TYPES_FORMAT = {
 }
 
 export const PICKER_ERRORS = {
-  required: 'Значение не может быть пустым!',
-  outOfRange: 'Значение за пределами диапазона!',
+  required: 'This field is required!',
+  outOfRange: 'Value is out of range!',
 }
 
 export const TIME_FORMAT = 'HH:mm'

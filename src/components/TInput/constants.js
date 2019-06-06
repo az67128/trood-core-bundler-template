@@ -66,13 +66,13 @@ export const VALIDATION_FORMATS = {
 }
 
 export const ERROR_TYPES = {
-  email: 'Введите корректный email!',
-  color: 'Введите корректный hex-код!',
-  url: 'Введите корректный url!',
-  format: 'Вы ввели неправильное значение!',
-  maxLen: 'Максимальная длина: ',
-  minLen: 'Минимальная длина: ',
-  required: 'Это поле обязательно!',
+  email: 'E-Mail is incorrect!',
+  color: 'HEX-code is incorrect!',
+  url: 'Url is incorrect!',
+  format: 'Value is incorrect!',
+  maxLen: 'Max length: ',
+  minLen: 'Min length: ',
+  required: 'This field is required!',
 }
 
 export const FLOAT_MAX_FRACTIONALS = 6

@@ -15,5 +15,5 @@ export const LABEL_POSITION_TYPES = {
 }
 
 export const ERROR_TYPES = {
-  required: 'Это поле обязательно!',
+  required: 'This field is required!',
 }

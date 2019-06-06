@@ -31,18 +31,18 @@ export const SMART_DATE_FORMATS = {
 
 const relativeDate = (value, full) => {
   switch (moment(value).startOf('day').diff(moment().startOf('day'), 'days')) {
-    case 0: return 'сегодня'
-    case 1: return 'завтра'
-    case -1: return 'вчера'
+    case 0: return 'today'
+    case 1: return 'tomorrow'
+    case -1: return 'yesterday'
     default: return (full ? value.format('DD MMMM YYYY') : value.format('DD.MM.YY'))
   }
 }
 
 export const SMART_DATE_FORMATS_FUNCTIONS = {
-  [FULL_FORMAT_WITH_TIME]: value => value.format('DD MMMM YYYY в HH:mm'),
+  [FULL_FORMAT_WITH_TIME]: value => value.format('DD MMMM YYYY HH:mm'),
   [FULL_FORMAT]: value => value.format('DD MMMM YYYY'),
   [SHORT_FORMAT]: value => value.format('DD.MM.YY'),
-  [SHORT_WITH_TIME_FORMAT]: value => value.format('DD.MM.YY в HH:mm'),
+  [SHORT_WITH_TIME_FORMAT]: value => value.format('DD.MM.YY HH:mm'),
   [ONLY_TIME]: value => value.format('HH:mm'),
   [NO_SAME_YEAR_FULL_FORMAT]: value => {
     if (moment().isSame(value, 'year')) return value.format('DD MMMM')
@@ -55,10 +55,10 @@ export const SMART_DATE_FORMATS_FUNCTIONS = {
   [RELATIVE_FULL_FORMAT]: value => relativeDate(value, true),
   [RELATIVE_SHORT_FORMAT]: value => relativeDate(value, false),
   [RELATIVE_FULL_WITH_TIME_FORMAT]: value => {
-    return relativeDate(value, true) + value.format(' в HH:mm')
+    return relativeDate(value, true) + value.format(' HH:mm')
   },
   [RELATIVE_SHORT_WITH_TIME_FORMAT]: value => {
-    return relativeDate(value, false) + value.format(' в HH:mm')
+    return relativeDate(value, false) + value.format(' HH:mm')
   },
   [WITHOUT_DAY]: value => value.format('MMM YYYY'),
 }
