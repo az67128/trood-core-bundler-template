@@ -24,7 +24,7 @@ export const showConfirmModal = ({
     onAny: () => dispatch(showModal(false, CONFIRM_MODAL_NAME)),
     onAccept,
     onDecline,
-    size: MODAL_SIZES.small,
+    size: MODAL_SIZES.confirm,
     ...other,
   }))
 }
@@ -51,7 +51,8 @@ export const showMessageBoxModal = ({
     onAny: () => dispatch(showModal(false, CONFIRM_MODAL_NAME)),
     onAccept,
     showDecline: false,
-    size: MODAL_SIZES.small,
+    size: MODAL_SIZES.confirm,
+    acceptButtonText: 'Ok',
     ...other,
   }))
 }

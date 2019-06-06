@@ -242,8 +242,8 @@ export const deleteEntity = (modelName, parents = []) => (model, onDelete) => (d
 
       if (currentModelConfig.deletion && currentModelConfig.deletion.confirm) {
         dispatch(modals.actions.showConfirmModal({
-          text: currentModelConfig.deletion.message || 'Удалить запись?',
-          acceptButtonText: 'Да',
+          text: currentModelConfig.deletion.message || 'Do you want to delete the record?',
+          acceptButtonText: 'Yes',
           onAccept: async () => {
             await dispatch(deleteAction)
               .then(afterDeleteAction)

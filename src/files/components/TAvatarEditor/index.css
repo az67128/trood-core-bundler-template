@@ -3,21 +3,22 @@
 .root {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
-  overflow-y: auto;
+  flex: 1 1;
 }
 
 .avatarConteiner {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  min-height: 320px;
 }
 
-.avatarConteiner > canvas {
+.canvas {
   border-radius: 5px;
   box-sizing: border-box;
-  margin: 32px;
+}
+
+.root .range {
+  margin-top: 20px;
 }
 
 .footer {

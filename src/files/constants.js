@@ -27,3 +27,4 @@ export const GOOGLE_DOCS_VIEWER = 'https://docs.google.com/viewer?url='
 export const MS_OFFICE_VIEWER = 'https://view.officeapps.live.com/op/view.aspx?src='
 
 export const IMAGE_VIEWER_MODAL = 'imageViewerModal'
+export const IMAGE_EDITOR_MODAL = 'imageEditorModal'

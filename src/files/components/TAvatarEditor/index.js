@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
+import classNames from 'classnames'
 
 import style from './index.css'
+import modalsStyle from '$trood/styles/modals.css'
+
 import { DEFAULT_SIZE, DEFAULT_TYPE, DEFAULT_FILL_COLOR, TYPES_EXT, DEFAULT_ZOOM, MIN_ZOOM } from './constants'
 import ImageDataConverter from '$trood/helpers/imageDataConverter'
 
-import { ModalWrapper, MODAL_SIZES } from '$trood/modals'
 import TButton from '$trood/components/TButton'
 import TRange from '$trood/components/TRange'
 
@@ -16,16 +18,6 @@ const isBase64 = (str = '') => {
 }
 
 class TAvatarEditor extends PureComponent {
-  static defaultProps = {
-    returnImgType: DEFAULT_TYPE,
-    fillColor: DEFAULT_FILL_COLOR,
-    width: DEFAULT_SIZE,
-    height: DEFAULT_SIZE,
-    modal: true,
-    onClose: () => {},
-    onSubmit: () => {},
-  }
-
   static propTypes = {
     image: PropTypes.string.isRequired,
     returnImgType: PropTypes.oneOf(Object.keys(TYPES_EXT)),
@@ -35,9 +27,13 @@ class TAvatarEditor extends PureComponent {
     },
     width: PropTypes.number,
     height: PropTypes.number,
-    modal: PropTypes.bool,
-    onClose: PropTypes.func,
-    onSubmit: PropTypes.func,
+  }
+
+  static defaultProps = {
+    returnImgType: DEFAULT_TYPE,
+    fillColor: DEFAULT_FILL_COLOR,
+    width: DEFAULT_SIZE,
+    height: DEFAULT_SIZE,
   }
 
   constructor(props) {
@@ -52,7 +48,7 @@ class TAvatarEditor extends PureComponent {
       zoom: DEFAULT_ZOOM,
       minZoom: MIN_ZOOM,
     }
-    this.listeners = []
+    this.listeners = {}
 
     this.bindEvents = this.bindEvents.bind(this)
     this.unbindEvents = this.unbindEvents.bind(this)
@@ -64,7 +60,7 @@ class TAvatarEditor extends PureComponent {
     this.mouseMoveListener = this.mouseMoveListener.bind(this)
     this.boundedCoords = this.boundedCoords.bind(this)
     this.addImageToCanvas = this.addImageToCanvas.bind(this)
-    this.handleCrop = this.handleCrop.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
     this.handleZoomUpdate = this.handleZoomUpdate.bind(this)
   }
 
@@ -89,6 +85,15 @@ class TAvatarEditor extends PureComponent {
 
   componentWillUnmount() {
     this.unbindEvents()
+  }
+
+  onSubmit() {
+    const imgDataURL = this.toDataURL()
+    // convert base64 to imgFile
+    const imgFile = (new ImageDataConverter(imgDataURL)).dataURItoBlob()
+    // end convert
+    this.props.onSubmit({ imgDataURL, imgFile })
+    this.props.closeAction()
   }
 
   bindEvents() {
@@ -249,55 +254,40 @@ class TAvatarEditor extends PureComponent {
     return canvas.toDataURL(this.props.returnImgType, 0.75)
   }
 
-  handleCrop() {
-    const imgDataURL = this.toDataURL()
-    // convert base64 to imgFile
-    const imgFile = (new ImageDataConverter(imgDataURL)).dataURItoBlob()
-    // end convert
-    this.props.onSubmit({ imgDataURL, imgFile })
-  }
-
   render() {
-    const { width, height, onClose } = this.props
+    const { width, height } = this.props
 
     return (
-      <ModalWrapper {...{
-        show: true,
-        shouldCloseOnOverlayClick: false,
-        closeAction: onClose,
-        size: MODAL_SIZES.small,
-        order: 9999,
-      }}>
-        <div className={style.root}>
-          <div className={style.avatarConteiner}>
-            <canvas {...{
-              ref: (node) => { this.canvas = node },
-              width,
-              height,
-            }} />
-            {this.state.maxZoom > this.state.minZoom &&
+      <div className={style.root}>
+        <div className={classNames(modalsStyle.root, style.avatarConteiner)}>
+          <canvas {...{
+            className: style.canvas,
+            ref: (node) => {
+              this.canvas = node
+            },
+            width,
+            height,
+          }} />
+          {
+            this.state.maxZoom > this.state.minZoom &&
             <TRange {...{
+              className: style.range,
               onChange: (value) => this.handleZoomUpdate(value),
               min: this.state.minZoom,
               max: this.state.maxZoom,
               step: 0.01,
               defaultValue: 1,
             }} />
-            }
-          </div>
-          <div className={style.footer}>
-            <TButton {...{
-              onClick: onClose,
-              color: 'red',
-              label: 'Отмена',
-            }} />
-            <TButton {...{
-              onClick: this.handleCrop,
-              label: 'OK',
-            }} />
-          </div>
+          }
         </div>
-      </ModalWrapper>
+        <div className={modalsStyle.buttonsContainer}>
+          <TButton {...{
+            className: modalsStyle.button,
+            onClick: this.onSubmit,
+            label: 'Save',
+          }} />
+        </div>
+      </div>
     )
   }
 }

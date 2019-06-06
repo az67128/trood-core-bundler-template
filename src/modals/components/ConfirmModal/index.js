@@ -18,11 +18,11 @@ const ConfirmModal = ({
 
   ...other
 }) => {
-  const text = other.text || 'Вы уверены?'
+  const text = other.text || 'Are you sure?'
 
-  const acceptButtonText = other.acceptButtonText || 'Ок'
+  const acceptButtonText = other.acceptButtonText || 'Yes'
 
-  const declineButtonText = other.declineButtonText || 'Отмена'
+  const declineButtonText = other.declineButtonText || 'No'
 
   const handleAny = (action) => {
     onAny()

@@ -20,12 +20,14 @@ export const MODAL_FULL = 'full'
 export const MODAL_LARGE = 'large'
 export const MODAL_MEDIUM = 'medium'
 export const MODAL_SMALL = 'small'
+export const MODAL_CONFIRM = 'confirm'
 
 export const MODAL_SIZES = {
   [MODAL_LARGE]: MODAL_LARGE,
   [MODAL_MEDIUM]: MODAL_MEDIUM,
   [MODAL_SMALL]: MODAL_SMALL,
   [MODAL_FULL]: MODAL_FULL,
+  [MODAL_CONFIRM]: MODAL_CONFIRM,
 }
 
 export const POPUP_BLUE = 'white'

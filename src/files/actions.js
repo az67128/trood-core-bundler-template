@@ -8,6 +8,7 @@ import {
   GOOGLE_DOCS_VIEWER,
   MS_OFFICE_VIEWER,
   IMAGE_VIEWER_MODAL,
+  IMAGE_EDITOR_MODAL,
 } from './constants'
 
 
@@ -21,12 +22,7 @@ export const uploadFile = (file) => (dispatch) => {
   }))
 }
 
-export const canOpenFile = (file) => () => {
-  if (OPENING_FILE_TYPES.includes(file.type)) {
-    return true
-  }
-  return false
-}
+export const canOpenFile = (file) => () => OPENING_FILE_TYPES.includes(file.type)
 
 export const openFile = (file) => (dispatch) => {
   const { type, fileUrl } = file
@@ -45,4 +41,8 @@ export const openFile = (file) => (dispatch) => {
       break
     default:
   }
+}
+
+export const editImage = (image, onSubmit) => (dispatch) => {
+  dispatch(modals.actions.showModal(true, IMAGE_EDITOR_MODAL, { image, onSubmit }))
 }

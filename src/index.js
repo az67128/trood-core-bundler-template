@@ -8,9 +8,6 @@ import ReactDOM from 'react-dom'
 
 import { api, setRestifyStore } from 'redux-restify'
 
-import moment from 'moment'
-import 'moment/locale/ru'
-
 import { createBrowserHistory } from 'history'
 import { stringify, parse } from 'qs'
 import qhistory from 'qhistory'
@@ -35,8 +32,6 @@ if (!process.env.TEST) {
   const store = getStore(history)
   setRestifyStore(store)
   addStorageWriter(store.getState)
-
-  moment.locale('ru')
 
   store.dispatch({
     type: api.constants.ACTIONS_TYPES.loadsManager.reset,

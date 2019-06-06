@@ -79,8 +79,8 @@ export const recovery = (token) => (dispatch, getState) => {
     .catch(({ status }) => {
       if (status === 404) {
         dispatch(modals.actions.showMessageBoxModal({
-          title: 'Ошибка',
-          text: 'Аккаунт не найден',
+          title: 'Error',
+          text: 'Account not found',
           size: MODAL_SIZES.small,
         }))
       }

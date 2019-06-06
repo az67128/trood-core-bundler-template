@@ -94,7 +94,7 @@ class TFileInput extends PureComponent {
       connectDropTarget,
     } = this.props
 
-    const label = isOver ? 'Перетащите файл сюда' : this.props.label
+    const label = isOver ? 'Drop file here' : this.props.label
 
     let background
     if (propsBackground) {

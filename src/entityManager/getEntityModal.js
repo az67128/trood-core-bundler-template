@@ -254,7 +254,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         const saveButton = (
           <TButton {...{
             className: modalsStyle.button,
-            label: entityComponentName === ENTITY_COMPONENT_EDIT ? 'Сохранить изменения' : 'Сохранить',
+            label: entityComponentName === ENTITY_COMPONENT_EDIT ? 'Change' : 'Save',
             disabled: !modelValid || this.state.buttonLocked,
             color: BUTTON_COLORS.blue,
             onClick: () => {
@@ -299,7 +299,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
             {saveButton}
             <TButton {...{
               className: modalsStyle.button,
-              label: 'Отменить',
+              label: 'Cancel',
               color: BUTTON_COLORS.gray,
               onClick: cancelAction,
             }} />
@@ -323,7 +323,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     const childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
     // Calc props for editing modal
     if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
-      title = props.title || `${props.isEditing ? 'Редактировать' : 'Создать'} "${currentModel.name}"`
+      title = props.title || `${props.isEditing ? 'Edit' : 'Create'} ${currentModel.name}`
       modelFormName = getEditFormName({
         modelName,
         id: props.entityId,

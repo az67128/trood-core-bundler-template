@@ -53,6 +53,10 @@
   padding-right: calc(50% - 220px);
 }
 
+.confirm {
+  composes: small;
+}
+
 .medium {
   composes: scrollContainer;
   padding-left: 20%;

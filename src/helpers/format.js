@@ -92,7 +92,7 @@ const getPhoneFormat = (value = '', ext = true) => {
     const countryFormat = (countries[0].format || '').replace(/^\+/, '')
     if (!countryFormat) return undefined
     if (!ext) return countryFormat
-    return `${countryFormat} доб ${Array(15).fill('.').join('')}`
+    return `${countryFormat} ex ${Array(15).fill('.').join('')}`
   }
   return undefined
 }
@@ -161,7 +161,7 @@ export const humanizeNumber = (number, once, twice, many, zero) => {
 }
 
 export const formatSize = (length) => {
-  const type = ['Б', 'Кб', 'Мб', 'Гб', 'Тб']
+  const type = ['byte', 'Kb', 'Mb', 'Gb', 'Tb']
   let i = 0
   let newLength = length
   while (newLength && Math.round(newLength / 1024) > 0 && i < type.length - 1) {
@@ -171,7 +171,7 @@ export const formatSize = (length) => {
   return `${Math.round(newLength)} ${type[i]}`
 }
 
-const postfixArray = ['', 'млн.', 'млрд.', 'трлн.']
+const postfixArray = ['', 'M', 'B', 'T']
 
 export const toMoney = value => {
   const money = +value

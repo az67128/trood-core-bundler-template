@@ -6,6 +6,8 @@ import { forms } from 'redux-restify'
 import * as actions from './actions'
 import { PAGE_TYPE_BY_URL } from './constants'
 
+import modals from '$trood/modals'
+
 import PageAuth from './components/PageAuth'
 
 
@@ -30,6 +32,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     ...stateProps,
     ...dispatchProps,
     formActions: bindActionCreators(forms.actions[stateProps.pageType.formName], dispatchProps.dispatch),
+    modalsActions: bindActionCreators(modals.actions, dispatchProps.dispatch),
   })
 }
 

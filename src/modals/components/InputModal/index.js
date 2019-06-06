@@ -38,9 +38,9 @@ class InputModal extends PureComponent {
 
     options: [],
 
-    text: 'Выберите значение',
-    acceptButtonText: 'Ок',
-    declineButtonText: 'Отмена',
+    text: 'Select value',
+    acceptButtonText: 'OK',
+    declineButtonText: 'Cancel',
   }
 
   constructor(props) {
@@ -82,7 +82,7 @@ class InputModal extends PureComponent {
           <TSelect {...{
             items: options,
             className: modalsStyle.control,
-            placeHolder: 'Не выбрано',
+            placeHolder: 'Not chosen',
             values: selected && [selected],
             onChange: values => this.setState({ selected: values[0] }),
           }} />

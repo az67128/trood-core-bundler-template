@@ -168,8 +168,8 @@ export const getModelsForCreateFormFromService = serviceName => {
         models: memo.models.concat([{
           modelName,
           modelTitle: registeredModels[modelName].name,
-          createEntityActionTitle: `Создать ${registeredModels[modelName].name.toLowerCase()}`,
-          attachMailActionTitle: `Прикрепить ${registeredModels[modelName].name.toLowerCase()}`,
+          createEntityActionTitle: `Create ${registeredModels[modelName].name.toLowerCase()}`,
+          attachMailActionTitle: `Link to ${registeredModels[modelName].name.toLowerCase()}`,
           createEntityActionName: currentActionName,
           createEntityActionCheckName: currentActionCheckName,
           attachMailActionName: currentAttachMailActionName,

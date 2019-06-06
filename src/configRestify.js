@@ -1,5 +1,7 @@
 import merge from 'lodash/merge'
 
+import customApiConfig from './customApiConfig'
+
 import { getToken } from './storage'
 import {
   DEFAULT_ALLOWED_NO_TOKEN_ENDPOINTS,
@@ -79,7 +81,7 @@ const configRestify = () => {
   }
 
   const modelsDefinitions = {}
-  const apiDefinitions = {}
+  let apiDefinitions = {}
   const formsDefinitions = {}
 
   // Register business objects libraries
@@ -213,6 +215,11 @@ const configRestify = () => {
     apiPrefix: STATIC_API_PREFIX,
     allowedNoTokenEndpoints: STATIC_ALLOWED_NO_TOKEN_ENDPOINTS,
     httpCodesCallbacks: defaultHttpCodesAllbacks,
+  }
+
+  apiDefinitions = {
+    ...apiDefinitions,
+    ...customApiConfig,
   }
 
   // Register global app models
