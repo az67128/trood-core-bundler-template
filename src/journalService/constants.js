@@ -1,4 +1,7 @@
 import React from 'react'
+import { defineMessages } from 'react-intl'
+
+import { intlObject } from '$trood/localeService'
 import { ICONS_TYPES } from '$trood/components/TIcon'
 
 
@@ -14,10 +17,29 @@ export const HISTORY_ACTIONS = {
   [HISTORY_BASE_OBJECT]: HISTORY_BASE_OBJECT,
 }
 
+export const messages = defineMessages({
+  created: {
+    id: 'journalService.created',
+    defaultMessage: 'Created',
+  },
+  changed: {
+    id: 'journalService.changed',
+    defaultMessage: 'Changed',
+  },
+  removed: {
+    id: 'journalService.removed',
+    defaultMessage: 'Removed',
+  },
+  system: {
+    id: 'journalService.system',
+    defaultMessage: 'System',
+  },
+})
+
 export const HISTORY_ACTIONS_DICT = {
   [HISTORY_ACTION_CREATE]: (objectName, modelName) => (
     <React.Fragment>
-      <span>Создан объект</span>
+      <span>{intlObject.intl.formatMessage(messages.created)}</span>
       <span>{objectName.toLowerCase()}</span>
       {
         modelName &&
@@ -27,7 +49,7 @@ export const HISTORY_ACTIONS_DICT = {
   ),
   [HISTORY_ACTION_UPDATE]: (objectName, modelName) => (
     <React.Fragment>
-      <span>Изменен объект</span>
+      <span>{intlObject.intl.formatMessage(messages.changed)}</span>
       <span>{objectName.toLowerCase()}</span>
       {
         modelName &&
@@ -37,7 +59,7 @@ export const HISTORY_ACTIONS_DICT = {
   ),
   [HISTORY_ACTION_DELETE]: (objectName, modelName) => (
     <React.Fragment>
-      <span>Удален объект</span>
+      <span>{intlObject.intl.formatMessage(messages.removed)}</span>
       <span>{objectName.toLowerCase()}</span>
       {
         modelName &&

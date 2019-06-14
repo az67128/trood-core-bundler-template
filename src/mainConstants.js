@@ -112,4 +112,8 @@ export const messages = defineMessages({
     id: '$trood.search',
     defaultMessage: 'Search',
   },
+  upload: {
+    id: '$trood.upload',
+    defaultMessage: 'Upload',
+  },
 })

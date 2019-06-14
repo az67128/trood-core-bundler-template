@@ -18,7 +18,10 @@ import {
   HISTORY_ACTIONS,
   HISTORY_ACTIONS_DICT,
   HISTORY_ACTIONS_ICONS,
+  messages,
 } from '../../constants'
+
+import { intlObject } from '$trood/localeService'
 
 import { capitalize, camelToHuman, snakeToCamel } from '$trood/helpers/namingNotation'
 
@@ -45,7 +48,9 @@ class HistoryEntryBrickView extends PureComponent {
 
   static getActorName(model, actorEntities, history) {
     const { linkedObject } = model.actor
-    if (!linkedObject) return <div>Система</div>
+    if (!linkedObject) {
+      return <div>{intlObject.intl.formatMessage(messages.system)}</div>
+    }
 
     let actor = {
       ...linkedObject,

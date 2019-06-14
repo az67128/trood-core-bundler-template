@@ -8,8 +8,10 @@ import { DEFAULT_SIZE } from './constants'
 import TFileInput from '../TFileInput'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 
-import { UUID_REGEXP } from '$trood/mainConstants'
+import { UUID_REGEXP, messages } from '$trood/mainConstants'
 import { FILE_API_HOST } from '$trood/fileApiUrlSchema'
+
+import { intlObject } from '$trood/localeService'
 
 
 const avatarUUIDRegExp = new RegExp(`^${UUID_REGEXP.source}$`)
@@ -118,7 +120,11 @@ class TAvatar extends PureComponent {
           <TFileInput {...{
             key: `${avatar}FileInput`,
             className: style.uploadButton,
-            label: <div className={style.uploadLabel}>Upload</div>,
+            label: (
+              <div className={style.uploadLabel}>
+                {intlObject.intl.formatMessage(messages.upload)}
+              </div>
+            ),
             onChange: (values) => this.editImage(values[0]),
           }} />
         }
