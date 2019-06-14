@@ -6,10 +6,11 @@ import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import objectHash from 'object-hash'
 
-import { KEY_CODES, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
+import { KEY_CODES, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE, messages } from '$trood/mainConstants'
 import {
   INPUT_TYPES,
-  ERROR_TYPES,
   ROW_HEIGHT,
   INNER_INPUT_TYPES,
   DEFAULT_MAX_ROWS,
@@ -203,10 +204,12 @@ class Input extends PureComponent {
     // Required validation, overrides all other errors
     if (required) {
       if (/^\s*$/.test(value)) {
-        return [requiredError || ERROR_TYPES.required]
+        return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
       }
       if (type === INPUT_TYPES.int || type === INPUT_TYPES.float || type === INPUT_TYPES.moneyNumber) {
-        if (value === 0 || value === '0') return [requiredError || ERROR_TYPES.required]
+        if (value === 0 || value === '0') {
+          return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
+        }
       }
     }
 
@@ -214,15 +217,15 @@ class Input extends PureComponent {
 
     const regexpToMatch = format && format.regexp || format
     if (value && regexpToMatch && !regexpToMatch.test(value)) {
-      errors.push(format.error || ERROR_TYPES.format)
+      errors.push(format.error || intlObject.intl.formatMessage(messages.incorrectFormat))
     }
 
     if (maxLen && value.length > maxLen) {
-      errors.push(ERROR_TYPES.maxLen + maxLen)
+      errors.push(intlObject.intl.formatMessage(messages.maxLength, { number: maxLen }))
     }
 
     if (minLen && (required || value.length > 0) && value.length < minLen) {
-      errors.push(ERROR_TYPES.minLen + minLen)
+      errors.push(intlObject.intl.formatMessage(messages.minLength, { number: minLen }))
     }
 
     return errors

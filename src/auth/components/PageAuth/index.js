@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 
 import style from './index.css'
 
-import { PAGE_TYPE_RECOVERY, AUTH_MESSAGES } from '../../constants'
+import { PAGE_TYPE_RECOVERY, messages } from '../../constants'
+import { intlObject } from '$trood/localeService'
 
 import Logo from '$trood/components/Logo'
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
@@ -28,7 +29,8 @@ class PageAuth extends PureComponent {
     const { nextUrl } = location.state || {}
     const submitAction = () => authActions[pageType.actionName](isRecovery ? token : nextUrl)
     const serverError = (formErrors.data || {}).error
-    const serverErrorMessage = AUTH_MESSAGES[serverError] || serverError
+    const serverErrorMessage = messages[serverError] ?
+      intlObject.intl.formatMessage(messages[serverError]) : serverError
     const defaultInputProps = (path) => ({
       key: `${pageType.type}_${path}`,
       value: form[path],
@@ -47,7 +49,7 @@ class PageAuth extends PureComponent {
       <div className={style.root}>
         <div className={style.form}>
           <div className={style.title}>
-            {pageType.title}
+            {intlObject.intl.formatMessage(pageType.title)}
             <Logo size={80} />
           </div>
           {
@@ -55,8 +57,8 @@ class PageAuth extends PureComponent {
             <TInput {...{
               ...defaultInputProps('login'),
               type: INPUT_TYPES.email,
-              label: 'Login',
-              placeholder: 'Login',
+              label: intlObject.intl.formatMessage(messages.login),
+              placeholder: intlObject.intl.formatMessage(messages.login),
             }} />
           }
           {
@@ -64,8 +66,8 @@ class PageAuth extends PureComponent {
             <TInput {...{
               ...defaultInputProps('password'),
               type: INPUT_TYPES.password,
-              label: 'Password',
-              placeholder: 'Password',
+              label: intlObject.intl.formatMessage(messages.password),
+              placeholder: intlObject.intl.formatMessage(messages.password),
             }} />
           }
           {
@@ -73,14 +75,14 @@ class PageAuth extends PureComponent {
             <TInput {...{
               ...defaultInputProps('passwordConfirmation'),
               type: INPUT_TYPES.password,
-              label: 'Verify password',
-              placeholder: 'Password',
+              label: intlObject.intl.formatMessage(messages.verifyPassword),
+              placeholder: intlObject.intl.formatMessage(messages.password),
             }} />
           }
           <div className={style.footer}>
             <TButton {...{
               onClick: submitAction,
-              label: pageType.actionTitle,
+              label: intlObject.intl.formatMessage(pageType.actionTitle),
             }} />
             <div className={style.left}>
               {
@@ -92,11 +94,11 @@ class PageAuth extends PureComponent {
               {
                 /^https?:/.test(pageType.linkTo) &&
                 <a className={style.link} href={pageType.linkTo}>
-                  {pageType.linkToTitle}
+                  {intlObject.intl.formatMessage(pageType.linkToTitle)}
                 </a>
                 ||
                 <Link className={style.link} to={pageType.linkTo}>
-                  {pageType.linkToTitle}
+                  {intlObject.intl.formatMessage(pageType.linkToTitle)}
                 </Link>
               }
             </div>

@@ -10,9 +10,10 @@ import TClickOutside from '$trood/components/TClickOutside'
 import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
 import TLabel from '$trood/components/TLabel'
 
-import { DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
+import { DEFAULT_DATE_FORMAT, messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
 
-import { PICKER_ERRORS, CALENDAR_TYPES, CALENDAR_TYPES_FORMAT, CALENDAR_POSITIONS } from '../constants'
+import { CALENDAR_TYPES, CALENDAR_TYPES_FORMAT, CALENDAR_POSITIONS } from '../constants'
 
 
 const allMomentPropTypes = PropTypes.oneOfType([
@@ -194,7 +195,7 @@ class DatePicker extends PureComponent {
     const { onValid, onInvalid, validate } = this.props
     const errors = []
     if (validate.required && !value) {
-      errors.push(PICKER_ERRORS.required)
+      errors.push(intlObject.intl.formatMessage(messages.requiredField))
     }
 
     if (errors.length) {
@@ -257,7 +258,11 @@ class DatePicker extends PureComponent {
               'data-cy': 'dateTimePickerControl',
             }}>
               <div className={classNames(style.value, !value && style.placeholder)}>
-                {value ? moment(value).format('DD.MM.YYYY') : placeholder}
+                {value ? intlObject.intl.formatDate(value, {
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                }) : placeholder}
               </div>
               <TIcon {...{
                 size: 8,

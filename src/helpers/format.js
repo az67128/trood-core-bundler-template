@@ -1,5 +1,8 @@
 import { allCountries, iso2Lookup, allCountryCodes } from 'country-telephone-data'
 import memoizeOne from 'memoize-one'
+import { defineMessages } from 'react-intl'
+
+import { intlObject } from '$trood/localeService'
 
 import { isDef, isDefAndNotNull } from '$trood/helpers/def'
 
@@ -160,8 +163,52 @@ export const humanizeNumber = (number, once, twice, many, zero) => {
   return `${number} ${many}`
 }
 
+const messages = defineMessages({
+  byte: {
+    id: 'helpers.format.byte',
+    defaultMessage: 'byte',
+  },
+  kByte: {
+    id: 'helpers.format.k_byte',
+    defaultMessage: 'Kb',
+  },
+  mByte: {
+    id: 'helpers.format.m_byte',
+    defaultMessage: 'Mb',
+  },
+  gByte: {
+    id: 'helpers.format.g_byte',
+    defaultMessage: 'Gb',
+  },
+  tByte: {
+    id: 'helpers.format.t_byte',
+    defaultMessage: 'Tb',
+  },
+  million: {
+    id: 'helpers.format.million',
+    defaultMessage: 'M',
+  },
+  billion: {
+    id: 'helpers.format.billion',
+    defaultMessage: 'B',
+  },
+  trillion: {
+    id: 'helpers.format.trillion',
+    defaultMessage: 'T',
+  },
+})
+
+const translateByKey = key => {
+  const msg = messages[key]
+  if (!msg) return key
+  if (intlObject.intl) {
+    return intlObject.intl.formatMessage(msg)
+  }
+  return msg.defaultMessage
+}
+
 export const formatSize = (length) => {
-  const type = ['byte', 'Kb', 'Mb', 'Gb', 'Tb']
+  const type = ['byte', 'kByte', 'mByte', 'gByte', 'tByte'].map(translateByKey)
   let i = 0
   let newLength = length
   while (newLength && Math.round(newLength / 1024) > 0 && i < type.length - 1) {
@@ -171,9 +218,9 @@ export const formatSize = (length) => {
   return `${Math.round(newLength)} ${type[i]}`
 }
 
-const postfixArray = ['', 'M', 'B', 'T']
-
 export const toMoney = value => {
+  const postfixArray = ['', 'million', 'billion', 'trillion'].map(translateByKey)
+
   const money = +value
   if (Math.round(money / 1000) < 1000) return { value: money, postfix: '' }
   let i = 0

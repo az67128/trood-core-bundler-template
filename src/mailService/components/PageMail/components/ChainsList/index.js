@@ -8,6 +8,9 @@ import QueryLink from '$trood/components/QueryLink'
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import SmartDate, { SMART_DATE_FORMATS } from '$trood/components/SmartDate'
 
+import { messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
 
 const ChainsList = ({
   className,
@@ -33,7 +36,7 @@ const ChainsList = ({
           type: INPUT_TYPES.search,
           onChange: value => mailServiceConfigFormActions.changeField('chainSearch', value),
           onSearch: value => mailServiceConfigFormActions.changeField('chainActualSearch', value),
-          placeholder: 'Поиск',
+          placeholder: intlObject.intl.formatMessage(messages.search),
         }} />
       </div>
       <AsyncEntitiesList {...{

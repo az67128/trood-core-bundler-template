@@ -24,7 +24,3 @@ export const SELECT_TYPES = {
   [SELECT_LIST]: SELECT_LIST,
   [SELECT_RATING]: SELECT_RATING,
 }
-
-export const ERROR_TYPES = {
-  required: 'This field is required!',
-}

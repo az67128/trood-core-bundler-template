@@ -1,5 +1,22 @@
 import moment from 'moment'
+import { defineMessages } from 'react-intl'
+import { intlObject } from '$trood/localeService'
 
+
+const messages = defineMessages({
+  today: {
+    id: 'components.SmartDate.today',
+    defaultMessage: 'today',
+  },
+  tomorrow: {
+    id: 'components.SmartDate.tomorrow',
+    defaultMessage: 'tomorrow',
+  },
+  yesterday: {
+    id: 'components.SmartDate.yesterday',
+    defaultMessage: 'yesterday',
+  },
+})
 
 export const FULL_FORMAT_WITH_TIME = 'fullWithTime'
 export const ONLY_TIME = 'onlyTime'
@@ -29,36 +46,66 @@ export const SMART_DATE_FORMATS = {
   [WITHOUT_DAY]: WITHOUT_DAY,
 }
 
-const relativeDate = (value, full) => {
+const fullDate = {
+  year: 'numeric',
+  month: 'long',
+  day: '2-digit',
+}
+
+const dig2Date = {
+  year: '2-digit',
+  month: '2-digit',
+  day: '2-digit',
+}
+
+const shortDate = {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+}
+
+const timeFormat = {
+  hour12: false,
+  hour: '2-digit',
+  minute: '2-digit',
+}
+
+const relativeDate = (value, full, time) => {
+  const timeStr = time ? intlObject.intl.formatDate(value, time) : ''
   switch (moment(value).startOf('day').diff(moment().startOf('day'), 'days')) {
-    case 0: return 'today'
-    case 1: return 'tomorrow'
-    case -1: return 'yesterday'
-    default: return (full ? value.format('DD MMMM YYYY') : value.format('DD.MM.YY'))
+    case 0: return `${intlObject.intl.formatMessage(messages.today)} ${timeStr}`.trim()
+    case 1: return `${intlObject.intl.formatMessage(messages.tomorrow)} ${timeStr}`.trim()
+    case -1: return `${intlObject.intl.formatMessage(messages.yesterday)} ${timeStr}`.trim()
+    default: return intlObject.intl.formatDate(value, {
+      ...time,
+      ...(full ? fullDate : dig2Date),
+    })
   }
 }
 
 export const SMART_DATE_FORMATS_FUNCTIONS = {
-  [FULL_FORMAT_WITH_TIME]: value => value.format('DD MMMM YYYY HH:mm'),
-  [FULL_FORMAT]: value => value.format('DD MMMM YYYY'),
-  [SHORT_FORMAT]: value => value.format('DD.MM.YY'),
-  [SHORT_WITH_TIME_FORMAT]: value => value.format('DD.MM.YY HH:mm'),
-  [ONLY_TIME]: value => value.format('HH:mm'),
+  [FULL_FORMAT_WITH_TIME]: value => intlObject.intl.formatDate(value, {
+    ...fullDate,
+    ...timeFormat,
+  }),
+  [FULL_FORMAT]: value => intlObject.intl.formatDate(value, fullDate),
+  [SHORT_FORMAT]: value => intlObject.intl.formatDate(value, dig2Date),
+  [SHORT_WITH_TIME_FORMAT]: value => intlObject.intl.formatDate(value, {
+    ...dig2Date,
+    ...timeFormat,
+  }),
+  [ONLY_TIME]: value => intlObject.intl.formatDate(value, timeFormat),
   [NO_SAME_YEAR_FULL_FORMAT]: value => {
-    if (moment().isSame(value, 'year')) return value.format('DD MMMM')
-    return value.format('DD MMMM YYYY')
+    if (moment().isSame(value, 'year')) return intlObject.intl.formatDate(value, { ...fullDate, year: undefined })
+    return intlObject.intl.formatDate(value, fullDate)
   },
   [NO_SAME_YEAR_SHORT_FORMAT]: value => {
-    if (moment().isSame(value, 'year')) return value.format('DD MMMM')
-    return value.format('DD.MM.YY')
+    if (moment().isSame(value, 'year')) return intlObject.intl.formatDate(value, { ...fullDate, year: undefined })
+    return intlObject.intl.formatDate(value, dig2Date)
   },
   [RELATIVE_FULL_FORMAT]: value => relativeDate(value, true),
   [RELATIVE_SHORT_FORMAT]: value => relativeDate(value, false),
-  [RELATIVE_FULL_WITH_TIME_FORMAT]: value => {
-    return relativeDate(value, true) + value.format(' HH:mm')
-  },
-  [RELATIVE_SHORT_WITH_TIME_FORMAT]: value => {
-    return relativeDate(value, false) + value.format(' HH:mm')
-  },
-  [WITHOUT_DAY]: value => value.format('MMM YYYY'),
+  [RELATIVE_FULL_WITH_TIME_FORMAT]: value => relativeDate(value, true, timeFormat),
+  [RELATIVE_SHORT_WITH_TIME_FORMAT]: value => relativeDate(value, false, timeFormat),
+  [WITHOUT_DAY]: value => intlObject.intl.formatDate(value, { ...shortDate, day: undefined }),
 }

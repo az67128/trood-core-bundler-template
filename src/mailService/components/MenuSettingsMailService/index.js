@@ -3,7 +3,8 @@ import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
 import style from './index.css'
-import { SETTINGS_FOR } from '../../constants'
+import { SETTINGS_FOR, messages } from '../../constants'
+import { intlObject } from '$trood/localeService'
 
 import TButton, { BUTTON_TYPES, BUTTON_COLORS } from '$trood/components/TButton'
 
@@ -45,7 +46,7 @@ class MenuSettingsMailService extends PureComponent {
           color: settingsMailServiceForm.settingsFor === SETTINGS_FOR.mailboxes ?
             BUTTON_COLORS.white : BUTTON_COLORS.gray,
           type: BUTTON_TYPES.text,
-          label: 'Настройки почты',
+          label: intlObject.intl.formatMessage(messages.mailBoxSettings),
           onClick: () => {
             editMailboxesFormActions.deleteForm()
             settingsMailServiceFormActions.changeField('settingsFor', SETTINGS_FOR.mailboxes)
@@ -56,7 +57,7 @@ class MenuSettingsMailService extends PureComponent {
           color: settingsMailServiceForm.settingsFor === SETTINGS_FOR.folders ?
             BUTTON_COLORS.white : BUTTON_COLORS.gray,
           type: BUTTON_TYPES.text,
-          label: 'Настройки папок',
+          label: intlObject.intl.formatMessage(messages.folderSettings),
           onClick: () => {
             editFolderFormActions.deleteForm()
             settingsMailServiceFormActions.changeField('settingsFor', SETTINGS_FOR.folders)

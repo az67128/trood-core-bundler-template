@@ -4,7 +4,9 @@ import { registerModal, MODAL_SIZES } from '$trood/modals'
 
 import { api, forms } from 'redux-restify'
 
-import { SETTINGS_MAIL_MODAL, EDIT_MAILBOX_FORM_NAME, EDIT_FOLDER_FORM_NAME } from '../constants'
+import { intlObject } from '$trood/localeService'
+
+import { SETTINGS_MAIL_MODAL, EDIT_MAILBOX_FORM_NAME, EDIT_FOLDER_FORM_NAME, messages } from '../constants'
 import ModalSettingsMailService from '../components/ModalSettingsMailService'
 
 import * as actions from '../actions'
@@ -12,7 +14,7 @@ import * as actions from '../actions'
 
 const stateToProps = (state) => {
   return {
-    title: 'Настройки',
+    title: intlObject.intl.formatMessage(messages.settings),
     size: MODAL_SIZES.small,
 
     settingsMailServiceForm: forms.selectors.settingsMailServiceForm.getForm(state),

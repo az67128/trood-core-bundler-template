@@ -21,5 +21,3 @@ export const LIST_ORIENTATION = {
 }
 
 export const SCROLL_THRESHOLD = 20
-
-export const EMPTY_ITEMS_LABEL = 'Пусто'

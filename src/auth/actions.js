@@ -13,7 +13,8 @@ import {
   clearToken,
 } from '$trood/storage'
 
-import { LOGIN_PAGE_URL, AUTH_MESSAGES } from './constants'
+import { LOGIN_PAGE_URL, messages } from './constants'
+import { intlObject } from '$trood/localeService'
 
 import {
   AUTH_API_NAME,
@@ -70,7 +71,7 @@ export const recovery = (token) => (dispatch, getState) => {
     .then(({ data, status }) => {
       if (status === 200) {
         dispatch(modals.actions.showMessageBoxModal({
-          text: AUTH_MESSAGES[data.data.detail] || data.data.detail,
+          text: intlObject.intl.formatMessage(messages[data.data.detail]) || data.data.detail,
           size: MODAL_SIZES.small,
         }))
       }
@@ -79,8 +80,8 @@ export const recovery = (token) => (dispatch, getState) => {
     .catch(({ status }) => {
       if (status === 404) {
         dispatch(modals.actions.showMessageBoxModal({
-          title: 'Error',
-          text: 'Account not found',
+          title: intlObject.intl.formatMessage(messages.error),
+          text: intlObject.intl.formatMessage(messages.notFound),
           size: MODAL_SIZES.small,
         }))
       }

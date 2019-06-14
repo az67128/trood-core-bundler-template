@@ -4,7 +4,9 @@ import { registerModal, MODAL_SIZES } from '$trood/modals'
 
 import { api, forms } from 'redux-restify'
 
-import { MOVE_MAIL_MODAL } from '../constants'
+import { intlObject } from '$trood/localeService'
+
+import { MOVE_MAIL_MODAL, messages } from '../constants'
 import ModalMoveMail from '../components/ModalMoveMail'
 
 import * as actions from '../actions'
@@ -12,7 +14,7 @@ import * as actions from '../actions'
 
 const stateToProps = (state) => {
   return {
-    title: 'Переместить цепочку',
+    title: intlObject.intl.formatMessage(messages.moveToFolder),
     size: MODAL_SIZES.small,
 
     chainsEntities: api.selectors.entityManager.chains.getEntities(state),

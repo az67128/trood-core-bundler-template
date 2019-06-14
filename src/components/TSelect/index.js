@@ -5,12 +5,12 @@ import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
+import { intlObject } from '$trood/localeService'
+import { messages } from '$trood/mainConstants'
+
 import TLabel from '$trood/components/TLabel'
 
-import {
-  SELECT_TYPES,
-  ERROR_TYPES,
-} from './constants'
+import { SELECT_TYPES } from './constants'
 
 import List, { LIST_TYPES } from './components/List'
 import DropDown from './components/DropDown'
@@ -144,7 +144,7 @@ class TSelect extends PureComponent {
     } = this.props
 
     if (!disabled) {
-      const errors = required && !values.length ? [ERROR_TYPES.required] : []
+      const errors = required && !values.length ? [intlObject.intl.formatMessage(messages.requiredField)] : []
 
       if (errors.length) {
         onInvalid(errors)

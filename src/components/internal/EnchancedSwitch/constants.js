@@ -13,7 +13,3 @@ export const LABEL_POSITION_TYPES = {
   [LABEL_RIGHT]: LABEL_RIGHT,
   [LABEL_LEFT]: LABEL_LEFT,
 }
-
-export const ERROR_TYPES = {
-  required: 'This field is required!',
-}

@@ -106,7 +106,7 @@
     "lint": "npm run jslint && npm run stylelint",
     "jslint": "eslint src/ --ext .js",
     "stylelint": "stylelint \"src/**/*.css\"",
-    "po": "rip po2json \"./translate/po/*.po\" -m \"./translate/messages/**/*.json\" -o \"./public/locale-data\""
+    "po": "rip po2json \"./translate/po/*.po\" -c \"id\" -m \"./translate/messages/**/*.json\" -o \"./public/locale-data\""
   },
   "pre-commit": [
     "lint"

@@ -1,16 +1,18 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
+import { intlObject } from '$trood/localeService'
+
 import Input from './input'
 import {
   VALIDATION_FORMATS,
   INPUT_TYPES,
-  ERROR_TYPES,
   formatToFunctions,
   formatFromFunctions,
   formatLengthFunctions,
   includeForTypes,
   excludeForTypes,
+  messages,
 } from './constants'
 
 class TInput extends PureComponent {
@@ -66,10 +68,11 @@ class TInput extends PureComponent {
 
     if (!properties.format) {
       const validateRegexp = VALIDATION_FORMATS[type]
+      const errorMsg = messages[type]
       if (validateRegexp) {
         properties.format = {
           regexp: validateRegexp,
-          error: ERROR_TYPES[type],
+          error: errorMsg && intlObject.intl.formatMessage(errorMsg),
         }
       }
     }

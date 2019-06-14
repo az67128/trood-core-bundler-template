@@ -1,3 +1,6 @@
+import { defineMessages } from 'react-intl'
+
+
 export const PICKER_TYPES = {
   time: 'time',
   date: 'date',
@@ -19,11 +22,6 @@ export const CALENDAR_TYPES_FORMAT = {
   [CALENDAR_TYPES.day]: 'D',
   [CALENDAR_TYPES.month]: 'MMMM',
   [CALENDAR_TYPES.year]: 'YYYY',
-}
-
-export const PICKER_ERRORS = {
-  required: 'This field is required!',
-  outOfRange: 'Value is out of range!',
 }
 
 export const TIME_FORMAT = 'HH:mm'

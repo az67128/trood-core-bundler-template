@@ -6,7 +6,9 @@ import files from '$trood/files'
 
 import { api, forms } from 'redux-restify'
 
-import { EDIT_MAIL_MODAL, getMailFormName } from '../constants'
+import { intlObject } from '$trood/localeService'
+
+import { EDIT_MAIL_MODAL, getMailFormName, messages } from '../constants'
 import ModalEditMail from '../components/ModalEditMail'
 
 import * as actions from '../actions'
@@ -16,7 +18,7 @@ const stateToProps = (state) => {
   const startingToAddress = forms.selectors.mailServiceConfigForm.getField('startingToAddress')(state)
 
   return {
-    title: 'Новое письмо',
+    title: intlObject.intl.formatMessage(messages.newMessage),
     size: MODAL_SIZES.medium,
 
     startingToAddress,

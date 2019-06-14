@@ -2,12 +2,22 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
-import style from './index.css'
+import { defineMessages } from 'react-intl'
+import { intlObject } from '$trood/localeService'
 
 import TButton from '$trood/components/TButton'
 import LoadingIndicator from '$trood/components/LoadingIndicator'
 import { BUTTON_COLORS, BUTTON_TYPES } from '$trood/components/TButton/constants'
 
+import style from './index.css'
+
+
+export const messages = defineMessages({
+  loadMore: {
+    id: 'components.LoadMoreButton.load_more',
+    defaultMessage: 'Load more...',
+  },
+})
 
 class LoadMoreButton extends PureComponent {
   static propTypes = {
@@ -26,12 +36,11 @@ class LoadMoreButton extends PureComponent {
   render() {
     const {
       className,
+      label = intlObject.intl.formatMessage(messages.loadMore),
       isLoading,
       onClick,
 
     } = this.props
-
-    const label = this.props.label || 'Загрузить еще...'
 
     return (
       <div {...{

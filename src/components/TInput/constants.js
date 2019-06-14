@@ -1,5 +1,6 @@
-import * as format from '$trood/helpers/format'
+import { defineMessages } from 'react-intl'
 
+import * as format from '$trood/helpers/format'
 import { EMAIL_REGEXP } from '$trood/mainConstants'
 
 
@@ -65,15 +66,20 @@ export const VALIDATION_FORMATS = {
   [TIME]: /([0-1]\d[0-5]\d)|(2[0-3][0-5]\d)/,
 }
 
-export const ERROR_TYPES = {
-  email: 'E-Mail is incorrect!',
-  color: 'HEX-code is incorrect!',
-  url: 'Url is incorrect!',
-  format: 'Value is incorrect!',
-  maxLen: 'Max length: ',
-  minLen: 'Min length: ',
-  required: 'This field is required!',
-}
+export const messages = defineMessages({
+  [EMAIL]: {
+    id: 'components.TInput.incorrect_mail',
+    defaultMessage: 'E-Mail is incorrect!',
+  },
+  [COLOR]: {
+    id: 'components.TInput.incorrect_hex',
+    defaultMessage: 'HEX-code is incorrect!',
+  },
+  [URL]: {
+    id: 'components.TInput.incorrect_url',
+    defaultMessage: 'Url is incorrect!',
+  },
+})
 
 export const FLOAT_MAX_FRACTIONALS = 6
 export const MONEY_MAX_FRACTIONALS = 2

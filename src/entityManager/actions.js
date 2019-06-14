@@ -10,7 +10,10 @@ import {
   getViewModalName,
   getEditFormName,
   modalQueryToString,
+  messages,
 } from './constants'
+
+import { intlObject } from '$trood/localeService'
 
 
 export const createEntityForm = (modelName, parents = []) => (
@@ -241,9 +244,17 @@ export const deleteEntity = (modelName, parents = []) => (model, onDelete) => (d
       }
 
       if (currentModelConfig.deletion && currentModelConfig.deletion.confirm) {
+        let text = currentModelConfig.deletion.message
+        if (text) {
+          if (text.defaultMessage) {
+            text = intlObject.intl.formatMessage(text)
+          }
+        } else {
+          text = intlObject.intl.formatMessage(messages.deleteRequest)
+        }
         dispatch(modals.actions.showConfirmModal({
-          text: currentModelConfig.deletion.message || 'Do you want to delete the record?',
-          acceptButtonText: 'Yes',
+          text,
+          acceptButtonText: intlObject.intl.formatMessage(messages.acceptButtonText),
           onAccept: async () => {
             await dispatch(deleteAction)
               .then(afterDeleteAction)

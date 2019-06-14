@@ -3,6 +3,9 @@ import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import { NativeTypes } from 'react-dnd-html5-backend'
 import { DropTarget } from 'react-dnd'
+import { defineMessages } from 'react-intl'
+
+import { intlObject } from '$trood/localeService'
 
 import style from './index.css'
 
@@ -11,6 +14,13 @@ import { ICONS_TYPES } from '$trood/components/TIcon/constants'
 
 import { DEFAULT_API_HOST } from '$trood/apiUrlSchema'
 
+
+const messages = defineMessages({
+  dropFile: {
+    id: 'files.components.TFileInput.drop_file',
+    defaultMessage: 'Drop file here',
+  },
+})
 
 const dropTarget = {
   drop: (props, monitor) => {
@@ -94,7 +104,7 @@ class TFileInput extends PureComponent {
       connectDropTarget,
     } = this.props
 
-    const label = isOver ? 'Drop file here' : this.props.label
+    const label = isOver ? intlObject.intl.formatMessage(messages.dropFile) : this.props.label
 
     let background
     if (propsBackground) {

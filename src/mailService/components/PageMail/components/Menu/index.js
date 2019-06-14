@@ -7,6 +7,9 @@ import TButton, { BUTTON_TYPES, BUTTON_COLORS } from '$trood/components/TButton'
 import QueryLink from '$trood/components/QueryLink'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 
+import { messages } from '../../../../constants'
+import { intlObject } from '$trood/localeService'
+
 
 class Menu extends PureComponent {
   render() {
@@ -29,7 +32,7 @@ class Menu extends PureComponent {
               <TIcon {...{
                 type: ICONS_TYPES.mail,
                 size: 15,
-                label: 'Написать письмо',
+                label: intlObject.intl.formatMessage(messages.newMessage),
               }} />
             ),
             onClick: () => mailServiceActions.writeMail(),
@@ -45,13 +48,13 @@ class Menu extends PureComponent {
             <TIcon {...{
               type: ICONS_TYPES.mail,
               size: 15,
-              label: 'Входящие',
+              label: intlObject.intl.formatMessage(messages.inbox),
             }} />
           </QueryLink>
           }
           {!!folders.length &&
           <div className={style.foldersTitle}>
-            Папки
+            {intlObject.intl.formatMessage(messages.folders)}
           </div>
           }
           {folders.map(folder => (
@@ -73,7 +76,7 @@ class Menu extends PureComponent {
             <TIcon {...{
               type: ICONS_TYPES.mail,
               size: 15,
-              label: 'Отправленные',
+              label: intlObject.intl.formatMessage(messages.outbox),
             }} />
           </QueryLink>
           }
@@ -86,7 +89,7 @@ class Menu extends PureComponent {
             <TIcon {...{
               type: ICONS_TYPES.settings,
               size: 15,
-              label: 'Настройки',
+              label: intlObject.intl.formatMessage(messages.settings),
             }} />
           ),
           onClick: () => mailServiceActions.showMailServiceSettingsModal(),

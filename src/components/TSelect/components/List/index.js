@@ -9,8 +9,10 @@ import {
   LIST_TYPES,
   LIST_ORIENTATION,
   SCROLL_THRESHOLD,
-  EMPTY_ITEMS_LABEL,
 } from './constants'
+
+import { messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
 
 import TRadioButton from '$trood/components/TRadioButton'
 import TCheckbox from '$trood/components/TCheckbox'
@@ -72,7 +74,6 @@ class List extends PureComponent {
     orientation: LIST_ORIENTATION.vertical,
     items: [],
     values: [],
-    emptyItemsLabel: EMPTY_ITEMS_LABEL,
 
     autoScroll: true,
 
@@ -172,7 +173,7 @@ class List extends PureComponent {
       orientation,
       items,
       values,
-      emptyItemsLabel,
+      emptyItemsLabel = intlObject.intl.formatMessage(messages.emptyMessage),
       disabled,
       isLoading,
     } = this.props

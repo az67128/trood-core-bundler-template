@@ -1,7 +1,31 @@
 import React from 'react'
+import { defineMessages } from 'react-intl'
 
 import { capitalize, lowerize } from '$trood/helpers/namingNotation'
 
+
+export const messages = defineMessages({
+  deleteRequest: {
+    id: 'entity_manager.delete_request',
+    defaultMessage: 'Do you want to delete the record?',
+  },
+  acceptButtonText: {
+    id: 'entity_manager.accept_button_text',
+    defaultMessage: 'Yes',
+  },
+  change: {
+    id: 'entity_manager.change',
+    defaultMessage: 'Change',
+  },
+  edit: {
+    id: 'entity_manager.edit',
+    defaultMessage: 'Edit',
+  },
+  create: {
+    id: 'entity_manager.create',
+    defaultMessage: 'Create',
+  },
+})
 
 const slashOrNoop = value => `${value ? `/${value}` : ''}`
 

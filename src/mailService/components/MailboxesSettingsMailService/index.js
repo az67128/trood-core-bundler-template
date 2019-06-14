@@ -9,7 +9,9 @@ import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import TSelect from '$trood/components/TSelect'
 import TCheckbox from '$trood/components/TCheckbox'
-import { ENCRYPTION_TYPES, ERROR_MESSAGES } from '../../constants'
+import { ENCRYPTION_TYPES, messages } from '../../constants'
+import { messages as mainMessages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
@@ -52,7 +54,12 @@ class MailboxesSettingsMailService extends PureComponent {
 
     if (editMailboxesFormErrors) {
       Object.keys(editMailboxesFormErrors).forEach(field => {
-        editMailboxesFormErrors[field] = (editMailboxesFormErrors[field]).map(error => ERROR_MESSAGES[error] || error)
+        editMailboxesFormErrors[field] = (editMailboxesFormErrors[field])
+          .map(error => {
+            const msg = messages[error]
+            if (!msg) return error
+            return intlObject.intl.formatMessage(msg)
+          })
       })
     }
 
@@ -72,7 +79,7 @@ class MailboxesSettingsMailService extends PureComponent {
 
     const getFormChangeSelectProps = (name) => ({
       className: style.selectBlock,
-      placeHolder: 'Не выбрано',
+      placeHolder: intlObject.intl.formatMessage(mainMessages.notSet),
       values: editMailboxesForm[name] && [editMailboxesForm[name]],
       items: Object.keys(ENCRYPTION_TYPES).map(item => ({ value: item, label: item })),
       onInvalid: errs => editMailboxesFormActions.setFieldError(name, errs),
@@ -85,14 +92,17 @@ class MailboxesSettingsMailService extends PureComponent {
       },
     })
 
-    const nonFieldErrors = (editMailboxesFormErrors.nonFieldErrors || []).map((item, key) => (
-      <div {...{
-        className: style.error,
-        key,
-      }}>
-        {ERROR_MESSAGES[item] || item}
-      </div>
-    ))
+    const nonFieldErrors = (editMailboxesFormErrors.nonFieldErrors || []).map((item, key) => {
+      const msg = messages[item]
+      return (
+        <div {...{
+          className: style.error,
+          key,
+        }}>
+          {msg ? intlObject.intl.formatMessage(msg) : msg}
+        </div>
+      )
+    })
 
     return (
       <div {...{
@@ -125,7 +135,7 @@ class MailboxesSettingsMailService extends PureComponent {
             onClick: () => {
               mailServiceActions.createMailboxesForm()
             },
-            label: 'Почта',
+            label: intlObject.intl.formatMessage(messages.mailBox),
             specialType: BUTTON_SPECIAL_TYPES.add,
           }} />
         }
@@ -134,49 +144,49 @@ class MailboxesSettingsMailService extends PureComponent {
             className: style.mailboxesAdd,
           }} >
             <TInput {...{
-              label: 'Название',
               ...getFormChangeInputProps('name'),
+              label: intlObject.intl.formatMessage(messages.mailBoxName),
             }} />
             <TInput {...{
-              label: 'Email',
               ...getFormChangeInputProps('email'),
+              label: intlObject.intl.formatMessage(messages.email),
               type: INPUT_TYPES.email,
             }} />
             <TInput {...{
-              label: 'Password',
               ...getFormChangeInputProps('password'),
+              label: intlObject.intl.formatMessage(messages.password),
               type: INPUT_TYPES.password,
             }} />
             <TInput {...{
-              label: 'Imap Host',
               ...getFormChangeInputProps('imapHost'),
+              label: intlObject.intl.formatMessage(messages.imapHost),
             }} />
             <TInput {...{
-              label: 'Imap Port',
               ...getFormChangeInputProps('imapPort'),
+              label: intlObject.intl.formatMessage(messages.imapPort),
               type: INPUT_TYPES.int,
             }} />
             <TSelect {...{
               ...getFormChangeSelectProps('imapSecure'),
-              label: 'Imap Secure',
+              label: intlObject.intl.formatMessage(messages.imapSecure),
             }} />
             <TInput {...{
-              label: 'Smtp Host',
               ...getFormChangeInputProps('smtpHost'),
+              label: intlObject.intl.formatMessage(messages.smtpHost),
             }} />
             <TInput {...{
-              label: 'Smtp Port',
               ...getFormChangeInputProps('smtpPort'),
+              label: intlObject.intl.formatMessage(messages.smtpPort),
               type: INPUT_TYPES.int,
             }} />
             <TSelect {...{
               ...getFormChangeSelectProps('smtpSecure'),
-              label: 'Smtp Secure',
+              label: intlObject.intl.formatMessage(messages.smtpSecure),
             }} />
             <TCheckbox {...{
               value: getNestedObjectField(editMailboxesForm, 'shared'),
               onChange: value => editMailboxesFormActions.changeField('shared', value),
-              label: 'Показать всем',
+              label: intlObject.intl.formatMessage(messages.shared),
             }} />
             {nonFieldErrors}
             <div {...{
@@ -185,12 +195,12 @@ class MailboxesSettingsMailService extends PureComponent {
               <TButton {...{
                 className: style.buttonAdd,
                 onClick: editMailboxesFormActions.submit,
-                label: editMailboxesForm.id ? 'Изменить' : 'Добавить',
+                label: intlObject.intl.formatMessage(editMailboxesForm.id ? mainMessages.edit : mainMessages.create),
                 disabled: !editMailboxesFormValid,
               }} />
               <TButton {...{
                 className: style.buttonCancel,
-                label: 'Отменить',
+                label: intlObject.intl.formatMessage(mainMessages.cancel),
                 color: BUTTON_COLORS.gray,
                 onClick: editMailboxesFormActions.deleteForm,
               }} />

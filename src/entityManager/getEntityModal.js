@@ -30,6 +30,7 @@ import {
   ENTITY_COMPONENT_INLINE_EDIT,
   MODAL_NAME_FUNCS,
   EntityManagerContext,
+  messages,
 } from './constants'
 
 import {
@@ -40,7 +41,17 @@ import {
   getCurrentEntitiesActions,
 } from './selectors'
 
+import { messages as mainMessages } from '$trood/mainConstants'
+
+import { intlObject } from '$trood/localeService'
+
 import { applySelectors } from '$trood/helpers/selectors'
+
+
+const formatMessage = msg => {
+  if (!msg || !msg.defaultMessage || !intlObject.intl) return msg
+  return intlObject.intl.formatMessage(msg)
+}
 
 const linkChildWithParent = (modelName, parentName, parentId, formActions, form) => (dispatch) => {
   const currentParentModel = RESTIFY_CONFIG.registeredModels[parentName]
@@ -254,7 +265,9 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         const saveButton = (
           <TButton {...{
             className: modalsStyle.button,
-            label: entityComponentName === ENTITY_COMPONENT_EDIT ? 'Change' : 'Save',
+            label: intlObject.intl.formatMessage(
+              entityComponentName === ENTITY_COMPONENT_EDIT ? messages.change : mainMessages.save,
+            ),
             disabled: !modelValid || this.state.buttonLocked,
             color: BUTTON_COLORS.blue,
             onClick: () => {
@@ -299,7 +312,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
             {saveButton}
             <TButton {...{
               className: modalsStyle.button,
-              label: 'Cancel',
+              label: intlObject.intl.formatMessage(mainMessages.cancel),
               color: BUTTON_COLORS.gray,
               onClick: cancelAction,
             }} />
@@ -323,7 +336,9 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     const childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
     // Calc props for editing modal
     if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
-      title = props.title || `${props.isEditing ? 'Edit' : 'Create'} ${currentModel.name}`
+      title = formatMessage(props.title) || `${
+        intlObject.intl.formatMessage(props.isEditing ? messages.edit : messages.create)
+      } ${formatMessage(currentModel.name)}`
       modelFormName = getEditFormName({
         modelName,
         id: props.entityId,
@@ -335,7 +350,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     // Calc props for viewing modal
     } else if (entityComponentName === ENTITY_COMPONENT_VIEW) {
       model = currentEntities[modelName].getById(props.entityId)
-      title = props.title || currentModel.name
+      title = formatMessage(props.title) || formatMessage(currentModel.name)
     }
 
     const childEntitiesByModel =

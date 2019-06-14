@@ -13,6 +13,9 @@ import SmartDate, { SMART_DATE_FORMATS } from '$trood/components/SmartDate'
 
 import { html2text, getTagsFromHtml } from '$trood/helpers/format'
 
+import { messages } from '../../../../constants'
+import { intlObject } from '$trood/localeService'
+
 import { FileListView } from '$trood/files'
 
 
@@ -192,7 +195,7 @@ class Mail extends PureComponent {
               {
                 !open &&
                 <div className={style.contacts}>
-                  {`От: ${model.fromAddress}`}
+                  {intlObject.intl.formatMessage(messages.fromWithValue, { emails: model.fromAddress })}
                 </div>
               }
               <SmartDate {...{
@@ -205,10 +208,10 @@ class Mail extends PureComponent {
               open &&
               <div className={style.contacts}>
                 <span>
-                  {`От: ${model.fromAddress}`}
+                  {intlObject.intl.formatMessage(messages.fromWithValue, { emails: model.fromAddress })}
                 </span>
                 <span>
-                  {`Кому: ${model.to.join(', ')}`}
+                  {intlObject.intl.formatMessage(messages.toWithValue, { emails: model.to.join(', ') })}
                 </span>
               </div>
             }
@@ -265,21 +268,21 @@ class Mail extends PureComponent {
               type: ICONS_TYPES.arrowWithTail,
               rotate: ROTATE_TYPES.down,
               size: 15,
-              label: 'Ответить',
+              label: intlObject.intl.formatMessage(messages.reply),
               onClick: () => mailServiceActions.replayMail(model),
             }} />
             <TIcon {...{
               className: style.dotMenuItem,
               type: ICONS_TYPES.arrowWithTail,
               size: 15,
-              label: 'Переслать',
+              label: intlObject.intl.formatMessage(messages.forward),
               onClick: () => mailServiceActions.forwardMail(model),
             }} />
             <TIcon {...{
               className: style.dotMenuItem,
               type: ICONS_TYPES.trashBin,
               size: 15,
-              label: 'Удалить',
+              label: intlObject.intl.formatMessage(messages.delete),
               onClick: () => mailServiceActions.deleteMail(model.id),
             }} />
           </DotMenu>

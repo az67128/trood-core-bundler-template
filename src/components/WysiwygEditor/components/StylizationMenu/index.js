@@ -4,6 +4,9 @@ import classNames from 'classnames'
 import StyleButton from '../StyleButton'
 import StyleColorPicker from '../StyleColorPicker'
 
+import { intlObject } from '$trood/localeService'
+import { messages } from '../../constants'
+
 import style from './index.css'
 
 const StylizationMenu = ({
@@ -26,7 +29,7 @@ const StylizationMenu = ({
       ))}
       {!!textColorStyles.length &&
         <StyleColorPicker {...{
-          placeholder: 'Цвет текста',
+          placeholder: intlObject.intl.formatMessage(messages.textColor),
           colorStyles: textColorStyles,
           editorState,
           onToggle,
@@ -34,7 +37,7 @@ const StylizationMenu = ({
       }
       {!!backgroundColorStyles.length &&
         <StyleColorPicker {...{
-          placeholder: 'Цвет фона',
+          placeholder: intlObject.intl.formatMessage(messages.backgroundColor),
           colorStyles: backgroundColorStyles,
           editorState,
           onToggle,

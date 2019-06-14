@@ -2,6 +2,9 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
+import { messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
 import style from './index.css'
 
 import { ICONS_TYPES } from '$trood/components/TIcon/constants'
@@ -39,7 +42,7 @@ class Header extends Component {
           menuRenderers,
           additionalLinks: [
             {
-              label: 'Выйти',
+              label: intlObject.intl.formatMessage(messages.logout),
               onClick: authActions.logout,
               iconType: ICONS_TYPES.logout,
               className: style.logot,

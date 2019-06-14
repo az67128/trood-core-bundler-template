@@ -8,6 +8,9 @@ import TSelect from '$trood/components/TSelect'
 import TButton from '$trood/components/TButton'
 import { BUTTON_COLORS } from '$trood/components/TButton/constants'
 
+import { messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
 
 class InputModal extends PureComponent {
   static propTypes = {
@@ -37,10 +40,6 @@ class InputModal extends PureComponent {
     onDecline: () => {},
 
     options: [],
-
-    text: 'Select value',
-    acceptButtonText: 'OK',
-    declineButtonText: 'Cancel',
   }
 
   constructor(props) {
@@ -82,7 +81,7 @@ class InputModal extends PureComponent {
           <TSelect {...{
             items: options,
             className: modalsStyle.control,
-            placeHolder: 'Not chosen',
+            placeHolder: intlObject.intl.formatMessage(messages.notSet),
             values: selected && [selected],
             onChange: values => this.setState({ selected: values[0] }),
           }} />

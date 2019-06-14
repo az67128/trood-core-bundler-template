@@ -1,3 +1,6 @@
+import { defineMessages } from 'react-intl'
+
+
 export const INIT_ACTION = '@@INIT'
 export const ROUTER_LOCATION_CHANGE_ACTION = '@@router/LOCATION_CHANGE'
 export const STATE_REPLACE_ACTION = 'STATE_REPLACE'
@@ -23,3 +26,90 @@ export const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SZ'
 export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD'
 
 export const DEFAULT_SCROLLING_CONTAINER_ID = 'troodAppScroll'
+
+export const messages = defineMessages({
+  serverError: {
+    id: '$trood.server_error',
+    defaultMessage: 'Server error! Try to refresh page!',
+  },
+  requiredField: {
+    id: '$trood.required_field',
+    defaultMessage: 'This field is required!',
+  },
+  outOfRangeValue: {
+    id: '$trood.out_of_range_value',
+    defaultMessage: 'Value is out of range!',
+  },
+  incorrectFormat: {
+    id: '$trood.incorrect_format',
+    defaultMessage: 'Value is incorrect!',
+  },
+  maxLength: {
+    id: '$trood.max_length',
+    defaultMessage: 'Max length: {number}',
+  },
+  minLength: {
+    id: '$trood.min_length',
+    defaultMessage: 'Min length: {number}',
+  },
+  emptyMessage: {
+    id: '$trood.empty_message',
+    defaultMessage: 'Empty',
+  },
+  logout: {
+    id: '$trood.logout',
+    defaultMessage: 'Logout',
+  },
+  edit: {
+    id: '$trood.edit',
+    defaultMessage: 'Edit',
+  },
+  create: {
+    id: '$trood.create',
+    defaultMessage: 'Create',
+  },
+  save: {
+    id: '$trood.save',
+    defaultMessage: 'Save',
+  },
+  ok: {
+    id: '$trood.ok',
+    defaultMessage: 'OK',
+  },
+  cancel: {
+    id: '$trood.cancel',
+    defaultMessage: 'Cancel',
+  },
+  true: {
+    id: '$trood.true',
+    defaultMessage: 'Yes',
+  },
+  false: {
+    id: '$trood.false',
+    defaultMessage: 'No',
+  },
+  sureAsk: {
+    id: '$trood.sureAsk',
+    defaultMessage: 'Are you sure?',
+  },
+  yes: {
+    id: '$trood.yes',
+    defaultMessage: 'Yes',
+  },
+  no: {
+    id: '$trood.no',
+    defaultMessage: 'No',
+  },
+  selectValue: {
+    id: '$trood.select_value',
+    defaultMessage: 'Select value',
+  },
+  notSet: {
+    id: '$trood.not_set',
+    defaultMessage: 'Not set',
+  },
+  search: {
+    id: '$trood.search',
+    defaultMessage: 'Search',
+  },
+})

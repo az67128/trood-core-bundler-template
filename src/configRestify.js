@@ -2,6 +2,9 @@ import merge from 'lodash/merge'
 
 import customApiConfig from './customApiConfig'
 
+import { messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
 import { getToken } from './storage'
 import {
   DEFAULT_ALLOWED_NO_TOKEN_ENDPOINTS,
@@ -71,7 +74,7 @@ const configRestify = () => {
   const defaultHttpCodesAllbacks = (code) => {
     if (code >= 500) {
       return () => modals.actions.showMessageBoxModal({
-        text: 'Server error! Try to refresh page!',
+        text: intlObject.intl.formatMessage(messages.serverError),
         size: MODAL_SIZES.mediumSmall,
       })
     }

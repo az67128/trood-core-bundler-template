@@ -2,6 +2,8 @@ import { api, forms } from 'redux-restify'
 
 import modals from '$trood/modals'
 
+import { intlObject } from '$trood/localeService'
+
 import {
   EDIT_MAILBOX_FORM_NAME,
   EDIT_FOLDER_FORM_NAME,
@@ -45,7 +47,7 @@ export const writeMail = (to) => (dispatch, getState) => {
 
 export const forwardMail = (mail) => (dispatch) => {
   dispatch(createMailForm({
-    attachedMail: `${getHtmlMailInfo(mail)}${mail.body}`,
+    attachedMail: `${getHtmlMailInfo(mail, intlObject.intl)}${mail.body}`,
     subject: `FWD: ${mail.subject}`,
     attachments: mail.attachmentsIds,
   }))
@@ -56,7 +58,7 @@ export const forwardMail = (mail) => (dispatch) => {
 export const replayMail = (mail) => (dispatch) => {
   const to = mail.fromAddress[0]
   dispatch(createMailForm({
-    attachedMail: `${getHtmlMailInfo(mail)}${mail.body}`,
+    attachedMail: `${getHtmlMailInfo(mail, intlObject.intl)}${mail.body}`,
     subject: `RE: ${mail.subject}`,
     inReplyTo: mail.id,
     to,

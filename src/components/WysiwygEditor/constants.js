@@ -1,3 +1,5 @@
+import { defineMessages } from 'react-intl'
+
 import { ICONS_TYPES } from '../TIcon'
 
 
@@ -54,3 +56,14 @@ export const getColorStylesMap = (colors, bg) => colors.reduce((memo, curr) => (
     [bg ? 'background' : 'color']: curr,
   },
 }), {})
+
+export const messages = defineMessages({
+  textColor: {
+    id: 'components.WysiwygEditor.text_color',
+    defaultMessage: 'Text color',
+  },
+  backgroundColor: {
+    id: 'components.WysiwygEditor.background_color',
+    defaultMessage: 'Background color',
+  },
+})

@@ -10,6 +10,9 @@ import {
   SMART_DATE_FORMATS_FUNCTIONS,
 } from './constants'
 
+import { messages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
 
 const UNIX_TIMESTAMP_CHECKER = 1544399
 const MS_IN_SEC = 1000
@@ -19,7 +22,7 @@ const SmartDate = ({
   date,
   format = FULL_FORMAT,
   customFormat,
-  defaultEmptyMessage = 'Неизвестно',
+  defaultEmptyMessage = intlObject.intl.formatMessage(messages.notSet),
 }) => {
   let realDate = date
   if (typeof realDate === 'number' && realDate / MS_IN_SEC < UNIX_TIMESTAMP_CHECKER) {

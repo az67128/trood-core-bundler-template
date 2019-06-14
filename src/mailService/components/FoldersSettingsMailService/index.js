@@ -8,6 +8,10 @@ import TButton, { BUTTON_SPECIAL_TYPES, BUTTON_COLORS } from '$trood/components/
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 
+import { messages } from '../../constants'
+import { messages as mainMessages } from '$trood/mainConstants'
+import { intlObject } from '$trood/localeService'
+
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
 class FoldersSettingsMailService extends PureComponent {
@@ -78,7 +82,7 @@ class FoldersSettingsMailService extends PureComponent {
             onClick: () => {
               mailServiceActions.createFoldersForm()
             },
-            label: 'Папка',
+            label: intlObject.intl.formatMessage(messages.folder),
             specialType: BUTTON_SPECIAL_TYPES.add,
           }} />
         }
@@ -88,7 +92,7 @@ class FoldersSettingsMailService extends PureComponent {
           }} >
             <TInput {...{
               className: style.input,
-              label: 'Название папки',
+              label: intlObject.intl.formatMessage(messages.folderName),
               value: getNestedObjectField(editFolderForm, 'name'),
               onChange: value => editFolderFormActions.changeField('name', value),
               onInvalid: errs => editFolderFormActions.setFieldError('name', errs),
@@ -106,12 +110,12 @@ class FoldersSettingsMailService extends PureComponent {
               <TButton {...{
                 className: style.buttonAdd,
                 onClick: editFolderFormActions.submit,
-                label: editFolderForm.id ? 'Изменить' : 'Добавить',
+                label: intlObject.intl.formatMessage(editFolderForm.id ? mainMessages.edit : mainMessages.create),
                 disabled: !editFolderFormValid,
               }} />
               <TButton {...{
                 className: style.buttonCancel,
-                label: 'Отменить',
+                label: intlObject.intl.formatMessage(mainMessages.cancel),
                 color: BUTTON_COLORS.gray,
                 onClick: editFolderFormActions.deleteForm,
               }} />

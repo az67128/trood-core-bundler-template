@@ -10,6 +10,9 @@ import DotMenu from '$trood/components/DotMenu'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import LoadingIndicator from '$trood/components/LoadingIndicator'
 
+import { messages } from '../../../../constants'
+import { intlObject } from '$trood/localeService'
+
 import Mail from '../Mail'
 
 
@@ -190,7 +193,7 @@ class MailsList extends PureComponent {
                 className: style.dotMenuItem,
                 type: ICONS_TYPES.folder,
                 size: 15,
-                label: 'В папку',
+                label: intlObject.intl.formatMessage(messages.moveToFolder),
                 onClick: () => mailServiceActions.moveChains(chainId),
               }} />
             </DotMenu>

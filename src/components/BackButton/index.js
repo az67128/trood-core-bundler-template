@@ -2,6 +2,9 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import { Route } from 'react-router-dom'
+import { defineMessages } from 'react-intl'
+
+import { intlObject } from '$trood/localeService'
 
 import style from './index.css'
 
@@ -9,6 +12,13 @@ import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
 
 import { BACK_BUTTON_TYPES } from './constants'
 
+
+const messages = defineMessages({
+  back: {
+    id: 'components.BackButton.back',
+    defaultMessage: 'Back',
+  },
+})
 
 class BackButton extends PureComponent {
   static propTypes = {
@@ -55,7 +65,7 @@ class BackButton extends PureComponent {
               className: style.icon,
               type: ICONS_TYPES.arrowWithTail,
               rotate: ROTATE_TYPES.bottom,
-              label: withLabel ? 'Назад' : undefined,
+              label: withLabel ? intlObject.intl.formatMessage(messages.back) : undefined,
               size: 16,
             }} />
           }
