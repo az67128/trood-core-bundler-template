@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import style from './index.css'
 
 import { PAGE_TYPE_RECOVERY, messages } from '../../constants'
-import { intlObject } from '$trood/localeService'
+import { LocaleSwitch, intlObject } from '$trood/localeService'
 
 import Logo from '$trood/components/Logo'
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
@@ -52,6 +52,7 @@ class PageAuth extends PureComponent {
             {intlObject.intl.formatMessage(pageType.title)}
             <Logo size={80} />
           </div>
+          <LocaleSwitch className={style.locale} />
           {
             (!isRecovery || !token) &&
             <TInput {...{

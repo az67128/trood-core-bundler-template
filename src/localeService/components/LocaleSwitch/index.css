@@ -1,23 +1,38 @@
 @import 'styles/variables.css';
 
 .root {
+  position: relative;
+  height: 28px;
+  width: 50px;
 }
 
-.flag {
-  border: 1px solid transparent;
+.selectedLocale,
+.localesList {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 1px solid var(--trood-blue);
+  border-radius: 3px;
+}
+
+.localesList {
+  background-color: var(--trood-white);
+}
+
+.localeItem,
+.selectedLocale {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
   cursor: pointer;
-  height: 11px;
 }
 
-.flag:hover {
-  border-color: var(--trood-gray-extra-dark);
-}
-
-.selectedFlag,
-.selectedFlag:hover {
-  border-color: var(--trood-black);
-}
-
-.flag:not(:first-child) {
+.localeName {
   margin-left: 5px;
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 700;
+  color: var(--trood-gray-text);
 }

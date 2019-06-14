@@ -7,6 +7,8 @@ import lodashGet from 'lodash/get'
 
 import { forms } from 'redux-restify'
 
+import TClickOutside from '$trood/components/TClickOutside'
+
 import style from './index.css'
 import flagIconStyle from '$trood/styles/flagIcon.css'
 
@@ -24,6 +26,21 @@ class LocaleSwitch extends PureComponent {
     className: '',
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      open: false,
+    }
+
+    this.toggleOpen = this.toggleOpen.bind(this)
+  }
+
+  toggleOpen(value) {
+    const open = value === undefined ? !this.state.open : value
+    this.setState({ open })
+  }
+
   render() {
     const {
       className,
@@ -32,30 +49,67 @@ class LocaleSwitch extends PureComponent {
       localeServiceFormActions,
     } = this.props
 
+    const { open } = this.state
+
     const locales = lodashGet(systemConfig, ['services', 'locale', 'availableLocales'])
-    if (!locales || !locales.length) {
+    if (!locales || locales.length < 2) {
       return null
     }
 
+    const currentLocale = localeServiceForm.selectedLocale
+
     return (
-      <div {...{
-        className: classNames(style.root, className),
-      }} >
-        {locales.map(locale => (
-          <div {...{
-            key: locale.code,
-            className: classNames(
-              flagIconStyle.flagIcon,
-              style.flag,
-              localeServiceForm.selectedLocale === locale.code && style.selectedFlag,
-              flagIconStyle[`flagIcon${capitalize(locale.code)}`],
-            ),
-            onClick: () => {
-              localeServiceFormActions.changeField('selectedLocale', locale.code)
-            },
-          }} />
-        ))}
-      </div>
+      <TClickOutside onClick={() => this.toggleOpen(false)}>
+        <div {...{
+          className: classNames(style.root, className),
+        }} >
+          {
+            !open &&
+            <div {...{
+              className: style.selectedLocale,
+              onClick: () => this.toggleOpen(),
+            }}>
+              <div {...{
+                className: classNames(
+                  flagIconStyle.flagIcon,
+                  flagIconStyle[`flagIcon${capitalize(currentLocale)}`],
+                ),
+              }} />
+              <div className={style.localeName}>
+                {currentLocale}
+              </div>
+            </div>
+          }
+          {
+            open &&
+            <div className={style.localesList}>
+              {locales.map(locale => (
+                <div {...{
+                  key: locale.code,
+                  className: classNames(
+                    style.localeItem,
+                    currentLocale === locale.code && style.currentLocale,
+                  ),
+                  onClick: () => {
+                    this.toggleOpen(false)
+                    localeServiceFormActions.changeField('selectedLocale', locale.code)
+                  },
+                }}>
+                  <div {...{
+                    className: classNames(
+                      flagIconStyle.flagIcon,
+                      flagIconStyle[`flagIcon${capitalize(locale.code)}`],
+                    ),
+                  }} />
+                  <div className={style.localeName}>
+                    {locale.code}
+                  </div>
+                </div>
+              ))}
+            </div>
+          }
+        </div>
+      </TClickOutside>
     )
   }
 }

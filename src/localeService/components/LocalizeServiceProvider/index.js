@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addLocaleData, IntlProvider } from 'react-intl'
+import moment from 'moment'
 
 import { api, forms } from 'redux-restify'
 
@@ -57,6 +58,7 @@ class LocalizeServiceProvider extends PureComponent {
     if (prevProps && localeServiceForm.selectedLocale === prevProps.localeServiceForm.selectedLocale) {
       return
     }
+    moment.locale(localeServiceForm.selectedLocale)
     this.setState({
       localeDataLoaded: false,
       localeMessagesLoaded: false,

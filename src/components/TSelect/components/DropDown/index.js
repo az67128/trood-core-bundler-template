@@ -156,6 +156,7 @@ class DropDown extends PureComponent {
     const {
       controlClassName,
       valueClassName,
+      mainSelectContainerStyle,
 
       type = (this.props.multi ? LIST_TYPES.checkbox : LIST_TYPES.text),
       values,
@@ -194,7 +195,7 @@ class DropDown extends PureComponent {
 
     return (
       <TClickOutside onClick={() => this.toggleOpen(false)}>
-        <div className={classNames(
+        <div style={mainSelectContainerStyle} className={classNames(
           controlClassName,
           style.root,
           errors.length && style.error,
