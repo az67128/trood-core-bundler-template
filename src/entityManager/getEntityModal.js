@@ -261,13 +261,12 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
           submitAction,
           deleteAction,
           cancelAction,
+          isEditing,
         } = this.props
         const saveButton = (
           <TButton {...{
             className: modalsStyle.button,
-            label: intlObject.intl.formatMessage(
-              entityComponentName === ENTITY_COMPONENT_EDIT ? messages.change : mainMessages.save,
-            ),
+            label: intlObject.intl.formatMessage(isEditing ? messages.change : mainMessages.save),
             disabled: !modelValid || this.state.buttonLocked,
             color: BUTTON_COLORS.blue,
             onClick: () => {
