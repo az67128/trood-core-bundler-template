@@ -41,8 +41,10 @@ export const openFile = (file, windowRef) => (dispatch) => {
       openFileInNewTab(`${MS_OFFICE_VIEWER}${href}`)
       break
     case FILE_TYPES.docs:
-    case FILE_TYPES.pdf:
       openFileInNewTab(`${GOOGLE_DOCS_VIEWER}${href}`)
+      break
+    case FILE_TYPES.pdf:
+      openFileInNewTab(href)
       break
     case FILE_TYPES.image:
       dispatch(modals.actions.showModal(true, IMAGE_VIEWER_MODAL, { file }))
