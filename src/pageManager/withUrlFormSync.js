@@ -5,8 +5,8 @@ import deepEqual from 'deep-equal'
 import { getDisplayName } from '$trood/helpers/react'
 
 
-export default (fieldsToSyncArg) => (WrappedComponent) => {
-  const fieldsToSync = Array.isArray(fieldsToSyncArg) ? fieldsToSyncArg : [fieldsToSyncArg]
+export default (fieldsToSyncArg = {}) => (WrappedComponent) => {
+  const fieldsToSync = Object.keys(fieldsToSyncArg)
   class WithUrlFormSync extends PureComponent {
     static displayName = `withFormUrlSync(${getDisplayName(WrappedComponent)})`
 
@@ -34,10 +34,12 @@ export default (fieldsToSyncArg) => (WrappedComponent) => {
       } = this.props
 
       const formChanges = fieldsToSync.reduce((memo, field) => {
-        if (!deepEqual(form[field], location.query[field])) {
+        const fieldTransform = typeof fieldsToSyncArg[field] === 'function' ? fieldsToSyncArg[field] : v => v
+        const value = fieldTransform(location.query[field])
+        if (!deepEqual(form[field], value)) {
           return {
             ...memo,
-            [field]: location.query[field],
+            [field]: value,
           }
         }
         return memo

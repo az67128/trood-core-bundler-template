@@ -1,6 +1,3 @@
-import { defineMessages } from 'react-intl'
-
-
 export const PICKER_TYPES = {
   time: 'time',
   date: 'date',
