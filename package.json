@@ -82,7 +82,7 @@
     "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
     "redux-batched-actions": "^0.2.1",
-    "redux-restify": "0.0.1",
+    "redux-restify": "0.0.22",
     "redux-thunk": "^2.2.0",
     "resolve": "1.6.0",
     "sanitize-html": "^1.19.0",
