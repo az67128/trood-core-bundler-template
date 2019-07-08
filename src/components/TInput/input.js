@@ -32,6 +32,9 @@ const WysiwygEditor = Loadable({
 
 const noopFunc = () => {}
 
+const numberTypes = [INPUT_TYPES.moneyNumber, INPUT_TYPES.money, INPUT_TYPES.int, INPUT_TYPES.float]
+const decimalTypes = [INPUT_TYPES.moneyNumber, INPUT_TYPES.money, INPUT_TYPES.float]
+
 class Input extends PureComponent {
   static propTypes = {
     type: PropTypes.oneOf(Object.values(INPUT_TYPES)),
@@ -116,8 +119,11 @@ class Input extends PureComponent {
       stateFormatedValue = `${stateFormatedValue}${FULL_ZERO_TIME.substr(stateFormatedValue.length)}`
     }
     if (formattedValue === state.prevPropsFormattedValue) return null
-    if (type === INPUT_TYPES.moneyNumber || type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
+    if (numberTypes.includes(type)) {
       stateFormatedValue = stateFormatedValue || '0'
+      if (stateFormatedValue.indexOf('-') === 0 && formattedValue.indexOf('-') !== 0) {
+        formattedValue = stateFormatedValue // don`t state change on minus zero
+      }
       const parts = stateFormatedValue.split(/\u002c|\u002e/)
       const fraction = +(parts[1] || '0')
       if (!fraction) stateFormatedValue = parts[0] // don`t state change on zero fraction
@@ -206,7 +212,7 @@ class Input extends PureComponent {
       if (/^\s*$/.test(value)) {
         return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
       }
-      if (type === INPUT_TYPES.int || type === INPUT_TYPES.float || type === INPUT_TYPES.moneyNumber) {
+      if (numberTypes.includes(type)) {
         if (value === 0 || value === '0') {
           return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
         }
@@ -254,19 +260,26 @@ class Input extends PureComponent {
       value,
       settings: { getValue, formatValue },
     } = this.props
-    const formattedValue = formatValue(e.target.value)
+    const { formattedValue } = this.state
+    let newFormattedValue = formatValue(e.target.value)
     if (type === INPUT_TYPES.time) {
-      const isValid = checkTime(formattedValue)
+      const isValid = checkTime(newFormattedValue)
       if (!isValid) {
         e.preventDefault()
         return false
       }
     }
+    if (decimalTypes.includes(type) && (
+      formattedValue.replace('-', '') === '' && newFormattedValue.replace('-', '') === '0'
+    )) {
+      newFormattedValue = `${newFormattedValue},`
+      this.selectionStart += 1
+    }
     this.setState({
       caretPosition: this.selectionStart,
-      formattedValue,
+      formattedValue: newFormattedValue,
     }, () => {
-      const newValue = getValue(formattedValue)
+      const newValue = getValue(newFormattedValue)
       this.throttledOnChangeEvent(newValue)
       if (value !== newValue) {
         this.debouncedOnSearchEvent(newValue)
@@ -285,8 +298,7 @@ class Input extends PureComponent {
     const { type, settings: { getValue, formatValue } } = this.props
     const splitFormattedValue = `${formattedValue.substr(0, this.selectionStart - delta)}${additional}`
     let newSplitFormattedValue = formatValue(splitFormattedValue)
-    if (type === INPUT_TYPES.money || type === INPUT_TYPES.moneyNumber ||
-      type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
+    if (numberTypes.includes(type)) {
       const splitValue = getValue(splitFormattedValue, false)
       const splitValueLength = splitValue.length
       const newFormattedValue = formatValue(`${splitFormattedValue}${formattedValue.substr(this.selectionStart)}`)
@@ -330,8 +342,7 @@ class Input extends PureComponent {
     } = this.props
     const { formattedValue } = this.state
     let shouldPreventDefault = false
-    if (type === INPUT_TYPES.money || type === INPUT_TYPES.moneyNumber ||
-      type === INPUT_TYPES.int || type === INPUT_TYPES.float) {
+    if (numberTypes.includes(type)) {
       shouldPreventDefault = char === '-' && (this.selectionStart !== 0 || formattedValue.includes('-'))
       shouldPreventDefault += (char === '.' || char === ',') && formattedValue.includes(',')
       const roundValue = Math.floor(getValue(formattedValue)).toString()
