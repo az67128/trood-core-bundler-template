@@ -473,8 +473,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
               unbindedFormActions,
               stateProps.model,
             ))
-            dispatch(chainSubmitAction(stateProps.modelFormName))
-            return Promise.resolve()
+            return dispatch(chainSubmitAction(stateProps.modelFormName))
           }
         } else {
           submitEntityForm = chainSubmitAction
