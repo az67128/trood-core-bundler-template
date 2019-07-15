@@ -28,6 +28,7 @@
   font-size: 10px;
   font-weight: 600;
   height: 50px;
+  word-break: break-word;
 }
 
 .table td {
@@ -35,6 +36,7 @@
   text-align: left;
   vertical-align: middle;
   padding: 0 8px;
+  word-break: break-word;
 }
 
 .table th:first-child,
