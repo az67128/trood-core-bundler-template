@@ -1,3 +1,5 @@
+/* global __webpack_hash__ */
+/* eslint-disable camelcase */
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
@@ -83,9 +85,11 @@ class LocalizeServiceProvider extends PureComponent {
     }
 
     if (localeServiceForm.selectedLocale !== DEFAULT_LOCALE) {
+      let fileName = localeServiceForm.selectedLocale
+      if (process.env.PROD) fileName = `${fileName}_${__webpack_hash__}`
       apiActions.callGet({
         apiName: STATIC_API_NAME,
-        url: `/locale-data/${localeServiceForm.selectedLocale}.json`,
+        url: `/locale-data/${fileName}.json`,
         getEntityUrl: noSlashEnforceUrl,
       }).then(({ data }) => {
         this.setState((state) => ({

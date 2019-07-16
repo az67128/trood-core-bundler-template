@@ -53,6 +53,13 @@ measureFileSizesBeforeBuild(paths.appBuild)
   })
   .then(res => {
     execSync('npm run po', { stdio: 'inherit' });
+    const localeFiles = fs.readdirSync(paths.appLoacaleData);
+    localeFiles.forEach(fileName => {
+      const fileNameArr = fileName.split('.');
+      fileNameArr[0] = `${fileNameArr[0]}_${res.stats.hash}`;
+      const newFileName = fileNameArr.join('.');
+      fs.renameSync(path.join(paths.appLoacaleData, fileName), path.join(paths.appLoacaleData, newFileName))
+    });
     // Merge with the public folder
     copyPublicFolder();
     return res
