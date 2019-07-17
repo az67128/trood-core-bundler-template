@@ -1,9 +1,9 @@
 import { matchPath } from 'react-router-dom'
 import objectHash from 'object-hash'
-import lodashGet from 'lodash/get'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 import { snakeToCamel } from '$trood/helpers/namingNotation'
+import { ruleChecker } from '$trood/helpers/abac'
 
 import { getPageLayoutProps } from './pageLayouts'
 
@@ -27,27 +27,22 @@ export const getPagesHeaderRenderers = (pages, entityPageModelName) => {
 const memoizeRenderers = {}
 
 const pageViewAction = 'view'
-const any = '*'
-const allowedRules = [
-  'allow',
-  any,
-]
 
-const checkRule = (value = {}, rule) => {
-  if (typeof rule === 'string') return rule === any || rule === value || rule === value.id
-  if (Array.isArray(rule.in)) return rule.in.some(item => item === any || item === value || item === value.id)
-  return false
-}
-
-const getIsAllowPage = (pageId, permission) => {
-  const pageRules = (permission.rules || {})[pageId]
-  if (!pageRules) return true
-  return (pageRules[pageViewAction] || [])
-    .some(viewRule => {
-      if (!allowedRules.includes(viewRule.result)) return false
-      // TODO take rule priority
-      return Object.keys(viewRule.rule).every(key => checkRule(lodashGet(permission, key), viewRule.rule[key]))
-    })
+const getIsAllowPage = (
+  pageId,
+  {
+    rules = {},
+    obj = {},
+    sbj = {},
+  } = {},
+) => {
+  return ruleChecker({
+    rules,
+    domain: 'frontend',
+    resource: pageId,
+    action: pageViewAction,
+    values: { obj, sbj },
+  })
 }
 
 // Here we calculate all redux containers for registered in system config pages

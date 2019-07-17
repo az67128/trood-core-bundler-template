@@ -63,7 +63,7 @@ const getRenderers = (sbj, permissions = {}) => {
     },
     {
       sbj,
-      rules: permissions.frontend,
+      rules: permissions,
     },
   )
 }
