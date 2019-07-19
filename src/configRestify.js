@@ -71,7 +71,7 @@ import componentsManifest from '$trood/componentLibraries/manifest'
 
 
 const configRestify = () => {
-  const defaultHttpCodesCallbacks = (code) => {
+  const defaultHttpCodesCallbacks = (code, customCodes = {}) => {
     if (code >= 500) {
       return () => modals.actions.showMessageBoxModal({
         text: intlObject.intl.formatMessage(messages.serverError),
@@ -80,7 +80,8 @@ const configRestify = () => {
     }
     return {
       401: auth.actions.logoutFront,
-      403: () => modals.actions.showErrorPopup(intlObject.intl.formatMessage(messages.accessDenied)),
+      403: auth.actions.logoutFront,
+      ...customCodes,
     }
   }
 
@@ -96,7 +97,9 @@ const configRestify = () => {
       apiHost: library.endpoint || process.env.DEFAULT_API_HOST || window.location.host,
       apiPrefix: '',
       allowedNoTokenEndpoints: DEFAULT_ALLOWED_NO_TOKEN_ENDPOINTS,
-      httpCodesCallbacks: defaultHttpCodesCallbacks,
+      httpCodesCallbacks: code => defaultHttpCodesCallbacks(code, {
+        403: () => modals.actions.showErrorPopup(intlObject.intl.formatMessage(messages.accessDenied)),
+      }),
       ...API_TYPES[library.type],
     }
     Object.keys(library.models)

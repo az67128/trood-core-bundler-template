@@ -116,4 +116,8 @@ export const messages = defineMessages({
     id: '$trood.upload',
     defaultMessage: 'Upload',
   },
+  accessDenied: {
+    id: '$trood.accessDenied',
+    defaultMessage: 'Access denied',
+  },
 })
