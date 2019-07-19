@@ -71,7 +71,7 @@ import componentsManifest from '$trood/componentLibraries/manifest'
 
 
 const configRestify = () => {
-  const defaultHttpCodesAllbacks = (code) => {
+  const defaultHttpCodesCallbacks = (code) => {
     if (code >= 500) {
       return () => modals.actions.showMessageBoxModal({
         text: intlObject.intl.formatMessage(messages.serverError),
@@ -80,6 +80,7 @@ const configRestify = () => {
     }
     return {
       401: auth.actions.logoutFront,
+      403: () => modals.actions.showErrorPopup(intlObject.intl.formatMessage(messages.accessDenied)),
     }
   }
 
@@ -95,7 +96,7 @@ const configRestify = () => {
       apiHost: library.endpoint || process.env.DEFAULT_API_HOST || window.location.host,
       apiPrefix: '',
       allowedNoTokenEndpoints: DEFAULT_ALLOWED_NO_TOKEN_ENDPOINTS,
-      httpCodesCallbacks: defaultHttpCodesAllbacks,
+      httpCodesCallbacks: defaultHttpCodesCallbacks,
       ...API_TYPES[library.type],
     }
     Object.keys(library.models)
@@ -161,7 +162,7 @@ const configRestify = () => {
     apiHost: AUTH_API_HOST,
     apiPrefix: AUTH_API_PREFIX,
     allowedNoTokenEndpoints: AUTH_ALLOWED_NO_TOKEN_ENDPOINTS,
-    httpCodesCallbacks: defaultHttpCodesAllbacks,
+    httpCodesCallbacks: defaultHttpCodesCallbacks,
     transformEntityResponse: response => ({
       data: response.data,
     }),
@@ -171,14 +172,14 @@ const configRestify = () => {
     apiHost: FILE_API_HOST,
     apiPrefix: FILE_API_PREFIX,
     allowedNoTokenEndpoints: FILE_ALLOWED_NO_TOKEN_ENDPOINTS,
-    httpCodesCallbacks: defaultHttpCodesAllbacks,
+    httpCodesCallbacks: defaultHttpCodesCallbacks,
   }
   apiDefinitions[MAIL_API_NAME] = {
     getToken,
     apiHost: MAIL_API_HOST,
     apiPrefix: MAIL_API_PREFIX,
     allowedNoTokenEndpoints: MAIL_ALLOWED_NO_TOKEN_ENDPOINTS,
-    httpCodesCallbacks: defaultHttpCodesAllbacks,
+    httpCodesCallbacks: defaultHttpCodesCallbacks,
   }
   apiDefinitions[JOURNAL_API_NAME] = {
     getToken,
@@ -204,20 +205,20 @@ const configRestify = () => {
         count: response.totalCount,
       }
     },
-    httpCodesCallbacks: defaultHttpCodesAllbacks,
+    httpCodesCallbacks: defaultHttpCodesCallbacks,
   }
   apiDefinitions[REPORTING_API_NAME] = {
     getToken,
     apiHost: REPORTING_API_HOST,
     apiPrefix: REPORTING_API_PREFIX,
     allowedNoTokenEndpoints: REPORTING_ALLOWED_NO_TOKEN_ENDPOINTS,
-    httpCodesCallbacks: defaultHttpCodesAllbacks,
+    httpCodesCallbacks: defaultHttpCodesCallbacks,
   }
   apiDefinitions[STATIC_API_NAME] = {
     apiHost: STATIC_API_HOST,
     apiPrefix: STATIC_API_PREFIX,
     allowedNoTokenEndpoints: STATIC_ALLOWED_NO_TOKEN_ENDPOINTS,
-    httpCodesCallbacks: defaultHttpCodesAllbacks,
+    httpCodesCallbacks: defaultHttpCodesCallbacks,
   }
 
   apiDefinitions = {

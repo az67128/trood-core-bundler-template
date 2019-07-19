@@ -6,11 +6,20 @@ const allow = 'allow'
 const deny = 'deny'
 
 const checkRule = (key, rule, values) => {
+  if (key === 'or' || key === 'and') {
+    const arrayComparer = key === 'or' ? 'some' : 'every'
+    return rule[arrayComparer](innerRule => {
+      return Object.keys(innerRule).every(innerKey => checkRule(innerKey, innerRule[innerKey], values))
+    })
+  }
+
   if (isDefAndNotNull(rule.in)) return rule.in.some(item => checkRule(key, item, values))
   if (isDefAndNotNull(rule.not)) return !checkRule(key, rule.not, values)
 
-  const keyValue = lodashGet(values, key)
-  const ruleValue = lodashGet(values, rule) || rule
+  let keyValue = lodashGet(values, key)
+  keyValue = (keyValue || {}).id || keyValue || key
+  let ruleValue = lodashGet(values, rule)
+  ruleValue = (ruleValue || {}).id || ruleValue || rule
 
   if (isDefAndNotNull(rule.lt)) return keyValue < ruleValue
   if (isDefAndNotNull(rule.gt)) return keyValue > ruleValue
@@ -20,15 +29,7 @@ const checkRule = (key, rule, values) => {
 
 export const checkActionRule = (actionRule = {}, values = {}) => {
   const { result, rule = {} } = actionRule
-  const ruleResult = Object.keys(rule).every(key => {
-    if (key === 'or' || key === 'and') {
-      const arrayComparer = key === 'or' ? 'some' : 'every'
-      return rule[key][arrayComparer](innerRule => {
-        return Object.keys(innerRule).every(innerKey => checkRule(innerKey, innerRule[innerKey], values))
-      })
-    }
-    return checkRule(key, rule[key], values)
-  })
+  const ruleResult = Object.keys(rule).every(key => checkRule(key, rule[key], values))
   if (result === allow) return ruleResult
   if (result === deny) return !ruleResult
   return false

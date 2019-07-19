@@ -4,6 +4,9 @@ import { api, forms, RESTIFY_CONFIG, RestifyForeignKeysArray } from 'redux-resti
 
 import modals from '$trood/modals'
 
+import auth from '$trood/auth'
+import { ruleChecker } from '$trood/helpers/abac'
+
 import {
   getBaseFormName,
   getEditModalName,
@@ -12,6 +15,7 @@ import {
   modalQueryToString,
   messages,
 } from './constants'
+import { messages as mainMessages } from '$trood/mainConstants'
 
 import { intlObject } from '$trood/localeService'
 
@@ -136,53 +140,75 @@ export const viewEntity = (modelName, parents) => (model, { history, title, clos
  * Start edit entity, shows modal
  * @param {number|string|Object} [model] - can be either restify model, restify form or entity id to edit
  */
-const generalEditEntity = (showModal) => (modelName, parents = []) => (model, config = {}) => async (dispatch) => {
-  let currentForm
-  let idToEdit = model
-  let prevForm
-  let isEditing = false
-  if (typeof model === 'object') {
-    // Here we edit already existed, but not sent form, so we should remember it state
-    if (model.id) {
-      idToEdit = model.id
-    } else {
-      // TODO by @deylak return actions and name here
-      const formName = getEditFormName({
-        modelName,
-        id: model.tempId,
-        parents,
-      })
-      const formActions = forms.getFormActions(formName)
-      currentForm = {
-        form: model,
-        formName,
-        formActions,
-      }
-      prevForm = { ...model }
-      isEditing = true
+const generalEditEntity = (showModal) => (modelName, parents = []) => (model, config = {}) =>
+  async (dispatch, getState) => {
+    const rules = auth.selectors.getPermissions(getState())
+    const obj = {
+      ...config.default,
+      ...config.values,
+      ...model,
     }
+    const sbj = auth.selectors.getActiveAcoount(getState())
+    const accessDenied = !ruleChecker({
+      rules,
+      domain: 'custodian',
+      resource: modelName,
+      action: model ? 'dataSinglePost' : 'dataSinglePut',
+      values: {
+        obj,
+        sbj,
+      },
+    })
+    if (accessDenied) {
+      return dispatch(modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied)))
+    }
+
+    let currentForm
+    let idToEdit = model
+    let prevForm
+    let isEditing = false
+    if (typeof model === 'object') {
+      // Here we edit already existed, but not sent form, so we should remember it state
+      if (model.id) {
+        idToEdit = model.id
+      } else {
+        // TODO by @deylak return actions and name here
+        const formName = getEditFormName({
+          modelName,
+          id: model.tempId,
+          parents,
+        })
+        const formActions = forms.getFormActions(formName)
+        currentForm = {
+          form: model,
+          formName,
+          formActions,
+        }
+        prevForm = { ...model }
+        isEditing = true
+      }
+    }
+    if (!currentForm) {
+      currentForm = await dispatch(createEntityForm(modelName, parents)(idToEdit, config))
+    }
+    if (showModal) {
+      dispatch(modals.actions.showModal(true, getEditModalName(modelName), {
+        title: config.title,
+        onSuccess: config.onSuccess,
+        onDelete: config.onDelete,
+        entityId: currentForm.form.id || currentForm.form.tempId,
+        isEditing: isEditing || !!currentForm.form.id,
+        parents,
+        prevForm,
+      }))
+    } else {
+      dispatch(currentForm.formActions.changeSomeFields({
+        isSubmitted: false,
+        prevForm,
+      }, true))
+    }
+    return currentForm
   }
-  if (!currentForm) {
-    currentForm = await dispatch(createEntityForm(modelName, parents)(idToEdit, config))
-  }
-  if (showModal) {
-    dispatch(modals.actions.showModal(true, getEditModalName(modelName), {
-      title: config.title,
-      onSuccess: config.onSuccess,
-      onDelete: config.onDelete,
-      entityId: currentForm.form.id || currentForm.form.tempId,
-      isEditing: isEditing || !!currentForm.form.id,
-      parents,
-      prevForm,
-    }))
-  } else {
-    dispatch(currentForm.formActions.changeSomeFields({
-      isSubmitted: false,
-      prevForm,
-    }, true))
-  }
-  return currentForm
-}
 
 const generalEditModalEntity = generalEditEntity(true)
 const generalEditInlineEntity = generalEditEntity(false)

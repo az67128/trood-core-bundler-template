@@ -42,6 +42,7 @@
   transition: transform 0.3s;
   background-color: color(var(--trood-blue) l(90%) a(80%));
   border: 1px solid var(--trood-blue);
+  outline: none;
 }
 
 .green {
