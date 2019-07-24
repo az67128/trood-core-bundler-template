@@ -412,7 +412,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model, stateProps.onDelete))
     }
     let editAction
-    if (entityComponentName === ENTITY_COMPONENT_VIEW) {
+    if (entityComponentName === ENTITY_COMPONENT_VIEW && !currentModel.notEdit) {
       editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editChildEntity(stateProps.model))
     }
 
