@@ -407,7 +407,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
 
     // Delete action is needed only for existing entities
     let deleteAction
-    if (stateProps.isEditing && !(currentModel.modal || {}).deleteActionDisabled) {
+    if (stateProps.isEditing && !currentModel.notDelete && !(currentModel.modal || {}).deleteActionDisabled) {
       deleteAction = () =>
         dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model, stateProps.onDelete))
     }
