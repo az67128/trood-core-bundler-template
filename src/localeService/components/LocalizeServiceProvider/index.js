@@ -70,7 +70,8 @@ class LocalizeServiceProvider extends PureComponent {
     const currentScriptTag = document.getElementsByTagName('script')[0]
     const newScript = document.createElement('script')
     newScript.type = 'text/javascript'
-    newScript.src = `https://unpkg.com/react-intl@latest/locale-data/${localeServiceForm.selectedLocale}.js`
+    // TODO migrate to react-intl@latest
+    newScript.src = `https://unpkg.com/react-intl@2.9.0/locale-data/${localeServiceForm.selectedLocale}.js`
     newScript.async = true
     currentScriptTag.parentNode.insertBefore(newScript, currentScriptTag)
     newScript.onload = () => {
