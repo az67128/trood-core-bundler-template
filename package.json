@@ -20,6 +20,7 @@
     "classnames": "^2.2.5",
     "connected-react-router": "^4.3.0",
     "country-telephone-data": "^0.6.0",
+    "create-file-webpack": "^1.0.2",
     "cross-env": "^5.1.4",
     "css-loader": "0.28.7",
     "deep-equal": "^1.0.1",

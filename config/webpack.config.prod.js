@@ -15,6 +15,8 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const packageJson = require('../package')
+const CreateFileWebpack = require('create-file-webpack')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -248,6 +250,14 @@ module.exports = {
     // In production, it will be an empty string unless you specify "homepage"
     // in `package.json`, in which case it will be the pathname of that URL.
     new InterpolateHtmlPlugin(env.raw),
+    new CreateFileWebpack({
+      path: paths.appBuild,
+      fileName: 'version.json',
+      content: JSON.stringify({
+        version: packageJson.version,
+        core_version: process.env.TROOD_CORE_VERSION
+      })
+    }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
