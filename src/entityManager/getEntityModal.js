@@ -14,7 +14,7 @@ import {
 
 import modalsStyle from '$trood/styles/modals.css'
 
-import { registerModal, MODAL_SIZES } from '$trood/modals'
+import modals, { registerModal, MODAL_SIZES } from '$trood/modals'
 import auth from '$trood/auth'
 
 import TButton from '$trood/components/TButton'
@@ -46,6 +46,8 @@ import { messages as mainMessages } from '$trood/mainConstants'
 import { intlObject } from '$trood/localeService'
 
 import { applySelectors } from '$trood/helpers/selectors'
+import { ruleChecker } from '$trood/helpers/abac'
+import { getRecursiveObjectReplacement } from '$trood/helpers/nestedObjects'
 
 
 const formatMessage = msg => {
@@ -328,6 +330,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     const currentPropsEntities = getCurrentPropsEntities(currentEntities)
     let modelFormName
     let model
+    let serverModel
     let title
     let modelErrors
     let modelValid
@@ -346,9 +349,13 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       model = forms.selectors.getForm(modelFormName)(state)
       modelErrors = forms.selectors.getErrors(modelFormName)(state)
       modelValid = forms.selectors.getIsValid(modelFormName)(state)
-    // Calc props for viewing modal
+      if (props.isEditing) {
+        serverModel = currentEntities[modelName].getById(props.entityId)
+      }
+      // Calc props for viewing modal
     } else if (entityComponentName === ENTITY_COMPONENT_VIEW) {
       model = currentEntities[modelName].getById(props.entityId)
+      serverModel = model
       title = formatMessage(props.title) || formatMessage(currentModel.name)
     }
 
@@ -376,6 +383,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       dataCyName,
       modelFormName,
       model,
+      serverModel,
       modelErrors,
       modelValid,
       authData: auth.selectors.getAuthData(state),
@@ -416,13 +424,53 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editChildEntity(stateProps.model))
     }
 
+    const rules = auth.selectors.getPermissions(stateProps.state)
+    const sbj = auth.selectors.getActiveAcoount(stateProps.state)
+
+    const getAccessIsDenied = (ctx) => !ruleChecker({
+      rules,
+      domain: 'custodian',
+      resource: modelName,
+      action: stateProps.isEditing ? 'dataSinglePost' : 'dataSinglePut',
+      values: {
+        obj: stateProps.serverModel,
+        sbj,
+        ctx,
+      },
+    })
+
     let unbindedFormActions
     let modelFormActions
     let cancelAction
     let submitEntityForm = () => () => Promise.resolve()
     // Calc form actions only for edit view
     if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
-      unbindedFormActions = forms.getFormActions(stateProps.modelFormName)
+      const formActions = forms.getFormActions(stateProps.modelFormName)
+      // getRecursiveObjectReplacement
+      unbindedFormActions = {
+        ...formActions,
+        changeField: (name, value) => {
+          const ctx = {
+            data: getRecursiveObjectReplacement(stateProps.model, name, value),
+          }
+          if (getAccessIsDenied(ctx)) {
+            return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+          }
+          return formActions.changeField(name, value)
+        },
+        changeSomeFields: (values) => {
+          const ctx = {
+            data: {
+              ...stateProps.model,
+              ...values,
+            },
+          }
+          if (getAccessIsDenied(ctx)) {
+            return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+          }
+          return formActions.changeSomeFields(values)
+        },
+      }
       modelFormActions = bindActionCreators(
         unbindedFormActions,
         dispatchProps.dispatch,

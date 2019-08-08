@@ -34,6 +34,9 @@ const getIsAllowPage = (
     rules = {},
     obj = {},
     sbj = {},
+    ctx = {
+      data: {},
+    },
   } = {},
 ) => {
   return ruleChecker({
@@ -41,7 +44,7 @@ const getIsAllowPage = (
     domain: 'frontend',
     resource: pageId,
     action: pageViewAction,
-    values: { obj, sbj },
+    values: { obj, sbj, ctx },
   })
 }
 

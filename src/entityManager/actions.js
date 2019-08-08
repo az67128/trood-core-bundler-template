@@ -6,6 +6,7 @@ import modals from '$trood/modals'
 
 import auth from '$trood/auth'
 import { ruleChecker } from '$trood/helpers/abac'
+import { mergeAndReplaceArrays } from '$trood/helpers/nestedObjects'
 
 import {
   getBaseFormName,
@@ -143,10 +144,16 @@ export const viewEntity = (modelName, parents) => (model, { history, title, clos
 const generalEditEntity = (showModal) => (modelName, parents = []) => (model, config = {}) =>
   async (dispatch, getState) => {
     const rules = auth.selectors.getPermissions(getState())
-    const obj = {
-      ...config.default,
-      ...config.values,
-      ...model,
+    const obj = model
+    const baseFormName = getBaseFormName(modelName)
+    const baseConfig = RESTIFY_CONFIG.registeredForms[baseFormName]
+    const ctx = {
+      data: mergeAndReplaceArrays(
+        baseConfig.defaults,
+        config.defaults,
+        baseConfig.values,
+        config.values,
+      ),
     }
     const sbj = auth.selectors.getActiveAcoount(getState())
     const accessDenied = !ruleChecker({
@@ -157,6 +164,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       values: {
         obj,
         sbj,
+        ctx,
       },
     })
     if (accessDenied) {

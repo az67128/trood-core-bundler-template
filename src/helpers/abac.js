@@ -44,7 +44,14 @@ export const ruleChecker = ({
 } = {}) => {
   const domainResources = rules[domain] || {}
   const resourceActions = domainResources[resource] || {}
-  const actionRules = resourceActions[action] || []
+  const actionKeys = Object.keys(resourceActions).filter(key => {
+    const regexp = new RegExp(key.replace('*', '.*'))
+    return regexp.test(action)
+  })
+  const actionRules = actionKeys.reduce((memo, curr) => ([
+    ...memo,
+    ...resourceActions[curr],
+  ]), [])
   if (!actionRules.length) return true
   return actionRules.some(actionRule => checkActionRule(actionRule, values))
 }
