@@ -10,6 +10,7 @@ import style from './index.css'
 import modals from '$trood/modals'
 import auth, { AuthManagerContext, LOGIN_PAGE_URL, RECOVERY_PAGE_URL } from '$trood/auth'
 
+import { ruleChecker } from '$trood/helpers/abac'
 
 import systemConfig from '$trood/config'
 
@@ -193,14 +194,75 @@ class App extends Component {
     const registeredRoutesPaths = memoizedGetAllPaths(renderers)
     const pageManagerContextValue = memoizedGetPageManagerContext(registeredRoutesPaths)
 
+    const checkRule = ({
+      domain = 'custodian',
+      resource,
+      action,
+      obj,
+      ctx,
+    }) => ruleChecker({
+      rules: permissions,
+      domain,
+      resource,
+      action,
+      values: {
+        sbj: activeAccount,
+        obj,
+        ctx: {
+          data: ctx,
+        },
+      },
+    })
+
+    const checkCustodianGetRule = ({
+      single = true,
+      ...other
+    }) => checkRule({
+      action: single ? 'dataSingleGet' : 'dataBulkGet',
+      ...other,
+    })
+
+    const checkCustodianCreateRule = ({
+      single = true,
+      ...other
+    }) => checkRule({
+      action: single ? 'dataSinglePut' : 'dataBulkPut',
+      ...other,
+    })
+
+    const checkCustodianUpdateRule = ({
+      single = true,
+      ...other
+    }) => checkRule({
+      action: single ? 'dataSinglePost' : 'dataBulkPost',
+      ...other,
+    })
+
+    const checkCustodianDeleteRule = ({
+      single = true,
+      ...other
+    }) => checkRule({
+      action: single ? 'dataSingleDelete' : 'dataBulkDelete',
+      ...other,
+    })
+
     return (
-      <AuthManagerContext.Provider value={{ ...authData, getLinkedObject }}>
+      <AuthManagerContext.Provider value={{
+        ...authData,
+        getLinkedObject,
+        checkRule,
+        checkCustodianGetRule,
+        checkCustodianCreateRule,
+        checkCustodianUpdateRule,
+        checkCustodianDeleteRule,
+      }}>
         <PageManagerContext.Provider value={pageManagerContextValue}>
           <MailServiceContext.Provider value={this.mailServiceContext}>
             <EntityManagerContext.Provider>
               <div className={style.root}>
                 {React.createElement(modals.container)}
-                {!isAuthenticated &&
+                {
+                  !isAuthenticated &&
                   <Switch>
                     <Route {...{
                       path: LOGIN_PAGE_URL,
@@ -224,7 +286,8 @@ class App extends Component {
                     }} />
                   </Switch>
                 }
-                {isAuthenticated &&
+                {
+                  isAuthenticated &&
                   <React.Fragment>
                     <Route {...{
                       path: LOGIN_PAGE_URL,
