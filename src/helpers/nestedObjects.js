@@ -102,5 +102,5 @@ const arraysCustomizer = (objValue, srcValue) => {
 }
 
 export const mergeAndReplaceArrays = (...args) => {
-  return mergeWith(...args, arraysCustomizer)
+  return mergeWith({}, ...args, arraysCustomizer)
 }
