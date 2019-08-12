@@ -413,19 +413,31 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     )
     const currentEntitiesActions = getCurrentEntitiesActions(entitiesActions, dispatchProps.dispatch)
 
+    const rules = auth.selectors.getPermissions(stateProps.state)
+    const sbj = auth.selectors.getActiveAcoount(stateProps.state)
+
     // Delete action is needed only for existing entities
     let deleteAction
-    if (stateProps.isEditing && !currentModel.notDelete && !(currentModel.modal || {}).deleteActionDisabled) {
-      deleteAction = () =>
-        dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model, stateProps.onDelete))
+    if (stateProps.isEditing) {
+      const deleteAccess = ruleChecker({
+        rules,
+        domain: 'custodian',
+        resource: modelName,
+        action: 'dataSingleDelete',
+        values: {
+          obj: stateProps.serverModel,
+          sbj,
+        },
+      })
+      if (!currentModel.notDelete && !(currentModel.modal || {}).deleteActionDisabled && deleteAccess) {
+        deleteAction = () =>
+          dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model, stateProps.onDelete))
+      }
     }
     let editAction
     if (entityComponentName === ENTITY_COMPONENT_VIEW && !currentModel.notEdit) {
       editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editChildEntity(stateProps.model))
     }
-
-    const rules = auth.selectors.getPermissions(stateProps.state)
-    const sbj = auth.selectors.getActiveAcoount(stateProps.state)
 
     const getAccessIsDenied = (ctx) => !ruleChecker({
       rules,

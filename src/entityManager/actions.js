@@ -153,6 +153,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
         config.defaults,
         baseConfig.values,
         config.values,
+        model,
       ),
     }
     const sbj = auth.selectors.getActiveAcoount(getState())
