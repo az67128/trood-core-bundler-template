@@ -64,68 +64,68 @@
 }
 
 :export {
-  trood-black: var(--trood-black);
-  trood-black-hover: var(--trood-black-hover);
-  trood-black-hover-light: var(--trood-black-hover-light);
-  trood-black-light: var(--trood-black-light);
-  trood-black-border: var(--trood-black-border);
+  troodBlack: var(--trood-black);
+  troodBlackHover: var(--trood-black-hover);
+  troodBlackHover-light: var(--trood-black-hover-light);
+  troodBlackLight: var(--trood-black-light);
+  troodBlackBorder: var(--trood-black-border);
 
-  trood-background: var(--trood-background);
-  trood-background-dark: var(--trood-background-dark);
-  trood-background-light: var(--trood-background-light);
+  troodBackground: var(--trood-background);
+  troodBackgroundDark: var(--trood-background-dark);
+  troodBackgroundLight: var(--trood-background-light);
 
-  trood-white: var(--trood-white);
-  trood-white-hover: var(--trood-white-hover);
+  troodWhite: var(--trood-white);
+  troodWhiteHover: var(--trood-white-hover);
 
-  trood-light-gray: var(--trood-light-gray);
-  trood-gray: var(--trood-gray);
-  trood-gray-hover: var(--trood-gray-hover);
-  trood-gray-dark: var(--trood-gray-dark);
-  trood-gray-text: var(--trood-gray-text);
-  trood-gray-extra-dark: var(--trood-gray-extra-dark);
-  trood-gray-icon: var(--trood-gray-icon);
-  trood-gray-super-dark: var(--trood-gray-super-dark);
-  trood-gray-border-light: var(--trood-gray-border-light);
-  trood-gray-bg: var(--trood-gray-bg);
-  trood-gray-medium-dark: var(--trood-gray-medium-dark);
-  trood-gray-border: var(--trood-gray-border);
+  troodLightGray: var(--trood-light-gray);
+  troodGray: var(--trood-gray);
+  troodGrayHover: var(--trood-gray-hover);
+  troodGrayDark: var(--trood-gray-dark);
+  troodGrayText: var(--trood-gray-text);
+  troodGrayExtraDark: var(--trood-gray-extra-dark);
+  troodGrayIcon: var(--trood-gray-icon);
+  troodGraySuperDark: var(--trood-gray-super-dark);
+  troodGrayBorderLight: var(--trood-gray-border-light);
+  troodGrayBg: var(--trood-gray-bg);
+  troodGrayMediumDark: var(--trood-gray-medium-dark);
+  troodGrayBorder: var(--trood-gray-border);
 
-  trood-blue: var(--trood-blue);
-  trood-blue-hover: var(--trood-blue-hover);
-  trood-blue-extra-light: var(--trood-blue-extra-light);
-  trood-blue-gray: var(--trood-blue-gray);
-  trood-blue-dark: var(--trood-blue-dark);
-  trood-blue-dark-hover: var(--trood-blue-dark-hover);
-  trood-blue-icon: var(--trood-blue-icon);
-  trood-blue-border: var(--trood-blue-border);
+  troodBlue: var(--trood-blue);
+  troodBlueHover: var(--trood-blue-hover);
+  troodBlueExtraLight: var(--trood-blue-extra-light);
+  troodBlueGray: var(--trood-blue-gray);
+  troodBlueDark: var(--trood-blue-dark);
+  troodBlueDarkHover: var(--trood-blue-dark-hover);
+  troodBlueIcon: var(--trood-blue-icon);
+  troodBlueBorder: var(--trood-blue-border);
 
-  trood-red: var(--trood-red);
-  trood-red-hover: var(--trood-red-hover);
-  trood-magenta-extra-light: var(--trood-magenta-extra-light);
+  troodRed: var(--trood-red);
+  troodRedHover: var(--trood-red-hover);
+  troodMagentaExtraLight: var(--trood-magenta-extra-light);
 
-  trood-pink: var(--trood-pink);
+  troodPink: var(--trood-pink);
 
-  trood-orange: var(--trood-orange);
-  trood-orange-hover: var(--trood-orange-hover);
+  troodOrange: var(--trood-orange);
+  troodOrangeHover: var(--trood-orange-hover);
 
-  trood-yellow: var(--trood-yellow);
+  troodYellow: var(--trood-yellow);
 
-  trood-green: var(--trood-green);
-  trood-green-hover: var(--trood-green-hover);
-  trood-green-dark: var(--trood-green-dark);
-  trood-green-blue: var(--trood-green-blue);
+  troodGreen: var(--trood-green);
+  troodGreenHover: var(--trood-green-hover);
+  troodGreenDark: var(--trood-green-dark);
+  troodGreenBlue: var(--trood-green-blue);
 
-  trood-phone: var(--trood-phone);
-  trood-tablet: var(--trood-tablet);
-  trood-lg: var(--trood-lg);
-  trood-sides: var(--trood-sides);
-  trood-sides-small: var(--trood-sides-small);
-  trood-menu-width: var(--trood-menu-width);
-  trood-menu-width-small: var(--trood-menu-width-small);
-  trood-grid-gap: var(--trood-grid-gap);
-  trood-page-padding: var(--trood-page-padding);
-  trood-header-height: var(--trood-header-height);
-  trood-border-radius: var(--trood-border-radius);
+  troodPhone: var(--trood-phone);
+  troodTablet: var(--trood-tablet);
+  troodLg: var(--trood-lg);
+  troodSides: var(--trood-sides);
+  troodSidesSmall: var(--trood-sides-small);
+  troodMenuWidth: var(--trood-menu-width);
+  troodMenuWidthSmall: var(--trood-menu-width-small);
+  troodGridGap: var(--trood-grid-gap);
+  troodPagePadding: var(--trood-page-padding);
+  troodHeaderHeight: var(--trood-header-height);
+  troodBorderRadius: var(--trood-border-radius);
 }
 
 @custom-media --trood-less-1500 only screen and (width <= 1500px);
