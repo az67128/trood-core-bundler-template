@@ -1,5 +1,6 @@
 module.exports = {
   extends: 'stylelint-config-standard',
+  "ignoreFiles": "./src/styles/variables.css",
   rules: {
     'selector-pseudo-element-colon-notation': 'single',
     'selector-pseudo-class-no-unknown': [
