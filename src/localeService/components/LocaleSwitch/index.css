@@ -4,35 +4,50 @@
   position: relative;
   height: 28px;
   width: 50px;
+  user-select: none;
 }
 
 .selectedLocale,
 .localesList {
   position: absolute;
-  top: 0;
   left: 0;
+  padding: 0 5px;
   width: 100%;
-  border: 1px solid var(--trood-blue);
-  border-radius: 3px;
+}
+
+.selectedLocale {
+  top: 0;
+  color: var(--trood-blue);
 }
 
 .localesList {
+  top: 100%;
   background-color: var(--trood-white);
+  color: var(--trood-gray-text);
+}
+
+.control {
+  height: 100%;
+  margin-left: auto;
 }
 
 .localeItem,
 .selectedLocale {
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 28px;
   cursor: pointer;
 }
 
+.root.open .selectedLocale {
+  background-color: var(--trood-white);
+}
+
+.localeItem:hover {
+  color: var(--trood-black);
+}
+
 .localeName {
-  margin-left: 5px;
-  font-size: 10px;
-  line-height: 14px;
-  font-weight: 700;
-  color: var(--trood-gray-text);
+  font-size: 13px;
+  font-weight: 600;
 }
