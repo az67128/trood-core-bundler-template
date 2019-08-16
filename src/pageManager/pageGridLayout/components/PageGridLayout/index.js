@@ -45,6 +45,8 @@ import {
 
 import { currentLayout } from '$trood/layoutsManager'
 
+import ErrorBoundary from '$trood/components/ErrorBoundary'
+
 
 const getEntityManagerContext = (modelName, entityId) => {
   const parents = [{
@@ -217,7 +219,9 @@ const PageGridLayout = ({
               marginBottom,
             },
           }}>
-            {compToRender}
+            <ErrorBoundary>
+              {compToRender}
+            </ErrorBoundary>
           </div>
         )
       })}
