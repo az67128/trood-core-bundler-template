@@ -2,6 +2,7 @@ import React from 'react'
 import memoizeOne from 'memoize-one'
 
 import style from './index.css'
+import basePageLayout from '$trood/styles/basePageLayout.css'
 
 import componentsManifest from '$trood/componentLibraries/manifest'
 
@@ -219,7 +220,7 @@ const PageGridLayout = ({
               marginBottom,
             },
           }}>
-            <ErrorBoundary>
+            <ErrorBoundary errorClassName={basePageLayout.block}>
               {compToRender}
             </ErrorBoundary>
           </div>

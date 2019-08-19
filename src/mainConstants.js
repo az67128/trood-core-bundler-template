@@ -28,6 +28,10 @@ export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD'
 export const DEFAULT_SCROLLING_CONTAINER_ID = 'troodAppScroll'
 
 export const messages = defineMessages({
+  error: {
+    id: '$trood.error',
+    defaultMessage: 'Error!',
+  },
   serverError: {
     id: '$trood.server_error',
     defaultMessage: 'Server error! Try to refresh page!',

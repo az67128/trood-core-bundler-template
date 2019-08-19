@@ -10,6 +10,7 @@ import fadeInUp from '$trood/styles/transitions/fadeInUp.css'
 
 import { ICONS_TYPES } from '$trood/components/TIcon/constants'
 import TIcon from '$trood/components/TIcon'
+import ErrorBoundary from '$trood/components/ErrorBoundary'
 
 import { MODAL_SIZES } from '../../constants'
 
@@ -161,12 +162,14 @@ class ModalWrapper extends PureComponent {
               </div>
             }
             <div className={style.children}>
-              {children}
-              {!!buttons && size !== MODAL_SIZES.full &&
-                <div className={modalsStyle.buttonsContainer}>
-                  {buttons(this.props)}
-                </div>
-              }
+              <ErrorBoundary errorClassName={modalsStyle.root}>
+                {children}
+                {!!buttons && size !== MODAL_SIZES.full &&
+                  <div className={modalsStyle.buttonsContainer}>
+                    {buttons(this.props)}
+                  </div>
+                }
+              </ErrorBoundary>
             </div>
             {!title && closeAction && closeButton}
           </div>
