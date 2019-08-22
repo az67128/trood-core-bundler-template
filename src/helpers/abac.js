@@ -43,6 +43,8 @@ export const ruleChecker = ({
   values = {},
 } = {}) => {
   const domainResources = rules[domain] || {}
+  const globalDefaultResolution = rules._defaultResolution
+  const domainDefaultResolution = domainResources._defaultResolution
   const resourceActions = domainResources[resource] || {}
   const actionKeys = Object.keys(resourceActions).filter(key => {
     const regexp = new RegExp(key.replace('*', '.*'))
@@ -52,6 +54,8 @@ export const ruleChecker = ({
     ...memo,
     ...resourceActions[curr],
   ]), [])
-  if (!actionRules.length) return true
+  if (!actionRules.length) {
+    return domainDefaultResolution === allow || globalDefaultResolution === allow
+  }
   return actionRules.some(actionRule => checkActionRule(actionRule, values))
 }

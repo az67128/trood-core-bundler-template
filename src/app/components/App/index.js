@@ -42,6 +42,7 @@ const getLinkedObjectNeededFields = (permissions = {}) => {
   let frontendPermissions = permissions.frontend || {}
   frontendPermissions = Object.values(frontendPermissions)
   frontendPermissions = frontendPermissions.reduce((memo, curr) => {
+    if (typeof curr !== 'object') return memo
     return {
       ...memo,
       ...Object.values(curr).reduce((memo1, item) => {
