@@ -35,6 +35,11 @@ export const checkActionRule = (actionRule = {}, values = {}) => {
   return false
 }
 
+export const getRuleMask = (actionRules = [], values = {}) => {
+  const maskRule = actionRules.find(actionRule => checkActionRule(actionRule, values)) || {}
+  return maskRule.mask || []
+}
+
 export const ruleChecker = ({
   rules = {},
   domain,
@@ -49,13 +54,19 @@ export const ruleChecker = ({
   const actionKeys = Object.keys(resourceActions).filter(key => {
     const regexp = new RegExp(key.replace('*', '.*'))
     return regexp.test(action)
-  })
+  }).sort()
   const actionRules = actionKeys.reduce((memo, curr) => ([
     ...memo,
     ...resourceActions[curr],
   ]), [])
   if (!actionRules.length) {
-    return domainDefaultResolution === allow || globalDefaultResolution === allow
+    return {
+      access: domainDefaultResolution === allow || globalDefaultResolution === allow,
+      mask: [],
+    }
   }
-  return actionRules.some(actionRule => checkActionRule(actionRule, values))
+  return {
+    access: actionRules.some(actionRule => checkActionRule(actionRule, values)),
+    mask: getRuleMask(actionRules),
+  }
 }

@@ -419,7 +419,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     // Delete action is needed only for existing entities
     let deleteAction
     if (stateProps.isEditing) {
-      const deleteAccess = ruleChecker({
+      const { access } = ruleChecker({
         rules,
         domain: 'custodian',
         resource: modelName,
@@ -429,7 +429,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
           sbj,
         },
       })
-      if (!currentModel.notDelete && !(currentModel.modal || {}).deleteActionDisabled && deleteAccess) {
+      if (!currentModel.notDelete && !(currentModel.modal || {}).deleteActionDisabled && access) {
         deleteAction = () =>
           dispatchProps.dispatch(entitiesActions[modelName].deleteEntity(stateProps.model, stateProps.onDelete))
       }
@@ -439,17 +439,20 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editChildEntity(stateProps.model))
     }
 
-    const getAccessIsDenied = (ctx) => !ruleChecker({
-      rules,
-      domain: 'custodian',
-      resource: modelName,
-      action: stateProps.isEditing ? 'dataPost' : 'dataPut',
-      values: {
-        obj: stateProps.serverModel,
-        sbj,
-        ctx,
-      },
-    })
+    const getAccessIsDenied = (ctx) => {
+      const { access } = ruleChecker({
+        rules,
+        domain: 'custodian',
+        resource: modelName,
+        action: stateProps.isEditing ? 'dataPost' : 'dataPut',
+        values: {
+          obj: stateProps.serverModel,
+          sbj,
+          ctx,
+        },
+      })
+      return !access
+    }
 
     let unbindedFormActions
     let modelFormActions

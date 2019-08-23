@@ -39,13 +39,14 @@ const getIsAllowPage = (
     },
   } = {},
 ) => {
-  return ruleChecker({
+  const { access } = ruleChecker({
     rules,
     domain: 'frontend',
     resource: pageId,
     action: pageViewAction,
     values: { obj, sbj, ctx },
   })
+  return access
 }
 
 // Here we calculate all redux containers for registered in system config pages

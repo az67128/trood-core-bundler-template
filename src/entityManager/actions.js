@@ -157,7 +157,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       ),
     }
     const sbj = auth.selectors.getActiveAcoount(getState())
-    const accessDenied = !ruleChecker({
+    const { access } = ruleChecker({
       rules,
       domain: 'custodian',
       resource: modelName,
@@ -168,7 +168,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
         ctx,
       },
     })
-    if (accessDenied) {
+    if (!access) {
       return dispatch(modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied)))
     }
 
