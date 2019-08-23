@@ -161,7 +161,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       rules,
       domain: 'custodian',
       resource: modelName,
-      action: model ? 'dataSinglePost' : 'dataSinglePut',
+      action: model ? 'dataPost' : 'dataPut',
       values: {
         obj,
         sbj,

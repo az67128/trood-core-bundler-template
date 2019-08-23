@@ -423,7 +423,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         rules,
         domain: 'custodian',
         resource: modelName,
-        action: 'dataSingleDelete',
+        action: 'dataDelete',
         values: {
           obj: stateProps.serverModel,
           sbj,
@@ -443,7 +443,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       rules,
       domain: 'custodian',
       resource: modelName,
-      action: stateProps.isEditing ? 'dataSinglePost' : 'dataSinglePut',
+      action: stateProps.isEditing ? 'dataPost' : 'dataPut',
       values: {
         obj: stateProps.serverModel,
         sbj,

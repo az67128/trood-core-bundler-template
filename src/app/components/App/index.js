@@ -215,37 +215,13 @@ class App extends Component {
       },
     })
 
-    const checkCustodianGetRule = ({
-      single = true,
-      ...other
-    }) => checkRule({
-      action: single ? 'dataSingleGet' : 'dataBulkGet',
-      ...other,
-    })
+    const checkCustodianGetRule = (props) => checkRule({ ...props, action: 'dataGet' })
 
-    const checkCustodianCreateRule = ({
-      single = true,
-      ...other
-    }) => checkRule({
-      action: single ? 'dataSinglePut' : 'dataBulkPut',
-      ...other,
-    })
+    const checkCustodianCreateRule = (props) => checkRule({ ...props, action: 'dataPut' })
 
-    const checkCustodianUpdateRule = ({
-      single = true,
-      ...other
-    }) => checkRule({
-      action: single ? 'dataSinglePost' : 'dataBulkPost',
-      ...other,
-    })
+    const checkCustodianUpdateRule = (props) => checkRule({ ...props, action: 'dataPost' })
 
-    const checkCustodianDeleteRule = ({
-      single = true,
-      ...other
-    }) => checkRule({
-      action: single ? 'dataSingleDelete' : 'dataBulkDelete',
-      ...other,
-    })
+    const checkCustodianDeleteRule = (props) => checkRule({ ...props, action: 'dataDelete' })
 
     return (
       <AuthManagerContext.Provider value={{
