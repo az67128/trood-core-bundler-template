@@ -67,6 +67,6 @@ export const ruleChecker = ({
   }
   return {
     access: actionRules.some(actionRule => checkActionRule(actionRule, values)),
-    mask: getRuleMask(actionRules),
+    mask: getRuleMask(actionRules, values),
   }
 }

@@ -48,6 +48,7 @@ import { intlObject } from '$trood/localeService'
 import { applySelectors } from '$trood/helpers/selectors'
 import { ruleChecker } from '$trood/helpers/abac'
 import { getRecursiveObjectReplacement } from '$trood/helpers/nestedObjects'
+import { snakeToCamel } from '$trood/helpers/namingNotation'
 
 
 const formatMessage = msg => {
@@ -439,8 +440,8 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       editAction = () => dispatchProps.dispatch(entitiesActions[modelName].editChildEntity(stateProps.model))
     }
 
-    const getAccessIsDenied = (ctx) => {
-      const { access } = ruleChecker({
+    const checkAccess = (ctx) => {
+      return ruleChecker({
         rules,
         domain: 'custodian',
         resource: modelName,
@@ -451,7 +452,6 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
           ctx,
         },
       })
-      return !access
     }
 
     let unbindedFormActions
@@ -468,22 +468,35 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
           const ctx = {
             data: getRecursiveObjectReplacement(stateProps.model, name, value),
           }
-          if (getAccessIsDenied(ctx)) {
+          const { access, mask } = checkAccess(ctx)
+          if (!access || mask.some(m => snakeToCamel(m) === name)) {
             return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
           }
           return formActions.changeField(name, value)
         },
-        changeSomeFields: (values) => {
+        changeSomeFields: (values, forceUndefines) => {
           const ctx = {
             data: {
               ...stateProps.model,
               ...values,
             },
           }
-          if (getAccessIsDenied(ctx)) {
+          const valuesKeys = Object.keys(values)
+          const { access, mask } = checkAccess(ctx)
+          if (!access || mask.some(m => valuesKeys.includes(snakeToCamel(m)))) {
             return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
           }
-          return formActions.changeSomeFields(values)
+          return formActions.changeSomeFields(values, forceUndefines)
+        },
+        resetField: (name) => {
+          const ctx = {
+            data: getRecursiveObjectReplacement(stateProps.model, name, undefined),
+          }
+          const { access, mask } = checkAccess(ctx)
+          if (!access || mask.some(m => snakeToCamel(m) === name)) {
+            return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+          }
+          return formActions.resetField(name)
         },
       }
       modelFormActions = bindActionCreators(
