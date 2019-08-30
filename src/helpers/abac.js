@@ -4,8 +4,10 @@ import { isDefAndNotNull } from './def'
 
 const allow = 'allow'
 const deny = 'deny'
+const any = '*'
 
 const checkRule = (key, rule, values) => {
+  if (rule === any) return true
   if (key === 'or' || key === 'and') {
     const arrayComparer = key === 'or' ? 'some' : 'every'
     return rule[arrayComparer](innerRule => {
