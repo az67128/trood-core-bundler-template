@@ -2,16 +2,8 @@ import pageGridLayout from './pageGridLayout'
 import mailService from '$trood/mailService'
 import authService from '$trood/auth'
 
+import { PAGE_TYPES } from './constants'
 
-export const PAGE_TYPE_GRID = 'grid'
-export const PAGE_TYPE_MAIL = 'mail'
-export const PAGE_TYPE_PERSONAL_ACCOUNT = 'personalAccount'
-
-export const PAGE_TYPES = {
-  [PAGE_TYPE_GRID]: PAGE_TYPE_GRID,
-  [PAGE_TYPE_MAIL]: PAGE_TYPE_MAIL,
-  [PAGE_TYPE_PERSONAL_ACCOUNT]: PAGE_TYPE_PERSONAL_ACCOUNT,
-}
 
 const pageTypesLayoutsDict = {
   [PAGE_TYPES.grid]: pageGridLayout,

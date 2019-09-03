@@ -2,6 +2,8 @@ require('babel-polyfill')
 const gulp = require('gulp')
 const template = require('gulp-template')
 const rename = require('gulp-rename')
+const { PAGE_TYPES_DEFAULT_TITLE } = require('./src/pageManager')
+
 
 const isTest = process.env.NODE_ENV === 'testing'
 
@@ -145,6 +147,7 @@ gulp.task('make-layouts', () => {
 
 // TODO by @deylak import this from trood-core
 const getPageId = (page, entityModelName) => `${page.url}${entityModelName ? `_${entityModelName}` : ''}`
+const getPageTitle = (page) => page.title || PAGE_TYPES_DEFAULT_TITLE[page.type] || ''
 
 gulp.task('make-locale', () => {
   const config = require('./src/config').default
@@ -153,7 +156,7 @@ gulp.task('make-locale', () => {
     let currentPageTitles = [
       {
         id: getPageId(page, modelType),
-        title: page.title,
+        title: getPageTitle(page),
       },
     ]
     if (page.pages) {
@@ -174,7 +177,7 @@ gulp.task('make-locale', () => {
       let currentPageTitles = [
         {
           id: getPageId(currentPage, key),
-          title: currentPage.title,
+          title: getPageTitle(currentPage),
         },
       ]
       if (currentPage.pages) {

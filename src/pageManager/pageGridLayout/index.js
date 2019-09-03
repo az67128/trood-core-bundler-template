@@ -1,12 +1,8 @@
 import getPageContainer from './getPageContainer'
 
+import { getPageId, getPageConfig, getPageBaseId, getModelIdSelector } from '../constants'
 
-const getModelIdSelector = () => (state, props) => props.match.params.id
-const getPageConfig = (page) => page
-const getPageId = (page, entityModelName) => `${page.url}${entityModelName ? `_${entityModelName}` : ''}`
-const getPageBaseId = (page, entityModelName, layout, prevPageId = '') => {
-  return `${prevPageId ? `${prevPageId}_` : ''}${getPageId(page, entityModelName)}`
-}
+
 const getPageHeaderRendererConfig = (page, entityModelName, layout, prevPageId) => ({
   label: page.title,
   localeMessageId: getPageBaseId(page, entityModelName, layout, prevPageId),

@@ -37,6 +37,7 @@ const getPageId = () => TROOD_PERSONAL_ACCOUNT_PAGE_ID
 const getPageHeaderRendererConfig = page => ({
   label: page.title || TROOD_PERSONAL_ACCOUNT_PAGE_DEFAULT_TITLE,
   iconType: page.icon || TROOD_PERSONAL_ACCOUNT_PAGE_DEFAULT_ICON,
+  localeMessageId: getPageId(),
 })
 
 export default {

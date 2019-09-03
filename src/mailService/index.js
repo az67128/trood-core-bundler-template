@@ -18,6 +18,7 @@ const getPageId = () => TROOD_MAIL_SERVICE_PAGE_ID
 const getPageHeaderRendererConfig = page => ({
   label: page.title || TROOD_MAIL_SERVICE_PAGE_DEFAULT_TITLE,
   iconType: page.icon || TROOD_MAIL_SERVICE_PAGE_DEFAULT_ICON,
+  localeMessageId: getPageId(),
 })
 const getModelType = () => undefined
 
