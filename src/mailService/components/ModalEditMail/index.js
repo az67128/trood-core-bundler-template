@@ -91,7 +91,7 @@ class ModalEditMail extends PureComponent {
       className: modalsStyle.thinControl,
       labelClassName: modalsStyle.thinControlLabel,
       controlClassName: modalsStyle.thinControlControl,
-      placeHolder: intlObject.intl.formatMesage(mainMessages.notSet),
+      placeHolder: intlObject.intl.formatMessage(mainMessages.notSet),
       values: model[name] && [model[name]],
       onChange: values => mailFormActions.changeField(name, values[0]),
       onInvalid: errs => mailFormActions.setFieldError(name, errs),
@@ -112,12 +112,12 @@ class ModalEditMail extends PureComponent {
       }} >
         <div className={style.left}>
           <TSelect {...{
-            label: intlObject.intl.formatMesage(messages.from),
+            label: intlObject.intl.formatMessage(messages.from),
             items: mailboxes.map(box => ({ value: box.id, label: `${box.name} (${box.email})` })),
             ...getFormChangeSelectProps('mailbox'),
           }} />
           <TInput {...{
-            label: intlObject.intl.formatMesage(messages.to),
+            label: intlObject.intl.formatMessage(messages.to),
             type: INPUT_TYPES.email,
             ...getFormChangeInputProps(['to', 0]),
           }}>
@@ -127,7 +127,7 @@ class ModalEditMail extends PureComponent {
                 thin: true,
                 className: style.copyButton,
                 onClick: () => mailFormActions.insertToArray('to', ''),
-                label: intlObject.intl.formatMesage(messages.cc),
+                label: intlObject.intl.formatMessage(messages.cc),
                 specialType: BUTTON_SPECIAL_TYPES.add,
               }} />
               <TButton {...{
@@ -135,7 +135,7 @@ class ModalEditMail extends PureComponent {
                 thin: true,
                 className: style.copyButton,
                 onClick: () => mailFormActions.insertToArray('bcc', ''),
-                label: intlObject.intl.formatMesage(messages.bcc),
+                label: intlObject.intl.formatMessage(messages.bcc),
                 specialType: BUTTON_SPECIAL_TYPES.add,
               }} />
             </div>
@@ -145,7 +145,7 @@ class ModalEditMail extends PureComponent {
             return (
               <TInput {...{
                 key: index,
-                label: intlObject.intl.formatMesage(messages.cc),
+                label: intlObject.intl.formatMessage(messages.cc),
                 type: INPUT_TYPES.email,
                 ...getFormChangeInputProps(['to', realIndex]),
               }} >
@@ -162,7 +162,7 @@ class ModalEditMail extends PureComponent {
           {(model.bcc || []).map((address, index) => (
             <TInput {...{
               key: index,
-              label: intlObject.intl.formatMesage(messages.bcc),
+              label: intlObject.intl.formatMessage(messages.bcc),
               type: INPUT_TYPES.email,
               ...getFormChangeInputProps(['bcc', index]),
             }} >
@@ -177,14 +177,14 @@ class ModalEditMail extends PureComponent {
           ))}
           <TInput {...{
             ...getFormChangeInputProps('subject'),
-            label: intlObject.intl.formatMesage(messages.subject),
+            label: intlObject.intl.formatMessage(messages.subject),
           }} />
           <TInput {...{
             type: INPUT_TYPES.wysiwyg,
             ...getFormChangeInputProps('body'),
             className: style.wysiwygWrapper,
             inputClassName: style.wysiwyg,
-            placeholder: intlObject.intl.formatMesage(messages.messageText),
+            placeholder: intlObject.intl.formatMessage(messages.messageText),
             validate: {
               required: false,
               checkOnBlur: true,
@@ -192,7 +192,7 @@ class ModalEditMail extends PureComponent {
           }} />
           {model.attachedMail &&
             <HideableContent {...{
-              title: intlObject.intl.formatMesage(messages.attachedMail),
+              title: intlObject.intl.formatMessage(messages.attachedMail),
               className: style.attachedMail,
             }}>
               <div {...{
@@ -235,7 +235,7 @@ class ModalEditMail extends PureComponent {
             })}
           </div>
           <TButton {...{
-            label: intlObject.intl.formatMesage(messages.send),
+            label: intlObject.intl.formatMessage(messages.send),
             disabled: !modelValid,
             onClick: () => submitAction(mailServiceActions.sendMail(startingToAddress)),
           }} />
