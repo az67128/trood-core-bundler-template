@@ -9,6 +9,23 @@ export const DEFAULT_ALLOWED_NO_TOKEN_ENDPOINTS = [
 
 export const API_TYPE_CUSTODIAN = 'CUSTODIAN'
 
+const transformAccessDeniedResponse = (data) => {
+  if (Array.isArray(data)) {
+    return data.map(d => transformAccessDeniedResponse(d))
+  }
+  if (data && typeof data === 'object') {
+    const dataKeys = Object.keys(data)
+    if (dataKeys.length === 1 && data.access === 'denied') {
+      return null
+    }
+    return dataKeys.reduce((memo, key) => ({
+      ...memo,
+      [key]: transformAccessDeniedResponse(data[key]),
+    }), {})
+  }
+  return data
+}
+
 export const API_TYPES = {
   [API_TYPE_CUSTODIAN]: {
     getEntityUrl: ({
@@ -38,18 +55,18 @@ export const API_TYPES = {
       }
     },
     transformArrayResponse: response => ({
-      data: response.data,
+      data: transformAccessDeniedResponse(response.data),
       count: response.totalCount,
     }),
     transformEntityResponse: response => {
       // TODO by @deylak one more custodian hack, cause for update requests it doesn't send this format
       if (typeof response.data === 'object' && typeof response.status === 'string') {
         return {
-          data: response.data,
+          data: transformAccessDeniedResponse(response.data),
         }
       }
       return {
-        data: response,
+        data: transformAccessDeniedResponse(response),
       }
     },
     getGenericModel: (fieldValue) => ({

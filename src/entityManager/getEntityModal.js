@@ -176,7 +176,7 @@ const getEntityFormSubmit = (modelName, formActions, entityId, isEditing, state,
       dispatch(formActions.deleteForm(formName))
     } else {
       // Apply all changes before submitting root parent
-      dispatch(formActions.changeSomeFields(parentForm))
+      dispatch(formActions.changeSomeFields(parentForm, false, false, true))
       const { data: model, status } = await dispatch(submitEntityForm(formName))
       if (onSuccess) {
         dispatch(onSuccess({ data: model, status }))
@@ -464,31 +464,39 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       // getRecursiveObjectReplacement
       unbindedFormActions = {
         ...formActions,
-        changeField: (name, value) => {
+        changeField: (name, value, transformUndefinedToNull = true, skipAbacCheck = false) => {
+          const val = transformUndefinedToNull && value === undefined ? null : value
+          if (skipAbacCheck) return formActions.changeField(name, val)
           const ctx = {
-            data: getRecursiveObjectReplacement(stateProps.model, name, value),
+            data: getRecursiveObjectReplacement(stateProps.model, name, val),
           }
           const { access, mask } = checkAccess(ctx)
           if (!access || mask.some(m => snakeToCamel(m) === name)) {
             return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
           }
-          return formActions.changeField(name, value)
+          return formActions.changeField(name, val)
         },
-        changeSomeFields: (values, forceUndefines) => {
+        changeSomeFields: (values, forceUndefines, transformUndefinedToNull = true, skipAbacCheck = false) => {
+          const valuesKeys = Object.keys(values)
+          const vals = valuesKeys.reduce((memo, key) => ({
+            ...memo,
+            [key]: transformUndefinedToNull && values[key] === undefined ? null : values[key],
+          }), {})
+          if (skipAbacCheck) return formActions.changeSomeFields(vals, forceUndefines)
           const ctx = {
             data: {
               ...stateProps.model,
-              ...values,
+              ...vals,
             },
           }
-          const valuesKeys = Object.keys(values)
           const { access, mask } = checkAccess(ctx)
           if (!access || mask.some(m => valuesKeys.includes(snakeToCamel(m)))) {
             return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
           }
-          return formActions.changeSomeFields(values, forceUndefines)
+          return formActions.changeSomeFields(vals, forceUndefines)
         },
-        resetField: (name) => {
+        resetField: (name, skipAbacCheck = false) => {
+          if (skipAbacCheck) return formActions.resetField(name)
           const ctx = {
             data: getRecursiveObjectReplacement(stateProps.model, name, undefined),
           }

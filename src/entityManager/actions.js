@@ -7,6 +7,7 @@ import modals from '$trood/modals'
 import auth from '$trood/auth'
 import { ruleChecker } from '$trood/helpers/abac'
 import { mergeAndReplaceArrays } from '$trood/helpers/nestedObjects'
+import { snakeToCamel } from '$trood/helpers/namingNotation'
 
 import {
   getBaseFormName,
@@ -48,8 +49,14 @@ export const createEntityForm = (modelName, parents = []) => (
     }
   }
 
+  const modelToEdit =
+    await api.selectors.entityManager[modelName].getEntities(state).asyncGetById(id, { forceLoad: true })
+  const rules = auth.selectors.getPermissions(state)
+  const sbj = auth.selectors.getActiveAcoount(state)
+
+  const baseFormName = getBaseFormName(modelName)
   const newForm = forms.createFormConfig({
-    baseConfig: getBaseFormName(modelName),
+    baseConfig: baseFormName,
     model: modelName,
     defaults: {
       ...defaults,
@@ -62,11 +69,36 @@ export const createEntityForm = (modelName, parents = []) => (
       tempId: true,
       isSubmitted: true,
     },
+    transformBeforeSubmit: (_, data) => {
+      let submitData = { ...data }
+      const baseTransformBeforeSubmit = RESTIFY_CONFIG.registeredForms[baseFormName].transformBeforeSubmit
+      if (typeof baseTransformBeforeSubmit === 'function') {
+        submitData = baseTransformBeforeSubmit(submitData)
+      } else if (typeof baseTransformBeforeSubmit === 'object') {
+        Object.keys(baseTransformBeforeSubmit).forEach(key => {
+          submitData[key] = baseTransformBeforeSubmit[key](key, submitData[key], submitData)
+        })
+      }
+      const { mask } = ruleChecker({
+        rules,
+        domain: 'custodian',
+        resource: modelName,
+        action: id ? 'dataPost' : 'dataPut',
+        values: {
+          obj: modelToEdit,
+          sbj,
+          ctx: data,
+        },
+      })
+      mask.forEach(key => {
+        const dataKey = snakeToCamel(key)
+        submitData[dataKey] = undefined
+      })
+      return submitData
+    },
     validateAll: true,
     deleteOnSubmit: true,
   })
-  const modelToEdit =
-    await api.selectors.entityManager[modelName].getEntities(state).asyncGetById(id, { forceLoad: true })
 
   dispatch(forms.actions.createForm(formName, newForm, true))
 
@@ -161,7 +193,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       rules,
       domain: 'custodian',
       resource: modelName,
-      action: model ? 'dataPost' : 'dataPut',
+      action: model && model.id ? 'dataPost' : 'dataPut',
       values: {
         obj,
         sbj,
