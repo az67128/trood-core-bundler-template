@@ -227,7 +227,7 @@ const defaultMailServiceContext = {
 export const MailServiceContext = React.createContext(defaultMailServiceContext)
 
 export const TROOD_MAIL_SERVICE_PAGE_ID = 'troodMailService'
-export const TROOD_MAIL_SERVICE_PAGE_DEFAULT_TITLE = 'Почта' // TODO translate
+export const TROOD_MAIL_SERVICE_PAGE_DEFAULT_TITLE = 'Mail'
 export const TROOD_MAIL_SERVICE_PAGE_DEFAULT_ICON = ICONS_TYPES.mail
 
 const SSL = 'ssl'
