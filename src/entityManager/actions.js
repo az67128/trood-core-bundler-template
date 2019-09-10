@@ -83,7 +83,7 @@ export const createEntityForm = (modelName, parents = []) => (
         rules,
         domain: 'custodian',
         resource: modelName,
-        action: id ? 'dataPost' : 'dataPut',
+        action: id ? 'dataPatch' : 'dataPost',
         values: {
           obj: modelToEdit,
           sbj,
@@ -193,7 +193,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       rules,
       domain: 'custodian',
       resource: modelName,
-      action: model && model.id ? 'dataPost' : 'dataPut',
+      action: model && model.id ? 'dataPatch' : 'dataPost',
       values: {
         obj,
         sbj,

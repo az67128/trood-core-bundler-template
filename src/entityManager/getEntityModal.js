@@ -445,7 +445,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         rules,
         domain: 'custodian',
         resource: modelName,
-        action: stateProps.isEditing ? 'dataPost' : 'dataPut',
+        action: stateProps.isEditing ? 'dataPatch' : 'dataPost',
         values: {
           obj: stateProps.serverModel,
           sbj,

@@ -34,18 +34,10 @@ export const API_TYPES = {
       modelEndpoint,
       entityId,
       crudAction,
-      specialAction,
     }) => {
-      let requestType = entityId ? 'single' : 'bulk'
-      if (crudAction !== CRUD_ACTIONS.read) {
-        requestType = specialAction || 'single'
-      }
-      const url = `${apiHost}${apiPrefix}${requestType}/${modelEndpoint}${entityId ? `/${entityId}` : ''}`
+      const url = `${apiHost}${apiPrefix}${modelEndpoint}${entityId ? `/${entityId}` : ''}`
       if (crudAction === CRUD_ACTIONS.read || crudAction === CRUD_ACTIONS.delete) return url
-      return {
-        url: `${url}?depth=3`,
-        method: crudAction === CRUD_ACTIONS.update ? 'post' : 'put',
-      }
+      return `${url}?depth=3`
     },
     getPaginationQuery: (query, page, pageSize) => {
       const limitStr = `limit(${(page - 1) * pageSize},${pageSize})`

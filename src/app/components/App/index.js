@@ -217,9 +217,9 @@ class App extends Component {
 
     const checkCustodianGetRule = (props) => checkRule({ ...props, action: 'dataGet' })
 
-    const checkCustodianCreateRule = (props) => checkRule({ ...props, action: 'dataPut' })
+    const checkCustodianCreateRule = (props) => checkRule({ ...props, action: 'dataPost' })
 
-    const checkCustodianUpdateRule = (props) => checkRule({ ...props, action: 'dataPost' })
+    const checkCustodianUpdateRule = (props) => checkRule({ ...props, action: 'dataPatch' })
 
     const checkCustodianDeleteRule = (props) => checkRule({ ...props, action: 'dataDelete' })
 
