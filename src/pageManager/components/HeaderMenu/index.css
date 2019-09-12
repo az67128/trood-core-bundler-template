@@ -97,18 +97,18 @@
 }
 
 @media (--trood-lg-and-tablet-and-phone) {
-  .vertical {
+  .autoResize .vertical {
     width: var(--trood-menu-width-small);
   }
 
-  .vertical .url {
+  .autoResize .vertical .url {
     flex-flow: column nowrap;
     justify-content: center;
     text-align: center;
     padding: 5px 0;
   }
 
-  .icon {
+  .autoResize .icon {
     margin-right: 0;
     margin-bottom: auto;
   }

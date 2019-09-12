@@ -28,8 +28,11 @@ const HeaderMenu = ({
 
   additionalLinks = [],
   LinkComponent,
+  iconClassName,
   linkClassName,
   linkActiveClassName,
+
+  autoResize = true,
 }) => {
   if (Object.keys(menuRenderers).length < MIN_MENU_RENDERERS && !additionalLinks.length) return null
   const preAdditionalLinks = additionalLinks.filter(link => link && link.pre)
@@ -53,7 +56,7 @@ const HeaderMenu = ({
           <React.Fragment>
             {link.iconType &&
               <TIcon {...{
-                className: style.icon,
+                className: classNames(style.icon, iconClassName),
                 type: link.iconType,
               }} />
             }
@@ -91,7 +94,7 @@ const HeaderMenu = ({
         [],
       )
       return (
-        <div className={classNames(style.root, style[type], className)}>
+        <div className={classNames(style.root, style[type], className, autoResize && style.autoResize)}>
           {preAdditionalLinks.map(mapAdditionalLinks)}
           {headerKeysToRender.map(key => {
             const currentRenderer = getNestedObjectField(menuRenderers, key) || menuRenderers[key[key.length - 1]]
@@ -114,7 +117,7 @@ const HeaderMenu = ({
                   !LinkComponent &&
                   <React.Fragment>
                     {currentIconType &&
-                      <TIcon className={style.icon} type={currentIconType} />
+                      <TIcon className={classNames(style.icon, iconClassName)} type={currentIconType} />
                     }
                     {currentLabel}
                   </React.Fragment>
