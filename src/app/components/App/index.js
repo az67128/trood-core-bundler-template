@@ -181,6 +181,9 @@ class App extends Component {
 
       match,
       getLinkedObject,
+
+      layoutConfigForm,
+      layoutConfigFormActions,
     } = this.props
 
     /* TODO authLinkedObjectIsLoading always true
@@ -280,6 +283,9 @@ class App extends Component {
                       registeredRoutesPaths,
                       match,
                       menuRenderers,
+
+                      layoutConfigForm,
+                      layoutConfigFormActions,
                     })}
                   </React.Fragment>
                 }

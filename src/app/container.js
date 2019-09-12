@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { api } from 'redux-restify'
+import { api, forms } from 'redux-restify'
 
 import App from './components/App'
 
@@ -44,6 +44,7 @@ const stateToProps = (state, props) => {
     linkedModals,
     linkedModalsModels,
     ...linkedModalsModelsEntities,
+    layoutConfigForm: forms.selectors.layoutConfigForm.getForm(state),
     isHasAuthData: auth.selectors.getIsHasAuthData(state),
     authData: auth.selectors.getAuthData(state),
     permissions: auth.selectors.getPermissions(state),
@@ -60,6 +61,7 @@ const stateToProps = (state, props) => {
 const dispatchToProps = (dispatch) => ({
   dispatch,
   authActions: bindActionCreators(auth.actions, dispatch),
+  layoutConfigFormActions: bindActionCreators(forms.actions.layoutConfigForm, dispatch),
   mailServiceActions: bindActionCreators(mailService.actions, dispatch),
 })
 
