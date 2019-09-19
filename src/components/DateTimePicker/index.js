@@ -24,6 +24,7 @@ class DateTimePicker extends PureComponent {
   static propTypes = {
     type: PropTypes.oneOf(Object.values(PICKER_TYPES)),
     calendarPosition: PropTypes.oneOf(Object.values(CALENDAR_POSITIONS)),
+    zeroTimeIsValue: PropTypes.bool,
     value: allMomentPropTypes,
     label: PropTypes.node,
     timeLabel: PropTypes.node,
@@ -44,6 +45,7 @@ class DateTimePicker extends PureComponent {
     type: PICKER_TYPES.dateTime,
     validate: {},
     showTextErrors: true,
+    zeroTimeIsValue: false,
     onChange: () => {},
     onValid: () => {},
     onInvalid: () => {},
@@ -57,7 +59,7 @@ class DateTimePicker extends PureComponent {
       dateValue = dateTime.format(DEFAULT_DATE_FORMAT)
       timeValue = dateTime.format(TIME_FORMAT)
     }
-    if (!state.timeValue && timeValue) {
+    if (!props.zeroTimeIsValue && !state.timeValue && timeValue) {
       const startDayTimeValue = moment().startOf('day').format(TIME_FORMAT)
       if (timeValue === startDayTimeValue) {
         timeValue = state.timeValue
