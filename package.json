@@ -79,7 +79,7 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-transition-group": "^1",
-    "recharts": "^1.0.1",
+    "recharts": "1.7.1",
     "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
     "redux-batched-actions": "^0.2.1",
