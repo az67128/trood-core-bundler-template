@@ -13,7 +13,7 @@ export default {
       login: undefined,
       role: undefined,
       status: undefined,
-      linkedObject: undefined,
+      profile: undefined,
     },
     action: undefined,
     v: undefined,

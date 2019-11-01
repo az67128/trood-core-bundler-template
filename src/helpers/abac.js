@@ -3,7 +3,6 @@ import { isDefAndNotNull } from './def'
 
 
 const allow = 'allow'
-const deny = 'deny'
 const any = '*'
 
 const checkRule = (key, rule, values) => {
@@ -29,17 +28,20 @@ const checkRule = (key, rule, values) => {
   return keyValue === ruleValue
 }
 
-export const checkActionRule = (actionRule = {}, values = {}) => {
-  const { result, rule = {} } = actionRule
-  const ruleResult = Object.keys(rule).every(key => checkRule(key, rule[key], values))
-  if (result === allow) return ruleResult
-  if (result === deny) return !ruleResult
-  return false
-}
-
-export const getRuleMask = (actionRules = [], values = {}) => {
-  const maskRule = actionRules.find(actionRule => checkActionRule(actionRule, values)) || {}
-  return maskRule.mask || []
+export const getSuitableRuleResult = (actionRules = [], values = {}, defaultAccess = true) => {
+  const suitableRule = actionRules.find(({ rule }) => {
+    return Object.keys(rule).every(key => checkRule(key, rule[key], values))
+  })
+  if (suitableRule) {
+    return {
+      access: suitableRule.result === allow,
+      mask: suitableRule.mask || [],
+    }
+  }
+  return {
+    access: defaultAccess,
+    mask: [],
+  }
 }
 
 export const ruleChecker = ({
@@ -52,6 +54,7 @@ export const ruleChecker = ({
   const domainResources = rules[domain] || {}
   const globalDefaultResolution = rules._defaultResolution
   const domainDefaultResolution = domainResources._defaultResolution
+  const defaultAccess = domainDefaultResolution === allow || globalDefaultResolution === allow
   const resourceActions = domainResources[resource] || {}
   const actionKeys = Object.keys(resourceActions).filter(key => {
     const regexp = new RegExp(key.replace('*', '.*'))
@@ -61,14 +64,6 @@ export const ruleChecker = ({
     ...memo,
     ...resourceActions[curr],
   ]), [])
-  if (!actionRules.length) {
-    return {
-      access: domainDefaultResolution === allow || globalDefaultResolution === allow,
-      mask: [],
-    }
-  }
-  return {
-    access: actionRules.some(actionRule => checkActionRule(actionRule, values)),
-    mask: getRuleMask(actionRules, values),
-  }
+  const suitableRuleResult = getSuitableRuleResult(actionRules, values, defaultAccess)
+  return suitableRuleResult
 }

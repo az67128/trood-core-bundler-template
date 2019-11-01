@@ -19,29 +19,29 @@ export const getIsAuthenticated = () => {
   return !!token && token !== 'null'
 }
 
-export const getLinkedObjectId = state => {
-  return forms.selectors.authDataForm.getField('linkedObject')(state)
+export const getProfileId = state => {
+  return forms.selectors.authDataForm.getField('profile')(state)
 }
 
-export const getLinkedObject = state => {
-  const { linkedObject } = mainConfig.services.auth
-  const linkedObjectId = getLinkedObjectId(state)
-  return api.selectors.entityManager[linkedObject].getEntities(state).getById(linkedObjectId)
+export const getProfile = state => {
+  const { profile } = mainConfig.services.auth
+  const profileId = getProfileId(state)
+  return api.selectors.entityManager[profile].getEntities(state).getById(profileId)
 }
 
-export const getLinkedObjectIsLoading = state => {
-  const { linkedObject } = mainConfig.services.auth
-  const linkedObjectId = getLinkedObjectId(state)
-  return api.selectors.entityManager[linkedObject].getEntities(state).getIsLoadingById(linkedObjectId)
+export const getProfileIsLoading = state => {
+  const { profile } = mainConfig.services.auth
+  const profileId = getProfileId(state)
+  return api.selectors.entityManager[profile].getEntities(state).getIsLoadingById(profileId)
 }
 
 export const getActiveAcoount = state => {
   const authData = getAuthData(state)
-  const linkedObject = getLinkedObject(state)
+  const profile = getProfile(state)
   return {
     ...authData,
     abac: undefined,
-    linkedObject,
+    profile,
   }
 }
 

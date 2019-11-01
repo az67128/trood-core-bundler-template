@@ -49,11 +49,11 @@ const stateToProps = (state, props) => {
     authData: auth.selectors.getAuthData(state),
     permissions: auth.selectors.getPermissions(state),
     activeAccount: auth.selectors.getActiveAcoount(state),
-    authLinkedObject: auth.selectors.getLinkedObject(state),
-    authLinkedObjectIsLoading: auth.selectors.getLinkedObjectIsLoading(state),
+    authProfile: auth.selectors.getProfile(state),
+    authProfileIsLoading: auth.selectors.getProfileIsLoading(state),
     isAuthenticated: auth.selectors.getIsAuthenticated(state),
     isLoading: api.selectors.loadsManager.getIsLoading(state),
-    getLinkedObject: () => auth.selectors.getLinkedObject(state),
+    getProfile: () => auth.selectors.getProfile(state),
     getModalOpen: modalName => modals.selectors.getModalOpen(modalName)(state),
   }
 }

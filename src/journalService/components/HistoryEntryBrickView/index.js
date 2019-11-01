@@ -47,14 +47,14 @@ class HistoryEntryBrickView extends PureComponent {
   }
 
   static getActorName(model, actorEntities, history) {
-    const { linkedObject } = model.actor
-    if (!linkedObject) {
+    const { profile } = model.actor
+    if (!profile) {
       return <div>{intlObject.intl.formatMessage(messages.system)}</div>
     }
 
     let actor = {
-      ...linkedObject,
-      $modelType: systemConfig.services.auth.linkedObject,
+      ...profile,
+      $modelType: ((systemConfig.services || {}).auth || {}).profile,
     }
     if (actorEntities) actor = actorEntities.getById(actor.id)
 

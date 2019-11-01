@@ -4,7 +4,6 @@
 export const stateKey = 'em-template-state'
 export const buildKey = 'em-template-build'
 export const tokenKey = 'em-template-token'
-export const linkedObjectKey = 'em-template-linked-object-id'
 
 export const clearStorage = () => {
   window.localStorage.removeItem(stateKey)

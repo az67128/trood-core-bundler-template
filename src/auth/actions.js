@@ -24,19 +24,19 @@ import {
 } from '$trood/authApiUrlSchema'
 
 
-export const updateLinkedObject = (modelName, model) => dispatch => {
+export const updateProfile = (modelName, model) => dispatch => {
   dispatch(api.actions.entityManager[modelName].updateById(model.id, model))
   return model.id
 }
 
 const setAuthData = (data) => (dispatch) => {
-  const { linkedObject } = mainConfig.services.auth
+  const { profile } = mainConfig.services.auth
   const formattedResponse = Object.keys(data).reduce((memo, key) => {
-    if (key === 'linkedObject') {
-      const linkedObjectId = dispatch(updateLinkedObject(linkedObject, data[key]))
+    if (key === 'profile') {
+      const profileId = dispatch(updateProfile(profile, data[key]))
       return {
         ...memo,
-        [key]: linkedObjectId,
+        [key]: profileId,
       }
     }
     return {

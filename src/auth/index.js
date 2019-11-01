@@ -16,22 +16,22 @@ import systemConfig from '$trood/config'
 
 export * from './constants'
 
-const getModelIdSelector = () => selectors.getLinkedObjectId
-const getModelType = () => systemConfig.services.auth.linkedObject
+const getModelIdSelector = () => selectors.getProfileId
+const getModelType = () => ((systemConfig.services || {}).auth || {}).profile
 const getPageConfig = (pageConfig) => {
-  const linkedObject = getModelType()
-  if (!pageConfig.components && !pageConfig.pages) {
-    return defaults(pageConfig, systemConfig.entityPages[linkedObject])
+  const profile = getModelType()
+  if (profile && !pageConfig.components && !pageConfig.pages) {
+    return defaults(pageConfig, systemConfig.entityPages[profile])
   }
   return pageConfig
 }
 const getPageContainer = (pageConfig, entityPageName, defaultLayout) => {
-  const linkedObject = getModelType()
+  const profile = getModelType()
   const idSelector = getModelIdSelector()
-  if (!pageConfig.components && !pageConfig.pages) {
-    return defaultLayout.getPageContainer(systemConfig.entityPages[linkedObject], linkedObject, idSelector)
+  if (profile && !pageConfig.components && !pageConfig.pages) {
+    return defaultLayout.getPageContainer(systemConfig.entityPages[profile], profile, idSelector)
   }
-  return defaultLayout.getPageContainer(pageConfig, linkedObject, idSelector)
+  return defaultLayout.getPageContainer(pageConfig, profile, idSelector)
 }
 const getPageId = () => TROOD_PERSONAL_ACCOUNT_PAGE_ID
 const getPageHeaderRendererConfig = page => ({

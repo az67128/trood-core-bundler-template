@@ -38,7 +38,7 @@ import { currentLayout } from '$trood/layoutsManager'
 
 const menuRenderers = getPagesHeaderRenderers(systemConfig.pages)
 
-const getLinkedObjectNeededFields = (permissions = {}) => {
+const getProfileNeededFields = (permissions = {}) => {
   let frontendPermissions = permissions.frontend || {}
   frontendPermissions = Object.values(frontendPermissions)
   frontendPermissions = frontendPermissions.reduce((memo, curr) => {
@@ -75,10 +75,10 @@ const getPageManagerContext = registeredRoutesPaths => ({
   registeredRoutesPaths,
 })
 
-const memoizedGetLinkedObjectNeededFields = memoizeOne(getLinkedObjectNeededFields)
+const memoizedGetProfileNeededFields = memoizeOne(getProfileNeededFields)
 const memoizedGetRenderers = memoizeOne(getRenderers, (a, b) => {
   if (a[1] !== b[1]) return false
-  const neededField = memoizedGetLinkedObjectNeededFields(a[1])
+  const neededField = memoizedGetProfileNeededFields(a[1])
   return neededField.reduce((memo, field) => {
     return memo && deepEqual(objectGet(a[0], field), objectGet(b[0], field))
   }, true)
@@ -88,12 +88,12 @@ const memoizedGetPageManagerContext = memoizeOne(getPageManagerContext)
 
 class App extends Component {
   static propTypes = {
-    authLinkedObject: PropTypes.object,
+    authProfile: PropTypes.object,
     permissions: PropTypes.object,
   }
 
   static defaultProps = {
-    authLinkedObject: {},
+    authProfile: {},
     permissions: {},
   }
 
@@ -171,26 +171,26 @@ class App extends Component {
   render() {
     const {
       isAuthenticated,
-      authLinkedObject,
+      authProfile,
       activeAccount,
-      // authLinkedObjectIsLoading,
+      // authProfileIsLoading,
       permissions,
 
       authData = {},
       authActions = {},
 
       match,
-      getLinkedObject,
+      getProfile,
 
       layoutConfigForm,
       layoutConfigFormActions,
     } = this.props
 
-    /* TODO authLinkedObjectIsLoading always true
-    if (authLinkedObjectIsLoading) {
+    /* TODO authProfileIsLoading always true
+    if (authProfileIsLoading) {
       return <LoadingIndicator className={style.loading} />
     } */
-    if (authLinkedObject.$loading) {
+    if (authProfile.$loading) {
       return <LoadingIndicator className={style.loading} />
     }
 
@@ -229,7 +229,7 @@ class App extends Component {
     return (
       <AuthManagerContext.Provider value={{
         ...authData,
-        getLinkedObject,
+        getProfile,
         checkRule,
         checkCustodianGetRule,
         checkCustodianCreateRule,
