@@ -24,6 +24,25 @@ import {
 } from '$trood/authApiUrlSchema'
 
 
+const restoreNull = (data = {}) => {
+  if (typeof data !== 'object') return data
+  if (Array.isArray(data)) {
+    return data.map(item => restoreNull(item))
+  }
+  return Object.keys(data).reduce((memo, curr) => {
+    let currValue = data[curr]
+    if (currValue === undefined) {
+      currValue = null
+    } else if (typeof currValue === 'object') {
+      currValue = restoreNull(currValue)
+    }
+    return {
+      ...memo,
+      [curr]: currValue,
+    }
+  }, {})
+}
+
 export const updateProfile = (modelName, model) => dispatch => {
   if (!model) return undefined
   dispatch(api.actions.entityManager[modelName].updateById(model.id, model))
@@ -38,6 +57,12 @@ const setAuthData = (data) => (dispatch) => {
       return {
         ...memo,
         [key]: profileId,
+      }
+    }
+    if (key === 'abac') {
+      return {
+        ...memo,
+        [key]: restoreNull(data[key]),
       }
     }
     return {

@@ -14,11 +14,17 @@ const checkRule = (key, rule, values) => {
     })
   }
 
+  let keyValue = lodashGet(values, key)
+  if (isDefAndNotNull(keyValue) && typeof keyValue === 'object') {
+    keyValue = keyValue.id
+  }
+  if (!isDefAndNotNull(keyValue)) keyValue = null
+
+  if (!isDefAndNotNull(rule)) return rule === keyValue
+
   if (isDefAndNotNull(rule.in)) return rule.in.some(item => checkRule(key, item, values))
   if (isDefAndNotNull(rule.not)) return !checkRule(key, rule.not, values)
 
-  let keyValue = lodashGet(values, key)
-  keyValue = (keyValue || {}).id || keyValue || key
   let ruleValue = lodashGet(values, rule)
   ruleValue = (ruleValue || {}).id || ruleValue || rule
 
@@ -28,10 +34,13 @@ const checkRule = (key, rule, values) => {
   return keyValue === ruleValue
 }
 
-export const getSuitableRuleResult = (actionRules = [], values = {}, defaultAccess = true) => {
-  const suitableRule = actionRules.find(({ rule }) => {
+export const getSuitableRule = (actionRules = [], values = {}) => {
+  return actionRules.find(({ rule }) => {
     return Object.keys(rule).every(key => checkRule(key, rule[key], values))
   })
+}
+
+export const getSuitableRuleResult = (suitableRule, defaultAccess = true) => {
   if (suitableRule) {
     return {
       access: suitableRule.result === allow,
@@ -55,15 +64,28 @@ export const ruleChecker = ({
   const globalDefaultResolution = rules._defaultResolution
   const domainDefaultResolution = domainResources._defaultResolution
   const defaultAccess = domainDefaultResolution === allow || globalDefaultResolution === allow
-  const resourceActions = domainResources[resource] || {}
-  const actionKeys = Object.keys(resourceActions).filter(key => {
+  const resourceKeys = Object.keys(domainResources).filter(key => {
     const regexp = new RegExp(key.replace('*', '.*'))
-    return regexp.test(action)
-  }).sort()
-  const actionRules = actionKeys.reduce((memo, curr) => ([
+    return regexp.test(resource)
+  }).sort().reverse()
+  const resourceActions = resourceKeys.reduce((memo, curr) => ([
     ...memo,
-    ...resourceActions[curr],
+    domainResources[curr],
   ]), [])
-  const suitableRuleResult = getSuitableRuleResult(actionRules, values, defaultAccess)
-  return suitableRuleResult
+  let suitableRule
+  resourceActions.forEach(resourceAction => {
+    if (!suitableRule) {
+      const actionKeys = Object.keys(resourceAction).filter(key => {
+        const regexp = new RegExp(key.replace('*', '.*'))
+        return regexp.test(action)
+      }).sort().reverse()
+      const actionRules = actionKeys.reduce((memo, curr) => ([
+        ...memo,
+        ...resourceAction[curr],
+      ]), [])
+      suitableRule = getSuitableRule(actionRules, values)
+    }
+  })
+
+  return getSuitableRuleResult(suitableRule, defaultAccess)
 }
