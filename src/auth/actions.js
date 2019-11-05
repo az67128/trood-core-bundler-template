@@ -25,6 +25,7 @@ import {
 
 
 export const updateProfile = (modelName, model) => dispatch => {
+  if (!model) return undefined
   dispatch(api.actions.entityManager[modelName].updateById(model.id, model))
   return model.id
 }
