@@ -78,6 +78,7 @@ const PageGridLayout = ({
   modelId,
   entityPageModelName,
   entityPageModelIdSelector,
+  layoutProps,
   ...other
 }) => {
   if (entityPageModelName && !modelId) return null
@@ -103,6 +104,7 @@ const PageGridLayout = ({
               {React.createElement(currentLayout.nestedPageMenuComponent, {
                 menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
                 basePath,
+                layoutProps,
               })}
             </div>
           )}
@@ -240,6 +242,7 @@ const PageGridLayout = ({
                 {React.createElement(currentLayout.nestedPageMenuComponent, {
                   menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
                   basePath,
+                  layoutProps,
                 })}
               </div>
 

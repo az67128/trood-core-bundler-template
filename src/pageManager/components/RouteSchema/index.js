@@ -35,6 +35,7 @@ const RouteSchema = ({
   basePath = [],
   renderers = {},
   registeredRoutesPaths,
+  layoutProps,
 }) => {
   const currentBaseUrl = getNestedObjectField(urlSchema, basePath)
   let mappedRoutes = Object.keys(renderers).map(key => {
@@ -97,7 +98,7 @@ const RouteSchema = ({
                   registeredRoutesPaths,
                   basePath: basePath.concat(key),
                 }}>
-                  <CurrentComponent {...currentRenderer.props} />
+                  <CurrentComponent {...{ ...currentRenderer.props, layoutProps }} />
                 </PageManagerContext.Provider>
               )
             },

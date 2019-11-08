@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import memoizeOne from 'memoize-one'
-import objectGet from 'lodash/get'
-import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
@@ -12,15 +9,7 @@ import auth, { AuthManagerContext, LOGIN_PAGE_URL, RECOVERY_PAGE_URL } from '$tr
 
 import { ruleChecker } from '$trood/helpers/abac'
 
-import systemConfig from '$trood/config'
-
-import {
-  PageManagerContext,
-  defaultPageManagerContext,
-  getPagesRouteShemaRenderers,
-  getPagesHeaderRenderers,
-  getAllPaths,
-} from '$trood/pageManager'
+import { PageManagerContext } from '$trood/pageManager'
 
 import LoadingIndicator from '$trood/components/LoadingIndicator'
 
@@ -35,65 +24,20 @@ import {
 } from '$trood/entityManager'
 import { currentLayout } from '$trood/layoutsManager'
 
+import {
+  menuRenderers,
+  memoizedGetAllPaths,
+  memoizedGetPageManagerContext,
+  memoizedGetRenderers,
+} from './helpers'
 
-const menuRenderers = getPagesHeaderRenderers(systemConfig.pages)
-
-const getProfileNeededFields = (permissions = {}) => {
-  let frontendPermissions = permissions.frontend || {}
-  frontendPermissions = Object.values(frontendPermissions)
-  frontendPermissions = frontendPermissions.reduce((memo, curr) => {
-    if (typeof curr !== 'object') return memo
-    return {
-      ...memo,
-      ...Object.values(curr).reduce((memo1, item) => {
-        return {
-          ...memo1,
-          ...item.reduce((memo2, rule) => ({ ...memo2, ...rule.rule }), {}),
-        }
-      }, {}),
-    }
-  }, {})
-  const fields = Object.keys(frontendPermissions)
-  return fields.map(field => field.split('.').slice(1))
-}
-
-const getRenderers = (sbj, permissions = {}) => {
-  return getPagesRouteShemaRenderers(
-    systemConfig.pages,
-    {
-      extraPages: systemConfig.entityPages,
-    },
-    {
-      sbj,
-      rules: permissions,
-    },
-  )
-}
-
-const getPageManagerContext = registeredRoutesPaths => ({
-  ...defaultPageManagerContext,
-  registeredRoutesPaths,
-})
-
-const memoizedGetProfileNeededFields = memoizeOne(getProfileNeededFields)
-const memoizedGetRenderers = memoizeOne(getRenderers, (a, b) => {
-  if (a[1] !== b[1]) return false
-  const neededField = memoizedGetProfileNeededFields(a[1])
-  return neededField.reduce((memo, field) => {
-    return memo && deepEqual(objectGet(a[0], field), objectGet(b[0], field))
-  }, true)
-})
-const memoizedGetAllPaths = memoizeOne(getAllPaths)
-const memoizedGetPageManagerContext = memoizeOne(getPageManagerContext)
 
 class App extends Component {
   static propTypes = {
-    authProfile: PropTypes.object,
     permissions: PropTypes.object,
   }
 
   static defaultProps = {
-    authProfile: {},
     permissions: {},
   }
 
@@ -113,7 +57,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.restoreAuthData()
+    this.restoreAuthData(true)
     this.openLinkedModal()
   }
 
@@ -156,14 +100,14 @@ class App extends Component {
     }
   }
 
-  restoreAuthData() {
+  restoreAuthData(force) {
     const {
       isLoading,
       isAuthenticated,
       isHasAuthData,
       authActions,
     } = this.props
-    if (!isLoading && isAuthenticated && !isHasAuthData) {
+    if (!isLoading && isAuthenticated && (!isHasAuthData || force)) {
       authActions.restoreAuthData()
     }
   }
@@ -171,9 +115,7 @@ class App extends Component {
   render() {
     const {
       isAuthenticated,
-      authProfile,
       activeAccount,
-      // authProfileIsLoading,
       permissions,
 
       authData = {},
@@ -182,14 +124,10 @@ class App extends Component {
       match,
       getProfile,
 
-      layoutConfigForm,
-      layoutConfigFormActions,
+      layoutProps,
     } = this.props
 
-    /* TODO authProfileIsLoading always true
-    if (authProfileIsLoading) {
-      return <LoadingIndicator className={style.loading} />
-    } */
+    const authProfile = getProfile()
     if (authProfile.$loading) {
       return <LoadingIndicator className={style.loading} />
     }
@@ -283,9 +221,7 @@ class App extends Component {
                       registeredRoutesPaths,
                       match,
                       menuRenderers,
-
-                      layoutConfigForm,
-                      layoutConfigFormActions,
+                      layoutProps,
                     })}
                   </React.Fragment>
                 }
