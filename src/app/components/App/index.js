@@ -125,6 +125,7 @@ class App extends Component {
       getProfile,
 
       layoutProps,
+      history,
     } = this.props
 
     const authProfile = getProfile()
@@ -222,6 +223,7 @@ class App extends Component {
                       match,
                       menuRenderers,
                       layoutProps,
+                      history,
                     })}
                   </React.Fragment>
                 }
