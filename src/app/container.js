@@ -133,7 +133,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     const currentModel = RESTIFY_CONFIG.registeredModels[layoutModelsDict[modelName]]
     const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
       ...prevActions,
-      [action]: entityManager.actions[action](modelName),
+      [action]: entityManager.actions[action](modelName, []),
     }), {})
     const apiActions = api.actions.entityManager[layoutModelsDict[modelName]]
     return {
