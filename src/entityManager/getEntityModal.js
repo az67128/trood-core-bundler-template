@@ -130,6 +130,8 @@ const getEntityFormSubmit = (modelName, formActions, entityId, isEditing, state,
   if (childFormsNames.length) {
     const childFormsActions = forms.getFormActions(childFormsNames)
     submitChildForms = childFormsNames.reduce((memo, formName) => {
+      const currentIsSubmitted = childForms[formName].isSubmitted
+      if (!currentIsSubmitted) return memo
       const currentModelName = getModelNameFromFormName(formName)
       const currentId = childForms[formName].tempId
       const currentIsEditing = !!childForms[formName].id
