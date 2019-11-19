@@ -1,5 +1,3 @@
-import { RestifyForeignKey } from 'redux-restify'
-
 import {
   AUTH_API_NAME,
   ACCOUNT_ENDPOINT,
@@ -12,13 +10,11 @@ export default {
   defaults: {
     id: undefined,
     login: undefined,
-    created: undefined,
+    password: undefined,
     status: undefined,
     active: undefined,
-    role: new RestifyForeignKey('role'),
+    role: undefined,
     language: undefined,
-    token: undefined,
-    expire: undefined,
     profile: undefined,
   },
 }
