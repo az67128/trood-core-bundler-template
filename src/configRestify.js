@@ -265,6 +265,12 @@ const configRestify = () => {
     ] = formsContext(key).default
   })
 
+  Object.values(formsDefinitions).forEach(fd => {
+    if (fd.resultRemoveNulls === undefined) {
+      fd.resultRemoveNulls = false
+    }
+  })
+
   initRestify({
     apiDefinitions,
     modelsDefinitions,
