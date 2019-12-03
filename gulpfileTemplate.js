@@ -1,4 +1,5 @@
-require('babel-polyfill')
+require('core-js/stable')
+require('regenerator-runtime/runtime')
 const gulp = require('gulp')
 const template = require('gulp-template')
 const rename = require('gulp-rename')
@@ -206,10 +207,9 @@ gulp.task('make-locale', () => {
       .pipe(gulp.dest('./src'))
 })
 
-gulp.task('default', [
+gulp.task('default', gulp.parallel(
   'make-components',
   'make-business-objects',
   'make-layouts',
   'make-locale',
-], () => {
-})
+))

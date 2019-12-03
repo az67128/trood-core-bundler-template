@@ -1,9 +1,8 @@
 'use strict'
 const path = require('path')
-const paths = require('../config/paths');
+const paths = require('../config/paths')
 var fs = require('fs')
 const webpack = require('webpack')
-const EmptyModulePlugin = require('empty-module-webpack-plugin')
 
 
 const nodeModules = {}
@@ -16,6 +15,7 @@ fs.readdirSync('node_modules')
   })
 
 webpack({
+  mode: 'production',
   externals: nodeModules,
   entry: './gulpfileTemplate.js',
   target: 'node',
@@ -36,23 +36,20 @@ webpack({
   module: {
     rules: [
       {
+        test: /\.css$/,
+        use: 'null-loader',
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules|manifest\.js|configMessages\.js/,
         loader: require.resolve('babel-loader'),
         options: {
-          // This is a feature of `babel-loader` for webpack (not Babel itself).
-          // It enables caching results in ./node_modules/.cache/babel-loader/
-          // directory for faster rebuilds.
           cacheDirectory: true,
         },
       },
     ],
   },
   plugins: [
-    // We will try to load a lot of npm modules, when parsing project structure,
-    // but we don't really need them , we need only local requires
-    // new EmptyModulePlugin(/^[^.](?!.*(ulp-|abel-polyfill|trood))|\.css$/),
-    new EmptyModulePlugin(/\.css$/),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
     }),
