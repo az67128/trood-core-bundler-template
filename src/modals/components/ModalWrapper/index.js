@@ -76,7 +76,12 @@ class ModalWrapper extends PureComponent {
 
     const transitionProps = {
       key: 'modalTransitions',
-      className: fadeInUp,
+      classNames: {
+        enter: fadeInUp.enter,
+        enterActive: fadeInUp.enterActive,
+        exit: fadeInUp.exit,
+        exitActive: fadeInUp.exitActive,
+      },
       timeout: {
         enter: 500,
         exit: 500,
