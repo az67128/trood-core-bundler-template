@@ -21,7 +21,7 @@ Now, we should only edit our system configuration in ``src/config.js`` file:
       ],
       services: { // Services configuration (Now onlu auth service supported)
         auth: { // Service name
-          linkedObject: 'employee', // Auth service can be linked to some business object for storing additional user params
+          profile: 'employee', // Auth service can be linked to some business object for storing additional user params
         },
       },
       libraries: [ // Components libraries register
@@ -29,6 +29,12 @@ Now, we should only edit our system configuration in ``src/config.js`` file:
           name: 'TroodCoreBusinessComponents', // Library name
         },
       ],
+      layouts: { // Custome layouts
+        defaultLayout: 'TroodCoreLayout',
+        models: { // Business objects mapping
+            activeStatus: 'activeStatus', // Component model and corresponding business object
+        },
+      },
       pages: [ // Syste pages register
         {
           title: 'Контрагенты', // Page title
