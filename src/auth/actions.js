@@ -25,7 +25,7 @@ import {
 
 
 const restoreNull = (data = {}) => {
-  if (typeof data !== 'object') return data
+  if (typeof data !== 'object' || data === null) return data
   if (Array.isArray(data)) {
     return data.map(item => restoreNull(item))
   }
