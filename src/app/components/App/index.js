@@ -30,6 +30,7 @@ import {
   memoizedGetPageManagerContext,
   memoizedGetRenderers,
 } from './helpers'
+import { snakeToCamel } from '$trood/helpers/namingNotation'
 
 
 class App extends Component {
@@ -146,7 +147,7 @@ class App extends Component {
     }) => ruleChecker({
       rules: permissions,
       domain,
-      resource,
+      resource: snakeToCamel(resource),
       action,
       values: {
         sbj: activeAccount,
