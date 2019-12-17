@@ -25,6 +25,7 @@ class TInput extends PureComponent {
     validate: PropTypes.shape({
       checkOnBlur: PropTypes.bool,
       required: PropTypes.bool,
+      zeroIsValue: PropTypes.bool,
       maxLen: PropTypes.number,
       minLen: PropTypes.number,
       format: PropTypes.oneOfType([

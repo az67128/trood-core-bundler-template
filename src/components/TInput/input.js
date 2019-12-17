@@ -66,6 +66,7 @@ class Input extends PureComponent {
       getValue: PropTypes.func.isRequired,
       checkOnBlur: PropTypes.bool,
       required: PropTypes.bool,
+      zeroIsValue: PropTypes.bool,
       maxLen: PropTypes.number,
       minLen: PropTypes.number,
       requiredError: PropTypes.string,
@@ -202,6 +203,7 @@ class Input extends PureComponent {
       settings: {
         format,
         required,
+        zeroIsValue,
         requiredError,
         minLen,
         maxLen,
@@ -213,7 +215,7 @@ class Input extends PureComponent {
       if (/^\s*$/.test(value)) {
         return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
       }
-      if (numberTypes.includes(type)) {
+      if (numberTypes.includes(type) && !zeroIsValue) {
         if (value === 0 || value === '0') {
           return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
         }
