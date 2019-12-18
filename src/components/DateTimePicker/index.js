@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import momentPropTypes from 'react-moment-proptypes'
 import classNames from 'classnames'
 import moment from 'moment'
+import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
@@ -19,6 +20,17 @@ const allMomentPropTypes = PropTypes.oneOfType([
   momentPropTypes.momentString,
   momentPropTypes.momentDurationObj,
 ])
+
+const propsForCheckUpdate = props => ({
+  value: props.value && moment(props.value).format(DEFAULT_DATE_TIME_FORMAT),
+  validate: {
+    checkOnBlur: props.validate.checkOnBlur,
+    dateRequired: props.validate.dateRequired,
+    timeRequired: props.validate.timeRequired,
+    minDate: props.validate.minDate && moment(props.validate.minDate).format(DEFAULT_DATE_TIME_FORMAT),
+    maxDate: props.validate.maxDate && moment(props.validate.maxDate).format(DEFAULT_DATE_TIME_FORMAT),
+  },
+})
 
 class DateTimePicker extends PureComponent {
   static propTypes = {
@@ -98,7 +110,7 @@ class DateTimePicker extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
+    if (!deepEqual(propsForCheckUpdate(this.props), propsForCheckUpdate(prevProps))) {
       this.handleValidate()
     }
   }
