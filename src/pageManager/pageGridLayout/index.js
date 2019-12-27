@@ -1,5 +1,4 @@
 import getPageContainer from './getPageContainer'
-import getPageChildContainer from './getPageChildContainer'
 
 import { getPageId, getPageConfig, getPageBaseId, getModelIdSelector } from '../constants'
 
@@ -19,7 +18,6 @@ export default {
   getPageBaseId,
   // So we don't rewrite third gridPageContainer argument
   getPageContainer: (page, entityModelName) => getPageContainer(page, entityModelName, getModelIdSelector()),
-  getPageChildContainer,
   getPageHeaderRendererConfig,
   getModelType,
   getModelIdSelector,
