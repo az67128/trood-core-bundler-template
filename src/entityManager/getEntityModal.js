@@ -12,7 +12,7 @@ import {
   RestifyGenericForeignKey,
 } from 'redux-restify'
 
-import pageManager from '$trood/pageManager'
+import { getPageChildContainer } from '$trood/pageManager'
 
 import modalsStyle from '$trood/styles/modals.css'
 
@@ -404,7 +404,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     return {
       modelApiActions: bindActionCreators(api.actions.entityManager[modelName], dispatch),
       dispatch,
-      PageChildContainer: dispatch(pageManager.getPageChildContainer),
+      PageChildContainer: dispatch(getPageChildContainer),
     }
   }
 
