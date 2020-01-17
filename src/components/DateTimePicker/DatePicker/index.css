@@ -33,7 +33,7 @@
 
 .disabled .header {
   cursor: default;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray);
 }
 
 .value {

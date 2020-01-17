@@ -55,7 +55,7 @@
 }
 
 .disabled .value {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray);
 }
 
 .content .search {

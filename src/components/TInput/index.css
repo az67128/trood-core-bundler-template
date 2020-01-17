@@ -67,6 +67,10 @@
   composes: input;
 }
 
+.disabled {
+  color: var(--trood-gray);
+}
+
 .shadow {
   composes: input;
   height: 0;
