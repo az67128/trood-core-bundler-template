@@ -10,6 +10,6 @@
   color: var(--trood-black);
 }
 
-.disabled {
+.root.disabled {
   color: var(--trood-gray);
 }

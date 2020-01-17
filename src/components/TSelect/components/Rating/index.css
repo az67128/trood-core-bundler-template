@@ -6,7 +6,7 @@
   cursor: pointer;
 }
 
-.disabled {
+.root.disabled {
   pointer-events: none;
   cursor: default;
   opacity: 0.5;

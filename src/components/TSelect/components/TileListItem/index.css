@@ -15,6 +15,6 @@
   box-shadow: inset 0 0 2px 2px var(--trood-orange);
 }
 
-.disabled {
+.root.disabled {
   opacity: 0.5;
 }

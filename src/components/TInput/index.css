@@ -67,8 +67,8 @@
   composes: input;
 }
 
-.disabled {
-  color: var(--trood-gray);
+.root .disabled {
+  color: var(--trood-gray-text);
 }
 
 .shadow {
