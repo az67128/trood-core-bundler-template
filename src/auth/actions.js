@@ -50,10 +50,10 @@ export const updateProfile = (modelName, model) => dispatch => {
 }
 
 const setAuthData = (data) => (dispatch) => {
-  const { profile } = mainConfig.services.auth
+  const { profile } = (mainConfig.services || {}).auth || {}
   const formattedResponse = Object.keys(data).reduce((memo, key) => {
     if (key === 'profile') {
-      const profileId = dispatch(updateProfile(profile, data[key]))
+      const profileId = profile ? dispatch(updateProfile(profile, data[key])) : null
       return {
         ...memo,
         [key]: profileId,
