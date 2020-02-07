@@ -4,13 +4,14 @@ import classNames from 'classnames'
 
 import style from './index.css'
 
-import { CURRENCIES_ACCURACY } from './constants'
+import { CURRENCIES, CURRENCY_CODES, CURRENCY_SIGN_TYPE } from './constants'
 
 import { toNumber, toMoney } from '$trood/helpers/format'
 
 
 class TCurrency extends PureComponent {
   static propTypes = {
+    className: PropTypes.string,
     value: (props, propName, componentName) => {
       const currentProp = props[propName]
       if (Number.isNaN(+currentProp)) {
@@ -18,19 +19,22 @@ class TCurrency extends PureComponent {
       }
       return undefined
     },
+    currency: PropTypes.oneOf(Object.values(CURRENCY_CODES)),
+    currencySignType: PropTypes.oneOf(Object.values(CURRENCY_SIGN_TYPE)),
     short: PropTypes.bool,
+    sign: PropTypes.node,
     showSign: PropTypes.bool,
-    className: PropTypes.string,
     signClassName: PropTypes.string,
-    sign: PropTypes.string,
+    trimCount: PropTypes.number,
   }
 
   static defaultProps = {
     value: 0,
+    currency: (localStorage.defaultCurrency || process.env.DEFAULT_CURRENCY || CURRENCY_CODES.rub).toUpperCase(),
+    currencySignType: CURRENCY_SIGN_TYPE.symbol,
     short: false,
     showSign: true,
-    className: '',
-    sign: 'p',
+    trimCount: 2,
   }
 
   constructor(props) {
@@ -41,11 +45,10 @@ class TCurrency extends PureComponent {
 
   getFormatValue() {
     const {
+      value,
       short,
+      trimCount,
     } = this.props
-
-    const trimCount = CURRENCIES_ACCURACY.ru
-    const value = this.props.value || 0
 
     if (short) {
       const valueObj = toMoney(value)
@@ -62,19 +65,27 @@ class TCurrency extends PureComponent {
   render() {
     const {
       className,
-      signClassName,
+      currency,
+      currencySignType,
       showSign,
-      sign,
+      signClassName,
     } = this.props
+
+    const sign = this.props.sign || (CURRENCIES[currency] || {})[currencySignType]
+
     return (
       <span className={classNames(style.root, className)}>
         {this.getFormatValue()}
         {showSign &&
-          <span className={classNames(style.rub, signClassName)}>{sign}</span>
+          <span className={classNames(style.rub, signClassName)}>
+            {sign}
+          </span>
         }
       </span>
     )
   }
 }
+
+export { CURRENCY_CODES, CURRENCY_SIGN_TYPE }
 
 export default TCurrency
