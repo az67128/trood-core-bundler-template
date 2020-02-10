@@ -30,7 +30,11 @@ class TCurrency extends PureComponent {
 
   static defaultProps = {
     value: 0,
-    currency: (localStorage.defaultCurrency || process.env.DEFAULT_CURRENCY || CURRENCY_CODES.rub).toUpperCase(),
+    currency: (
+      (typeof window === 'object' ? window.localStorage.defaultCurrency : undefined) ||
+      process.env.DEFAULT_CURRENCY ||
+      CURRENCY_CODES.rub
+    ).toUpperCase(),
     currencySignType: CURRENCY_SIGN_TYPE.symbol,
     short: false,
     showSign: true,
