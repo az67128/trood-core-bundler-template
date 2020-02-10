@@ -2,9 +2,11 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
+import { intlObject } from '$trood/localeService'
+
 import style from './index.css'
 
-import { CURRENCIES, CURRENCY_CODES, CURRENCY_SIGN_TYPE } from './constants'
+import { CURRENCIES, CURRENCY_CODES, CURRENCY_SIGN_TYPE, localization } from './constants'
 
 import { toNumber, toMoney } from '$trood/helpers/format'
 
@@ -30,11 +32,6 @@ class TCurrency extends PureComponent {
 
   static defaultProps = {
     value: 0,
-    currency: (
-      (typeof window === 'object' ? window.localStorage.getItem('defaultCurrency') : undefined) ||
-      process.env.DEFAULT_CURRENCY ||
-      CURRENCY_CODES.rub
-    ).toUpperCase(),
     currencySignType: CURRENCY_SIGN_TYPE.symbol,
     short: false,
     showSign: true,
@@ -69,13 +66,23 @@ class TCurrency extends PureComponent {
   render() {
     const {
       className,
-      currency,
+      currency = (
+        (typeof window === 'object' ? window.localStorage.getItem('defaultCurrency') : undefined) ||
+        process.env.DEFAULT_CURRENCY ||
+        CURRENCY_CODES.rub
+      ).toUpperCase(),
       currencySignType,
       showSign,
       signClassName,
     } = this.props
 
-    const sign = this.props.sign || (CURRENCIES[currency] || {})[currencySignType]
+    let sign = this.props.sign
+    if ((CURRENCIES[currency] || {})[currencySignType]) {
+      sign = CURRENCIES[currency][currencySignType]
+    }
+    if ((localization[currencySignType] || {})[currency]) {
+      sign = intlObject.intl.formatMessage(localization[currencySignType][currency])
+    }
 
     return (
       <span className={classNames(style.root, className)}>

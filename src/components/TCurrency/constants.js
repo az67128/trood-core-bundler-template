@@ -172,7 +172,7 @@ export const CURRENCY_SIGN_TYPE = {
 }
 
 // React Intl want static defaultMessage
-const localization = {
+export const localization = {
   code: defineMessages({
     AED: { id: 'components.TCurrency.code.AED', defaultMessage: 'AED' },
     AFN: { id: 'components.TCurrency.code.AFN', defaultMessage: 'AFN' },
