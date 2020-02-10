@@ -31,7 +31,7 @@ class TCurrency extends PureComponent {
   static defaultProps = {
     value: 0,
     currency: (
-      (typeof window === 'object' ? window.localStorage.defaultCurrency : undefined) ||
+      (typeof window === 'object' ? window.localStorage.getItem('defaultCurrency') : undefined) ||
       process.env.DEFAULT_CURRENCY ||
       CURRENCY_CODES.rub
     ).toUpperCase(),
