@@ -54,10 +54,19 @@ webpack({
       maxChunks: 1,
     }),
   ],
-}, (err, stats) => {
-  if (err || stats.hasErrors()) {
-    // Handle errors here
-    console.log(err, stats)
+}, (errors, stats) => {
+  if (errors || stats.hasErrors()) {
+    if (errors) {
+      console.error(errors.stack || errors, '\n\n')
+    }
+
+    if (stats.hasErrors()) {
+      console.error(stats.toString({
+        all: false,
+        errors: true,
+        colors: true,
+      }), '\n\n')
+    }
+    process.exit(1)
   }
-  // Done processing
 })
