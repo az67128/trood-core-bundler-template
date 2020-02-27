@@ -102,19 +102,19 @@ class TTable extends PureComponent {
     this.getRowKey = this.getRowKey.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.checking &&
-      (this.props.body !== nextProps.body || this.props.selectedItems !== nextProps.selectedItems)
+  componentDidUpdate(prevProps) {
+    if (this.props.checking &&
+      (this.props.body !== prevProps.body || this.props.selectedItems !== prevProps.selectedItems)
     ) {
       this.setState({
-        check: nextProps.body.map((item, index) => {
+        check: this.props.body.map((item, index) => {
           if (isDefAndNotNull(item.replaceCheck)) {
             return item.replaceCheck
           }
-          if (nextProps.selectedItems) {
-            return nextProps.selectedItems.includes(this.getRowKey(item, index, nextProps.body))
+          if (this.props.selectedItems) {
+            return this.props.selectedItems.includes(this.getRowKey(item, index, this.props.body))
           }
-          const equalIndex = equal(item, this.props.body)
+          const equalIndex = equal(item, prevProps.body)
           if (equalIndex > -1) return this.state.check[equalIndex]
           return false
         }),

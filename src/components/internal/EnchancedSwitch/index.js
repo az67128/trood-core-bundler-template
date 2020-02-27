@@ -91,9 +91,9 @@ class EnchancedSwitch extends PureComponent {
     this.validate(this.props.switched)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.switched !== this.props.switched) {
-      this.validate(nextProps.switched)
+  componentDidUpdate(prevProps) {
+    if (prevProps.switched !== this.props.switched) {
+      this.validate(this.props.switched)
     }
   }
 
