@@ -44,6 +44,7 @@ class LocaleSwitch extends PureComponent {
   render() {
     const {
       className,
+      localeRef,
 
       onChange,
       localeServiceForm,
@@ -63,6 +64,7 @@ class LocaleSwitch extends PureComponent {
     return (
       <TClickOutside onClick={() => this.toggleOpen(false)}>
         <div {...{
+          ref: localeRef,
           className: classNames(style.root, open && style.open, className),
         }} >
           <div {...{
@@ -116,4 +118,8 @@ const mapDispatchToProps = (dispatch) => ({
   localeServiceFormActions: bindActionCreators(forms.actions.localeServiceForm, dispatch),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleSwitch)
+const ConnectedLocaleSwitch = connect(mapStateToProps, mapDispatchToProps)(LocaleSwitch)
+
+export default React.forwardRef((props, ref) => (
+  <ConnectedLocaleSwitch {...{ ...props, localeRef: ref }} />
+))

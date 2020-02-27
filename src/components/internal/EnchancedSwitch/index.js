@@ -144,14 +144,13 @@ class EnchancedSwitch extends PureComponent {
         tabIndex: 0,
         className: classNames(style.root, className, disabled && style.disabled),
         'data-cy': label,
-        onClick: !disabled && ((e) => {
-          if (stopPropagation) {
-            e.stopPropagation()
-          }
-          onChange(!switched)
-        }),
-        onBlur: !disabled && (() => this.setState({ wasBlured: true })),
-        onFocus: !disabled && (() => this.setState({ wasBlured: false })),
+        onClick: !disabled ?
+          e => {
+            if (stopPropagation) e.stopPropagation()
+            onChange(!switched)
+          } : undefined,
+        onBlur: !disabled ? () => this.setState({ wasBlured: true }) : undefined,
+        onFocus: !disabled ? () => this.setState({ wasBlured: false }) : undefined,
       }} >
         <input {...{
           type,
