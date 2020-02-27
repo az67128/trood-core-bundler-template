@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { PureComponent } from 'react'
 import { findDOMNode } from 'react-dom'
 
-import { bind, unbind } from '$trood/helpers/events'
+import { bind, unbind, getComposedPath } from '$trood/helpers/events'
 
 const clickEvents = ['click', 'touchend']
 
@@ -39,7 +39,7 @@ class TClickOutside extends PureComponent {
   }
 
   handleOutsideClick(e) {
-    const path = e.path || e.composedPath()
+    const path = getComposedPath(e)
     if (!path.includes(findDOMNode(this))) {
       this.props.onClick()
     }
