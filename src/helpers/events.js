@@ -13,7 +13,7 @@ export const getComposedPath = (event) => {
   let { target } = event
   const path = []
   while (target.parentNode !== null) {
-    this.path.push(target)
+    path.push(target)
     target = target.parentNode
   }
   return path
