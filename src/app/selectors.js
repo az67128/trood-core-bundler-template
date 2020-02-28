@@ -2,7 +2,7 @@ import cssVars from '$trood/styles/variables.css'
 
 
 const onlyNumber = (value = '') => {
-  return value.toString().replace(/\D/g, '')
+  return value.toString().replace(/[^\d\.]+/g, '')
 }
 
 const troodDesktop = onlyNumber(cssVars.troodDesktop)

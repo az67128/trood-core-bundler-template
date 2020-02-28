@@ -1,6 +1,8 @@
 import React from 'react'
 import memoizeOne from 'memoize-one'
 
+import { AppContext } from '$trood/app'
+
 import style from './index.css'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 
@@ -12,6 +14,7 @@ import {
   GRID_COMPONENT_TYPE,
   GRID_MARGIN,
   TROOD_PAGE_PADDING,
+  getMobileMargin,
 } from '../../constants'
 
 import {
@@ -219,23 +222,35 @@ const PageGridLayout = (props) => {
           }
         }
         return (
-          <div {...{
-            'data-cy': comp.type,
-            key: currentId,
-            className: style.gridCell,
-            style: {
-              // We add 1, because css grid columns starts from 1
-              gridColumn: `${currentColumnIndex + 1} / span ${currentSpan}`,
-              marginLeft,
-              marginRight,
-              marginTop,
-              marginBottom,
-            },
-          }}>
-            <ErrorBoundary errorClassName={basePageLayout.block}>
-              {compToRender}
-            </ErrorBoundary>
-          </div>
+          <AppContext.Consumer key={currentId}>
+            {({ media = {} }) => {
+              if (media.portable) {
+                marginLeft = getMobileMargin(marginLeft)
+                marginRight = getMobileMargin(marginRight)
+                marginTop = getMobileMargin(marginTop)
+                marginBottom = getMobileMargin(marginBottom)
+              }
+              return (
+                <div {...{
+                  'data-cy': comp.type,
+                  key: currentId,
+                  className: style.gridCell,
+                  style: {
+                    // We add 1, because css grid columns starts from 1
+                    gridColumn: `${currentColumnIndex + 1} / span ${currentSpan}`,
+                    marginLeft,
+                    marginRight,
+                    marginTop,
+                    marginBottom,
+                  },
+                }}>
+                  <ErrorBoundary errorClassName={basePageLayout.block}>
+                    {compToRender}
+                  </ErrorBoundary>
+                </div>
+              )
+            }}
+          </AppContext.Consumer>
         )
       })}
       {
