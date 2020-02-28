@@ -1,7 +1,7 @@
 import React from 'react'
 import memoizeOne from 'memoize-one'
 
-import { AppContext } from '$trood/app'
+import { AppContext } from '$trood/app/constants'
 
 import style from './index.css'
 import basePageLayout from '$trood/styles/basePageLayout.css'
