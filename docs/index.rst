@@ -9,6 +9,7 @@ Trood core - Front-End docs
    :glob:
 
    trood-core/index
+   Components <http://docs.dev.trood.ru/troodsdk/front/components/>
 
 
 Indices and tables
