@@ -201,35 +201,29 @@ const PageGridLayout = (props) => {
             }} />
           )
         }
-
-        // Define margings for current grid unit
-        // We can have page edges(extra padding) or components without marging
-        let marginLeft
-        let marginRight
-        let marginTop
-        let marginBottom
-        if (comp.withMargin && !comp.components) {
-          marginTop = GRID_MARGIN
-          marginRight = GRID_MARGIN
-          if (comp.withMarginBottom) {
-            marginBottom = GRID_MARGIN
-          }
-          if (currentColumnIndex === 0 && isFirstColumn) {
-            marginLeft = TROOD_PAGE_PADDING
-          }
-          if (prevColumn === 0 && isLastColumn) {
-            marginRight = TROOD_PAGE_PADDING
-          }
-        }
         return (
           <AppContext.Consumer key={currentId}>
             {({ media = {} }) => {
-              if (media.portable) {
-                marginLeft = getMobileMargin(marginLeft)
-                marginRight = getMobileMargin(marginRight)
-                marginTop = getMobileMargin(marginTop)
-                marginBottom = getMobileMargin(marginBottom)
+              // Define margings for current grid unit
+              // We can have page edges(extra padding) or components without marging
+              let marginLeft
+              let marginRight
+              let marginTop
+              let marginBottom
+              if (comp.withMargin && !comp.components) {
+                marginTop = media.portable ? getMobileMargin(GRID_MARGIN) : GRID_MARGIN
+                marginRight = media.portable ? getMobileMargin(GRID_MARGIN) : GRID_MARGIN
+                if (comp.withMarginBottom) {
+                  marginBottom = media.portable ? getMobileMargin(GRID_MARGIN) : GRID_MARGIN
+                }
+                if (currentColumnIndex === 0 && isFirstColumn) {
+                  marginLeft = media.portable ? getMobileMargin(TROOD_PAGE_PADDING) : TROOD_PAGE_PADDING
+                }
+                if (prevColumn === 0 && isLastColumn) {
+                  marginRight = media.portable ? getMobileMargin(TROOD_PAGE_PADDING) : TROOD_PAGE_PADDING
+                }
               }
+
               return (
                 <div {...{
                   'data-cy': comp.type,
