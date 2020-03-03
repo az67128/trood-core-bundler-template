@@ -12,10 +12,12 @@ const getLoadableTemplate = (libraryName, componentName) => {
   const compName = `'${libraryName}/${componentName}'`
   const compPath = `'./${libraryName}/${componentName}'`
   if (!isTest) {
-    return `${compName}: Loadable({
-      loader: () => import(${compPath}),
-      loading: LoadingIndicator,
-    })`
+    return `${compName}: loadable(
+      () => import(${compPath}),
+      {
+        fallback: (<LoadingIndicator />),
+      },
+    )`
   }
   return `${compName}: require(${compPath}).default`
 }
@@ -26,10 +28,12 @@ const getServicesTemplate = (libraryName, componentName, services) => {
 
 const getModelTemplate = (libraryName, modelName, modelConfig, currentComponents, currentConstants) => {
   const componentTemplates = currentComponents.map(comp => `
-    '${comp}': Loadable({
-      loader: () => import('./${libraryName}/${modelName}/components/${comp}'),
-      loading: LoadingIndicator,
-    })
+    '${comp}': loadable(
+      () => import('./${libraryName}/${modelName}/components/${comp}'),
+      {
+        fallback: LoadingIndicator,
+      },
+    )
   `).join(',\n')
   return `'${libraryName}/${modelName}': {
     module: require('./${libraryName}/${modelName}').default,

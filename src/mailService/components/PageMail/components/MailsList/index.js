@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
-import Loadable from 'react-loadable'
+import loadable from '@loadable/component'
 import debounce from 'lodash/debounce'
 
 import style from './index.css'
@@ -16,14 +16,13 @@ import { intlObject } from '$trood/localeService'
 import Mail from '../Mail'
 
 
-const EntityPageLink = Loadable({
-  loader: () => import('$trood/pageManager'),
-  loading: LoadingIndicator,
-  render(loaded, props) {
-    const Component = loaded.EntityPageLink
-    return <Component {...props} />
+const EntityPageLink = loadable(
+  () => import('$trood/pageManager')
+    .then(pageManager => pageManager.EntityPageLink),
+  {
+    fallback: (<LoadingIndicator />),
   },
-})
+)
 
 const SET_READ_TIMEOUT = 3000
 

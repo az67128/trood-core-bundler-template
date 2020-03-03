@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import Loadable from 'react-loadable'
+import loadable from '@loadable/component'
 import classNames from 'classnames'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
@@ -25,10 +25,12 @@ import LoadingIndicator from '$trood/components/LoadingIndicator'
 import style from './index.css'
 
 
-const WysiwygEditor = Loadable({
-  loader: () => import('$trood/components/WysiwygEditor'),
-  loading: LoadingIndicator,
-})
+const WysiwygEditor = loadable(
+  () => import('$trood/components/WysiwygEditor'),
+  {
+    fallback: LoadingIndicator,
+  },
+)
 
 const noopFunc = () => {}
 
