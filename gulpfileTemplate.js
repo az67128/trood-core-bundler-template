@@ -31,7 +31,7 @@ const getModelTemplate = (libraryName, modelName, modelConfig, currentComponents
     '${comp}': loadable(
       () => import('./${libraryName}/${modelName}/components/${comp}'),
       {
-        fallback: LoadingIndicator,
+        fallback: (<LoadingIndicator />),
       },
     )
   `).join(',\n')

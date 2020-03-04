@@ -28,7 +28,7 @@ import style from './index.css'
 const WysiwygEditor = loadable(
   () => import('$trood/components/WysiwygEditor'),
   {
-    fallback: LoadingIndicator,
+    fallback: (<LoadingIndicator />),
   },
 )
 
@@ -274,11 +274,12 @@ class Input extends PureComponent {
         return false
       }
     }
-    if (decimalTypes.includes(type) && (
-      formattedValue.replace('-', '') === '' && newFormattedValue.replace('-', '') === '0'
-    )) {
-      newFormattedValue = `${newFormattedValue},`
-      this.selectionStart += 1
+    if (decimalTypes.includes(type)) {
+      const formatedValueAbs = formattedValue.replace('-', '')
+      const newFormatedValueAbs = +(newFormattedValue.replace(/\D/g, '') || 0)
+      if (formatedValueAbs === '0') {
+        newFormattedValue = newFormattedValue.replace(/\d+/, newFormatedValueAbs)
+      }
     }
     this.setState({
       caretPosition: this.selectionStart,
@@ -486,7 +487,8 @@ class Input extends PureComponent {
         style.rootWrapper,
         className,
       )}>
-        {label &&
+        {
+          label &&
           <TLabel {...{
             className: classNames(labelClassName, style.label),
             required,
@@ -501,24 +503,24 @@ class Input extends PureComponent {
             [style.active]: active,
           },
         )}>
-          {(type === INPUT_TYPES.phone || type === INPUT_TYPES.phoneWithExt) &&
-            <span className={style.phoneCode}>
-              +
-            </span>
+          {
+            (type === INPUT_TYPES.phone || type === INPUT_TYPES.phoneWithExt) &&
+            <span className={style.phoneCode}>+</span>
           }
-          {type === INPUT_TYPES.search &&
+          {
+            type === INPUT_TYPES.search &&
             <TIcon {...{
               className: style.phoneCode,
               type: ICONS_TYPES.search,
               size: 20,
             }} />
           }
-          {type === INPUT_TYPES.url &&
-            <span className={style.phoneCode}>
-              http://
-            </span>
+          {
+            type === INPUT_TYPES.url &&
+            <span className={style.phoneCode}>http://</span>
           }
-          {type === INPUT_TYPES.multi &&
+          {
+            type === INPUT_TYPES.multi &&
             <textarea {...{
               ref: (node) => {
                 this.shadow = node
@@ -538,7 +540,8 @@ class Input extends PureComponent {
           {getInputComp()}
           {children}
         </div>
-        {showTextErrors &&
+        {
+          showTextErrors &&
           <div className={style.errors}>
             {currentErrors.map((error, index) => (
               <div className={style.errorText} key={index}>
