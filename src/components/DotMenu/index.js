@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import TIcon, { ICONS_TYPES, LABEL_POSITION_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
+import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import { POPUP_POSITION } from '$trood/components/PopupBox'
 import PopupBox from '$trood/components/PopupBox'
 

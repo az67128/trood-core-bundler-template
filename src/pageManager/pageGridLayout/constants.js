@@ -2,11 +2,11 @@ import cssVars from '$trood/styles/variables.css'
 
 
 const onlyNumber = (value = '') => {
-  return value.toString().replace(/[^\d\.]+/g, '')
+  return value.toString().replace(/[^\d\u002e]+/g, '')
 }
 
 const replaceNumber = (value = '', replacement) => {
-  return value.toString().replace(/[\d\.]+/g, replacement)
+  return value.toString().replace(/[\d\u002e]+/g, replacement)
 }
 
 export const GRID_COLUMNS = 3

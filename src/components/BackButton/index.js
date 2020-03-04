@@ -7,7 +7,7 @@ import { defineMessages } from 'react-intl'
 import style from './index.css'
 
 import { intlObject } from '$trood/localeService'
-import TIcon, { ICONS_TYPES, ROTATE_TYPES, LABEL_POSITION_TYPES } from '$trood/components/TIcon'
+import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
 
 import { BACK_BUTTON_TYPES } from './constants'
 
@@ -80,5 +80,7 @@ class BackButton extends PureComponent {
     )
   }
 }
+
+export { BACK_BUTTON_TYPES }
 
 export default BackButton
