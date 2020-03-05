@@ -135,7 +135,7 @@ class ModalWrapper extends PureComponent {
                   <React.Fragment>
                     <TIcon {...{
                       type: ICONS_TYPES.edit,
-                      className: style.toolBarIcon,
+                      className: classNames(style.toolBarIcon, style.edit),
                       onClick: async () => {
                         await editAction()
                         if (closeOnEdit) closeAction()
@@ -153,7 +153,7 @@ class ModalWrapper extends PureComponent {
                   <React.Fragment>
                     <TIcon {...{
                       type: ICONS_TYPES.trashBin,
-                      className: style.toolBarIcon,
+                      className: classNames(style.toolBarIcon, style.delete),
                       onClick: async () => {
                         await deleteAction()
                         closeAction()

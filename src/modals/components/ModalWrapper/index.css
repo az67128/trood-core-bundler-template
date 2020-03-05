@@ -201,5 +201,35 @@
 
   .root .title {
     padding: 0 12px;
+    margin-top: 12px;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+  }
+
+  .root .delete {
+    order: 1;
+    margin-right: auto;
+  }
+
+  .root .delete ~ .delimeter {
+    display: none;
+  }
+
+  .root .edit {
+    order: 2;
+  }
+
+  .root .edit ~ .delimeter {
+    order: 3;
+  }
+
+  .root .close {
+    order: 4;
+  }
+
+  .root .titleText {
+    order: 5;
+    width: 100%;
+    margin-top: 10px;
   }
 }
