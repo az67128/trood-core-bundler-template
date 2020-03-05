@@ -36,9 +36,11 @@ class TSelect extends PureComponent {
     className: PropTypes.string,
     /** class name for styling label */
     labelClassName: PropTypes.string,
-    /** all type you can see in constants */
+    /** type is one of SELECT_TYPES.dropdown, SELECT_TYPES.filterDropdown, SELECT_TYPES.tile,
+     * SELECT_TYPES.list, SELECT_TYPES.rating */
     type: PropTypes.oneOf(Object.values(SELECT_TYPES)),
-    /** all list type you can see in interior component List, in constants */
+    /** list type is one of LIST_TYPES.text, LIST_TYPES.filterDropdown, LIST_TYPES.radio, LIST_TYPES.checkbox,
+     * LIST_TYPES.toggle, LIST_TYPES.tile */
     listType: PropTypes.oneOf(Object.values(LIST_TYPES)),
     /** multi select or not */
     multi: PropTypes.bool,
@@ -110,7 +112,8 @@ class TSelect extends PureComponent {
 
     /** class name for item. For select with type "List" */
     itemClassName: PropTypes.string,
-    /** orientation "vertical" or "horizontal". For select with type "List" or "Tile" */
+    /** orientation is one of LIST_ORIENTATION.vertical, LIST_ORIENTATION.horizontal.
+     * For select with type "List" or "Tile" */
     orientation: PropTypes.oneOf(Object.values(LIST_ORIENTATION)),
     /** children node. For select with type "List" */
     emptyItemsLabel: PropTypes.node,
@@ -123,7 +126,7 @@ class TSelect extends PureComponent {
     maxRating: PropTypes.number,
     /** icon settings. For select with type "Rating" */
     icon: PropTypes.shape({
-      /** all types you can see in component TIcon, in components */
+      /** all types you can see in component TIcon */
       type: PropTypes.oneOf(Object.values(ICONS_TYPES)),
       /** width and height size icon in px */
       size: PropTypes.number,

@@ -18,7 +18,8 @@ class PopupBox extends PureComponent {
     className: PropTypes.string,
     /** set control */
     control: PropTypes.node,
-    /** all position you can see in constants */
+    /** position is one of POPUP_POSITION.topLeft, POPUP_POSITION.topRight, POPUP_POSITION.topMiddle,
+     * POPUP_POSITION.bottomLeft, POPUP_POSITION.bottomRight, POPUP_POSITION.bottomMiddle */
     position: PropTypes.oneOf(Object.values(POPUP_POSITION)),
     /** show arrow or not */
     arrow: PropTypes.bool,

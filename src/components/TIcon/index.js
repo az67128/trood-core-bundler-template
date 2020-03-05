@@ -22,7 +22,7 @@ class TIcon extends PureComponent {
     className: PropTypes.string,
     /** width and height size icon in px */
     size: PropTypes.number,
-    /** all types you can see in components */
+    /** all types you can see below in example */
     type: PropTypes.oneOf(Object.keys(ICONS_TYPES)),
     /** default type for rotate you can see in constants, or send number in deg */
     rotate: PropTypes.oneOfType([
@@ -31,7 +31,8 @@ class TIcon extends PureComponent {
     ]),
     /** label icon */
     label: PropTypes.node,
-    /** all label position you can see in constants */
+    /** label position is one of LABEL_POSITION_TYPES.up, LABEL_POSITION_TYPES.right, LABEL_POSITION_TYPES.down,
+     * LABEL_POSITION_TYPES.left, LABEL_POSITION_TYPES.tooltip */
     labelPosition: PropTypes.oneOf(Object.keys(LABEL_POSITION_TYPES)),
     /** color icon */
     color: PropTypes.string,
@@ -70,7 +71,12 @@ class TIcon extends PureComponent {
 
     return (
       <div {...{
-        className: classNames(style.root, className),
+        className: classNames(
+          style.root,
+          className,
+          labelPosition === LABEL_POSITION_TYPES.down || labelPosition === LABEL_POSITION_TYPES.up ?
+            style['root-column'] : '',
+        ),
         'data-cy': type,
         onClick: disabled ? undefined : onClick,
         style: {

@@ -20,7 +20,8 @@ class DotMenu extends PureComponent {
 
     /** class name for styling, for PopupBox */
     className: PropTypes.string,
-    /** position value, for PopupBox. Their values you can see in the constants for PopupBox */
+    /** position is one of POPUP_POSITION.topLeft, POPUP_POSITION.topRight, POPUP_POSITION.topMiddle,
+     * POPUP_POSITION.bottomLeft, POPUP_POSITION.bottomRight, POPUP_POSITION.bottomMiddle */
     position: PropTypes.oneOf(Object.values(POPUP_POSITION)),
     /** show arrow or not, for PopupBox */
     arrow: PropTypes.bool,

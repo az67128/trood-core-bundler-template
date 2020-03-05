@@ -22,5 +22,6 @@ const itemsMenu = [
   vertical: true,
   items: itemsMenu,
   selectedItem: 2,
+  onChange: (...args) => console.log('onChange', ...args),
 }} />
 ```

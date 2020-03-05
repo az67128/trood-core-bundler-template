@@ -26,9 +26,9 @@ class TCurrency extends PureComponent {
       }
       return undefined
     },
-    /** all currency code you can see in constants */
+    /** currency code CURRENCY_CODES[<ISO 4217 alpha-3 currency code>.toLowerCase]*/
     currency: PropTypes.oneOf(Object.values(CURRENCY_CODES)),
-    /** all currency sign type you can see in constants */
+    /** currency sign type is one of CURRENCY_SIGN_TYPE.code, CURRENCY_SIGN_TYPE.name, CURRENCY_SIGN_TYPE.symbol */
     currencySignType: PropTypes.oneOf(Object.values(CURRENCY_SIGN_TYPE)),
     /** short or not */
     short: PropTypes.bool,
