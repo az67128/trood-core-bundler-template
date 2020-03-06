@@ -123,6 +123,6 @@ class TCurrency extends PureComponent {
   }
 }
 
-export { CURRENCY_CODES, CURRENCY_SIGN_TYPE }
+export { CURRENCIES, CURRENCY_CODES, CURRENCY_SIGN_TYPE }
 
 export default TCurrency
