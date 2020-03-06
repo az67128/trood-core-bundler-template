@@ -201,9 +201,10 @@
 
   .root .title {
     padding: 0 12px;
-    margin-top: 12px;
+    margin: 12px 0;
     flex-flow: row wrap;
     justify-content: flex-end;
+    height: auto;
   }
 
   .root .delete {
