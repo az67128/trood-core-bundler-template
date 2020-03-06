@@ -76,6 +76,7 @@
   src: url('/static/fonts/ArialRegular.eot');
   src:
     url('/static/fonts/ArialRegular.eot#iefix') format('embedded-opentype'),
+    url('/static/fonts/ArialRegular.woff2') format('woff2'),
     url('/static/fonts/ArialRegular.woff') format('woff'),
     url('/static/fonts/ArialRegular.ttf') format('truetype');
   font-style: normal;
