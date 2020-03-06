@@ -182,10 +182,7 @@ class ListView extends PureComponent {
               </div>
               {
                 expanded &&
-                <div className={classNames(
-                  style.tableListItemBody,
-                  checking && style.tableListItemBodyChecking,
-                )}>
+                <div className={style.tableListItemBody}>
                   {header.map((item, i) => (
                     <div {...{
                       key: i,
