@@ -66,24 +66,13 @@ class ListView extends PureComponent {
     return (
       <div className={classNames(style.tableList, className)}>
         <div className={style.tableListHeader}>
-          {(checking || listTitle) && (
-            <div className={style.tableListTitleContainer}>
-              {checking &&
-                <TCheckbox {...{
-                  className: style.listCheckbox,
-                  value: getCheckedCount() === check.length,
-                  onChange: checkAll,
-                  color: CHECK_COLORS.orange,
-                }} />
-              }
-              {checking && !listTitle && (
-                <span className={style.tableListTitle}>{intlObject.intl.formatMessage(messages.checkAll)}</span>
-              )}
-              {listTitle && <span className={style.tableListTitle}>{listTitle}</span>}
-            </div>
-          )}
-          {body.length > 0 && headerItemsSortable.length > 0 && (
-            <div className={style.listSortControls}>
+          {
+            listTitle &&
+            <span className={classNames(style.tableListTitle, style.listHeaderRow)}>{listTitle}</span>
+          }
+          {
+            body.length > 0 && headerItemsSortable.length > 0 &&
+            <div className={classNames(style.listSortControls, style.listHeaderRow)}>
               <span className={style.listSortControlsLabel}>
                 {intlObject.intl.formatMessage(messages.sortBy)}:
               </span>
@@ -95,7 +84,7 @@ class ListView extends PureComponent {
                 size: 16,
               }} />
               <TClickOutside onClick={() => this.toggleSortListExpand(false)}>
-                <div className={style.sortFields}>
+                <div className={style.sortListWrapper}>
                   <TIcon {...{
                     className: style.sortValueIcon,
                     type: ICONS_TYPES.arrow,
@@ -122,7 +111,25 @@ class ListView extends PureComponent {
                 </div>
               </TClickOutside>
             </div>
-          )}
+          }
+          {
+            (checking || listTitle) &&
+            <div className={classNames(style.tableListTitleContainer, style.listHeaderRow)}>
+              {
+                checking &&
+                <TCheckbox {...{
+                  className: style.listCheckbox,
+                  value: !!check.length && getCheckedCount() === check.length,
+                  onChange: checkAll,
+                  color: CHECK_COLORS.orange,
+                }} />
+              }
+              {
+                checking &&
+                <span className={style.tableListTitle}>{intlObject.intl.formatMessage(messages.checkAll)}</span>
+              }
+            </div>
+          }
         </div>
         {body.map((row, r) => {
           let currentMetaData
@@ -149,7 +156,8 @@ class ListView extends PureComponent {
                 onClick: () => this.toggleExpand(r),
               }}>
                 <div className={style.tableListItemTitle}>
-                  {checking && (
+                  {
+                    checking &&
                     <TCheckbox {...{
                       className: style.listCheckbox,
                       value: check[r],
@@ -157,7 +165,7 @@ class ListView extends PureComponent {
                       stopPropagation: true,
                       color: CHECK_COLORS.orange,
                     }} />
-                  )}
+                  }
                   <div className={classNames(style.tableListItemTitleText, expanded && style.expanded)}>
                     {isReactComponent(headerModel)
                       ? React.cloneElement(headerModel, {onClick: undefined})
@@ -172,7 +180,8 @@ class ListView extends PureComponent {
                   className: style.expandIcon,
                 }} />
               </div>
-              {expanded && (
+              {
+                expanded &&
                 <div className={classNames(
                   style.tableListItemBody,
                   checking && style.tableListItemBodyChecking,
@@ -189,7 +198,7 @@ class ListView extends PureComponent {
                     </div>
                   ))}
                 </div>
-              )}
+              }
             </div>
           )
         })}

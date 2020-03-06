@@ -32,10 +32,11 @@ const TableView = ({
   <table className={classNames(style.table, className)}>
     <thead>
       <tr className={headerClassName}>
-        {checking &&
+        {
+          checking &&
           <th className={style.checkCell}>
             <TCheckbox {...{
-              value: getCheckedCount() === check.length,
+              value: !!check.length && getCheckedCount() === check.length,
               onChange: checkAll,
               color: CHECK_COLORS.orange,
             }} />
@@ -54,7 +55,8 @@ const TableView = ({
                 },
               }}>
                 {item.title}
-                {item.sortable && sortingColumn === item.name &&
+                {
+                  item.sortable && sortingColumn === item.name &&
                   <TIcon {...{
                     type: ICONS_TYPES.arrow,
                     rotate: sortingOrder === -1 ? ROTATE_TYPES.up : ROTATE_TYPES.down,
@@ -84,7 +86,8 @@ const TableView = ({
               typeof rowClassName === 'function' ? rowClassName(row, r, body, currentMetaData) : rowClassName,
             ),
           }}>
-            {checking &&
+            {
+              checking &&
               <td className={style.checkCell} data-cy={`table_cell_${r}_checkbox`}>
                 <TCheckbox {...{
                   value: check[r],

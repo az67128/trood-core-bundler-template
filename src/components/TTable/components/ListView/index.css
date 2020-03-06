@@ -10,10 +10,13 @@
 
 .tableListHeader {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-flow: column nowrap;
+  align-items: flex-start;
   padding: 12px 15px;
+}
+
+.listHeaderRow:not(:last-child) {
+  margin-bottom: 10px;
 }
 
 .tableListTitleContainer {
@@ -111,9 +114,11 @@
 }
 
 .listSortControls {
+  position: relative;
   display: flex;
+  flex-flow: row nowrap;
   align-items: center;
-  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .listSortControlsLabel {
@@ -121,26 +126,24 @@
   line-height: 1.43;
   font-weight: 500;
   color: var(--trood-gray-extra-dark);
-  margin-right: 15px;
+  margin-right: 8px;
 }
 
 .listSortItem {
-  display: flex;
-  align-items: center;
   font-size: 12px;
-  font-weight: normal;
   color: var(--trood-blue);
   padding: 7px;
   cursor: pointer;
   width: 100%;
+  text-align: right;
 }
 
 .listSortItem:hover {
   background-color: var(--trood-gray-hover);
 }
 
-.sortFields {
-  position: relative;
+.sortListWrapper {
+  overflow: hidden;
 }
 
 .sortFieldsContainer {
@@ -151,7 +154,6 @@
   top: calc(100% + 5px);
   right: 0;
   z-index: 9;
-  width: 200px;
   background-color: white;
   border: 1px solid var(--trood-gray-border);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
@@ -163,9 +165,18 @@
 
 .sortOrderIcon {
   color: var(--trood-blue);
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .sortValueIcon {
+  font-size: 12px;
   color: var(--trood-blue);
+  overflow: hidden;
+}
+
+.sortValueIcon > div:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 0;
 }
