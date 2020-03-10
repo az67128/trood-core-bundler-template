@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
-import sanitizeHtml from 'sanitize-html'
+import loadable from '@loadable/component'
 import Linkify, { linkify } from 'react-linkify'
-import { Parser, ProcessNodeDefinitions } from 'html-to-react'
 
 import style from './index.css'
 
@@ -19,10 +18,13 @@ import { intlObject } from '$trood/localeService'
 import { FileListView } from '$trood/files'
 
 
-linkify.set({ fuzzyIP: true, fuzzyEmail: false })
+const sanitizeHtml = loadable.lib(() => import('sanitize-html'))
+const html2reactParser = loadable.lib(() => import('html-to-react')
+  .then(h2r => new h2r.Paser()))
+const processNodeDefinitions = loadable.lib(() => import('html-to-react')
+  .then(h2r => new h2r.ProcessNodeDefinitions()))
 
-const html2reactParser = new Parser()
-const processNodeDefinitions = new ProcessNodeDefinitions()
+linkify.set({ fuzzyIP: true, fuzzyEmail: false })
 
 const createFromMailAvailableName = checkName => `${checkName}IsCreateAvailable`
 const attachMailAvailableName = checkName => `${checkName}IsAttachMailAvailable`
