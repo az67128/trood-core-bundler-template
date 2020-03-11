@@ -72,6 +72,8 @@ class TSelect extends PureComponent {
     controlClassName: PropTypes.string,
     /** class name for value. For select with type "DropDown" */
     valueClassName: PropTypes.string,
+    /** Open options to up when true. For select with type "DropDown" */
+    openUp: PropTypes.bool,
     /** style for main select container. For select with type "DropDown" */
     mainSelectContainerStyle: PropTypes.object,
     /** items data. For select with type "DropDown" and "List" or "Tile" */
