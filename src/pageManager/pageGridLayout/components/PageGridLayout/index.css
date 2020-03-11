@@ -15,3 +15,13 @@
 .gridCell:empty {
   display: none;
 }
+
+@media (--trood-media-portable) {
+  .root {
+    margin-bottom: calc(var(--trood-grid-gap) / 2);
+  }
+
+  .secondaryMenu {
+    padding: 0 calc(var(--trood-page-padding) / 2);
+  }
+}
