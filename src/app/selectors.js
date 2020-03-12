@@ -30,12 +30,12 @@ export const isDesktop = () => {
 
 export const isTablet = () => {
   const width = getWindowWidth()
-  return width > troodPhone && width < troodTablet
+  return width >= troodPhone && width < troodTablet
 }
 
 export const isPhone = () => {
   const width = getWindowWidth()
-  return width <= troodPhone
+  return width < troodPhone
 }
 
 export const isPortable = () => {

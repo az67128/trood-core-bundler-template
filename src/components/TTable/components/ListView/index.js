@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
+import { messages as mainMessages } from '$trood/mainConstants'
 import { intlObject } from '$trood/localeService'
 
 import { isReactComponent } from '$trood/helpers/react'
@@ -91,7 +92,8 @@ class ListView extends PureComponent {
                       className: style.sortValueIcon,
                       type: ICONS_TYPES.arrow,
                       rotate: sortListExpanded ? ROTATE_TYPES.down : ROTATE_TYPES.up,
-                      label: headerItemsSortable.find(item => item.name === sortingColumn).title,
+                      label: (headerItemsSortable.find(item => item.name === sortingColumn) ||
+                        { title: intlObject.intl.formatMessage(mainMessages.notSet) }).title,
                       labelPosition: LABEL_POSITION_TYPES.left,
                       onClick: () => this.toggleSortListExpand(!sortListExpanded),
                       size: 16,

@@ -59,7 +59,7 @@
   --trood-header-height: 60px;
   --trood-border-radius: 2px;
 
-  --trood-phone: 800px;
+  --trood-phone: 1024px;
   --trood-tablet: 1280px;
   --trood-desktop: 1400px;
 }
@@ -67,8 +67,8 @@
 @custom-media --trood-media-desktop-large only screen and (width > 1400px);
 @custom-media --trood-media-desktop-small only screen and (width >= 1280px) and (width <= 1400px);
 @custom-media --trood-media-desktop only screen and (width >= 1280px);
-@custom-media --trood-media-tablet only screen and (width > 800px) and (width < 1280px);
-@custom-media --trood-media-phone only screen and (width <= 800px);
+@custom-media --trood-media-tablet only screen and (width >= 1024px) and (width < 1280px);
+@custom-media --trood-media-phone only screen and (width < 1024px);
 @custom-media --trood-media-portable only screen and (width < 1280px);
 
 :export {

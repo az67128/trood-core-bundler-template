@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import deepEqual from 'deep-equal'
 import debounce from 'lodash/debounce'
 
 import style from './index.css'
@@ -80,7 +81,8 @@ class App extends Component {
   }
 
   onResize() {
-    this.setState({ media: getWindowMediaFlags() })
+    const media = getWindowMediaFlags()
+    if (!deepEqual(this.state.media, media)) this.setState({ media })
   }
 
   openLinkedModal() {
