@@ -115,7 +115,7 @@ class ModalWrapper extends PureComponent {
         isOpen: show,
         onRequestClose: closeAndCancel,
         shouldCloseOnOverlayClick,
-        className: style[size],
+        className: classNames(style[size], style.modal),
         style: {
           overlay: {
             zIndex: 5000 + (order || 0),
@@ -166,13 +166,13 @@ class ModalWrapper extends PureComponent {
                     }
                   </React.Fragment>
                 }
-                {closeAction && closeButton}
                 {
                   !!buttons && size === MODAL_SIZES.full &&
                   <div className={style.fullButtons}>
                     {buttons(this.props)}
                   </div>
                 }
+                {closeAction && closeButton}
               </div>
             }
             <div className={style.children}>

@@ -74,7 +74,7 @@ const PageGridLayout = (props) => {
       components = [],
       pages,
       url,
-      columns,
+      columns = GRID_COLUMNS,
     },
     parentPath,
     nestLevel = 0,
@@ -88,122 +88,124 @@ const PageGridLayout = (props) => {
     ...other
   } = props
 
-  const basePageTitleArgs = props.basePageTitleArgs || getBasePageTitleArgs(props.page, entityPageModelName)
-  if (entityPageModelName && !modelId) return null
-  let prevColumn = 0
-  const currentGridColumns = columns || GRID_COLUMNS
-  const pageComponent = (
-    <div {...{
-      className: nestLevel > 0 ? style.nestedRoot : style.root,
-      style: {
-        grid: `auto-flow auto / repeat(${currentGridColumns}, 1fr)`,
-      },
-    }}>
-      {
-        !nestLevel && (!pages || !pages.length) &&
-        <PageManagerContext.Consumer>
-          {({ basePath }) => (
-            <div {...{
-              style: {
-                gridColumn: `1 / span ${currentGridColumns}`,
-              },
-              className: style.secondaryMenu,
-            }}>
-              {React.createElement(currentLayout.nestedPageMenuComponent, {
-                basePageTitleArgs,
-                menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
-                basePath,
-                authActions,
-                ...layoutProps,
-                history,
-              })}
-            </div>
-          )}
-        </PageManagerContext.Consumer>
-      }
-      {components.map((comp, index) => {
-        const currentSpan = comp.span || DEFAULT_SPAN
-        const currentId = comp.id || index
+  return (
+    <AppContext.Consumer>
+      {({ media = {} }) => {
 
-        const currentColumnIndex = prevColumn
-        prevColumn = (prevColumn + currentSpan) % currentGridColumns
-
-        let compToRender
-        if (comp.type === GRID_COMPONENT_TYPE) {
-          compToRender = (
-            <PageGridLayout {...{
-              basePageTitleArgs,
-              history,
-              page: {
-                components: comp.components,
-                url,
-                columns: comp.columns,
-              },
-              modelId,
-              parentPath,
-              nestLevel: nestLevel + 1,
-              isFirstColumn: currentColumnIndex === 0,
-              isLastColumn: prevColumn === 0,
-              entityPageModelName,
-              ...other,
-            }} />
-          )
-        } else {
-          const CurrentComponent = componentsManifest.components[comp.type]
-          let componentServices = {}
-          if (componentsManifest.services[comp.type]) {
-            // Here we get all services injected props for the component
-            // Iterate by component services and get general props object
-            componentServices = componentsManifest.services[comp.type].reduce((memo, serviceName) => ({
-              ...memo,
-              // Iterate by service prop names and get service props object
-              ...SERVICES_PROPS_NAMES[serviceName].reduce((propsMemo, propName) => ({
-                ...propsMemo,
-                [propName]: other[propName],
-              }), {}),
-            }), {})
-          }
-
-          const currentComponentProps = Object.keys(comp.models || {}).reduce((memo, key) => {
-            const currentEditorActionsName = getModelEditorActionsName(key)
-            const currentApiActionsName = getModelApiActionsName(key)
-            const currentActionsName = getModelActionsName(key)
-            const currentComponentsName = getModelComponentsName(key)
-            const currentConstantsName = getModelConstantsName(key)
-            const currentEntitiesName = getModelEntitiesName(key)
-            const currentChildEntitiesName = getChildEntityName(key)
-            return {
-              ...memo,
-              [key]: other[key],
-              [currentEditorActionsName]: other[currentEditorActionsName],
-              [currentActionsName]: other[currentActionsName],
-              [currentComponentsName]: other[currentComponentsName],
-              [currentConstantsName]: other[currentConstantsName],
-              [currentEntitiesName]: other[currentEntitiesName],
-              [currentApiActionsName]: other[currentApiActionsName],
-              [currentChildEntitiesName]: other[currentChildEntitiesName],
+        const basePageTitleArgs = props.basePageTitleArgs || getBasePageTitleArgs(props.page, entityPageModelName)
+        if (entityPageModelName && !modelId) return null
+        let prevColumn = 0
+        const currentGridColumns = media.portable ? 1 : columns
+        const pageComponent = (
+          <div {...{
+            className: nestLevel > 0 ? style.nestedRoot : style.root,
+            style: {
+              grid: `auto-flow auto / repeat(${currentGridColumns}, 1fr)`,
+            },
+          }}>
+            {
+              !nestLevel && (!pages || !pages.length) &&
+              <PageManagerContext.Consumer>
+                {({ basePath }) => (
+                  <div {...{
+                    style: {
+                      gridColumn: `1 / span ${currentGridColumns}`,
+                    },
+                    className: style.secondaryMenu,
+                  }}>
+                    {React.createElement(currentLayout.nestedPageMenuComponent, {
+                      basePageTitleArgs,
+                      menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
+                      basePath,
+                      authActions,
+                      ...layoutProps,
+                      history,
+                    })}
+                  </div>
+                )}
+              </PageManagerContext.Consumer>
             }
-          }, {
-            history,
-            model: other.model,
-            form: other[getFormPropName(comp.type)],
-            formActions: other[getFormActionsName(comp.type)],
-            modalsActions: other.modalsActions,
-            pageParams: other.match.params,
-            PageChildContainer: other.PageChildContainer,
-            ...componentServices,
-          })
+            {components.map((comp, index) => {
+              const currentSpan = comp.span || DEFAULT_SPAN
+              const currentId = comp.id || index
 
-          compToRender = (
-            <CurrentComponent {...{
-              ...comp.props,
-              ...currentComponentProps,
-            }} />
-          )
-        }
-        return (
-          <AppContext.Consumer key={currentId}>
-            {({ media = {} }) => {
+              const currentColumnIndex = prevColumn
+              prevColumn = (prevColumn + currentSpan) % currentGridColumns
+
+              let compToRender
+              if (comp.type === GRID_COMPONENT_TYPE) {
+                compToRender = (
+                  <PageGridLayout {...{
+                    basePageTitleArgs,
+                    history,
+                    page: {
+                      components: comp.components,
+                      url,
+                      columns: comp.columns,
+                    },
+                    modelId,
+                    parentPath,
+                    nestLevel: nestLevel + 1,
+                    isFirstColumn: currentColumnIndex === 0,
+                    isLastColumn: prevColumn === 0,
+                    entityPageModelName,
+                    ...other,
+                  }} />
+                )
+              } else {
+                const CurrentComponent = componentsManifest.components[comp.type]
+                let componentServices = {}
+                if (componentsManifest.services[comp.type]) {
+                  // Here we get all services injected props for the component
+                  // Iterate by component services and get general props object
+                  componentServices = componentsManifest.services[comp.type].reduce((memo, serviceName) => ({
+                    ...memo,
+                    // Iterate by service prop names and get service props object
+                    ...SERVICES_PROPS_NAMES[serviceName].reduce((propsMemo, propName) => ({
+                      ...propsMemo,
+                      [propName]: other[propName],
+                    }), {}),
+                  }), {})
+                }
+
+                const currentComponentProps = Object.keys(comp.models || {}).reduce((memo, key) => {
+                  const currentEditorActionsName = getModelEditorActionsName(key)
+                  const currentApiActionsName = getModelApiActionsName(key)
+                  const currentActionsName = getModelActionsName(key)
+                  const currentComponentsName = getModelComponentsName(key)
+                  const currentConstantsName = getModelConstantsName(key)
+                  const currentEntitiesName = getModelEntitiesName(key)
+                  const currentChildEntitiesName = getChildEntityName(key)
+                  return {
+                    ...memo,
+                    [key]: other[key],
+                    [currentEditorActionsName]: other[currentEditorActionsName],
+                    [currentActionsName]: other[currentActionsName],
+                    [currentComponentsName]: other[currentComponentsName],
+                    [currentConstantsName]: other[currentConstantsName],
+                    [currentEntitiesName]: other[currentEntitiesName],
+                    [currentApiActionsName]: other[currentApiActionsName],
+                    [currentChildEntitiesName]: other[currentChildEntitiesName],
+                  }
+                }, {
+                  history,
+                  model: other.model,
+                  form: other[getFormPropName(comp.type)],
+                  formActions: other[getFormActionsName(comp.type)],
+                  modalsActions: other.modalsActions,
+                  pageParams: other.match.params,
+                  PageChildContainer: other.PageChildContainer,
+                  ...componentServices,
+                })
+
+                compToRender = (
+                  <CurrentComponent {...{
+                    ...comp.props,
+                    ...currentComponentProps,
+                  }} />
+                )
+              }
+
               // Define margings for current grid unit
               // We can have page edges(extra padding) or components without marging
               let marginLeft
@@ -243,63 +245,63 @@ const PageGridLayout = (props) => {
                   </ErrorBoundary>
                 </div>
               )
-            }}
-          </AppContext.Consumer>
+            })}
+            {
+              pages && !!pages.length &&
+              <PageManagerContext.Consumer>
+                {({ match, basePath, registeredRoutesPaths }) => (
+                  <React.Fragment>
+                    <div {...{
+                      style: {
+                        gridColumn: `1 / span ${currentGridColumns}`,
+                      },
+                      className: style.secondaryMenu,
+                    }}>
+                      {React.createElement(currentLayout.nestedPageMenuComponent, {
+                        basePageTitleArgs,
+                        menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
+                        basePath,
+                        authActions,
+                        ...layoutProps,
+                        history,
+                      })}
+                    </div>
+
+                    <div style={{
+                      gridColumn: `1 / span ${currentGridColumns}`,
+                    }}>
+                      <RouteSchema {...{
+                        basePath,
+                        prevMatch: match,
+                        registeredRoutesPaths,
+                        renderers: getPagesRouteShemaRenderers(pages, {
+                          nestLevel: nestLevel + 1,
+                          entityPageModelName,
+                          parentPath: parentPath.concat(url),
+                          entityPageModelIdSelector: other.entityPageModelIdSelector,
+                        }),
+                      }} />
+                    </div>
+                  </React.Fragment>
+                )}
+              </PageManagerContext.Consumer>
+            }
+          </div>
         )
-      })}
-      {
-        pages && !!pages.length &&
-        <PageManagerContext.Consumer>
-          {({ match, basePath, registeredRoutesPaths }) => (
-            <React.Fragment>
-              <div {...{
-                style: {
-                  gridColumn: `1 / span ${currentGridColumns}`,
-                },
-                className: style.secondaryMenu,
-              }}>
-                {React.createElement(currentLayout.nestedPageMenuComponent, {
-                  basePageTitleArgs,
-                  menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
-                  basePath,
-                  authActions,
-                  ...layoutProps,
-                  history,
-                })}
-              </div>
 
-              <div style={{
-                gridColumn: `1 / span ${currentGridColumns}`,
-              }}>
-                <RouteSchema {...{
-                  basePath,
-                  prevMatch: match,
-                  registeredRoutesPaths,
-                  renderers: getPagesRouteShemaRenderers(pages, {
-                    nestLevel: nestLevel + 1,
-                    entityPageModelName,
-                    parentPath: parentPath.concat(url),
-                    entityPageModelIdSelector: other.entityPageModelIdSelector,
-                  }),
-                }} />
-              </div>
-            </React.Fragment>
-          )}
-        </PageManagerContext.Consumer>
-      }
-    </div>
+        if (nestLevel === 0 && entityPageModelName) {
+          const contextValue = memoizedGetEntityManagerContext(entityPageModelName, modelId)
+          return (
+            <EntityManagerContext.Provider value={contextValue}>
+              {pageComponent}
+            </EntityManagerContext.Provider>
+          )
+        }
+
+        return pageComponent
+      }}
+    </AppContext.Consumer>
   )
-
-  if (nestLevel === 0 && entityPageModelName) {
-    const contextValue = memoizedGetEntityManagerContext(entityPageModelName, modelId)
-    return (
-      <EntityManagerContext.Provider value={contextValue}>
-        {pageComponent}
-      </EntityManagerContext.Provider>
-    )
-  }
-
-  return pageComponent
 }
 
 export default PageGridLayout
