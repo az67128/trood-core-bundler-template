@@ -65,72 +65,69 @@ class ListView extends PureComponent {
 
     return (
       <div className={classNames(style.tableList, className)}>
-        <div className={style.tableListHeader}>
-          {
-            listTitle &&
-            <span className={classNames(style.tableListTitle, style.listHeaderRow)}>{listTitle}</span>
-          }
-          {
-            body.length > 0 && headerItemsSortable.length > 0 &&
-            <div className={classNames(style.listSortControls, style.listHeaderRow)}>
+        {
+          (listTitle || checking || headerItemsSortable.length > 0) &&
+          <div className={style.tableListHeader}>
+            {
+              listTitle &&
+              <span className={classNames(style.tableListTitle, style.listHeaderRow)}>{listTitle}</span>
+            }
+            {
+              headerItemsSortable.length > 0 &&
+              <div className={classNames(style.listSortControls, style.listHeaderRow)}>
               <span className={style.listSortControlsLabel}>
                 {intlObject.intl.formatMessage(messages.sortBy)}:
               </span>
-              <TIcon {...{
-                className: style.sortOrderIcon,
-                type: ICONS_TYPES.arrowWithTail,
-                rotate: sortingOrder === -1 ? ROTATE_TYPES.right : ROTATE_TYPES.left,
-                onClick: () => onSort(sortingColumn, sortingOrder === -1 ? 1: -1),
-                size: 16,
-              }} />
-              <TClickOutside onClick={() => this.toggleSortListExpand(false)}>
-                <div className={style.sortListWrapper}>
-                  <TIcon {...{
-                    className: style.sortValueIcon,
-                    type: ICONS_TYPES.arrow,
-                    rotate: sortListExpanded ? ROTATE_TYPES.down : ROTATE_TYPES.up,
-                    label: headerItemsSortable.find(item => item.name === sortingColumn).title,
-                    labelPosition: LABEL_POSITION_TYPES.left,
-                    onClick: () => this.toggleSortListExpand(!sortListExpanded),
-                    size: 16,
-                  }} />
-                  <div className={classNames(style.sortFieldsContainer, sortListExpanded && style.expanded)}>
-                    {headerItemsSortable.map((item, index) => (
-                      <span {...{
-                        key: index,
-                        onClick: () => {
-                          onSort(item.name, sortingOrder)
-                          this.toggleSortListExpand(false)
-                        },
-                        className: style.listSortItem,
-                      }}>
+                <TIcon {...{
+                  className: style.sortOrderIcon,
+                  type: ICONS_TYPES.arrowWithTail,
+                  rotate: sortingOrder === -1 ? ROTATE_TYPES.right : ROTATE_TYPES.left,
+                  onClick: () => onSort(sortingColumn, sortingOrder === -1 ? 1: -1),
+                  size: 16,
+                }} />
+                <TClickOutside onClick={() => this.toggleSortListExpand(false)}>
+                  <div className={style.sortListWrapper}>
+                    <TIcon {...{
+                      className: style.sortValueIcon,
+                      type: ICONS_TYPES.arrow,
+                      rotate: sortListExpanded ? ROTATE_TYPES.down : ROTATE_TYPES.up,
+                      label: headerItemsSortable.find(item => item.name === sortingColumn).title,
+                      labelPosition: LABEL_POSITION_TYPES.left,
+                      onClick: () => this.toggleSortListExpand(!sortListExpanded),
+                      size: 16,
+                    }} />
+                    <div className={classNames(style.sortFieldsContainer, sortListExpanded && style.expanded)}>
+                      {headerItemsSortable.map((item, index) => (
+                        <span {...{
+                          key: index,
+                          onClick: () => {
+                            onSort(item.name, sortingOrder)
+                            this.toggleSortListExpand(false)
+                          },
+                          className: style.listSortItem,
+                        }}>
                         {item.title}
                       </span>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </TClickOutside>
-            </div>
-          }
-          {
-            (checking || listTitle) &&
-            <div className={classNames(style.tableListTitleContainer, style.listHeaderRow)}>
-              {
-                checking &&
+                </TClickOutside>
+              </div>
+            }
+            {
+              checking &&
+              <div className={classNames(style.tableListTitleContainer, style.listHeaderRow)}>
                 <TCheckbox {...{
                   className: style.listCheckbox,
                   value: !!check.length && getCheckedCount() === check.length,
                   onChange: checkAll,
                   color: CHECK_COLORS.orange,
                 }} />
-              }
-              {
-                checking &&
                 <span className={style.tableListTitle}>{intlObject.intl.formatMessage(messages.checkAll)}</span>
-              }
-            </div>
-          }
-        </div>
+              </div>
+            }
+          </div>
+        }
         {body.map((row, r) => {
           let currentMetaData
           if (modelMetaData) {

@@ -34,7 +34,10 @@
 .tableListItemContainer {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--trood-gray-hover);
+}
+
+.tableListItemContainer:not(:first-child) {
+  border-top: 1px solid var(--trood-gray-border);
 }
 
 .tableListItemContainer.expanded {
@@ -56,6 +59,7 @@
 .tableListItemTitle {
   display: flex;
   align-items: center;
+  pointer-events: none;
 }
 
 .listCheckbox {
