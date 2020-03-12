@@ -22,7 +22,7 @@
 .tableListTitleContainer {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
 .tableListTitle {
@@ -91,7 +91,7 @@
 
 .tableList .listItemBodyRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
   width: 100%;
@@ -99,22 +99,17 @@
 
 .tableListItemLabel {
   font-size: 12px;
-  line-height: 1.43;
   font-weight: 600;
   color: var(--trood-gray-extra-dark);
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
 .tableListItemValue {
   font-size: 12px;
-  line-height: 1.43;
   font-weight: normal;
   color: var(--trood-gray-extra-dark);
   text-align: right;
-}
-
-.tableListItemValue > div {
-  justify-content: flex-end;
+  overflow: hidden;
 }
 
 .listSortControls {
@@ -127,7 +122,6 @@
 
 .listSortControlsLabel {
   font-size: 12px;
-  line-height: 1.43;
   font-weight: 500;
   color: var(--trood-gray-extra-dark);
   margin-right: 8px;
