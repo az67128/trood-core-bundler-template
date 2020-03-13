@@ -110,6 +110,11 @@
   color: var(--trood-gray-extra-dark);
   text-align: right;
   overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tableListItemValue a {
+  color: var(--trood-blue);
 }
 
 .listSortControls {
