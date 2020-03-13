@@ -64,3 +64,29 @@
 .error {
   color: var(--trood-red);
 }
+
+@media (--trood-media-portable) {
+  .root {
+    background: var(--trood-white);
+  }
+
+  .form {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 20px;
+    margin: 0;
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 28px;
+    flex-flow: column-reverse nowrap;
+    margin-bottom: 50px;
+  }
+
+  .titleText {
+    margin-top: 50px;
+    text-align: center;
+  }
+}
