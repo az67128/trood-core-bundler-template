@@ -168,9 +168,7 @@ class App extends Component {
       values: {
         sbj: activeAccount,
         obj,
-        ctx: {
-          data: ctx,
-        },
+        ctx,
       },
     })
 
