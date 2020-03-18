@@ -285,7 +285,10 @@ class Input extends PureComponent {
       caretPosition: this.selectionStart,
       formattedValue: newFormattedValue,
     }, () => {
-      const newValue = getValue(newFormattedValue)
+      let newValue
+      if (newFormattedValue !== '') {
+        newValue = getValue(newFormattedValue)
+      }
       this.throttledOnChangeEvent(newValue)
       if (value !== newValue) {
         this.debouncedOnSearchEvent(newValue)
