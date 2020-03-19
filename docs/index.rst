@@ -10,4 +10,4 @@ Trood core - Front-End docs
 
    tutorial/index
    api/index
-   Components <http://docs.dev.trood.ru/troodsdk/front/components/>
+   styleguidist/index

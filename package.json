@@ -120,7 +120,8 @@
     "stylelint": "stylelint \"src/**/*.css\"",
     "po": "rip po2json \"./translate/po/*.po\" -c \"id\" -m \"./translate/messages/**/*.json\" -o \"./public/locale-data\"",
     "styleguide": "styleguidist server",
-    "styleguide:build": "styleguidist build"
+    "styleguide2rst": "node scripts/styleguidist2rst.js",
+    "styleguide:build": "styleguidist build && npm run styleguide2rst"
   },
   "pre-commit": [
     "lint"

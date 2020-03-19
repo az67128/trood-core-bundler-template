@@ -3,6 +3,7 @@ const paths = require('./config/paths');
 
 
 module.exports = {
+  mountPointId: 'doc-content',
   styleguideComponents: {
     Wrapper: path.join(__dirname, 'src/styleguideRoot.js')
   },
@@ -74,5 +75,30 @@ module.exports = {
       ],
     },
   },
-  components: 'src/components/*/index.js'
+  components: 'src/components/*/index.js',
+  getComponentPathLine(componentPath) {
+    const name = path.normalize(path.dirname(componentPath)).replace(/src[\\\/]components[\\\/]/, '')
+    return `import ${name} from '$trood/components/${name}'`
+  },
+  styles: {
+    StyleGuide: {
+      root: {
+        position: 'relative',
+        height: '100vh',
+        overflow: 'hidden',
+      },
+      logo: {
+        display: 'none',
+      },
+      sidebar: {
+        position: 'absolute',
+      },
+      content: {
+        height: '100vh',
+        overflow: 'auto',
+        margin: '0 0 0 auto',
+        maxWidth: 1920,
+      },
+    },
+  },
 }
