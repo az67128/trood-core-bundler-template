@@ -19,7 +19,7 @@ class LocalizeServiceProvider extends PureComponent {
 
   componentDidMount() {
     document.getElementById('doc-content')
-      .setAttribute('style','margin: 0; padding: 0; max-width: none')
+      .setAttribute('style','margin: 0; padding: 0;')
   }
 
   render() {

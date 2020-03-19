@@ -1,11 +1,11 @@
-===========
-Components
-===========
+==================================================================
+${ComponentName}
+==================================================================
 
 .. raw:: html
 
     <script>
-        window.location.hash = '/AsyncEntitiesList'
+        window.location.hash = '!/${ComponentName}'
     </script>
     <style id="loader-style">
       #loader {
