@@ -3,6 +3,7 @@ const paths = require('./config/paths');
 
 
 module.exports = {
+  mountPointId: 'doc-content',
   showSidebar: false,
   styleguideComponents: {
     Wrapper: path.join(__dirname, 'src/styleguideRoot.js')

@@ -17,6 +17,11 @@ class LocalizeServiceProvider extends PureComponent {
     }
   }
 
+  componentDidMount() {
+    document.getElementById('doc-content')
+      .setAttribute('style','padding: 0;')
+  }
+
   render() {
     const { children } = this.props
     return (
