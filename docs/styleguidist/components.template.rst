@@ -2,6 +2,8 @@
 ${ComponentName}
 ==================================================================
 
+.. _link: #!/${ComponentName}
+
 .. raw:: html
 
     <script>
