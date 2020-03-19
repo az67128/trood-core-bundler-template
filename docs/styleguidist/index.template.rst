@@ -4,6 +4,9 @@ Components
 
 .. raw:: html
 
+    <script>
+        window.location.hash = '/AsyncEntitiesList'
+    </script>
     <style id="loader-style">
       #loader {
         top: 0;
