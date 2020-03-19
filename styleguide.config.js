@@ -81,4 +81,21 @@ module.exports = {
     const name = path.normalize(path.dirname(componentPath)).replace(/src[\\\/]components[\\\/]/, '')
     return `import ${name} from '$trood/components/${name}'`
   },
+  styles: {
+    StyleGuide: {
+      root: {
+        background: '#fcfcfc',
+      },
+    },
+    SectionHeading: {
+      toolbar: {
+        display: 'none',
+      },
+    },
+    Playground: {
+      toolbar: {
+        display: 'none',
+      },
+    },
+  },
 }
