@@ -97,30 +97,55 @@ Your can set them in the standard OS way or create /.env file (example in /etc/.
     * - Env name
       - Description
     * - REACT_APP_DEFAULT_API_HOST
-      - Absolute or relative path to data of CUSTODIAN service
+      - Absolute or relative path to
+
+        data of CUSTODIAN service
     * - REACT_APP_AUTH_API_HOST
-      - Absolute or relative path to AUTHORIZATION service
+      - Absolute or relative path to
+
+        AUTHORIZATION service
     * - REACT_APP_FILE_API_HOST
-      - Absolute or relative path to FILE service
+      - Absolute or relative path to
+
+        FILE service
     * - REACT_APP_SEARCH_API_HOST
-      - Absolute or relative path to SEARCH service
+      - Absolute or relative path to
+
+        SEARCH service
     * - REACT_APP_MAIL_API_HOST
-      - Absolute or relative path to MAIL service
+      - Absolute or relative path to
+
+        MAIL service
     * - REACT_APP_JOURNAL_API_HOST
-      - Absolute or relative path to JOURNAL service
+      - Absolute or relative path to
+
+        JOURNAL service
     * - REACT_APP_TROOD_AGENTS_API_HOST
-      - Absolute or relative path to AGENTS service
+      - Absolute or relative path to
+
+        AGENTS service
     * - REACT_APP_REPORTING_API_HOST
-      - Absolute or relative path to REPORTING service
+      - Absolute or relative path to
+
+        REPORTING service
     * - REACT_APP_REPORTING_PREPARED_ENDPOINT
-      - REPORTING service endpoint to prepared reports
+      - REPORTING service endpoint to
+
+        prepared reports
     * - REACT_APP_REPORTING_CONFIG_ENDPOINT
-      - REPORTING service endpoint to configuring reports
+      - REPORTING service endpoint to
+
+        configuring reports
     * - TROOD_CORE_VERSION
       - Viresion of frontendTroodCore
-        (branch, tag or commit of trood-core-bundler-template)
+
+        (branch, tag or commit of
+
+        trood-core-bundler-template)
     * - PORT
-      - Localhost port for npm start command
+      - Localhost port for
+
+        npm start command
 
 **************************************************
 6. Automatic configuration BO from Custodian meta
@@ -151,17 +176,27 @@ After script work end:
     * - /src/businessObjects/<BOLibName>/<BOName>/
       - folder for business object <BOName>
     * - \*\*/<BOName>/editComponent.js
-      - standard React component for edit <BOName>
+      - standard React component for
+
+        edit <BOName>
     * - \*\*/<BOName>/editComponent.css
-      - styles for \*\*/<BOName>/editComponent.js
+      - styles for
+
+        \*\*/<BOName>/editComponent.js
     * - \*\*/<BOName>/form.js
-      - form config for <BOName> (more `redux-restify forms docs`_)
+      - form config for <BOName>
+
+        (more `redux-restify forms docs`_)
     * - \*\*/<BOName>/model.js
-      - model config for <BOName> (more `redux-restify api docs`_)
+      - model config for <BOName>
+
+        (more `redux-restify api docs`_)
     * - \*\*/<BOName>/index.js
       - entry point for <BOName>
     * - /src/config.js
-      - added library <BOLibName> config to businessObjects section
+      - added library <BOLibName>
+
+        config to businessObjects section
 
 ***************************
 7. Manual configuration BO
