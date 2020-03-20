@@ -59,9 +59,28 @@ Your can configure access to system pages
 
     **ctx** rules is specify in FRONTEND domain. ctx contains:
 
-        * ctx.media.mobile: <bool> - screen width < 1024
-        * ctx.media.tablet: <bool> - screen width >= 1024 && < 1280
-        * ctx.media.portable: <bool> - screen width < 1280
-        * ctx.media.desktopSmall: <bool> - screen width >= 1280 && <= 1400
-        * ctx.media.desktopLarge: <bool> - screen width > 1400
-        * ctx.media.desktop: <bool> - screen width >= 1280
+        .. attribute:: ctx.media
+
+            .. attribute:: mobile
+
+                 <bool> - screen width < 1024
+
+            .. attribute:: tablet
+
+                 <bool> - screen width < 1024
+
+            .. attribute:: portable
+
+                 <bool> - screen width < 1280
+
+            .. attribute:: desktopSmall
+
+                 <bool> - screen width >= 1280 && <= 1400
+
+            .. attribute:: desktopLarge
+
+                 <bool> - screen width > 1400
+
+            .. attribute:: desktop
+
+                 <bool> - screen width >= 1280
