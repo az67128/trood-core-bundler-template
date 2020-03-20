@@ -2,7 +2,7 @@
 ABAC Access rights configuration
 =================================
 
-_`Custodian ABAC documentation`: /troodcore/custodian/abac.html
+.. _`Custodian ABAC documentation`: /troodcore/custodian/abac.html
 
 *****************************
 Business object access rules
