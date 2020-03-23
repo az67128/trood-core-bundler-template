@@ -1,6 +1,18 @@
-===============================
+================
+Page components
+================
+
+**************************
+Page component redux form
+**************************
+
+*********************
+Page component props
+*********************
+
+*******************************
 Page components library config
-===============================
+*******************************
 
 The page components library config file is ``ssrc/componentLibraries/<PageCompLibName>/config.js``
 
@@ -8,6 +20,16 @@ The page components library config file is ``ssrc/componentLibraries/<PageCompLi
 
     Page components library name
 
-*************************
-components configuration
-*************************
+.. attribute:: components
+
+    .. attribute:: title
+
+        Component name
+
+    .. attribute:: services
+
+        services
+
+    .. attribute:: models
+
+        models

@@ -5,3 +5,7 @@ View component
 *********************
 View component props
 *********************
+
+***********************
+View component actions
+***********************

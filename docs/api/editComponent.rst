@@ -5,3 +5,7 @@ Edit component
 *********************
 Edit component props
 *********************
+
+***********************
+Edit component actions
+***********************
