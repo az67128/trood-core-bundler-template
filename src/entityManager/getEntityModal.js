@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import memoizeOne from 'memoize-one'
+import TInput, { INPUT_TYPES } from "$trood/components/TInput";
+import classNames from 'classnames'
 
 import {
   api,
@@ -222,6 +224,37 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
   const memoizedGetEntityManagerContext = memoizeOne(getEntityManagerContext)
 
   class EntityComponentWrapper extends PureComponent {
+    getWrappedComponents = mask => {
+      const { model, modelFormActions, modelErrors } = this.props;
+        const getFormChangeInputProps = (name, mask = [], className) => {
+            return {
+                label: name,
+                disabled: mask.includes(name),
+                className: classNames(modalsStyle.control, className),
+                type: INPUT_TYPES.multi,
+                      value: model[name],
+                onChange: value => modelFormActions.changeField(name, value),
+                onInvalid: errs => modelFormActions.setFieldError(name, errs),
+                onValid: () => modelFormActions.resetFieldError(name),
+                errors: modelErrors[name],
+                validate: {
+                    required: true,
+                    checkOnBlur: true,
+                },
+            };
+        };
+        return {
+            TInput: props => (
+                <TInput
+                    {...{
+                      
+                        ...getFormChangeInputProps(props.name, mask, props.className),
+                        ...props,
+                    }}
+                />
+            ),
+        };
+    };
     render() {
       const {
         className,
@@ -234,15 +267,35 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       } = this.props
       const contextValue = memoizedGetEntityManagerContext(entityId, parents, prevForm, nextParents)
       return (
-        <div {...{
-          className,
-          'data-cy': dataCyName,
-        }} >
-          <EntityManagerContext.Provider value={contextValue}>
-            <EntityComponent {...this.props} />
-          </EntityManagerContext.Provider>
-          {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
-        </div>
+        <AuthManagerContext.Consumer>
+          {({ checkCustodianCreateRule, checkCustodianUpdateRule, checkCustodianGetRule }) => {
+            const maskChecker =
+              entityComponentName === ENTITY_COMPONENT_VIEW
+                ? checkCustodianGetRule
+                : model.id
+                ? checkCustodianUpdateRule
+                : checkCustodianCreateRule;
+            const entities = this.props[modelName + "Entities"];
+            const { mask } = maskChecker({
+              ...(model.id && { obj: entities.getById(model.id) }),
+              ctx: model,
+              resource: entities.modelConfig.endpoint,
+            });
+            return (
+              <div
+                {...{
+                  className,
+                  "data-cy": dataCyName,
+                }}
+              >
+                <EntityManagerContext.Provider value={contextValue}>
+                  <EntityComponent {...{ ...this.props, mask, ModalComponents: this.getWrappedComponents(mask) }} />
+                </EntityManagerContext.Provider>
+                {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
+              </div>
+            );
+          }}
+        </AuthManagerContext.Consumer>
       )
     }
   }
