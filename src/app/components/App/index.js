@@ -65,6 +65,12 @@ class App extends Component {
     this.onResize = debounce(this.onResize.bind(this), 300)
     this.restoreAuthData = this.restoreAuthData.bind(this)
     this.openLinkedModal = this.openLinkedModal.bind(this)
+
+    this.checkRule = this.checkRule.bind(this)
+    this.checkCustodianGetRule = this.checkCustodianGetRule.bind(this)
+    this.checkCustodianCreateRule = this.checkCustodianCreateRule.bind(this)
+    this.checkCustodianUpdateRule = this.checkCustodianUpdateRule.bind(this)
+    this.checkCustodianDeleteRule = this.checkCustodianDeleteRule.bind(this)
   }
 
   componentDidMount() {
@@ -129,6 +135,46 @@ class App extends Component {
     }
   }
 
+  checkRule(args) {
+    const {
+      domain = 'custodian',
+      resource,
+      action,
+      obj,
+      ctx,
+    } = args
+
+    const { permissions, activeAccount } = this.props
+
+    return ruleChecker({
+      rules: permissions,
+      domain,
+      resource: snakeToCamel(resource),
+      action,
+      values: {
+        sbj: activeAccount,
+        obj,
+        ctx,
+      },
+    })
+  }
+
+  checkCustodianGetRule(args) {
+    return this.checkRule({ ...args, action: 'dataGet' })
+  }
+
+  checkCustodianCreateRule (args) {
+    return this.checkRule({ ...args, action: 'dataPost' })
+  }
+
+  checkCustodianUpdateRule (args) {
+    return this.checkRule({ ...args, action: 'dataPatch' })
+  }
+
+  checkCustodianDeleteRule (args) {
+    return this.checkRule({ ...args, action: 'dataDelete' })
+  }
+
   render() {
     const {
       isAuthenticated,
@@ -154,42 +200,16 @@ class App extends Component {
     const registeredRoutesPaths = memoizedGetAllPaths(renderers)
     const pageManagerContextValue = memoizedGetPageManagerContext(registeredRoutesPaths)
 
-    const checkRule = ({
-      domain = 'custodian',
-      resource,
-      action,
-      obj,
-      ctx,
-    }) => ruleChecker({
-      rules: permissions,
-      domain,
-      resource: snakeToCamel(resource),
-      action,
-      values: {
-        sbj: activeAccount,
-        obj,
-        ctx,
-      },
-    })
-
-    const checkCustodianGetRule = (props) => checkRule({ ...props, action: 'dataGet' })
-
-    const checkCustodianCreateRule = (props) => checkRule({ ...props, action: 'dataPost' })
-
-    const checkCustodianUpdateRule = (props) => checkRule({ ...props, action: 'dataPatch' })
-
-    const checkCustodianDeleteRule = (props) => checkRule({ ...props, action: 'dataDelete' })
-
     return (
       <AppContext.Provider value={ this.state }>
         <AuthManagerContext.Provider value={{
           ...authData,
           getProfile,
-          checkRule,
-          checkCustodianGetRule,
-          checkCustodianCreateRule,
-          checkCustodianUpdateRule,
-          checkCustodianDeleteRule,
+          checkRule: this.checkRule,
+          checkCustodianGetRule: this.checkCustodianGetRule,
+          checkCustodianCreateRule: this.checkCustodianCreateRule,
+          checkCustodianUpdateRule: this.checkCustodianUpdateRule,
+          checkCustodianDeleteRule: this.checkCustodianDeleteRule,
         }}>
           <PageManagerContext.Provider value={pageManagerContextValue}>
             <MailServiceContext.Provider value={this.mailServiceContext}>

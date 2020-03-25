@@ -67,7 +67,7 @@ export const API_TYPES = {
       model: fieldValue,
     }),
     getGenericFormField: (fieldValue) => ({
-      _object: camelToLowerSnake(fieldValue._object || 'unedfined'),
+      _object: camelToLowerSnake(fieldValue._object || 'undefined'),
       id: fieldValue.id,
     }),
   },

@@ -76,9 +76,9 @@ class ListView extends PureComponent {
             {
               headerItemsSortable.length > 0 &&
               <div className={classNames(style.listSortControls, style.listHeaderRow)}>
-              <span className={style.listSortControlsLabel}>
-                {intlObject.intl.formatMessage(messages.sortBy)}:
-              </span>
+                <span className={style.listSortControlsLabel}>
+                  {intlObject.intl.formatMessage(messages.sortBy)}:
+                </span>
                 <TIcon {...{
                   className: style.sortOrderIcon,
                   type: ICONS_TYPES.arrowWithTail,
@@ -108,8 +108,8 @@ class ListView extends PureComponent {
                           },
                           className: style.listSortItem,
                         }}>
-                        {item.title}
-                      </span>
+                          {item.title}
+                        </span>
                       ))}
                     </div>
                   </div>

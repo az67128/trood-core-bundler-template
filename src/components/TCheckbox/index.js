@@ -87,7 +87,7 @@ class TCheckbox extends PureComponent {
     } = this.props
 
     const checkboxComp = (
-      <div{...{
+      <div {...{
         className: classNames(
           style.root,
           !iconType ? style.boxRoot : style.iconRoot,
@@ -97,8 +97,7 @@ class TCheckbox extends PureComponent {
           disabled && style.disabled,
         ),
         'data-cy':  value ? 'checkbox_checked' : 'checkbox_unchecked',
-      }}
-        >
+      }}>
         <TIcon {...{
           type: iconType || ICONS_TYPES.confirm,
           size: 16,

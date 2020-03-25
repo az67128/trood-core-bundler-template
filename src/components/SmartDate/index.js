@@ -68,10 +68,10 @@ class SmartDate extends PureComponent {
       return SMART_DATE_FORMATS_FUNCTIONS[format](dateToDisplay)
     }
 
-    return(
-    <div className={classNames(style.root, className)}>
-      {hasDate ? getValueFormatted() : defaultEmptyMessage}
-    </div>
+    return (
+      <div className={classNames(style.root, className)}>
+        {hasDate ? getValueFormatted() : defaultEmptyMessage}
+      </div>
     )
   }
 }
