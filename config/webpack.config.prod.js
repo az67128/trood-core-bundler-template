@@ -351,6 +351,13 @@ module.exports = {
       // Ignores URLs starting from /__ (useful for Firebase):
       // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
       navigateFallbackWhitelist: [/^(?!\/__).*/],
+      // Precache img and fonts
+      staticFileGlobs: [
+        'public/static/img/**.*',
+        'public/static/fonts/**.*',
+      ],
+      stripPrefix: 'public',
+      mergeStaticsConfig: true,
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }),
