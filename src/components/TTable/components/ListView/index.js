@@ -166,10 +166,7 @@ class ListView extends PureComponent {
                     }} />
                   }
                   <div className={classNames(style.tableListItemTitleText, expanded && style.expanded)}>
-                    {isReactComponent(headerModel)
-                      ? React.cloneElement(headerModel, {onClick: undefined})
-                      : headerModel
-                    }
+                    {headerModel}
                   </div>
                 </div>
                 <TIcon {...{
