@@ -4,8 +4,6 @@ import classNames from 'classnames'
 import { messages as mainMessages } from '$trood/mainConstants'
 import { intlObject } from '$trood/localeService'
 
-import { isReactComponent } from '$trood/helpers/react'
-
 import TClickOutside from '$trood/components/TClickOutside'
 import TCheckbox, { CHECK_COLORS } from '$trood/components/TCheckbox'
 import TIcon, { ICONS_TYPES, ROTATE_TYPES, LABEL_POSITION_TYPES } from '$trood/components/TIcon'

@@ -80,6 +80,7 @@
   }
 
   .title {
+    height: auto;
     font-size: 28px;
     flex-flow: column-reverse nowrap;
     margin-bottom: 50px;
