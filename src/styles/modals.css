@@ -88,3 +88,13 @@
   box-shadow: none !important;
   flex-grow: 1;
 }
+
+@media (--trood-media-portable) {
+  .root {
+    padding: 12px;
+  }
+
+  .buttonsContainer {
+    padding: 12px;
+  }
+}

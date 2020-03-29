@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import deepEqual from 'deep-equal'
+import debounce from 'lodash/debounce'
 
 import style from './index.css'
 
@@ -8,6 +10,7 @@ import modals from '$trood/modals'
 import auth, { AuthManagerContext, LOGIN_PAGE_URL, RECOVERY_PAGE_URL } from '$trood/auth'
 
 import { ruleChecker } from '$trood/helpers/abac'
+import { snakeToCamel } from '$trood/helpers/namingNotation'
 
 import { PageManagerContext } from '$trood/pageManager'
 
@@ -30,7 +33,9 @@ import {
   memoizedGetPageManagerContext,
   memoizedGetRenderers,
 } from './helpers'
-import { snakeToCamel } from '$trood/helpers/namingNotation'
+
+import { getWindowMediaFlags } from '../../selectors'
+import { AppContext } from '../../constants'
 
 
 class App extends Component {
@@ -53,13 +58,25 @@ class App extends Component {
       mailServiceActions,
     }
 
+    this.state = {
+      media: getWindowMediaFlags(),
+    }
+
+    this.onResize = debounce(this.onResize.bind(this), 300)
     this.restoreAuthData = this.restoreAuthData.bind(this)
     this.openLinkedModal = this.openLinkedModal.bind(this)
+
+    this.checkRule = this.checkRule.bind(this)
+    this.checkCustodianGetRule = this.checkCustodianGetRule.bind(this)
+    this.checkCustodianCreateRule = this.checkCustodianCreateRule.bind(this)
+    this.checkCustodianUpdateRule = this.checkCustodianUpdateRule.bind(this)
+    this.checkCustodianDeleteRule = this.checkCustodianDeleteRule.bind(this)
   }
 
   componentDidMount() {
     this.restoreAuthData(true)
     this.openLinkedModal()
+    window.addEventListener('resize', this.onResize)
   }
 
   componentDidUpdate(prevProps) {
@@ -67,6 +84,11 @@ class App extends Component {
     if (prevProps.location.query.modal !== this.props.location.query.modal) {
       this.openLinkedModal()
     }
+  }
+
+  onResize() {
+    const media = getWindowMediaFlags()
+    if (!deepEqual(this.state.media, media)) this.setState({ media })
   }
 
   openLinkedModal() {
@@ -113,6 +135,46 @@ class App extends Component {
     }
   }
 
+  checkRule(args) {
+    const {
+      domain = 'custodian',
+      resource,
+      action,
+      obj,
+      ctx,
+    } = args
+
+    const { permissions, activeAccount } = this.props
+
+    return ruleChecker({
+      rules: permissions,
+      domain,
+      resource: snakeToCamel(resource),
+      action,
+      values: {
+        sbj: activeAccount,
+        obj,
+        ctx,
+      },
+    })
+  }
+
+  checkCustodianGetRule(args) {
+    return this.checkRule({ ...args, action: 'dataGet' })
+  }
+
+  checkCustodianCreateRule (args) {
+    return this.checkRule({ ...args, action: 'dataPost' })
+  }
+
+  checkCustodianUpdateRule (args) {
+    return this.checkRule({ ...args, action: 'dataPatch' })
+  }
+
+  checkCustodianDeleteRule (args) {
+    return this.checkRule({ ...args, action: 'dataDelete' })
+  }
+
   render() {
     const {
       isAuthenticated,
@@ -134,105 +196,79 @@ class App extends Component {
       return <LoadingIndicator className={style.loading} />
     }
 
-    const renderers = memoizedGetRenderers(activeAccount, permissions)
+    const renderers = memoizedGetRenderers(activeAccount, { media: this.state.media }, permissions)
     const registeredRoutesPaths = memoizedGetAllPaths(renderers)
     const pageManagerContextValue = memoizedGetPageManagerContext(registeredRoutesPaths)
 
-    const checkRule = ({
-      domain = 'custodian',
-      resource,
-      action,
-      obj,
-      ctx,
-    }) => ruleChecker({
-      rules: permissions,
-      domain,
-      resource: snakeToCamel(resource),
-      action,
-      values: {
-        sbj: activeAccount,
-        obj,
-        ctx: {
-          data: ctx,
-        },
-      },
-    })
-
-    const checkCustodianGetRule = (props) => checkRule({ ...props, action: 'dataGet' })
-
-    const checkCustodianCreateRule = (props) => checkRule({ ...props, action: 'dataPost' })
-
-    const checkCustodianUpdateRule = (props) => checkRule({ ...props, action: 'dataPatch' })
-
-    const checkCustodianDeleteRule = (props) => checkRule({ ...props, action: 'dataDelete' })
-
     return (
-      <AuthManagerContext.Provider value={{
-        ...authData,
-        getProfile,
-        checkRule,
-        checkCustodianGetRule,
-        checkCustodianCreateRule,
-        checkCustodianUpdateRule,
-        checkCustodianDeleteRule,
-      }}>
-        <PageManagerContext.Provider value={pageManagerContextValue}>
-          <MailServiceContext.Provider value={this.mailServiceContext}>
-            <EntityManagerContext.Provider>
-              <div className={style.root}>
-                {React.createElement(modals.container)}
-                {
-                  !isAuthenticated &&
-                  <Switch>
-                    <Route {...{
-                      path: LOGIN_PAGE_URL,
-                      component: auth.container,
-                    }} />
-                    <Route {...{
-                      path: RECOVERY_PAGE_URL,
-                      component: auth.container,
-                    }} />
-                    <Route {...{
-                      render: ({ location }) => (
-                        <Redirect {...{
-                          to: {
-                            pathname: LOGIN_PAGE_URL,
-                            state: {
-                              nextUrl: `${location.pathname}${location.search}`,
+      <AppContext.Provider value={ this.state }>
+        <AuthManagerContext.Provider value={{
+          ...authData,
+          getProfile,
+          checkRule: this.checkRule,
+          checkCustodianGetRule: this.checkCustodianGetRule,
+          checkCustodianCreateRule: this.checkCustodianCreateRule,
+          checkCustodianUpdateRule: this.checkCustodianUpdateRule,
+          checkCustodianDeleteRule: this.checkCustodianDeleteRule,
+        }}>
+          <PageManagerContext.Provider value={pageManagerContextValue}>
+            <MailServiceContext.Provider value={this.mailServiceContext}>
+              <EntityManagerContext.Provider>
+                <div className={style.root}>
+                  {React.createElement(modals.container)}
+                  {
+                    !isAuthenticated &&
+                    <Switch>
+                      <Route {...{
+                        path: LOGIN_PAGE_URL,
+                        component: auth.container,
+                      }} />
+                      <Route {...{
+                        path: RECOVERY_PAGE_URL,
+                        component: auth.container,
+                      }} />
+                      <Route {...{
+                        render: ({ location }) => (
+                          <Redirect {...{
+                            to: {
+                              pathname: LOGIN_PAGE_URL,
+                              state: {
+                                nextUrl: `${location.pathname}${location.search}`,
+                              },
                             },
-                          },
-                        }} />
-                      ),
-                    }} />
-                  </Switch>
-                }
-                {
-                  isAuthenticated &&
-                  <React.Fragment>
-                    <Route {...{
-                      path: LOGIN_PAGE_URL,
-                      render: () => <Redirect to="/" />,
-                    }} />
-                    <Route {...{
-                      path: RECOVERY_PAGE_URL,
-                      render: () => <Redirect to="/" />,
-                    }} />
-                    {React.createElement(currentLayout.basePageComponent, {
-                      authActions,
-                      renderers,
-                      registeredRoutesPaths,
-                      match,
-                      menuRenderers,
-                      layoutProps,
-                      history,
-                    })}
-                  </React.Fragment>
-                }
-              </div>
-            </EntityManagerContext.Provider>
-          </MailServiceContext.Provider>
-        </PageManagerContext.Provider>
-      </AuthManagerContext.Provider>
+                          }} />
+                        ),
+                      }} />
+                    </Switch>
+                  }
+                  {
+                    isAuthenticated &&
+                    <React.Fragment>
+                      <Route {...{
+                        path: LOGIN_PAGE_URL,
+                        render: () => <Redirect to="/" />,
+                      }} />
+                      <Route {...{
+                        path: RECOVERY_PAGE_URL,
+                        render: () => <Redirect to="/" />,
+                      }} />
+                      {React.createElement(currentLayout.basePageComponent, {
+                        authActions,
+                        renderers,
+                        registeredRoutesPaths,
+                        match,
+                        menuRenderers,
+                        layoutProps,
+                        history,
+                      })}
+                    </React.Fragment>
+                  }
+                </div>
+              </EntityManagerContext.Provider>
+            </MailServiceContext.Provider>
+          </PageManagerContext.Provider>
+        </AuthManagerContext.Provider>
+      </AppContext.Provider>
     )
   }
 }

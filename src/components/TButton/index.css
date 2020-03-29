@@ -106,7 +106,6 @@
   width: 22px;
   height: 22px;
   padding: 3px;
-  color: var(--trood-blue);
 }
 
 .minusIcon {
@@ -130,12 +129,7 @@
 }
 
 .orange .addIcon {
-  color: var(--trood-orange);
   border: 2px dashed var(--trood-orange);
-}
-
-.gray .addIcon {
-  color: var(--trood-gray-extra-dark);
 }
 
 input.button {

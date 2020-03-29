@@ -9,33 +9,51 @@ import style from './index.css'
 import { CURRENCIES, CURRENCY_CODES, CURRENCY_SIGN_TYPE, localization } from './constants'
 
 import { toNumber, toMoney } from '$trood/helpers/format'
+import { isNotNull } from '$trood/helpers/def'
 
+/**
+ * Component for formatting currency.
+ */
 
 class TCurrency extends PureComponent {
   static propTypes = {
+    /** class name for styling component */
     className: PropTypes.string,
+    /** money value */
     value: (props, propName, componentName) => {
       const currentProp = props[propName]
-      if (Number.isNaN(+currentProp)) {
+      if (currentProp !== undefined && Number.isNaN(+currentProp)) {
         return new Error(`Invalid prop ${propName} supplied to ${componentName} Expected number or number-like string.`)
       }
       return undefined
     },
+    /** currency code CURRENCY_CODES[<ISO 4217 alpha-3 currency code>.toLowerCase]*/
     currency: PropTypes.oneOf(Object.values(CURRENCY_CODES)),
+    /** currency sign type is one of CURRENCY_SIGN_TYPE.code, CURRENCY_SIGN_TYPE.name, CURRENCY_SIGN_TYPE.symbol */
     currencySignType: PropTypes.oneOf(Object.values(CURRENCY_SIGN_TYPE)),
+    /** short or not */
     short: PropTypes.bool,
+    /** set sign */
     sign: PropTypes.node,
+    /** show sign or not */
     showSign: PropTypes.bool,
+    /** sign class name, for styling sign */
     signClassName: PropTypes.string,
+    /** number of decimal places */
     trimCount: PropTypes.number,
+    /** zero is value or not */
+    zeroIsValue: PropTypes.bool,
+    /** default empty message */
+    defaultEmptyMessage: PropTypes.string,
   }
 
   static defaultProps = {
-    value: 0,
     currencySignType: CURRENCY_SIGN_TYPE.symbol,
     short: false,
     showSign: true,
     trimCount: 2,
+    zeroIsValue: true,
+    defaultEmptyMessage: '-',
   }
 
   constructor(props) {
@@ -74,6 +92,9 @@ class TCurrency extends PureComponent {
       currencySignType,
       showSign,
       signClassName,
+      value,
+      defaultEmptyMessage,
+      zeroIsValue,
     } = this.props
 
     let sign = this.props.sign
@@ -82,6 +103,10 @@ class TCurrency extends PureComponent {
     }
     if ((localization[currencySignType] || {})[currency]) {
       sign = intlObject.intl.formatMessage(localization[currencySignType][currency])
+    }
+
+    if ((isNaN(value) || !isNotNull(value)) || (value === 0 && !zeroIsValue)) {
+      return defaultEmptyMessage
     }
 
     return (
@@ -97,6 +122,6 @@ class TCurrency extends PureComponent {
   }
 }
 
-export { CURRENCY_CODES, CURRENCY_SIGN_TYPE }
+export { CURRENCIES, CURRENCY_CODES, CURRENCY_SIGN_TYPE }
 
 export default TCurrency

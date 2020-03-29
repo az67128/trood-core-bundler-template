@@ -6,6 +6,8 @@
 # dependencies
 /node_modules
 
+/translate/messages
+
 # testing
 /coverage
 
@@ -32,4 +34,5 @@ gulpfile.js
 *.js.map
 
 # documentation
-docs/build
+/docs/components
+/build-docs

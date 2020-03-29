@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
 
 import HTML5Backend from 'react-dnd-html5-backend'
-import { DragDropContextProvider } from 'react-dnd'
+import { DndProvider  } from 'react-dnd'
 
 import app from '$trood/app'
 
@@ -15,7 +15,7 @@ const Root = ({
   history,
 }) => {
   return (
-    <DragDropContextProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend}>
       <Provider store={store}>
         <LocalizeServiceProvider>
           <ConnectedRouter history={history}>
@@ -23,7 +23,7 @@ const Root = ({
           </ConnectedRouter>
         </LocalizeServiceProvider>
       </Provider>
-    </DragDropContextProvider>
+    </DndProvider>
   )
 }
 

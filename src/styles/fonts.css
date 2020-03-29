@@ -5,8 +5,7 @@
   src: url('/static/fonts/Ubuntu-L.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-L.woff2') format('woff2'),
   url('/static/fonts/Ubuntu-L.woff') format('woff'),
-  url('/static/fonts/Ubuntu-L.ttf') format('truetype'),
-  url('/static/fonts/Ubuntu-L.svg#Ubuntu') format('svg');
+  url('/static/fonts/Ubuntu-L.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
@@ -17,8 +16,7 @@
   src: url('/static/fonts/Ubuntu-R.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-R.woff2') format('woff2'),
   url('/static/fonts/Ubuntu-R.woff') format('woff'),
-  url('/static/fonts/Ubuntu-R.ttf') format('truetype'),
-  url('/static/fonts/Ubuntu-R.svg#Ubuntu') format('svg');
+  url('/static/fonts/Ubuntu-R.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
@@ -29,8 +27,7 @@
   src: url('/static/fonts/Ubuntu-RI.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-RI.woff2') format('woff2'),
   url('/static/fonts/Ubuntu-RI.woff') format('woff'),
-  url('/static/fonts/Ubuntu-RI.ttf') format('truetype'),
-  url('/static/fonts/Ubuntu-RI.svg#Ubuntu') format('svg');
+  url('/static/fonts/Ubuntu-RI.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
@@ -41,8 +38,7 @@
   src: url('/static/fonts/Ubuntu-M.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-M.woff2') format('woff2'),
   url('/static/fonts/Ubuntu-M.woff') format('woff'),
-  url('/static/fonts/Ubuntu-M.ttf') format('truetype'),
-  url('/static/fonts/Ubuntu-M.svg#Ubuntu') format('svg');
+  url('/static/fonts/Ubuntu-M.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
@@ -53,8 +49,7 @@
   src: url('/static/fonts/Ubuntu-MI.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-MI.woff2') format('woff2'),
   url('/static/fonts/Ubuntu-MI.woff') format('woff'),
-  url('/static/fonts/Ubuntu-MI.ttf') format('truetype'),
-  url('/static/fonts/Ubuntu-MI.svg#Ubuntu') format('svg');
+  url('/static/fonts/Ubuntu-MI.ttf') format('truetype');
   font-weight: 500;
   font-style: italic;
 }
@@ -65,17 +60,17 @@
   src: url('/static/fonts/Ubuntu-B.eot#iefix') format('embedded-opentype'),
   url('/static/fonts/Ubuntu-B.woff2') format('woff2'),
   url('/static/fonts/Ubuntu-B.woff') format('woff'),
-  url('/static/fonts/Ubuntu-B.ttf') format('truetype'),
-  url('/static/fonts/Ubuntu-B.svg#Ubuntu') format('svg');
+  url('/static/fonts/Ubuntu-B.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Currency";
+  font-family: 'Currency';
   src: url('/static/fonts/ArialRegular.eot');
   src:
     url('/static/fonts/ArialRegular.eot#iefix') format('embedded-opentype'),
+    url('/static/fonts/ArialRegular.woff2') format('woff2'),
     url('/static/fonts/ArialRegular.woff') format('woff'),
     url('/static/fonts/ArialRegular.ttf') format('truetype');
   font-style: normal;

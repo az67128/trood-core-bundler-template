@@ -4,6 +4,6 @@
   align-items: center;
   width: 72px;
   height: 100%;
-  border-left: 1px solid var(--trood-gray-bg);
-  color: var(--trood-gray-extra-dark);
+  border-right: 1px solid var(--trood-gray-bg);
+  color: var(--trood-blue);
 }

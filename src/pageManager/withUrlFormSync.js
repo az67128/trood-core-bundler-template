@@ -46,7 +46,7 @@ export default (fieldsToSyncArg = {}) => (WrappedComponent) => {
       }, {})
 
       if (Object.keys(formChanges).length) {
-        formActions.changeSomeFields(formChanges)
+        formActions.changeSomeFields(formChanges, true)
       }
     }
 
