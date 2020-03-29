@@ -115,4 +115,3 @@ export const ModalComponents = {
   ModalDateTimePicker: ModalComponentWrapper('datetimepicker'),
   ModalSelect: ModalComponentWrapper('select'),
 }
-TInput.whyDidYouRender = true
