@@ -54,6 +54,7 @@ import { ruleChecker } from '$trood/helpers/abac'
 import { getRecursiveObjectReplacement } from '$trood/helpers/nestedObjects'
 import { snakeToCamel } from '$trood/helpers/namingNotation'
 
+import {ModalComponents, ModalContext} from './components/ModalComponents'
 
 const formatMessage = msg => {
   if (!msg || !msg.defaultMessage || !intlObject.intl) return msg
@@ -224,37 +225,6 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
   const memoizedGetEntityManagerContext = memoizeOne(getEntityManagerContext)
 
   class EntityComponentWrapper extends PureComponent {
-    getWrappedComponents = mask => {
-      const { model, modelFormActions, modelErrors } = this.props;
-        const getFormChangeInputProps = (name, mask = [], className) => {
-            return {
-                label: name,
-                disabled: mask.includes(name),
-                className: classNames(modalsStyle.control, className),
-                type: INPUT_TYPES.multi,
-                      value: model[name],
-                onChange: value => modelFormActions.changeField(name, value),
-                onInvalid: errs => modelFormActions.setFieldError(name, errs),
-                onValid: () => modelFormActions.resetFieldError(name),
-                errors: modelErrors[name],
-                validate: {
-                    required: true,
-                    checkOnBlur: true,
-                },
-            };
-        };
-        return {
-            TInput: props => (
-                <TInput
-                    {...{
-                      
-                        ...getFormChangeInputProps(props.name, mask, props.className),
-                        ...props,
-                    }}
-                />
-            ),
-        };
-    };
     render() {
       const {
         className,
@@ -267,35 +237,32 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       } = this.props
       const contextValue = memoizedGetEntityManagerContext(entityId, parents, prevForm, nextParents)
       return (
-        <AuthManagerContext.Consumer>
-          {({ checkCustodianCreateRule, checkCustodianUpdateRule, checkCustodianGetRule }) => {
-            const maskChecker =
-              entityComponentName === ENTITY_COMPONENT_VIEW
-                ? checkCustodianGetRule
-                : model.id
-                ? checkCustodianUpdateRule
-                : checkCustodianCreateRule;
-            const entities = this.props[modelName + "Entities"];
-            const { mask } = maskChecker({
-              ...(model.id && { obj: entities.getById(model.id) }),
-              ctx: model,
-              resource: entities.modelConfig.endpoint,
-            });
-            return (
-              <div
-                {...{
-                  className,
-                  "data-cy": dataCyName,
-                }}
-              >
-                <EntityManagerContext.Provider value={contextValue}>
-                  <EntityComponent {...{ ...this.props, mask, ModalComponents: this.getWrappedComponents(mask) }} />
-                </EntityManagerContext.Provider>
-                {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
-              </div>
-            );
-          }}
-        </AuthManagerContext.Consumer>
+        <div
+        {...{
+          className,
+          'data-cy': dataCyName,
+        }}
+      >
+        <EntityManagerContext.Provider value={contextValue}>
+          <AuthManagerContext.Consumer>
+            {({ checkCustodianCreateRule, checkCustodianUpdateRule }) => {
+              const maskChecker = model.id ? checkCustodianUpdateRule : checkCustodianCreateRule
+              const entities = this.props[modelName + 'Entities']
+              const { mask } = maskChecker({
+                ...(model.id && { obj: entities.getById(model.id) }),
+                ctx: model,
+                resource: entities.modelConfig.endpoint,
+              })
+              return (
+                <ModalContext.Provider value={{ mask, model, modelFormActions, modelErrors }}>
+                  <EntityComponent {...{ ...this.props, mask, ModalComponents }} />
+                </ModalContext.Provider>
+              )
+            }}
+          </AuthManagerContext.Consumer>
+        </EntityManagerContext.Provider>
+        {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
+      </div>
       )
     }
   }
