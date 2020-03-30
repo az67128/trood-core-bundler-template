@@ -69,7 +69,7 @@ module.exports = {
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[hash:8].js',
-    chunkFilename: 'static/js/[name].[hash:8].chunk.js',
+    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -118,6 +118,11 @@ module.exports = {
     ],
     splitChunks: {
       cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+        },
         styles: {
           name: 'styles',
           test: /\.css$/,
@@ -244,6 +249,7 @@ module.exports = {
                       ],
                       flexbox: 'no-2009',
                     }),
+                    require('postcss-calc'),
                   ],
                 },
               },
@@ -345,6 +351,13 @@ module.exports = {
       // Ignores URLs starting from /__ (useful for Firebase):
       // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
       navigateFallbackWhitelist: [/^(?!\/__).*/],
+      // Precache img and fonts
+      staticFileGlobs: [
+        'public/static/img/**.*',
+        'public/static/fonts/**.*',
+      ],
+      stripPrefix: 'public',
+      mergeStaticsConfig: true,
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }),

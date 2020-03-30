@@ -13,7 +13,7 @@ const configureStore = (history, initialState) => {
   ]
 
   const middlewares = applyMiddleware(...middlewareList)
-  const devTool = window.devToolsExtension
+  const devTool = window.__REDUX_DEVTOOLS_EXTENSION__
   const store = createStore(
     getRootReducer(history),
     initialState,

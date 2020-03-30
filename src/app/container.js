@@ -1,5 +1,7 @@
 import { bindActionCreators } from 'redux'
 import { withRouter } from 'react-router-dom'
+import memoizeOne from 'memoize-one'
+import deepEqual from 'deep-equal'
 
 import { api, forms, RESTIFY_CONFIG } from 'redux-restify'
 
@@ -63,6 +65,34 @@ const layoutServicesToGet = layoutConfig.services || []
 
 layoutServicesToGet.forEach(service => {
   layoutPropsKey.push(...SERVICES_PROPS_NAMES[service])
+})
+
+const getLayoutProps = (props, actions) => {
+  return {
+    ...props,
+    ...actions,
+  }
+}
+const memoizedGetLayoutProps = memoizeOne(getLayoutProps, deepEqual)
+
+const getLayoutEntitiesActions = (layoutModels, dispatch) => layoutModels
+  .reduce((memo, modelName) => {
+    const currentModel = RESTIFY_CONFIG.registeredModels[layoutModelsDict[modelName]]
+    const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
+      ...prevActions,
+      [action]: entityManager.actions[action](modelName, []),
+    }), {})
+    const apiActions = api.actions.entityManager[layoutModelsDict[modelName]]
+    return {
+      ...memo,
+      [getModelEditorActionsName(modelName)]: bindActionCreators(mapedActions, dispatch),
+      [getModelActionsName(modelName)]: bindActionCreators(currentModel.actions, dispatch),
+      [getModelApiActionsName(modelName)]: bindActionCreators(apiActions, dispatch),
+    }
+  }, {})
+const memoizedGetLayoutEntitiesActions = memoizeOne(getLayoutEntitiesActions, (a, b) => {
+  if (a[1] !== b[1]) return false
+  return deepEqual(a[0], b[0])
 })
 
 const stateToProps = (state, props) => {
@@ -129,20 +159,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     [getModelEditorActionsName(modelName)]:
       bindActionCreators(getModelEditorActions(modelName), dispatchProps.dispatch),
   }), {})
-  const layoutEntitiesActions = Object.keys(layoutModelsDict).reduce((memo, modelName) => {
-    const currentModel = RESTIFY_CONFIG.registeredModels[layoutModelsDict[modelName]]
-    const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
-      ...prevActions,
-      [action]: entityManager.actions[action](modelName, []),
-    }), {})
-    const apiActions = api.actions.entityManager[layoutModelsDict[modelName]]
-    return {
-      ...memo,
-      [getModelEditorActionsName(modelName)]: bindActionCreators(mapedActions, dispatchProps.dispatch),
-      [getModelActionsName(modelName)]: bindActionCreators(currentModel.actions, dispatchProps.dispatch),
-      [getModelApiActionsName(modelName)]: bindActionCreators(apiActions, dispatchProps.dispatch),
-    }
-  }, {})
+  const layoutEntitiesActions =
+    memoizedGetLayoutEntitiesActions(Object.keys(layoutModelsDict), dispatchProps.dispatch)
   const mergedProps = {
     ...stateProps,
     ...dispatchProps,
@@ -164,13 +182,11 @@ const mergeProps = (stateProps, dispatchProps) => {
     }
     return result
   }, {})
+
   return {
     ...finalMergedProps,
     ...linkedModalsModelsEditorActions,
-    layoutProps: {
-      ...finalMergedProps.layoutProps,
-      ...layoutEntitiesActions,
-    },
+    layoutProps: memoizedGetLayoutProps(finalMergedProps.layoutProps, layoutEntitiesActions),
   }
 }
 

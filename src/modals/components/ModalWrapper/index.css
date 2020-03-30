@@ -154,10 +154,11 @@
 
 .full .toolBarIcon,
 .full .close {
-  order: 0;
+  order: 2;
   width: 72px;
   height: 100%;
-  border-right: 1px solid var(--trood-gray-bg);
+  border-left: 1px solid var(--trood-gray-bg);
+  margin-left: auto;
 }
 
 .full .titleText {
@@ -173,17 +174,34 @@
 }
 
 .fullButtons {
-  order: 2;
+  order: 0;
   height: 100%;
-  margin-left: auto;
 }
 
-@media (--trood-phone) {
+@media (--trood-media-portable) {
   .overlay {
     min-height: 100%;
   }
 
-  .root {
+  .full .root .close,
+  .full .root .edit,
+  .full .root .delete {
+    flex-shrink: 0;
+  }
+
+  .full .root .titleText {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+    padding: 0 10px;
+  }
+
+  .full .root .close {
+    flex-shrink: 0;
+  }
+
+  .modal:not(.full) .root {
     position: fixed;
     top: 0;
     right: 0;
@@ -192,10 +210,45 @@
     width: auto;
     height: auto;
     max-height: 100%;
-    padding: 1rem;
+    overflow-y: auto;
   }
 
-  .root > form {
+  .modal:not(.full) .root > form {
     height: 100%;
+  }
+
+  .modal:not(.full) .root .title {
+    padding: 0 12px;
+    margin: 12px 0;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    height: auto;
+  }
+
+  .modal:not(.full) .root .delete {
+    order: 1;
+    margin-right: auto;
+  }
+
+  .modal:not(.full) .root .delete ~ .delimeter {
+    display: none;
+  }
+
+  .modal:not(.full) .root .edit {
+    order: 2;
+  }
+
+  .modal:not(.full) .root .edit ~ .delimeter {
+    order: 3;
+  }
+
+  .modal:not(.full) .root .close {
+    order: 4;
+  }
+
+  .modal:not(.full) .root .titleText {
+    order: 5;
+    width: 100%;
+    margin-top: 10px;
   }
 }

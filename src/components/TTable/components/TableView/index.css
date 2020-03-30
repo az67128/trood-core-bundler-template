@@ -33,7 +33,7 @@
   height: 50px;
   text-align: left;
   vertical-align: middle;
-  padding: 0 8px;
+  padding: 8px;
   word-break: break-word;
 }
 
@@ -72,8 +72,8 @@
   margin-left: 10px;
 }
 
-@media (--trood-tablet) {
-}
-
-@media (--trood-phone) {
+@media (--trood-media-portable) {
+  .sortIcon {
+    margin: 0;
+  }
 }

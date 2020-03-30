@@ -7,12 +7,14 @@ import { formatSize } from '$trood/helpers/format'
 import { FILE_TYPES } from '../../constants'
 
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
+import LoadingIndicator from '$trood/components/LoadingIndicator'
 
 import style from './index.css'
 
 const FileBrickView = ({
   className,
   model = {},
+  isLoading,
   filesActions = {},
 }) => {
   let href = model.fileUrl
@@ -29,6 +31,7 @@ const FileBrickView = ({
   let icon = (
     <TIcon {...{
       size: 24,
+      className: style.icon,
       type: ICONS_TYPES.doc,
     }} />
   )
@@ -36,11 +39,23 @@ const FileBrickView = ({
   if (model.type === FILE_TYPES.image) {
     icon = (
       <div {...{
-        className: style.icon,
+        className: style.image,
         style: {
           backgroundImage: `url(${resizedHref})`,
         },
       }} />
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div {...{
+        className: classNames(style.root, className),
+        'data-cy': `${model.$modelType}BrickView_${model.id}`,
+      }}>
+        {icon}
+        <LoadingIndicator className={style.info} size={24} />
+      </div>
     )
   }
 
@@ -56,7 +71,8 @@ const FileBrickView = ({
         </div>
       </div>
       <div className={style.controls}>
-        {canOpen &&
+        {
+          canOpen &&
           <TIcon {...{
             className: style.control,
             size: 18,

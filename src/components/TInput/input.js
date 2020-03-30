@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import Loadable from 'react-loadable'
+import loadable from '@loadable/component'
 import classNames from 'classnames'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
@@ -8,7 +8,7 @@ import objectHash from 'object-hash'
 
 import { intlObject } from '$trood/localeService'
 
-import { KEY_CODES, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE, messages } from '$trood/mainConstants'
+import { KEY_CODES, NAVIGATION_KEYS, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE, messages } from '$trood/mainConstants'
 import {
   INPUT_TYPES,
   ROW_HEIGHT,
@@ -25,10 +25,12 @@ import LoadingIndicator from '$trood/components/LoadingIndicator'
 import style from './index.css'
 
 
-const WysiwygEditor = Loadable({
-  loader: () => import('$trood/components/WysiwygEditor'),
-  loading: LoadingIndicator,
-})
+const WysiwygEditor = loadable(
+  () => import('$trood/components/WysiwygEditor'),
+  {
+    fallback: (<LoadingIndicator />),
+  },
+)
 
 const noopFunc = () => {}
 
@@ -161,7 +163,7 @@ class Input extends PureComponent {
     this.handleSelect = this.handleSelect.bind(this)
     this.changeSelection = this.changeSelection.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.handleInput = this.handleInput.bind(this)
     this.handlePaste = this.handlePaste.bind(this)
     this.handleFocus = this.handleFocus.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
@@ -272,17 +274,21 @@ class Input extends PureComponent {
         return false
       }
     }
-    if (decimalTypes.includes(type) && (
-      formattedValue.replace('-', '') === '' && newFormattedValue.replace('-', '') === '0'
-    )) {
-      newFormattedValue = `${newFormattedValue},`
-      this.selectionStart += 1
+    if (decimalTypes.includes(type)) {
+      const formatedValueAbs = formattedValue.replace('-', '')
+      const newFormatedValueAbs = +(newFormattedValue.replace(/\D/g, '') || 0)
+      if (formatedValueAbs === '0') {
+        newFormattedValue = newFormattedValue.replace(/\d+/, newFormatedValueAbs)
+      }
     }
     this.setState({
       caretPosition: this.selectionStart,
       formattedValue: newFormattedValue,
     }, () => {
-      const newValue = getValue(newFormattedValue)
+      let newValue
+      if (newFormattedValue !== '') {
+        newValue = getValue(newFormattedValue)
+      }
       this.throttledOnChangeEvent(newValue)
       if (value !== newValue) {
         this.debouncedOnSearchEvent(newValue)
@@ -292,8 +298,10 @@ class Input extends PureComponent {
   }
 
   handleSelect(e) {
-    this.selectionStart = e.target.selectionStart
-    this.selectionEnd = e.target.selectionEnd
+    if (!e.key || NAVIGATION_KEYS.includes(e.key)) {
+      this.selectionStart = e.target.selectionStart
+      this.selectionEnd = e.target.selectionEnd
+    }
   }
 
   changeSelection(delta = 0, additional = '') {
@@ -319,11 +327,7 @@ class Input extends PureComponent {
   }
 
   handleKeyDown(e) {
-    if (e.keyCode === KEY_CODES.backspace) {
-      const delta = +(this.selectionStart === this.selectionEnd)
-      this.changeSelection(delta)
-    }
-    if (e.keyCode === KEY_CODES.enter) {
+    if (e.key === KEY_CODES.enter) {
       const { getValue } = this.props.settings
       const value = getValue(this.state.formattedValue)
       this.handleBlur()
@@ -332,39 +336,45 @@ class Input extends PureComponent {
     }
   }
 
-  handleKeyPress(e) {
-    const char = String.fromCharCode(e.charCode)
-    const {
-      type,
-      settings: {
-        include,
-        exclude,
-        getValue,
-        formatValue,
-      },
-    } = this.props
-    const { formattedValue } = this.state
-    let shouldPreventDefault = false
-    if (numberTypes.includes(type)) {
-      shouldPreventDefault = char === '-' && (this.selectionStart !== 0 || formattedValue.includes('-'))
-      shouldPreventDefault += (char === '.' || char === ',') && formattedValue.includes(',')
-      const roundValue = Math.floor(getValue(formattedValue)).toString()
-      const roundFormattedValue = formatValue(roundValue)
-      shouldPreventDefault += roundValue.length >= Number.MAX_SAFE_INTEGER.toString().length - 1 &&
-        this.selectionStart === this.selectionEnd &&
-        !(char === '.' || char === ',') &&
-        this.selectionStart <= roundFormattedValue.length
-    }
-    if (exclude && !include) {
-      shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(e.key) : exclude.test(e.key))
-    }
-    if (include) {
-      shouldPreventDefault += (Array.isArray(include) ? !include.includes(e.key) : !include.test(e.key))
-    }
-    if (shouldPreventDefault) {
-      e.preventDefault()
-    } else {
-      this.changeSelection(0, char)
+  handleInput(e) {
+    if (((e.inputType === 'insertLineBreak' || e.key === KEY_CODES.enter) && this.props.type === INPUT_TYPES.multi)
+      || e.data) {
+      const char = e.data || '\r'
+      const {
+        type,
+        settings: {
+          include,
+          exclude,
+          getValue,
+          formatValue,
+        },
+      } = this.props
+      const { formattedValue } = this.state
+      let shouldPreventDefault = false
+      if (numberTypes.includes(type)) {
+        shouldPreventDefault = char === '-' && (this.selectionStart !== 0 || formattedValue.includes('-'))
+        shouldPreventDefault += (char === '.' || char === ',') && formattedValue.includes(',')
+        const roundValue = Math.floor(getValue(formattedValue)).toString()
+        const roundFormattedValue = formatValue(roundValue)
+        shouldPreventDefault += roundValue.length >= Number.MAX_SAFE_INTEGER.toString().length - 1 &&
+          this.selectionStart === this.selectionEnd &&
+          !(char === '.' || char === ',') &&
+          this.selectionStart <= roundFormattedValue.length
+      }
+      if (exclude && !include) {
+        shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
+      }
+      if (include) {
+        shouldPreventDefault += (Array.isArray(include) ? !include.includes(char) : !include.test(char))
+      }
+      if (shouldPreventDefault) {
+        e.preventDefault()
+      } else {
+        this.changeSelection(0, char)
+      }
+    } else if (e.inputType === 'deleteContentBackward' || e.key === KEY_CODES.backspace) {
+      const delta = +(this.selectionStart === this.selectionEnd)
+      this.changeSelection(delta)
     }
   }
 
@@ -412,6 +422,10 @@ class Input extends PureComponent {
 
     const inputProps = {
       ref: (node) => {
+        if (!this.input && node) {
+          node.addEventListener('input', this.handleInput)
+          // props onPress call it with short event argument
+        }
         this.input = node
         if (node) {
           this.inputWidth = node.offsetWidth
@@ -427,8 +441,9 @@ class Input extends PureComponent {
       value: formattedValue,
       onChange: this.handleChange,
       onSelect: this.handleSelect,
+      onClick: this.handleSelect,
+      onKeyUp: this.handleSelect,
       onKeyDown: this.handleKeyDown,
-      onKeyPress: this.handleKeyPress,
       onPaste: this.handlePaste,
       onFocus: this.handleFocus,
       onBlur: this.handleBlur,
@@ -475,7 +490,8 @@ class Input extends PureComponent {
         style.rootWrapper,
         className,
       )}>
-        {label &&
+        {
+          label &&
           <TLabel {...{
             className: classNames(labelClassName, style.label),
             required,
@@ -490,24 +506,24 @@ class Input extends PureComponent {
             [style.active]: active,
           },
         )}>
-          {(type === INPUT_TYPES.phone || type === INPUT_TYPES.phoneWithExt) &&
-            <span className={style.phoneCode}>
-              +
-            </span>
+          {
+            (type === INPUT_TYPES.phone || type === INPUT_TYPES.phoneWithExt) &&
+            <span className={style.phoneCode}>+</span>
           }
-          {type === INPUT_TYPES.search &&
+          {
+            type === INPUT_TYPES.search &&
             <TIcon {...{
               className: style.phoneCode,
               type: ICONS_TYPES.search,
               size: 20,
             }} />
           }
-          {type === INPUT_TYPES.url &&
-            <span className={style.phoneCode}>
-              http://
-            </span>
+          {
+            type === INPUT_TYPES.url &&
+            <span className={style.phoneCode}>http://</span>
           }
-          {type === INPUT_TYPES.multi &&
+          {
+            type === INPUT_TYPES.multi &&
             <textarea {...{
               ref: (node) => {
                 this.shadow = node
@@ -527,7 +543,8 @@ class Input extends PureComponent {
           {getInputComp()}
           {children}
         </div>
-        {showTextErrors &&
+        {
+          showTextErrors &&
           <div className={style.errors}>
             {currentErrors.map((error, index) => (
               <div className={style.errorText} key={index}>

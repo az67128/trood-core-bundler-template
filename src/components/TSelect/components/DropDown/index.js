@@ -27,6 +27,7 @@ class DropDown extends PureComponent {
     mainSelectContainerStyle: PropTypes.object,
 
     type: PropTypes.oneOf(Object.values(LIST_TYPES)),
+    openUp: PropTypes.bool,
     multi: PropTypes.bool,
     items: PropTypes.arrayOf(PropTypes.shape({
       value: valueTypes,
@@ -165,6 +166,7 @@ class DropDown extends PureComponent {
       mainSelectContainerStyle,
 
       type = (this.props.multi ? LIST_TYPES.checkbox : LIST_TYPES.text),
+      openUp,
       values,
       label,
       placeHolder,
@@ -225,7 +227,7 @@ class DropDown extends PureComponent {
             ...iconProps,
             className: classNames(style.control, iconProps.className),
           }} />
-          <div className={classNames(style.optionsContainer, !open && style.hide)}>
+          <div className={classNames(style.optionsContainer, openUp && style.openUp, !open && style.hide)}>
             <List {...{
               ...this.props,
               type,

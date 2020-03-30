@@ -1,47 +1,73 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
-import classNames from 'classnames'
 import deepEqual from 'deep-equal'
 
-import style from './index.css'
+import { AppContext } from '$trood/app/constants' // import from $trood/app causes an error in styleguidist
 
 import { isDefAndNotNull } from '$trood/helpers/def'
-import TCheckbox, { CHECK_COLORS } from '$trood/components/TCheckbox'
-import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
 
+import TableView from './components/TableView'
+import ListView from './components/ListView'
 
 const equal = (newItem, oldArray) => {
   if (isDefAndNotNull(newItem.id)) return oldArray.findIndex(item => item.id === newItem.id)
   return oldArray.findIndex(item => deepEqual(newItem, item))
 }
 
+/**
+ * Component for output table.
+ */
+
 class TTable extends PureComponent {
   static propTypes = {
+    /** function for set modelMetaData */
     modelMetaData: PropTypes.func,
+    /** header settings */
     header: PropTypes.arrayOf(PropTypes.shape({
+      /** header title */
       title: PropTypes.node,
+      /** class name for header */
       className: PropTypes.string,
+      /** show header or not */
       show: PropTypes.bool,
+      /** item model */
       model: PropTypes.func.isRequired,
       // Used for sorting
+      /** column name, used for sorting*/
       name: PropTypes.string,
+      /** sortable column or not */
       sortable: PropTypes.bool,
     })),
+    /** list title text */
+    listHeaderModel: PropTypes.func,
+    /** list title text */
+    listTitle: PropTypes.string,
+    /** array selected items */
     selectedItems: PropTypes.arrayOf(PropTypes.any),
+    /** array with data */
     body: PropTypes.arrayOf(PropTypes.object),
+    /** show checking or not */
     checking: PropTypes.bool,
+    /** onCheckedChange function */
     onCheckedChange: PropTypes.func,
+    /** class name for component */
     className: PropTypes.string,
+    /** class name for header */
     headerClassName: PropTypes.string,
+    /** class name for row */
     rowClassName: PropTypes.oneOfType([
       PropTypes.func,
       PropTypes.string,
     ]),
+    /** set row key */
     rowKey: PropTypes.func,
+    /** onClick function */
     onRowClick: PropTypes.func,
-
+    /** sorting column name */
     sortingColumn: PropTypes.string,
+    /** sorting order */
     sortingOrder: PropTypes.oneOf([-1, 1]),
+    /** onSort function */
     onSort: PropTypes.func,
   }
 
@@ -76,19 +102,19 @@ class TTable extends PureComponent {
     this.getRowKey = this.getRowKey.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.checking &&
-      (this.props.body !== nextProps.body || this.props.selectedItems !== nextProps.selectedItems)
+  componentDidUpdate(prevProps) {
+    if (this.props.checking &&
+      (this.props.body !== prevProps.body || this.props.selectedItems !== prevProps.selectedItems)
     ) {
       this.setState({
-        check: nextProps.body.map((item, index) => {
+        check: this.props.body.map((item, index) => {
           if (isDefAndNotNull(item.replaceCheck)) {
             return item.replaceCheck
           }
-          if (nextProps.selectedItems) {
-            return nextProps.selectedItems.includes(this.getRowKey(item, index, nextProps.body))
+          if (this.props.selectedItems) {
+            return this.props.selectedItems.includes(this.getRowKey(item, index, this.props.body))
           }
-          const equalIndex = equal(item, this.props.body)
+          const equalIndex = equal(item, prevProps.body)
           if (equalIndex > -1) return this.state.check[equalIndex]
           return false
         }),
@@ -125,104 +151,46 @@ class TTable extends PureComponent {
   }
 
   render() {
-    const {
-      modelMetaData,
-      header,
-      body,
-      checking,
-      className,
-      headerClassName,
-      rowClassName,
-      onRowClick,
-      sortingColumn,
-      sortingOrder,
-      onSort,
-    } = this.props
+    const { header } = this.props
     const { check } = this.state
+    const headerFiltered = header.filter(item => item.show !== false)
 
     return (
-      <table className={classNames(style.table, className)}>
-        <thead>
-          <tr className={headerClassName}>
-            {checking &&
-              <th className={style.checkCell}>
-                <TCheckbox {...{
-                  value: this.getCheckedCount() === check.length,
-                  onChange: this.checkAll,
-                  color: CHECK_COLORS.orange,
-                }} />
-              </th>
-            }
-            {header.filter(item => item.show !== false).map((item, i) => {
-              return (
-                <th key={i} className={item.className}>
-                  <div {...{
-                    className: item.sortable ? style.headerWrapperSortable : style.headerWrapper,
-                    'data-cy': item.title,
-                    onClick: () => {
-                      if (item.sortable) {
-                        onSort(item.name, sortingOrder === -1 ? 1 : -1)
-                      }
-                    },
-                  }}>
-                    {item.title}
-                    {item.sortable && sortingColumn === item.name &&
-                      <TIcon {...{
-                        type: ICONS_TYPES.arrow,
-                        rotate: sortingOrder === -1 ? ROTATE_TYPES.up : ROTATE_TYPES.down,
-                        className: style.sortIcon,
-                        size: 16,
-                      }} />
-                    }
-                    {item.sortable && sortingColumn !== item.name &&
-                      <div className={style.sortingPlaceholder} />
-                    }
-                  </div>
-                </th>
-              )
-            })}
-          </tr>
-        </thead>
-        <tbody className={style.tbody}>
-          {body.map((row, r) => {
-            let currentMetaData
-            if (modelMetaData) {
-              currentMetaData = modelMetaData(row, r, body)
-            }
+      <AppContext.Consumer>
+        {({ media = {} }) => {
+          if (media.portable) {
             return (
-              <tr {...{
-                onClick: () => onRowClick(row, r, body),
-                key: this.getRowKey(row, r, body),
-                className: classNames(
-                  row.rowClassName,
-                  typeof rowClassName === 'function' ? rowClassName(row, r, body, currentMetaData) : rowClassName,
-                ),
-              }}>
-                {checking &&
-                  <td className={style.checkCell} data-cy={`table_cell_${r}_checkbox`}>
-                    <TCheckbox {...{
-                      value: check[r],
-                      onChange: () => this.checkItem(r),
-                      stopPropagation: true,
-                      color: CHECK_COLORS.orange,
-                    }} />
-                  </td>
-                }
-                {header.filter(item => item.show !== false).map((item, i) => (
-                  <td {...{
-                    'data-cy': `table_cell_${r}_${i}`,
-                    key: i,
-                    className: item.className,
-                    colSpan: item.colSpan && item.colSpan(row, r, body),
-                  }}>
-                    {item.model(row, r, body, currentMetaData)}
-                  </td>
-                ))}
-              </tr>
+              <ListView {...{
+                ...this.props,
+
+                check,
+                checkAll: this.checkAll,
+                checkItem: this.checkItem,
+                getCheckedCount: this.getCheckedCount,
+
+                header: headerFiltered,
+
+                getRowKey: this.getRowKey,
+              }} />
             )
-          })}
-        </tbody>
-      </table>
+          }
+
+          return (
+            <TableView {...{
+              ...this.props,
+
+              check,
+              getCheckedCount: this.getCheckedCount,
+              checkAll: this.checkAll,
+              checkItem: this.checkItem,
+
+              header: headerFiltered,
+
+              getRowKey: this.getRowKey,
+            }} />
+          )
+        }}
+      </AppContext.Consumer>
     )
   }
 }

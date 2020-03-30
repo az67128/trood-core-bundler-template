@@ -4,7 +4,6 @@
   flex-flow: row nowrap;
   align-items: center;
   height: 32px;
-  color: var(--trood-blue);
 }
 
 .root:hover {
@@ -12,6 +11,10 @@
 }
 
 .icon {
+  color: var(--trood-blue);
+}
+
+.image {
   width: 24px;
   height: 24px;
   background: transparent center no-repeat;
@@ -27,7 +30,7 @@
   right: 0;
   top: 0;
   height: 100%;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-blue);
 }
 
 .root:hover .controls {
@@ -47,6 +50,7 @@
 .name {
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--trood-blue);
 }
 
 .size {

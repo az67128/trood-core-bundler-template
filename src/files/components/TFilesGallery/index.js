@@ -102,9 +102,9 @@ class TFilesGallery extends PureComponent {
     this.getNextToSourceIndex = this.getNextToSourceIndex.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.sources !== nextProps.sources) {
-      this.setState({ sources: mapSourcesToDefaultFormat(nextProps.sources, nextProps.filesEntities) })
+  componentDidUpdate(prevProps) {
+    if (this.props.sources !== prevProps.sources) {
+      this.setState({ sources: mapSourcesToDefaultFormat(this.props.sources, this.props.filesEntities) })
     }
   }
 

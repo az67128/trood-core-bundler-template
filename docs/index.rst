@@ -8,12 +8,6 @@ Trood core - Front-End docs
    :maxdepth: 3
    :glob:
 
-   trood-core/index
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   tutorial/index
+   api/index
+   styleguidist/index

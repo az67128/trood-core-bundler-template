@@ -49,7 +49,9 @@ class PageAuth extends PureComponent {
       <div className={style.root}>
         <div className={style.form}>
           <div className={style.title}>
-            {intlObject.intl.formatMessage(pageType.title)}
+            <span className={style.titleText}>
+              {intlObject.intl.formatMessage(pageType.title)}
+            </span>
             <Logo size={80} />
           </div>
           <LocaleSwitch {...{

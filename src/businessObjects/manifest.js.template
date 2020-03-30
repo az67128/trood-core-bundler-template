@@ -1,6 +1,7 @@
 /* eslint-disable */
 
-import Loadable from 'react-loadable'
+import React from 'react'
+import loadable from '@loadable/component'
 
 import LoadingIndicator from '$trood/components/LoadingIndicator'
 

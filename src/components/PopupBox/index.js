@@ -8,27 +8,33 @@ import FlexiblePopup from '$trood/components/FlexiblePopup'
 import { POPUP_POSITION } from './constants'
 import style from './index.css'
 
+/**
+ * Component for output popup box.
+ */
 
 class PopupBox extends PureComponent {
   static propTypes = {
+    /** class name for styling component */
     className: PropTypes.string,
-
+    /** set control */
     control: PropTypes.node,
+    /** position is one of POPUP_POSITION.topLeft, POPUP_POSITION.topRight, POPUP_POSITION.topMiddle,
+     * POPUP_POSITION.bottomLeft, POPUP_POSITION.bottomRight, POPUP_POSITION.bottomMiddle */
     position: PropTypes.oneOf(Object.values(POPUP_POSITION)),
-    close: PropTypes.bool,
+    /** show arrow or not */
     arrow: PropTypes.bool,
-
+    /** tRef function */
     tRef: PropTypes.func,
-
+    /** onOpen function */
     onOpen: PropTypes.func,
+    /** onClose function */
     onClose: PropTypes.func,
-
+    /** children node */
     children: PropTypes.node,
   }
 
   static defaultProps = {
     className: '',
-    close: false,
     position: POPUP_POSITION.topRight,
 
     onOpen: () => {},
@@ -75,9 +81,8 @@ class PopupBox extends PureComponent {
 
       children,
     } = this.props
-    const {
-      open,
-    } = this.state
+
+    const { open } = this.state
 
     const getChildren = typeof children === 'function' ? children : () => children
 
