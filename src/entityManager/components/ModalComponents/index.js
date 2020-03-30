@@ -4,36 +4,46 @@ import TCheckbox from '$trood/components/TCheckbox'
 import DateTimePicker, { PICKER_TYPES } from '$trood/components/DateTimePicker'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
 import modalsStyle from '$trood/styles/modals.css'
+import { snakeToCamel } from '$trood/helpers/namingNotation'
 
 export const ModalContext = React.createContext()
 
 const ModalComponentWrapper = type => props => {
   const {
-    mask,
+    editMask,
+    getMask,
     model,
     modelFormActions: { changeField, setFieldError, resetFieldError },
     modelErrors,
   } = useContext(ModalContext)
   const { fieldName } = props
-  const onChange = e => changeField(fieldName, e)
-  const onInvalid = errs => setFieldError(fieldName, errs)
-  const onValid = () => resetFieldError(fieldName)
-  const value = model[fieldName]
-  const errors = modelErrors[fieldName]
+
+  const fieldNameCamelized = snakeToCamel(fieldName)
+  if (getMask.includes(fieldNameCamelized)) return null
+
+  const onChange = e => changeField(fieldNameCamelized, e)
+  const onInvalid = errs => setFieldError(fieldNameCamelized, errs)
+  const onValid = () => resetFieldError(fieldNameCamelized)
+  const value = model[fieldNameCamelized]
+  const errors = modelErrors[fieldNameCamelized]
+
+  const commonProps = {
+    label: fieldNameCamelized,
+    disabled: editMask.includes(fieldNameCamelized),
+    className: modalsStyle.control,
+    errors,
+    onInvalid: onInvalid,
+    onValid: onValid,
+    onChange,
+    value,
+  }
   switch (type) {
     case 'input':
       return (
         <TInput
           {...{
-            label: fieldName,
+            ...commonProps,
             type: INPUT_TYPES.multi,
-            disabled: mask.includes(fieldName),
-            className: modalsStyle.control,
-            onInvalid: onInvalid,
-            onValid: onValid,
-            onChange: onChange,
-            errors,
-            value,
             validate: {
               required: true,
               checkOnBlur: true,
@@ -46,14 +56,7 @@ const ModalComponentWrapper = type => props => {
       return (
         <TCheckbox
           {...{
-            label: fieldName,
-            disabled: mask.includes(fieldName),
-            className: modalsStyle.control,
-            onInvalid: onInvalid,
-            onValid: onValid,
-            onChange: onChange,
-            errors,
-            value,
+            ...commonProps,
             validate: {
               required: true,
               checkOnBlur: true,
@@ -66,15 +69,8 @@ const ModalComponentWrapper = type => props => {
       return (
         <DateTimePicker
           {...{
-            label: fieldName,
+            ...commonProps,
             type: PICKER_TYPES.dateTime,
-            disabled: mask.includes(fieldName),
-            className: modalsStyle.control,
-            onInvalid,
-            onValid,
-            onChange: onChange,
-            errors,
-            value,
             validate: {
               checkOnBlur: true,
               requiredDate: false,
@@ -88,14 +84,9 @@ const ModalComponentWrapper = type => props => {
       return (
         <TSelect
           {...{
-            className: modalsStyle.control,
+            ...commonProps,
             values: value ? [value] : [],
-            onChange: vals => changeField(fieldName, vals[0]),
-            disabled: mask.includes(fieldName),
-            label: fieldName,
-            errors,
-            onInvalid,
-            onValid,
+            onChange: vals => changeField(fieldNameCamelized, vals[0]),
             type: SELECT_TYPES.filterDropdown,
             multi: false,
             clearable: true,
