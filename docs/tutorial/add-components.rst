@@ -153,8 +153,8 @@ When you transfer a Business object, you will get access to its props:
 
 * BONameEditorActions - actions for edit business object
 * BONameActions - custom actions from business object (if has export default { actions } in <BOName>/index.js)
-* BONameComponents - constants from business object (if has exports in <BOName>/components/index.js)
-* BONameConstants - constants from business object (if has <BOName>/constants.js)
+* BONameComponents - components from business object (if has export * as components in <BOName>/index.js)
+* BONameConstants - constants from business object (if has export * as constants in <BOName>/index.js)
 * BONameEntities - restify api.selectors - `redux-restify api selectors docs`_
 * BONameApiActions - restify api.actions - `redux-restify api actions docs`_
 * childBOName - actions for working with child
