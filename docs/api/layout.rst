@@ -123,15 +123,15 @@ For render menu you can use HeaderMenu ``import { HeaderMenu } from '$trood/page
 
 **Nested page menu component props**
 
-*authActions, history, layoutProps* - same as `Base page component` props
+*authActions, history, layoutProps* - same as `Base page component`_ props
 
 .. attribute:: menuRenderers
 
-    Same as menuRenderers `Base page component` props, but contains subpages
+    Same as menuRenderers `Base page component`_ props, but contains subpages
 
 .. attribute:: basePageTitleArgs
 
-    `Base page component` menuRenderers.<currentBasePath>
+    `Base page component`_ menuRenderers.<currentBasePath>
 
 .. attribute:: basePath
 
