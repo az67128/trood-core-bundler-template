@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import memoizeOne from 'memoize-one'
-import deepEqual from 'deep-equal'
 
 import {
   api,
@@ -208,14 +207,15 @@ const getCheckAccess = (modelName, isEditing, sbj, obj, rules) => (ctx) => {
 }
 const memoizedGetCheckAccess = memoizeOne(getCheckAccess)
 
-const getFormActions = (model, modelFormName, checkAccess) => {
+const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
   const formActions = forms.getFormActions(modelFormName)
 
-  return {
+  const unbindedFormActions = {
     ...formActions,
     changeField: (name, value, transformUndefinedToNull = true, skipAbacCheck = false) => {
       const val = transformUndefinedToNull && value === undefined ? null : value
       if (skipAbacCheck) return formActions.changeField(name, val)
+      const model = forms.selectors.getForm(modelFormName)(getState())
       const ctx = {
         data: getRecursiveObjectReplacement(model, name, val),
       }
@@ -232,6 +232,7 @@ const getFormActions = (model, modelFormName, checkAccess) => {
         [key]: transformUndefinedToNull && values[key] === undefined ? null : values[key],
       }), {})
       if (skipAbacCheck) return formActions.changeSomeFields(vals, forceUndefines)
+      const model = forms.selectors.getForm(modelFormName)(getState())
       const ctx = {
         data: {
           ...model,
@@ -246,6 +247,7 @@ const getFormActions = (model, modelFormName, checkAccess) => {
     },
     resetField: (name, skipAbacCheck = false) => {
       if (skipAbacCheck) return formActions.resetField(name)
+      const model = forms.selectors.getForm(modelFormName)(getState())
       const ctx = {
         data: getRecursiveObjectReplacement(model, name, undefined),
       }
@@ -256,12 +258,13 @@ const getFormActions = (model, modelFormName, checkAccess) => {
       return formActions.resetField(name)
     },
   }
+
+  return {
+    unbindedFormActions,
+    modelFormActions: bindActionCreators(unbindedFormActions, dispatch),
+  }
 }
-const memoizedGetFormActions = memoizeOne(getFormActions, (a, b) => {
-  if (a[1] !== b[1]) return false
-  if (a[2] !== b[2]) return false
-  return deepEqual(a[0], b[0])
-})
+const memoizedGetFormActions = memoizeOne(getFormActions)
 
 const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig) => {
   const currentModel = modelConfig || RESTIFY_CONFIG.registeredModels[modelName]
@@ -526,11 +529,11 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     let submitEntityForm = () => () => Promise.resolve()
     // Calc form actions only for edit view
     if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
-      unbindedFormActions = memoizedGetFormActions(stateProps.model, stateProps.modelFormName, checkAccess)
-      modelFormActions = bindActionCreators(
-        unbindedFormActions,
-        dispatchProps.dispatch,
+      const formActions = dispatchProps.dispatch((dispatch, getState) =>
+        memoizedGetFormActions(stateProps.modelFormName, checkAccess, dispatch, getState),
       )
+      unbindedFormActions = formActions.unbindedFormActions
+      modelFormActions = formActions.modelFormActions
       // Define cancel action only for editing modal, cause in view modal we just close it
       if (
         stateProps.isEditing && stateProps.model && !stateProps.model.id &&
