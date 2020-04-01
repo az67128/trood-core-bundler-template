@@ -1,3 +1,5 @@
+import memoizeOne from 'memoize-one'
+import deepEqual from 'deep-equal'
 import { api, forms } from 'redux-restify'
 
 import { getToken } from '$trood/storage'
@@ -37,14 +39,20 @@ export const getProfileIsLoading = state => {
   return api.selectors.entityManager[profile].getEntities(state).getIsLoadingById(profileId)
 }
 
-export const getActiveAcoount = state => {
+const getActiveAccountWrap = (authData, profile) => ({
+  ...authData,
+  abac: undefined,
+  profile,
+})
+const memoizedGetActiveAccountWrap = memoizeOne(getActiveAccountWrap, (a, b) => {
+  if (a[0] !== b[0]) return false
+  return deepEqual(a[1], b[1])
+})
+
+export const getActiveAccount = state => {
   const authData = getAuthData(state)
   const profile = getProfile(state)
-  return {
-    ...authData,
-    abac: undefined,
-    profile,
-  }
+  return memoizedGetActiveAccountWrap(authData, profile)
 }
 
 export const getPermissions = state => {

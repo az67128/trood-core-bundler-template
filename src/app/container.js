@@ -130,7 +130,7 @@ const stateToProps = (state, props) => {
     isHasAuthData: auth.selectors.getIsHasAuthData(state),
     authData: auth.selectors.getAuthData(state),
     permissions: auth.selectors.getPermissions(state),
-    activeAccount: auth.selectors.getActiveAcoount(state),
+    activeAccount: auth.selectors.getActiveAccount(state),
     isAuthenticated: auth.selectors.getIsAuthenticated(state),
     isLoading: api.selectors.loadsManager.getIsLoading(state),
     getProfile: () => auth.selectors.getProfile(state),
