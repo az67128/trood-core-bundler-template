@@ -118,7 +118,7 @@ const PageGridLayout = (props) => {
                       menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
                       basePath,
                       authActions,
-                      ...layoutProps,
+                      layoutProps,
                       history,
                     })}
                   </div>
@@ -262,7 +262,7 @@ const PageGridLayout = (props) => {
                         menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
                         basePath,
                         authActions,
-                        ...layoutProps,
+                        layoutProps,
                         history,
                       })}
                     </div>
