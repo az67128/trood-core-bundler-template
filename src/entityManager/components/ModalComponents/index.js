@@ -4,9 +4,20 @@ import TCheckbox from '$trood/components/TCheckbox'
 import DateTimePicker, { PICKER_TYPES } from '$trood/components/DateTimePicker'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
 import modalsStyle from '$trood/styles/modals.css'
-import { snakeToCamel } from '$trood/helpers/namingNotation'
+
+import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
 export const ModalContext = React.createContext()
+
+const validateInput  = {
+  required: true,
+  checkOnBlur: true,
+}
+const validateDateTime = {
+  checkOnBlur: true,
+  requiredDate: false,
+  requiredTime: false,
+}
 
 const ModalComponentWrapper = type => props => {
   const {
@@ -17,23 +28,22 @@ const ModalComponentWrapper = type => props => {
     modelErrors,
   } = useContext(ModalContext)
   const { fieldName } = props
+  const nestedObjectField = getNestedObjectField(fieldName);
+  if (getMask.includes(Array.isArray(fieldName) ? fieldName[0] : fieldName)) return null
 
-  const fieldNameCamelized = snakeToCamel(fieldName)
-  if (getMask.includes(fieldNameCamelized)) return null
-
-  const onChange = e => changeField(fieldNameCamelized, e)
-  const onInvalid = errs => setFieldError(fieldNameCamelized, errs)
-  const onValid = () => resetFieldError(fieldNameCamelized)
-  const value = model[fieldNameCamelized]
-  const errors = modelErrors[fieldNameCamelized]
+  const onChange = e => changeField(nestedObjectField, e)
+  const onInvalid = errs => setFieldError(nestedObjectField, errs)
+  const onValid = () => resetFieldError(nestedObjectField)
+  const value = model[nestedObjectField]
+  const errors = modelErrors[nestedObjectField]
 
   const commonProps = {
-    label: fieldNameCamelized,
-    disabled: editMask.includes(fieldNameCamelized),
+    label: fieldName,
+    disabled: editMask.includes(Array.isArray(fieldName) ? fieldName[0] : fieldName),
     className: modalsStyle.control,
     errors,
-    onInvalid: onInvalid,
-    onValid: onValid,
+    onInvalid,
+    onValid,
     onChange,
     value,
   }
@@ -44,10 +54,7 @@ const ModalComponentWrapper = type => props => {
           {...{
             ...commonProps,
             type: INPUT_TYPES.multi,
-            validate: {
-              required: true,
-              checkOnBlur: true,
-            },
+            validate: validateInput,
             ...props,
           }}
         />
@@ -57,10 +64,7 @@ const ModalComponentWrapper = type => props => {
         <TCheckbox
           {...{
             ...commonProps,
-            validate: {
-              required: true,
-              checkOnBlur: true,
-            },
+            validate: validateInput,
             ...props,
           }}
         />
@@ -71,11 +75,7 @@ const ModalComponentWrapper = type => props => {
           {...{
             ...commonProps,
             type: PICKER_TYPES.dateTime,
-            validate: {
-              checkOnBlur: true,
-              requiredDate: false,
-              requiredTime: false,
-            },
+            validate: validateDateTime,
             ...props,
           }}
         />
@@ -85,8 +85,8 @@ const ModalComponentWrapper = type => props => {
         <TSelect
           {...{
             ...commonProps,
-            values: value ? [value] : [],
-            onChange: vals => changeField(fieldNameCamelized, vals[0]),
+            values: props.multi ? value : (value ? [value] : []),
+            onChange: vals => onChange(props.multi ? vals : vals[0]),
             type: SELECT_TYPES.filterDropdown,
             multi: false,
             clearable: true,
@@ -106,3 +106,5 @@ export const ModalComponents = {
   ModalDateTimePicker: ModalComponentWrapper('datetimepicker'),
   ModalSelect: ModalComponentWrapper('select'),
 }
+
+TCheckbox.whyDidYouRender = true;
