@@ -52,6 +52,8 @@ import { ruleChecker } from '$trood/helpers/abac'
 import { getRecursiveObjectReplacement } from '$trood/helpers/nestedObjects'
 import { snakeToCamel } from '$trood/helpers/namingNotation'
 
+import { ModalComponents, ModalContext } from './components/ModalComponents'
+import { AuthManagerContext } from '$trood/auth'
 
 const formatMessage = msg => {
   if (!msg || !msg.defaultMessage || !intlObject.intl) return msg
@@ -304,15 +306,37 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         nextParents,
         prevForm,
         buttons,
+        model,
+        modelFormActions,
+        modelErrors,
       } = this.props
       const contextValue = memoizedGetEntityManagerContext(entityId, parents, prevForm, nextParents)
       return (
-        <div {...{
+        <div
+        {...{
           className,
           'data-cy': dataCyName,
-        }} >
-          <EntityManagerContext.Provider value={contextValue}>
-            <EntityComponent {...this.props} />
+        }}
+      >
+         <EntityManagerContext.Provider value={contextValue}>
+            <AuthManagerContext.Consumer>
+              {({ checkCustodianCreateRule, checkCustodianUpdateRule, checkCustodianGetRule }) => {
+                const editMaskChecker = model.id ? checkCustodianUpdateRule : checkCustodianCreateRule
+                const entities = this.props[modelName + 'Entities']
+                const objectToCheck = {
+                  ...(model.id && { obj: entities.getById(model.id) }),
+                  ctx: model,
+                  resource: entities.modelConfig.endpoint,
+                }
+                const editMask = editMaskChecker(objectToCheck).mask.map(item => snakeToCamel(item))
+                const getMask = checkCustodianGetRule(objectToCheck).mask.map(item => snakeToCamel(item))
+                return (
+                  <ModalContext.Provider value={{ editMask, getMask, model, modelFormActions, modelErrors }}>
+                    <EntityComponent {...{ ...this.props, editMask, getMask, ModalComponents }} />
+                  </ModalContext.Provider>
+                )
+              }}
+            </AuthManagerContext.Consumer>
           </EntityManagerContext.Provider>
           {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
         </div>
