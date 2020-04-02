@@ -9,7 +9,7 @@ import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
 export const ModalContext = React.createContext()
 
-const validateInput  = {
+const validateInput = {
   required: true,
   checkOnBlur: true,
 }
@@ -28,25 +28,25 @@ const ModalComponentWrapper = type => props => {
     modelErrors,
   } = useContext(ModalContext)
   const { fieldName } = props
-  const nestedObjectField = getNestedObjectField(fieldName);
   if (getMask.includes(Array.isArray(fieldName) ? fieldName[0] : fieldName)) return null
 
-  const onChange = e => changeField(nestedObjectField, e)
-  const onInvalid = errs => setFieldError(nestedObjectField, errs)
-  const onValid = () => resetFieldError(nestedObjectField)
-  const value = model[nestedObjectField]
-  const errors = modelErrors[nestedObjectField]
+  const onChange = e => changeField(fieldName, e)
+  const onInvalid = errs => setFieldError(fieldName, errs)
+  const onValid = () => resetFieldError(fieldName)
+  const value = getNestedObjectField(model, fieldName)
+  const errors = getNestedObjectField(modelErrors, fieldName)
 
   const commonProps = {
     label: fieldName,
     disabled: editMask.includes(Array.isArray(fieldName) ? fieldName[0] : fieldName),
     className: modalsStyle.control,
     errors,
-    onInvalid,
-    onValid,
-    onChange,
+    onInvalid: onInvalid,
+    onValid: onValid,
+    onChange: onChange,
     value,
   }
+
   switch (type) {
     case 'input':
       return (
@@ -85,7 +85,7 @@ const ModalComponentWrapper = type => props => {
         <TSelect
           {...{
             ...commonProps,
-            values: props.multi ? value : (value ? [value] : []),
+            values: props.multi ? value : value ? [value] : [],
             onChange: vals => onChange(props.multi ? vals : vals[0]),
             type: SELECT_TYPES.filterDropdown,
             multi: false,
@@ -106,5 +106,3 @@ export const ModalComponents = {
   ModalDateTimePicker: ModalComponentWrapper('datetimepicker'),
   ModalSelect: ModalComponentWrapper('select'),
 }
-
-TCheckbox.whyDidYouRender = true;
