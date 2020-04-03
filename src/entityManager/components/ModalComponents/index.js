@@ -26,6 +26,7 @@ const ModalComponentWrapper = type => props => {
     model,
     modelFormActions: { changeField, setFieldError, resetFieldError },
     modelErrors,
+    // eslint-disable-next-line react-hooks/rules-of-hooks
   } = useContext(ModalContext)
   const { fieldName } = props
   if (getMask.includes(Array.isArray(fieldName) ? fieldName[0] : fieldName)) return null
@@ -85,6 +86,7 @@ const ModalComponentWrapper = type => props => {
         <TSelect
           {...{
             ...commonProps,
+            // eslint-disable-next-line no-nested-ternary
             values: props.multi ? value : value ? [value] : [],
             onChange: vals => onChange(props.multi ? vals : vals[0]),
             type: SELECT_TYPES.filterDropdown,
@@ -96,7 +98,7 @@ const ModalComponentWrapper = type => props => {
         />
       )
     default:
-      null
+      return null
   }
 }
 

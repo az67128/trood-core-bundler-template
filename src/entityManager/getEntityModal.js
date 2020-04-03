@@ -312,13 +312,11 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       } = this.props
       const contextValue = memoizedGetEntityManagerContext(entityId, parents, prevForm, nextParents)
       return (
-        <div
-        {...{
+        <div {...{
           className,
           'data-cy': dataCyName,
-        }}
-      >
-         <EntityManagerContext.Provider value={contextValue}>
+        }}>
+          <EntityManagerContext.Provider value={contextValue}>
             <AuthManagerContext.Consumer>
               {({ checkCustodianCreateRule, checkCustodianUpdateRule, checkCustodianGetRule }) => {
                 const editMaskChecker = model.id ? checkCustodianUpdateRule : checkCustodianCreateRule
