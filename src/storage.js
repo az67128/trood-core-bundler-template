@@ -10,7 +10,6 @@ export const clearStorage = () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
       registrations.forEach(registration => {
-        console.log('clear', registration)
         registration.unregister()
       })
     })
