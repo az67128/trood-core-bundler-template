@@ -108,7 +108,7 @@ class TFileInput extends PureComponent {
 
     let background
     if (propsBackground) {
-      if (propsBackground.match(/https?:\/\//) || propsBackground.includes('data:image')) {
+      if (propsBackground.match(/^(https?:)?\/\//) || propsBackground.includes('data:image')) {
         background = propsBackground
       } else {
         background = host + propsBackground

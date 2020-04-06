@@ -86,7 +86,7 @@ class TAvatar extends PureComponent {
         avatar = filesEntities.getById(avatar).fileUrl
       }
 
-      if (avatar && !/^https?/.test(avatar)) {
+      if (avatar && !/^(https?:)?\/\//.test(avatar)) {
         avatar = host + avatar
       }
     }

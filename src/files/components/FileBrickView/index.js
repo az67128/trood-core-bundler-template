@@ -18,12 +18,12 @@ const FileBrickView = ({
   filesActions = {},
 }) => {
   let href = model.fileUrl
-  if (!/^https?:\/\//.test(href)) {
+  if (!/^(https?:)?\/\//.test(href)) {
     href = `${FILE_API_HOST}${href}`
   }
   let resizedHref = ((model.metadata || {}).resized || {}).thumb
   if (!resizedHref) resizedHref = href
-  if (!/^https?:\/\//.test(resizedHref)) {
+  if (!/^(https?:)?\/\//.test(resizedHref)) {
     resizedHref = `${FILE_API_HOST}${resizedHref}`
   }
   const canOpen = filesActions.canOpenFile(model)
