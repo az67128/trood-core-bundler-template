@@ -7,6 +7,13 @@ export const tokenKey = 'em-template-token'
 
 export const clearStorage = () => {
   window.localStorage.removeItem(stateKey)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach(registration => {
+        registration.unregister()
+      })
+    })
+  }
 }
 
 export const writeStorage = getState => {

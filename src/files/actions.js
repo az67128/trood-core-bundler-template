@@ -26,7 +26,7 @@ export const canOpenFile = (file) => () => OPENING_FILE_TYPES.includes(file.type
 
 export const openFile = (file, windowRef) => (dispatch) => {
   const { type, fileUrl } = file
-  const href = /^https?:\/\//.test(fileUrl) ? fileUrl : `${FILE_API_HOST}${fileUrl}`
+  const href = /^(https?:)?\/\//.test(fileUrl) ? fileUrl : `${FILE_API_HOST}${fileUrl}`
   const openFileInNewTab = url => {
     if (windowRef && windowRef.location) {
       // eslint-disable-next-line

@@ -52,6 +52,8 @@ import { ruleChecker } from '$trood/helpers/abac'
 import { getRecursiveObjectReplacement } from '$trood/helpers/nestedObjects'
 import { snakeToCamel } from '$trood/helpers/namingNotation'
 
+import { ModalComponents, ModalContext } from './components/ModalComponents'
+import { AuthManagerContext } from '$trood/auth'
 
 const formatMessage = msg => {
   if (!msg || !msg.defaultMessage || !intlObject.intl) return msg
@@ -192,6 +194,79 @@ const getEntityFormSubmit = (modelName, formActions, entityId, isEditing, state,
   return result
 }
 
+const getCheckAccess = (modelName, isEditing, sbj, obj, rules) => (ctx) => {
+  return ruleChecker({
+    rules,
+    domain: 'custodian',
+    resource: modelName,
+    action: isEditing ? 'dataPatch' : 'dataPost',
+    values: {
+      obj,
+      sbj,
+      ctx,
+    },
+  })
+}
+const memoizedGetCheckAccess = memoizeOne(getCheckAccess)
+
+const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
+  const formActions = forms.getFormActions(modelFormName)
+
+  const unbindedFormActions = {
+    ...formActions,
+    changeField: (name, value, transformUndefinedToNull = true, skipAbacCheck = false) => {
+      const val = transformUndefinedToNull && value === undefined ? null : value
+      if (skipAbacCheck) return formActions.changeField(name, val)
+      const model = forms.selectors.getForm(modelFormName)(getState())
+      const ctx = {
+        data: getRecursiveObjectReplacement(model, name, val),
+      }
+      const { access, mask } = checkAccess(ctx)
+      if (!access || mask.some(m => snakeToCamel(m) === name)) {
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+      }
+      return formActions.changeField(name, val)
+    },
+    changeSomeFields: (values, forceUndefines, transformUndefinedToNull = true, skipAbacCheck = false) => {
+      const valuesKeys = Object.keys(values)
+      const vals = valuesKeys.reduce((memo, key) => ({
+        ...memo,
+        [key]: transformUndefinedToNull && values[key] === undefined ? null : values[key],
+      }), {})
+      if (skipAbacCheck) return formActions.changeSomeFields(vals, forceUndefines)
+      const model = forms.selectors.getForm(modelFormName)(getState())
+      const ctx = {
+        data: {
+          ...model,
+          ...vals,
+        },
+      }
+      const { access, mask } = checkAccess(ctx)
+      if (!access || mask.some(m => valuesKeys.includes(snakeToCamel(m)))) {
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+      }
+      return formActions.changeSomeFields(vals, forceUndefines)
+    },
+    resetField: (name, skipAbacCheck = false) => {
+      if (skipAbacCheck) return formActions.resetField(name)
+      const model = forms.selectors.getForm(modelFormName)(getState())
+      const ctx = {
+        data: getRecursiveObjectReplacement(model, name, undefined),
+      }
+      const { access, mask } = checkAccess(ctx)
+      if (!access || mask.some(m => snakeToCamel(m) === name)) {
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+      }
+      return formActions.resetField(name)
+    },
+  }
+
+  return {
+    unbindedFormActions,
+    modelFormActions: bindActionCreators(unbindedFormActions, dispatch),
+  }
+}
+const memoizedGetFormActions = memoizeOne(getFormActions)
 
 const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig) => {
   const currentModel = modelConfig || RESTIFY_CONFIG.registeredModels[modelName]
@@ -231,15 +306,35 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         nextParents,
         prevForm,
         buttons,
+        model,
+        modelFormActions,
+        modelErrors,
       } = this.props
       const contextValue = memoizedGetEntityManagerContext(entityId, parents, prevForm, nextParents)
       return (
         <div {...{
           className,
           'data-cy': dataCyName,
-        }} >
+        }}>
           <EntityManagerContext.Provider value={contextValue}>
-            <EntityComponent {...this.props} />
+            <AuthManagerContext.Consumer>
+              {({ checkCustodianCreateRule, checkCustodianUpdateRule, checkCustodianGetRule }) => {
+                const editMaskChecker = model.id ? checkCustodianUpdateRule : checkCustodianCreateRule
+                const entities = this.props[modelName + 'Entities']
+                const objectToCheck = {
+                  ...(model.id && { obj: entities.getById(model.id) }),
+                  ctx: model,
+                  resource: entities.modelConfig.endpoint,
+                }
+                const editMask = editMaskChecker(objectToCheck).mask.map(item => snakeToCamel(item))
+                const getMask = checkCustodianGetRule(objectToCheck).mask.map(item => snakeToCamel(item))
+                return (
+                  <ModalContext.Provider value={{ editMask, getMask, model, modelFormActions, modelErrors }}>
+                    <EntityComponent {...{ ...this.props, editMask, getMask, ModalComponents }} />
+                  </ModalContext.Provider>
+                )
+              }}
+            </AuthManagerContext.Consumer>
           </EntityManagerContext.Provider>
           {entityComponentName === ENTITY_COMPONENT_INLINE_EDIT && buttons(this.props)}
         </div>
@@ -420,7 +515,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     const currentEntitiesActions = getCurrentEntitiesActions(entitiesActions, dispatchProps.dispatch)
 
     const rules = auth.selectors.getPermissions(stateProps.state)
-    const sbj = auth.selectors.getActiveAcoount(stateProps.state)
+    const sbj = auth.selectors.getActiveAccount(stateProps.state)
 
     // Delete action is needed only for existing entities
     let deleteAction
@@ -441,19 +536,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
       }
     }
 
-    const checkAccess = (ctx) => {
-      return ruleChecker({
-        rules,
-        domain: 'custodian',
-        resource: modelName,
-        action: stateProps.isEditing ? 'dataPatch' : 'dataPost',
-        values: {
-          obj: stateProps.serverModel,
-          sbj,
-          ctx,
-        },
-      })
-    }
+    const checkAccess = memoizedGetCheckAccess(modelName, stateProps.isEditing, sbj, stateProps.serverModel, rules)
 
     const { access } = checkAccess()
 
@@ -468,57 +551,11 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
     let submitEntityForm = () => () => Promise.resolve()
     // Calc form actions only for edit view
     if (entityComponentName === ENTITY_COMPONENT_EDIT || entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
-      const formActions = forms.getFormActions(stateProps.modelFormName)
-      // getRecursiveObjectReplacement
-      unbindedFormActions = {
-        ...formActions,
-        changeField: (name, value, transformUndefinedToNull = true, skipAbacCheck = false) => {
-          const val = transformUndefinedToNull && value === undefined ? null : value
-          if (skipAbacCheck) return formActions.changeField(name, val)
-          const ctx = {
-            data: getRecursiveObjectReplacement(stateProps.model, name, val),
-          }
-          const { access, mask } = checkAccess(ctx)
-          if (!access || mask.some(m => snakeToCamel(m) === name)) {
-            return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
-          }
-          return formActions.changeField(name, val)
-        },
-        changeSomeFields: (values, forceUndefines, transformUndefinedToNull = true, skipAbacCheck = false) => {
-          const valuesKeys = Object.keys(values)
-          const vals = valuesKeys.reduce((memo, key) => ({
-            ...memo,
-            [key]: transformUndefinedToNull && values[key] === undefined ? null : values[key],
-          }), {})
-          if (skipAbacCheck) return formActions.changeSomeFields(vals, forceUndefines)
-          const ctx = {
-            data: {
-              ...stateProps.model,
-              ...vals,
-            },
-          }
-          const { access, mask } = checkAccess(ctx)
-          if (!access || mask.some(m => valuesKeys.includes(snakeToCamel(m)))) {
-            return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
-          }
-          return formActions.changeSomeFields(vals, forceUndefines)
-        },
-        resetField: (name, skipAbacCheck = false) => {
-          if (skipAbacCheck) return formActions.resetField(name)
-          const ctx = {
-            data: getRecursiveObjectReplacement(stateProps.model, name, undefined),
-          }
-          const { access, mask } = checkAccess(ctx)
-          if (!access || mask.some(m => snakeToCamel(m) === name)) {
-            return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
-          }
-          return formActions.resetField(name)
-        },
-      }
-      modelFormActions = bindActionCreators(
-        unbindedFormActions,
-        dispatchProps.dispatch,
+      const formActions = dispatchProps.dispatch((dispatch, getState) =>
+        memoizedGetFormActions(stateProps.modelFormName, checkAccess, dispatch, getState),
       )
+      unbindedFormActions = formActions.unbindedFormActions
+      modelFormActions = formActions.modelFormActions
       // Define cancel action only for editing modal, cause in view modal we just close it
       if (
         stateProps.isEditing && stateProps.model && !stateProps.model.id &&

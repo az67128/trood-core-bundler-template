@@ -52,7 +52,7 @@ export const createEntityForm = (modelName, parents = []) => (
   const modelToEdit =
     await api.selectors.entityManager[modelName].getEntities(state).asyncGetById(id, { forceLoad: true })
   const rules = auth.selectors.getPermissions(state)
-  const sbj = auth.selectors.getActiveAcoount(state)
+  const sbj = auth.selectors.getActiveAccount(state)
 
   const baseFormName = getBaseFormName(modelName)
   const newForm = forms.createFormConfig({
@@ -188,7 +188,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
         model,
       ),
     }
-    const sbj = auth.selectors.getActiveAcoount(getState())
+    const sbj = auth.selectors.getActiveAccount(getState())
     const { access } = ruleChecker({
       rules,
       domain: 'custodian',
