@@ -17,6 +17,7 @@ EditComponent props:
 *********************
 
 * isEditing - true - editing mode, false - create mode
+* entityId - id of editing entity
 * parents - info about parent forms
 * model - redux store values for current form
 * modelErrors - errors for current form by fields
@@ -28,7 +29,6 @@ EditComponent props:
 * authData - account information
 * getMask - list of fields not available for viewing for current user by ABAC rules
 * editMask - list of fields not available for editing for current user by ABAC rules
-
 
 **BO dependent props:**
 
@@ -46,10 +46,13 @@ more details can be found here `manual-configuration-bo`_
 To use them in ``editComponent.js`` you need to pass ``fieldName`` props with name of the field. String and array of strings are supported.
 For example:
 
-.. code-block::
+.. code-block:: html
+
   <ModalInput fieldName="position" />
 
 For ``ModalSelect`` you should also specify following props: ``items``, ``onSearch``, ``onScrollToEnd``, ``isLoading``, ``missingValueResolver``
+
+You can also use any other props for ``ModalComponents``.
 
 -----
 
