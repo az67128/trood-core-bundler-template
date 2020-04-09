@@ -17,7 +17,6 @@ EditComponent props:
 *********************
 
 * isEditing - true - editing mode, false - create mode
-* entityId - id of editing entity
 * parents - info about parent forms
 * model - redux store values for current form
 * modelErrors - errors for current form by fields
@@ -27,8 +26,6 @@ EditComponent props:
 * modelFormActions - `redux-restify forms docs`_
 * serverModel - redux store values for current entity (before changes)
 * authData - account information
-* getMask - list of fields not available for viewing for current user by ABAC rules
-* editMask - list of fields not available for editing for current user by ABAC rules
 
 **BO dependent props:**
 
@@ -38,21 +35,6 @@ EditComponent props:
 * <BOName>ApiActions - BO Api actions
 
 more details can be found here `manual-configuration-bo`_
-
-**ModalComponents:**
-
-``ModalComponents`` prop contains pre-configured ``ModalInput``, ``ModalCheckbox``, ``ModalDateTimePicker`` and ``ModalSelect`` components.
-
-To use them in ``editComponent.js`` you need to pass ``fieldName`` props with name of the field. String and array of strings are supported.
-For example:
-
-.. code-block:: html
-
-  <ModalInput fieldName="position" />
-
-For ``ModalSelect`` you should also specify following props: ``items``, ``onSearch``, ``onScrollToEnd``, ``isLoading``, ``missingValueResolver``
-
-You can also use any other props for ``ModalComponents``.
 
 -----
 
@@ -111,4 +93,3 @@ editInlineEntity has same arguments ``model``, ``formConfig``
 Moreover, this form will be associated with the instance of the BO for which ``entityPage`` or ``editComponent`` is generated.
 
 And also at the time of submission, the BO field that is the link will be automatically set to this instance, if the field value is still undefined
-
