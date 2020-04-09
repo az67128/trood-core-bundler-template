@@ -11,11 +11,11 @@ Edit component
 .. _`Components`: http://docs.dev.trood.ru/troodsdk/front/styleguidist/index.html
 
 Edit component is React component for entity editing.
-``editComponent.js`` is located in ``/businessObjects/<BOLibName>/<BOName>/editComponent.js``
+``editComponent.js`` is located in ``/src/businessObjects/<BOLibName>/<BOName>/editComponent.js``
 
 Styles for the component can be described in the file: ``/src/businessObjects/<BOLibName>/<BOName>/editComponent.css``
 
-``editComponent.js`` should be included in export from ``/businessObjects/<BOLibName>/<BOName>/index.js``
+``editComponent.js`` should be included in export from ``/src/businessObjects/<BOLibName>/<BOName>/index.js``
 
 For example:
 
@@ -60,6 +60,9 @@ Edit component props
 * authData - account information
 * getMask - list of fields not available for viewing for current user by ABAC rules
 * editMask - list of fields not available for editing for current user by ABAC rules
+* modelActions - custom actions for current BO
+* modelApiActions - `redux-restify api docs`_
+* modelFormActions - `redux-restify forms docs`_
 
 **BO dependent props:**
 
@@ -91,6 +94,45 @@ You can also use any other props for ``ModalComponents`` based on `Components`_ 
 Edit component actions
 ***********************
 
-* modelActions - custom actions for current BO
-* modelApiActions - `redux-restify api docs`_
-* modelFormActions - `redux-restify forms docs`_
+To call edit component form you can use function ``<BOName>EitorActions.editEntity()``
+
+With this call, a modal window opens with the component described in the file ``/src/businessObjects/<BOLibName>/<BOName>/editComponent.js``
+
+<BOName>EditorActions.editEntity(model, formConfig)
+
+.. attribute:: model
+
+  BO entity - it is specified for editing. For creating - pass *undefined*.
+
+.. attribute:: formConfig
+
+  additional form restify configuration that can override the standard form.js parameters for <BOName>
+
+  More about form config: `redux-restify forms docs`_
+
+  You can change data not through a modal window, but in line in the component itself
+
+For inline render editComponent we need ``import { InlineEntityEditor } from '$trood/entityManager'``
+
+And when listing entities, pass the elements to the InlineEntityEditor
+
+.. code-block:: javascript
+
+  clientsArray.map(client => {
+    <InlineEntityEditor {...{
+      key: client.id, // set key
+      model: client, // model data
+      modelType: 'client', // BOName
+    }} />
+  })
+
+
+To call the inline editing form, we need to call the action ``<BOName>EitorActions.editInlineEntity()``
+
+editInlineEntity has same arguments ``model``, ``formConfig``
+
+``editEntity`` and ``editInlineEntity``, maybe with the child prefix ``editChildEntity`` and ``editInlineChildEntity``, they can be called within the ``entityPage`` or ``editComponent``.
+
+Moreover, this form will be associated with the instance of the BO for which ``entityPage`` or ``editComponent`` is generated.
+
+And also at the time of submission, the BO field that is the link will be automatically set to this instance, if the field value is still undefined
