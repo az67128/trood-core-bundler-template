@@ -22,7 +22,7 @@ When you run start or build command - trood-core-react-script will go through th
 Core concept schema
 ********************
 
-.. image:: ./frontScheme.png
+.. image:: frontScheme.png
    :height: 1800px
    :width: 1800px
    :scale: 35%
