@@ -28,7 +28,7 @@ For example:
 
 Simple example of ``editComponent.js``
 
-.. code-block:: javascript
+.. code-block:: jsx
 
     import React from 'react'
     import style from './editComponent.css'
@@ -116,7 +116,7 @@ For inline render editComponent we need ``import { InlineEntityEditor } from '$t
 
 And when listing entities, pass the elements to the InlineEntityEditor
 
-.. code-block:: javascript
+.. code-block:: jsx
 
   clientsArray.map(client => {
     <InlineEntityEditor {...{

@@ -98,7 +98,7 @@ View component actions
 To open BO modal view you should call a corresponding action. For example:
 
 
-.. code-block:: javascript
+.. code-block:: jsx
 
   // some layouts
   <div {...{
