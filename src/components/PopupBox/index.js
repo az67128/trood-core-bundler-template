@@ -76,6 +76,7 @@ class PopupBox extends PureComponent {
   render() {
     const {
       className,
+      disabled,
 
       position,
       arrow,
@@ -96,18 +97,21 @@ class PopupBox extends PureComponent {
           className: style.popup,
           onClick: () => this.toggleOpen(false),
         }}>
-          <div className={style.controlWrapper} onClick={() => this.toggleOpen()}>
-            {control}
+          <div>
+            <div className={style.controlWrapper} onClick={() => this.toggleOpen()}>
+              {control}
+            </div>
+            {
+              open && !disabled &&
+              <FlexiblePopup {...{
+                position: arrow && position,
+                className: style[position],
+                onClose: () => this.toggleOpen(false),
+              }}>
+                {getChildren()}
+              </FlexiblePopup>
+            }
           </div>
-          {open &&
-            <FlexiblePopup {...{
-              position: arrow && position,
-              className: style[position],
-              onClose: () => this.toggleOpen(false),
-            }}>
-              {getChildren()}
-            </FlexiblePopup>
-          }
         </TClickOutside>
       </div>
     )
