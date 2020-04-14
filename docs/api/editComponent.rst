@@ -118,13 +118,13 @@ And when listing entities, pass the elements to the InlineEntityEditor
 
 .. code-block:: jsx
 
-  clientsArray.map(client => {
+  clientsArray.map(client => (
     <InlineEntityEditor {...{
       key: client.id, // set key
       model: client, // model data
       modelType: 'client', // BOName
     }} />
-  })
+  ))
 
 
 To call the inline editing form, we need to call the action ``<BOName>EitorActions.editInlineEntity()``

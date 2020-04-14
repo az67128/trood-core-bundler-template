@@ -18,6 +18,8 @@ class PopupBox extends PureComponent {
     className: PropTypes.string,
     /** set control */
     control: PropTypes.node,
+    /** disabled or not */
+    disabled: PropTypes.bool,
     /** position is one of POPUP_POSITION.topLeft, POPUP_POSITION.topRight, POPUP_POSITION.topMiddle,
      * POPUP_POSITION.bottomLeft, POPUP_POSITION.bottomRight, POPUP_POSITION.bottomMiddle */
     position: PropTypes.oneOf(Object.values(POPUP_POSITION)),
@@ -72,6 +74,7 @@ class PopupBox extends PureComponent {
   render() {
     const {
       className,
+      disabled,
 
       position,
       arrow,
@@ -87,7 +90,7 @@ class PopupBox extends PureComponent {
     const getChildren = typeof children === 'function' ? children : () => children
 
     return (
-      <div className={classNames(style.root, className, arrow && style.arrow)} ref={tRef}>
+      <div className={classNames(style.root, className, disabled && style.disabled, arrow && style.arrow)} ref={tRef}>
         <TClickOutside {...{
           className: style.popup,
           onClick: () => this.toggleOpen(false),

@@ -72,13 +72,13 @@ And when listing, pass the elements to the InlineEntityEditor
 
 .. code-block:: jsx
 
-  clientsArray.map(client => {
+  clientsArray.map(client => (
     <InlineEntityEditor {...{
       key: client.id, // set key
       model: client, // model data
       modelType: 'client', // BOName
     }} />
-  })
+  ))
 
 --------
 
