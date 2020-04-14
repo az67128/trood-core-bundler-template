@@ -4,10 +4,6 @@
   position: relative;
 }
 
-.disabled {
-  pointer-events: none;
-}
-
 .popup {
   display: flex;
   flex-flow: column nowrap;

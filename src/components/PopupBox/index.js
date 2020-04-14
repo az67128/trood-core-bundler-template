@@ -54,19 +54,21 @@ class PopupBox extends PureComponent {
   }
 
   toggleOpen(open) {
-    let newOpen = open
-    const oldOpen = this.state.open
-    if (newOpen === undefined) {
-      newOpen = !oldOpen
-    }
-    this.setState({
-      open: newOpen,
-    })
-    if (oldOpen !== newOpen) {
-      if (newOpen) {
-        this.props.onOpen()
-      } else {
-        this.props.onClose()
+    if (!this.props.disabled) {
+      let newOpen = open
+      const oldOpen = this.state.open
+      if (newOpen === undefined) {
+        newOpen = !oldOpen
+      }
+      this.setState({
+        open: newOpen,
+      })
+      if (oldOpen !== newOpen) {
+        if (newOpen) {
+          this.props.onOpen()
+        } else {
+          this.props.onClose()
+        }
       }
     }
   }
@@ -74,7 +76,6 @@ class PopupBox extends PureComponent {
   render() {
     const {
       className,
-      disabled,
 
       position,
       arrow,
@@ -90,7 +91,7 @@ class PopupBox extends PureComponent {
     const getChildren = typeof children === 'function' ? children : () => children
 
     return (
-      <div className={classNames(style.root, className, disabled && style.disabled, arrow && style.arrow)} ref={tRef}>
+      <div className={classNames(style.root, className, arrow && style.arrow)} ref={tRef}>
         <TClickOutside {...{
           className: style.popup,
           onClick: () => this.toggleOpen(false),
