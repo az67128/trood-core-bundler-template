@@ -54,12 +54,12 @@ class PopupBox extends PureComponent {
   }
 
   toggleOpen(open) {
-    if (!this.props.disabled) {
-      let newOpen = open
-      const oldOpen = this.state.open
-      if (newOpen === undefined) {
-        newOpen = !oldOpen
-      }
+    let newOpen = open
+    const oldOpen = this.state.open
+    if (newOpen === undefined) {
+      newOpen = !oldOpen
+    }
+    if (!this.props.disabled || !newOpen) {
       this.setState({
         open: newOpen,
       })
