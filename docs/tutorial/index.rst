@@ -12,3 +12,4 @@ Tutorial
   add-components
   edit-components
   abac
+  wrappingUp
