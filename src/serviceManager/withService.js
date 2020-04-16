@@ -16,6 +16,7 @@ export default (
   stateToProps = defaultMapToProps,
   dispatchToProps = defaultMapToProps,
   mergeProps = defaultMergeProps,
+  connectHoc = connect,
 ) => (WrapedComponent) => {
   const serviceNames = Array.from(new Set(Array.isArray(service) ? service : [service]))
 
@@ -43,5 +44,5 @@ export default (
     }
   }
 
-  return connect(wrapedStateToProps, wrapedDispatchToProps, mergeProps)(WrapedComponent)
+  return connectHoc(wrapedStateToProps, wrapedDispatchToProps, mergeProps)(WrapedComponent)
 }

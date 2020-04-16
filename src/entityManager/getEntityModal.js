@@ -14,6 +14,8 @@ import {
 
 import { getPageChildContainer } from '$trood/pageManager'
 
+import { withService } from '$trood/serviceManager'
+
 import modalsStyle from '$trood/styles/modals.css'
 
 import modals, { registerModal, MODAL_SIZES } from '$trood/modals'
@@ -276,6 +278,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
   }
 
   const entitiesToGet = getEntitiesToGet(modelName, currentModel)
+  const servicesToGet = currentModel.services || []
 
   const getEntityManagerContext = (entityId, parents, prevForm, nextParents) => {
     let realNextParents = nextParents
@@ -640,18 +643,20 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
   }
 
   if (entityComponentName === ENTITY_COMPONENT_INLINE_EDIT) {
-    return connect(
+    return withService(
+      servicesToGet,
       stateToProps,
       dispatchToProps,
       mergeProps,
     )(EntityComponentWrapper)
   }
 
-  return registerModal(
-    dataCyName,
+  return withService(
+    servicesToGet,
     stateToProps,
     dispatchToProps,
     mergeProps,
+    (...args) => registerModal(dataCyName, ...args),
   )(EntityComponentWrapper)
 }
 
