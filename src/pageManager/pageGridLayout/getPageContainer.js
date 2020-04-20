@@ -158,7 +158,7 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
       // Getting restify entities actions
       const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
         ...prevActions,
-        [action]: entityManager.actions[action](modelName, currentParents),
+        [action]: entityManager.actions[action](entitiesToBusinessObjectsDict[modelName], currentParents),
       }), {})
 
       const apiActions = api.actions.entityManager[entitiesToBusinessObjectsDict[modelName]]

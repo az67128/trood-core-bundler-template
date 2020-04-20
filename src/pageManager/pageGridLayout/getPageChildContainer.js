@@ -64,7 +64,7 @@ const getPageChildContainer = (dispatch, getState) => ({
     const currentModel = RESTIFY_CONFIG.registeredModels[entitiesToBusinessObjectsDict[modelName]]
     const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
       ...prevActions,
-      [action]: entityManager.actions[action](modelName, currentParents),
+      [action]: entityManager.actions[action](entitiesToBusinessObjectsDict[modelName], currentParents),
     }), {})
 
     const apiActions = api.actions.entityManager[entitiesToBusinessObjectsDict[modelName]]
