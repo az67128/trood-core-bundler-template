@@ -15,6 +15,7 @@ const getEntityPageLink = (
 ) => {
   if (!model.$modelType) return undefined
   const to = getEntityPageUrl(model.$modelType, model.id)
+  if (!to) return undefined
   return getIsAllowPath(to, registeredRoutesPaths) ? to : undefined
 }
 

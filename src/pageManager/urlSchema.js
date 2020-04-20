@@ -82,6 +82,7 @@ const createSchemaMapObject = (schema, baseUrl = '', basePath = []) => {
 
 const urlSchemaMap = createSchemaMapObject(urlSchema)
 const getFromUrlsObject = (obj) => (urlMapObject, config = {}) => {
+  if (!urlMapObject) return undefined
   let result = obj[urlMapObject.$uuid || urlMapObject]
   Object.keys(config).forEach(key => {
     result = result.replace(`:${key}(\\d+)`, config[key])
