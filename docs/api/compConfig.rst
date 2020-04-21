@@ -111,3 +111,41 @@ For example, we describe the connection of the component "ClientsTableView":
       },
     ],
   }
+
+*******************************
+TroodCoreComponents 
+*******************************
+
+``TroodCoreComponents/TableView``
+
+Represents preconfigured table view for business entity.
+
+props:
+
+.. attribute:: tableEntities
+
+Restify api.selectors - `redux-restify api selectors docs`_
+
+.. attribute:: tableApiActions
+
+Restify api.actions - `redux-restify api actions docs`_
+
+.. attribute:: tableEditorActions
+
+actions for edit business object
+
+.. attribute:: checking
+
+Boolean. If true displays row checkboxes.
+
+.. attribute:: editable
+
+Boolean. If true adds column with edit icon which allow edit entity.
+
+.. attribute:: include
+
+Array of string. List of column names to include in table output
+
+.. attribute:: exclude
+
+Array of string. List of column names to exclude in table output
