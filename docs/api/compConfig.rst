@@ -149,3 +149,29 @@ Array of string. List of column names to include in table output
 .. attribute:: exclude
 
 Array of string. List of column names to exclude in table output
+
+Simple usage in ``./src/config.js``
+
+.. code-block:: javascript
+
+  pages: [
+    {
+      url: 'table',
+      type: 'grid',
+      components: [
+        {
+          type: 'TroodCoreComponents/TableView',
+          span: 3,
+          withMargin: true,
+          models: {
+            table: 'employee',
+          },
+          props: {
+            editable: true,
+            checking: true,
+            exclude: ['id'],
+          },
+        },
+      ],
+    },
+  ],
