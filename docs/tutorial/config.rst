@@ -266,7 +266,7 @@ and clear reference in src/businessObjects/<BOLibName>/<BOName>/index.js
 8. Build project
 *****************
 
-Localy run
+Locally run
 
 ``npm start``
 

@@ -2,8 +2,6 @@ import { bindActionCreators } from 'redux'
 
 import { api, RESTIFY_CONFIG, RestifyForeignKeysArray } from 'redux-restify'
 
-import files from '$trood/files'
-
 import {
   getCreateFormFromServiceActionName,
   getCreateFormFromServiceActionCheckName,
@@ -22,11 +20,10 @@ import * as actions from './actions'
 
 export const getEntitiesToGet = (modelName, modelConfig = {}) => {
   const dependsOn = modelConfig.dependsOn || []
-  const services = modelConfig.services || []
 
   // Getting selectors for restify entities selectors
   // TODO by @deylak services should not be treated as model name, we should add serviceManager here
-  return (dependsOn.concat(modelName).concat(services)).reduce((memo, model) => ({
+  return dependsOn.concat(modelName).reduce((memo, model) => ({
     ...memo,
     [model]: (state) => api.selectors.entityManager[model].getEntities(state),
   }), {})
@@ -141,9 +138,7 @@ export const getCurrentEntitiesActions = (entitiesActions, dispatch) => {
     ...memo,
     [getModelEditorActionsName(key)]: bindActionCreators(entitiesActions[key], dispatch),
     [getModelApiActionsName(key)]: bindActionCreators(api.actions.entityManager[key], dispatch),
-  }), {
-    filesActions: bindActionCreators(files.actions, dispatch),
-  })
+  }), {})
 }
 
 export const getModelsForCreateFormFromService = serviceName => {

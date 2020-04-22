@@ -70,15 +70,15 @@ For inline render editComponent we need ``import { InlineEntityEditor } from '$t
 
 And when listing, pass the elements to the InlineEntityEditor
 
-.. code-block:: javascript
+.. code-block:: jsx
 
-  clientsArray.map(client => {
+  clientsArray.map(client => (
     <InlineEntityEditor {...{
       key: client.id, // set key
       model: client, // model data
       modelType: 'client', // BOName
     }} />
-  })
+  ))
 
 --------
 
@@ -93,4 +93,3 @@ editInlineEntity has same arguments ``model``, ``formConfig``
 Moreover, this form will be associated with the instance of the BO for which ``entityPage`` or ``editComponent`` is generated.
 
 And also at the time of submission, the BO field that is the link will be automatically set to this instance, if the field value is still undefined
-

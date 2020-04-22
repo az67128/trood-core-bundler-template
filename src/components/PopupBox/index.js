@@ -18,6 +18,8 @@ class PopupBox extends PureComponent {
     className: PropTypes.string,
     /** set control */
     control: PropTypes.node,
+    /** disabled or not */
+    disabled: PropTypes.bool,
     /** position is one of POPUP_POSITION.topLeft, POPUP_POSITION.topRight, POPUP_POSITION.topMiddle,
      * POPUP_POSITION.bottomLeft, POPUP_POSITION.bottomRight, POPUP_POSITION.bottomMiddle */
     position: PropTypes.oneOf(Object.values(POPUP_POSITION)),
@@ -57,14 +59,16 @@ class PopupBox extends PureComponent {
     if (newOpen === undefined) {
       newOpen = !oldOpen
     }
-    this.setState({
-      open: newOpen,
-    })
-    if (oldOpen !== newOpen) {
-      if (newOpen) {
-        this.props.onOpen()
-      } else {
-        this.props.onClose()
+    if (!this.props.disabled || !newOpen) {
+      this.setState({
+        open: newOpen,
+      })
+      if (oldOpen !== newOpen) {
+        if (newOpen) {
+          this.props.onOpen()
+        } else {
+          this.props.onClose()
+        }
       }
     }
   }
@@ -72,6 +76,7 @@ class PopupBox extends PureComponent {
   render() {
     const {
       className,
+      disabled,
 
       position,
       arrow,
@@ -92,18 +97,21 @@ class PopupBox extends PureComponent {
           className: style.popup,
           onClick: () => this.toggleOpen(false),
         }}>
-          <div className={style.controlWrapper} onClick={() => this.toggleOpen()}>
-            {control}
+          <div>
+            <div className={style.controlWrapper} onClick={() => this.toggleOpen()}>
+              {control}
+            </div>
+            {
+              open && !disabled &&
+              <FlexiblePopup {...{
+                position: arrow && position,
+                className: style[position],
+                onClose: () => this.toggleOpen(false),
+              }}>
+                {getChildren()}
+              </FlexiblePopup>
+            }
           </div>
-          {open &&
-            <FlexiblePopup {...{
-              position: arrow && position,
-              className: style[position],
-              onClose: () => this.toggleOpen(false),
-            }}>
-              {getChildren()}
-            </FlexiblePopup>
-          }
         </TClickOutside>
       </div>
     )
