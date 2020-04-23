@@ -14,9 +14,9 @@ When you run start or build command - trood-core-react-script will go through th
     * merged project files. more_
     * installed core and project dependencies
 
-3. After that the webpack will be start or build your project
+3. After that, the webpack will start or build your project
 
-4. (Only for build) Build artifacts copied to root of you project.
+4. (Only for the build) Build artifacts copied to root of your project.
 
 ********************
 Core concept schema
