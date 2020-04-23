@@ -24,7 +24,7 @@ export const getPageLayoutProps = (page, entityPageName, prevPageId) => {
   return {
     pageConfig: pageTypesLayoutsDict[PAGE_TYPES.grid].getPageConfig(...propsArgs),
     // TODO export other only from grid
-    id: currentPageService.getPageId(...propsArgs),
+    id: page.id || currentPageService.getPageId(...propsArgs),
     headerRenderer: currentPageService.getPageHeaderRendererConfig(...propsArgs),
     container: currentPageService.getPageContainer(...propsArgs),
     modelType: currentPageService.getModelType(...propsArgs),

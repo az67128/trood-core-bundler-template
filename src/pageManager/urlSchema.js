@@ -41,7 +41,7 @@ const urlSchema = systemConfig.pages.reduce(reducePages(), {
     }
   }, {}),
 })
-console.log(urlSchema)
+
 const paramsRegex = /:\w+(?=\/|$)/g
 
 // Different urls properties to find by uuid
