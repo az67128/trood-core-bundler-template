@@ -118,21 +118,9 @@ TroodCoreComponents
 
 ``TroodCoreComponents/TableView``
 
-Represents preconfigured table view for business entity.
+Represents preconfigured table view for business entity passed to ``table`` model.
 
 props:
-
-.. attribute:: tableEntities
-
-Restify api.selectors - `redux-restify api selectors docs`_
-
-.. attribute:: tableApiActions
-
-Restify api.actions - `redux-restify api actions docs`_
-
-.. attribute:: tableEditorActions
-
-actions for edit business object
 
 .. attribute:: checking
 
@@ -156,6 +144,7 @@ Simple usage in ``./src/config.js``
 
   pages: [
     {
+      title: 'Employee',
       url: 'table',
       type: 'grid',
       components: [

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import TTable from '$trood/components/TTable'
 import AsyncEntitiesList from '$trood/components/AsyncEntitiesList'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
-import { snakeToCamel } from '$trood/helpers/namingNotation'
+import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import SmartDate, { SMART_DATE_FORMATS } from '$trood/components/SmartDate'
 import { templateApplyValues } from '$trood/helpers/templates'
@@ -18,16 +18,14 @@ const TableView = ({
   editable = false,
   include = [],
   exclude = [],
+  form: { sortColumn, sortOrder },
+  formActions,
 }) => {
-  const [sortColumn, setSortColumn] = useState(null)
-  const [sortOrder, setSortOrder] = useState(null)
-
   const config = RESTIFY_CONFIG.registeredModels[tableEntities.modelType]
 
   const sort = sortColumn ? `sort(${sortOrder > 0 ? '+' : '-'}${sortColumn})` : ''
   const tableApiConfig = {
     filter: {
-      depth: 3,
       q: sort,
     },
   }
@@ -36,18 +34,20 @@ const TableView = ({
   const tableIsLoading = tableEntities.getIsLoadingArray(tableApiConfig)
   const tableNextPageAction = () => tableApiActions.loadNextPage(tableApiConfig)
   const header = Object.keys(config.meta)
-    .filter((key) => {
-      if (exclude.includes(key)) return false
+    .filter((fieldName) => {
+      if (exclude.includes(fieldName)) return false
       if (include.length === 0) return true
-      return include.includes(key)
+      return include.includes(fieldName)
     })
-    .map((key) => {
-      const fieldName = snakeToCamel(key)
-      const field = config.meta[key]
+    .map((fieldName) => {
+      const fieldNameSnake = camelToLowerSnake(fieldName)
+      const field = config.meta[fieldName]
+
       if (field.linkType === 'outer') return null
+
       return {
-        title: key.replace(/_/g, ' '),
-        name: key,
+        title: fieldName,
+        name: fieldNameSnake,
         sortable: field.type !== 'generic',
         model: (item) => {
           if (field.linkType) {
@@ -71,9 +71,11 @@ const TableView = ({
               <EntityPageLink model={item[fieldName]}>{templateApplyValues(template, item[fieldName])}</EntityPageLink>
             )
           }
+
           if (field.type === 'bool') {
             return item[fieldName] ? 'true' : 'false'
           }
+
           if (field.type === 'datetime') {
             return (
               <SmartDate
@@ -84,10 +86,12 @@ const TableView = ({
               />
             )
           }
-          if (config.idField === key) {
-            return <EntityPageLink model={item[fieldName]}>{item[key]}</EntityPageLink>
+
+          if (config.idField === fieldNameSnake) {
+            return <EntityPageLink model={item[fieldName]}>{item[fieldName]}</EntityPageLink>
           }
-          return item[key]
+
+          return item[fieldName]
         },
       }
     })
@@ -124,8 +128,10 @@ const TableView = ({
             sortingColumn: sortColumn,
             sortingOrder: sortOrder,
             onSort: (name, order) => {
-              setSortColumn(name)
-              setSortOrder(order)
+              formActions.changeSomeFields({
+                sortColumn: name,
+                sortOrder: order,
+              })
             },
             body: tableArray,
             header: [...header, ...(editable ? editColumn : [])],
