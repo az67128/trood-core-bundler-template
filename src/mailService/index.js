@@ -13,8 +13,13 @@ export * from './constants'
 
 
 const getModelIdSelector = () => () => undefined
-const getPageConfig = page => page
 const getPageId = () => TROOD_MAIL_SERVICE_PAGE_ID
+const getPageConfig = (page, ...args) => {
+  return {
+    ...page,
+    id: getPageId(page, ...args),
+  }
+}
 const getPageHeaderRendererConfig = page => ({
   label: page.title || TROOD_MAIL_SERVICE_PAGE_DEFAULT_TITLE,
   iconType: page.icon || TROOD_MAIL_SERVICE_PAGE_DEFAULT_ICON,

@@ -9,7 +9,8 @@ export const camelToLowerSnake = s => camelToSnake(s).toLowerCase()
 export const camelToUpperSnake = s => camelToSnake(s).toUpperCase()
 // Using camel to snake for exclude camelCase parts from converting to lower case
 export const snakeToCamel = s => {
-  return camelToSnake(s).toLowerCase().replace(/(.)_+(.)/g, (match, g1, g2) => g1 + g2.toUpperCase())
+  return camelToLowerSnake(s)
+    .replace(/(\B)_+(.)/g, (match, g1, g2) => g1 + g2.toUpperCase())
 }
 
 const objectToCase = convertingFunc => (obj, config = {}) => {

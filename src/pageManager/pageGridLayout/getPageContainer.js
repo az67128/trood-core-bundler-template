@@ -31,85 +31,64 @@ import componentsManifest from '$trood/componentLibraries/manifest'
 
 
 const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSelector) => {
+  const entitiesSelectors = applySelectors(`pageContainerCurrentEntities${Math.random()}`)
+  const entityListsSelectors = applySelectors(`pageContainerEntityLists${Math.random()}`)
+  const formsSelectors = applySelectors(`pageContainerCurrentForms${Math.random()}`)
+
   // Here we recursively get all components inside the config(case with nested grids)
-  const currentEntitiesSelectors = applySelectors(`pageContainerCurrentEntities${Math.random()}`)
-  const currentEntitiyListsSelectors = applySelectors(`pageContainerEntityLists${Math.random()}`)
-  const currentFormsSelectors = applySelectors(`pageContainerCurrentForms${Math.random()}`)
   const reduceComponents = (memo, component) => {
     if (component.components) {
       return memo.concat(component).concat(component.components.reduce(reduceComponents, []))
     }
     return memo.concat(component)
   }
-  const currentComponents = (pageConfig.components || []).reduce(reduceComponents, [])
-  // Getting selectors for restify entities selectors
-  const entitiesToBusinessObjectsDict = {}
-  // Used for accessing entities by their names, not with `entities` suffix
+  const components = (pageConfig.components || []).reduce(reduceComponents, [])
+
+  const models = components
+    .reduce((memo, c) => [...memo, ...Object.values(c.models || {})], [entityPageModelName])
+    .filter((item, i, arr) => item && arr.indexOf(item) === i)
+
   const entityListsGetters = {}
-  const entitiesToGet = currentComponents.reduce((memo, component) => {
-    if (!component.models) return memo
-    const currentComponentEntities = Object.keys(component.models).reduce((prevEntities, model) => {
-      const currentBusinessObject = component.models[model]
-      entitiesToBusinessObjectsDict[model] = currentBusinessObject
-      const entititiesListGetter = (state) => api.selectors.entityManager[currentBusinessObject].getEntities(state)
-      entityListsGetters[model] = entititiesListGetter
-      return {
-        ...prevEntities,
-        // Here we map component defined entities names to business object, wich are defined in system config
-        [getModelEntitiesName(model)]: entititiesListGetter,
-        [getModelComponentsName(model)]: () => {
-          const currentModel = RESTIFY_CONFIG.registeredModels[currentBusinessObject]
-          return currentModel.components
-        },
-        [getModelConstantsName(model)]: () => {
-          const currentModel = RESTIFY_CONFIG.registeredModels[currentBusinessObject]
-          return currentModel.constants
-        },
-      }
-    }, {})
+  const entitiesToGet = models.reduce((memo, model) => {
+    entityListsGetters[model] = (state) => api.selectors.entityManager[model].getEntities(state)
     return {
       ...memo,
-      ...currentComponentEntities,
+      [getModelEntitiesName(model)]: entityListsGetters[model],
+      [getModelComponentsName(model)]: () => {
+        const currentModel = RESTIFY_CONFIG.registeredModels[model]
+        return currentModel.components
+      },
+      [getModelConstantsName(model)]: () => {
+        const currentModel = RESTIFY_CONFIG.registeredModels[model]
+        return currentModel.constants
+      },
     }
   }, {})
 
   // Getting selectors for forms, binded to components
-  const formsToGet = currentComponents.reduce((memo, component) => {
-    if (!componentsManifest.forms || !componentsManifest.forms[component.type]) {
+  const formsToGet = components.reduce((memo, component) => {
+    if (!componentsManifest.forms || !componentsManifest.forms[component.id]) {
       return memo
     }
     return {
       ...memo,
-      [component.type]: (state) => forms.selectors[component.type].getForm(state),
+      [component.id]: (state) => forms.selectors[component.id].getForm(state),
     }
   }, {})
 
-  // Getting trood services for all components entities
-  const servicesToGet = currentComponents.reduce((memo, component) => {
-    if (!componentsManifest.services[component.type]) {
-      return memo
-    }
-    return memo.concat(componentsManifest.services[component.type])
-  }, [])
-
   const stateToProps = (state, props) => {
-    const currentEntities = currentEntitiesSelectors(state, entitiesToGet)
-    const currentEntityLists = currentEntitiyListsSelectors(state, entityListsGetters)
-    const currentForms = currentFormsSelectors(state, formsToGet, getFormPropName)
+    const currentEntities = entitiesSelectors(state, entitiesToGet)
+    const currentEntityLists = entityListsSelectors(state, entityListsGetters)
+    const currentForms = formsSelectors(state, formsToGet, getFormPropName)
 
     let modelId
     let model
     let childForms = []
     let childEntitiesByModel = {}
     if (entityPageModelName) {
-      const entityPageEntities = api.selectors.entityManager[entityPageModelName].getEntities(state)
-      // TODO this is hack for inherit modelId sleector(now only personalAccount page case),
-      // rework after more thoughtfull nested page logic will be implemented
+      const entityPageEntities = currentEntityLists[entityPageModelName]
       const idSelector = props.entityPageModelIdSelector || entityPageModelIdSelector
       modelId = idSelector(state, props)
-      if (!Number.isNaN(parseInt(modelId, 10))) {
-        modelId = parseInt(modelId, 10)
-      }
       model = entityPageEntities.getById(modelId)
 
       const currentChildFormRegexp = getChildFormRegexp({ parentModel: entityPageModelName, parentId: modelId })
@@ -120,12 +99,12 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
     }
 
     return {
-      modelId,
-      model,
       ...props,
       ...currentEntities,
       ...childEntitiesByModel,
       ...currentForms,
+      model,
+      modelId,
       entityPageModelName,
     }
   }
@@ -145,8 +124,8 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
   }
 
   const mergeProps = (stateProps, dispatchProps) => {
-    const currentEntitiesActions = Object.keys(entitiesToBusinessObjectsDict).reduce((memo, modelName) => {
-      const currentModel = RESTIFY_CONFIG.registeredModels[entitiesToBusinessObjectsDict[modelName]]
+    const currentEntitiesActions = models.reduce((memo, model) => {
+      const currentModel = RESTIFY_CONFIG.registeredModels[model]
       const currentParents = []
       if (entityPageModelName) {
         currentParents.push({
@@ -158,15 +137,15 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
       // Getting restify entities actions
       const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
         ...prevActions,
-        [action]: entityManager.actions[action](entitiesToBusinessObjectsDict[modelName], currentParents),
+        [action]: entityManager.actions[action](model, currentParents),
       }), {})
 
-      const apiActions = api.actions.entityManager[entitiesToBusinessObjectsDict[modelName]]
+      const apiActions = api.actions.entityManager[model]
       return {
         ...memo,
-        [getModelEditorActionsName(modelName)]: bindActionCreators(mapedActions, dispatchProps.dispatch),
-        [getModelActionsName(modelName)]: bindActionCreators(currentModel.actions, dispatchProps.dispatch),
-        [getModelApiActionsName(modelName)]: bindActionCreators(apiActions, dispatchProps.dispatch),
+        [getModelEditorActionsName(model)]: bindActionCreators(mapedActions, dispatchProps.dispatch),
+        [getModelActionsName(model)]: bindActionCreators(currentModel.actions, dispatchProps.dispatch),
+        [getModelApiActionsName(model)]: bindActionCreators(apiActions, dispatchProps.dispatch),
         PageChildContainer: dispatchProps.dispatch(getPageChildContainer),
       }
     }, {})
@@ -177,6 +156,13 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
       ...currentEntitiesActions,
     }
   }
+
+  const servicesToGet = components.reduce((memo, component) => {
+    if (!componentsManifest.services[component.type]) {
+      return memo
+    }
+    return [...memo, ...componentsManifest.services[component.type]]
+  }, [])
 
   return withRouter(withService(servicesToGet, stateToProps, dispatchToProps, mergeProps)(PageGridLayout))
 }

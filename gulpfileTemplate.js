@@ -3,8 +3,11 @@ require('regenerator-runtime/runtime')
 const gulp = require('gulp')
 const template = require('gulp-template')
 const rename = require('gulp-rename')
-const { PAGE_TYPES_DEFAULT_TITLE, PAGE_TYPES_GET_PAGE_ID } = require('./src/pageManager')
+const { PAGE_TYPES_DEFAULT_TITLE, PAGE_TYPES_GET_PAGE_ID, getPageConfig } = require('./src/pageManager')
 
+
+const getPageId = (page, ...args) => PAGE_TYPES_GET_PAGE_ID[page.type](page, ...args)
+const getPageTitle = (page) => page.title || PAGE_TYPES_DEFAULT_TITLE[page.type] || ''
 
 const isTest = process.env.NODE_ENV === 'testing'
 
@@ -49,8 +52,8 @@ const getLayoutTemplate = (layoutName) => {
   }`
 }
 
-const getComponentFormTemplate = (formName, path) => {
-  return `'${formName}': require('${path}').default`
+const getComponentFormTemplate = ({ id, config }) => {
+  return `'${id}': require('${config}').default`
 }
 
 const getPageIntlMessage = (pageId, pageTitle) => {
@@ -61,6 +64,7 @@ const getPageIntlMessage = (pageId, pageTitle) => {
 }
 
 gulp.task('make-components', () => {
+  const config = require('./src/config').default
   const configsContext = require.context('./src/componentLibraries/', true, /config\.js(on)?$/)
   const formsContext = require.context('./src/componentLibraries/', true, /form\.js$/)
 
@@ -74,31 +78,55 @@ gulp.task('make-components', () => {
     [key.replace(/\.\/|\/form\.js/g, '')]: key.replace('.js', ''),
   }), {})
 
+  const pages = [
+    ...config.pages.map(p => getPageConfig(p)),
+    ...Object.keys(config.entityPages).map(key => getPageConfig(config.entityPages[key], key)),
+  ]
+  const componentsForms = []
+  const forEachComponents = (comps = []) => {
+    comps.forEach(c => {
+      const compFormConfig = forms[c.type]
+      if (compFormConfig) {
+        componentsForms.push({
+          id: c.id,
+          type: c.type,
+          config: compFormConfig,
+        })
+      }
+      if (c.components) forEachComponents(c.components)
+    })
+  }
+  const forEachPages = (pgs = []) => {
+    pgs.forEach(p => {
+      if (p.components) forEachComponents(p.components)
+      if (p.pages) forEachPages(p.pages)
+    })
+  }
+  forEachPages(pages)
+
   return gulp.src('./src/componentLibraries/manifest.js.template')
-      .pipe(template({
-        components: Object.keys(configs).map(library => {
-          const currentLibraryName = configs[library].title
-          const currentComponents = configs[library].components
-          return currentComponents.map(component => {
-            return getLoadableTemplate(currentLibraryName, component.title)
-          }).join(',\n')
-        }).join(',\n'),
-        forms: Object.keys(forms).map(formName => {
-          return getComponentFormTemplate(formName, forms[formName])
-        }).join(',\n'),
-        services: Object.keys(configs).map(library => {
-          const currentLibraryName = configs[library].title
-          const currentComponents = configs[library].components
-          return currentComponents.map(component => {
-            return getServicesTemplate(currentLibraryName, component.title, component.services)
-          }).join(',\n')
-        }).join(',\n'),
-      }))
-      .pipe(rename(path => {
-        path.basename = 'manifest'
-        path.extname = '.js'
-      }))
-      .pipe(gulp.dest('./src/componentLibraries'))
+    .pipe(template({
+      components: Object.keys(configs).map(library => {
+        const currentLibraryName = configs[library].title
+        const currentComponents = configs[library].components
+        return currentComponents.map(component => {
+          return getLoadableTemplate(currentLibraryName, component.title)
+        }).join(',\n    ')
+      }).join(',\n    '),
+      forms: componentsForms.map(getComponentFormTemplate).join(',\n    '),
+      services: Object.keys(configs).map(library => {
+        const currentLibraryName = configs[library].title
+        const currentComponents = configs[library].components
+        return currentComponents.map(component => {
+          return getServicesTemplate(currentLibraryName, component.title, component.services)
+        }).join(',\n    ')
+      }).join(',\n    '),
+    }))
+    .pipe(rename(path => {
+      path.basename = 'manifest'
+      path.extname = '.js'
+    }))
+    .pipe(gulp.dest('./src/componentLibraries'))
 })
 
 gulp.task('make-business-objects', () => {
@@ -110,23 +138,23 @@ gulp.task('make-business-objects', () => {
   }), {})
 
   return gulp.src('./src/businessObjects/manifest.js.template')
-      .pipe(template({
-        models: Object.keys(configs).map(library => {
-          const currentLibraryName = configs[library].title
-          const currentModels = configs[library].models
-          return currentModels.map(model => {
-            const currentModule = require(`./src/businessObjects/${currentLibraryName}/${model.title}`)
-            const currentComponents = Object.keys(currentModule.components || {})
-            const currentConstants = currentModule.constants || {}
-            return getModelTemplate(currentLibraryName, model.title, model, currentComponents, currentConstants)
-          }).join(',\n')
-        }).join(',\n'),
-      }))
-      .pipe(rename(path => {
-        path.basename = 'manifest'
-        path.extname = '.js'
-      }))
-      .pipe(gulp.dest('./src/businessObjects'))
+    .pipe(template({
+      models: Object.keys(configs).map(library => {
+        const currentLibraryName = configs[library].title
+        const currentModels = configs[library].models
+        return currentModels.map(model => {
+          const currentModule = require(`./src/businessObjects/${currentLibraryName}/${model.title}`)
+          const currentComponents = Object.keys(currentModule.components || {})
+          const currentConstants = currentModule.constants || {}
+          return getModelTemplate(currentLibraryName, model.title, model, currentComponents, currentConstants)
+        }).join(',\n')
+      }).join(',\n'),
+    }))
+    .pipe(rename(path => {
+      path.basename = 'manifest'
+      path.extname = '.js'
+    }))
+    .pipe(gulp.dest('./src/businessObjects'))
 })
 
 gulp.task('make-layouts', () => {
@@ -138,29 +166,26 @@ gulp.task('make-layouts', () => {
   }), {})
 
   return gulp.src('./src/layouts/manifest.js.template')
-      .pipe(template({
-        layouts: Object.keys(configs).map(layoutKey => {
-          return getLayoutTemplate(layoutKey)
-        }).join(',\n'),
-      }))
-      .pipe(rename(path => {
-        path.basename = 'manifest'
-        path.extname = '.js'
-      }))
-      .pipe(gulp.dest('./src/layouts'))
+    .pipe(template({
+      layouts: Object.keys(configs).map(layoutKey => {
+        return getLayoutTemplate(layoutKey)
+      }).join(',\n'),
+    }))
+    .pipe(rename(path => {
+      path.basename = 'manifest'
+      path.extname = '.js'
+    }))
+    .pipe(gulp.dest('./src/layouts'))
 })
-
-// TODO by @deylak import this from trood-core
-const getPageId = (page, entityModelName) => PAGE_TYPES_GET_PAGE_ID[page.type](page, entityModelName)
-const getPageTitle = (page) => page.title || PAGE_TYPES_DEFAULT_TITLE[page.type] || ''
 
 gulp.task('make-locale', () => {
   const config = require('./src/config').default
 
-  const reducePages = (modelType) => (memo, page) => {
+  const reducePages = (modelType, prevPageId) => (memo, page) => {
+    const currentPageId = getPageId(page, modelType, undefined, prevPageId)
     let currentPageTitles = [
       {
-        id: getPageId(page, modelType),
+        id: currentPageId,
         title: getPageTitle(page),
       },
     ]
@@ -168,7 +193,7 @@ gulp.task('make-locale', () => {
       currentPageTitles = [
         ...currentPageTitles,
         ...page.pages.reduce(
-          reducePages(page.modelType || modelType),
+          reducePages(page.modelType || modelType, currentPageId),
           [],
         ),
       ]
@@ -179,9 +204,10 @@ gulp.task('make-locale', () => {
     reducePages(),
     Object.keys(config.entityPages).reduce((memo, key) => {
       const currentPage = config.entityPages[key]
+      const currentPageId = getPageId(currentPage, key)
       let currentPageTitles = [
         {
-          id: getPageId(currentPage, key),
+          id: currentPageId,
           title: getPageTitle(currentPage),
         },
       ]
@@ -189,7 +215,7 @@ gulp.task('make-locale', () => {
         currentPageTitles = [
           ...currentPageTitles,
           ...currentPage.pages.reduce(
-            reducePages(key),
+            reducePages(key, currentPageId),
             [],
           ),
         ]
@@ -198,17 +224,17 @@ gulp.task('make-locale', () => {
     }, []),
   )
   return gulp.src('./src/configMessages.js.template')
-      .pipe(template({
-        pages: flattenPages
-          .filter(page => page.title)
-          .map(page => getPageIntlMessage(page.id, page.title))
-          .join(',\n'),
-      }))
-      .pipe(rename(path => {
-        path.basename = 'configMessages'
-        path.extname = '.js'
-      }))
-      .pipe(gulp.dest('./src'))
+    .pipe(template({
+      pages: flattenPages
+        .filter(page => page.title)
+        .map(page => getPageIntlMessage(page.id, page.title))
+        .join(',\n'),
+    }))
+    .pipe(rename(path => {
+      path.basename = 'configMessages'
+      path.extname = '.js'
+    }))
+    .pipe(gulp.dest('./src'))
 })
 
 gulp.task('default', gulp.parallel(

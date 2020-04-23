@@ -18,7 +18,7 @@ const reducePages = (modelType, prevPageId) => (memo, page) => {
       header: HEADER_SHOW,
       url: realConfig.url,
       pages: realConfig.pages && realConfig.pages.reduce(
-        reducePages(pageModelType || modelType, currentPageProps.baseId),
+        reducePages(pageModelType || modelType, currentPageProps.id),
         {},
       ),
     },
@@ -36,11 +36,12 @@ const urlSchema = systemConfig.pages.reduce(reducePages(), {
         modelType: key,
         header: HEADER_HIDE,
         url: `${realConfig.url || key}/:id(\\d+)`,
-        pages: realConfig.pages && realConfig.pages.reduce(reducePages(key, currentPageProps.baseId), {}),
+        pages: realConfig.pages && realConfig.pages.reduce(reducePages(key, currentPageProps.id), {}),
       },
     }
   }, {}),
 })
+console.log(urlSchema)
 const paramsRegex = /:\w+(?=\/|$)/g
 
 // Different urls properties to find by uuid
