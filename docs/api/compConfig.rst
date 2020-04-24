@@ -60,9 +60,9 @@ We have props that are implicitly passed to components, but you can interact wit
 When you transfer a Business object, you will get access to its props:
 
 * BONameEditorActions - actions for edit business object
-* BONameActions - custom actions from business object (if has export default { actions } in <BOName>/index.js)
-* BONameComponents - constants from business object (if has exports in <BOName>/components/index.js)
-* BONameConstants - constants from business object (if has <BOName>/constants.js)
+* BONameActions - custom actions from business object (if has export default { actions } in ``<BOName>/index.js``)
+* BONameComponents - constants from business object (if has exports in ``<BOName>/components/index.js``)
+* BONameConstants - constants from business object (if has ``<BOName>/constants.js``)
 * BONameEntities - restify api.selectors - `redux-restify api selectors docs`_
 * BONameApiActions - restify api.actions - `redux-restify api actions docs`_
 * childBOName - actions for working with child
@@ -91,7 +91,7 @@ The page components library config file is ``ssrc/componentLibraries/<PageCompLi
 
         models
 
-For example, we describe the connection of the component "ClientsTableView":
+For example, we describe the connection of the component ``ClientsTableView``:
 
 .. code-block:: javascript
 
