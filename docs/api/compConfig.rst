@@ -111,3 +111,56 @@ For example, we describe the connection of the component "ClientsTableView":
       },
     ],
   }
+
+*******************************
+TroodCoreComponents 
+*******************************
+
+``TroodCoreComponents/TableView``
+
+Represents preconfigured table view for business entity passed to ``table`` model.
+
+props:
+
+.. attribute:: checking
+
+Boolean. If true displays row checkboxes.
+
+.. attribute:: editable
+
+Boolean. If true adds column with edit icon which allow edit entity.
+
+.. attribute:: include
+
+Array of string. List of column names to include in table output
+
+.. attribute:: exclude
+
+Array of string. List of column names to exclude in table output
+
+Simple usage in ``./src/config.js``
+
+.. code-block:: javascript
+
+  pages: [
+    {
+      title: 'Employee',
+      url: 'table',
+      type: 'grid',
+      components: [
+        {
+          type: 'TroodCoreComponents/TableView',
+          span: 3,
+          withMargin: true,
+          models: {
+            table: 'employee',
+          },
+          props: {
+            editable: true,
+            checking: true,
+            exclude: ['id'],
+          },
+        },
+      ],
+    },
+  ],
