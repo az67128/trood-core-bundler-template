@@ -89,8 +89,8 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
       const entityPageEntities = currentEntityLists[entityPageModelName]
       const idSelector = props.entityPageModelIdSelector || entityPageModelIdSelector
       modelId = idSelector(state, props)
-      if (!Number.isNaN(parseInt(modelId, 10))) {
-        modelId = parseInt(modelId, 10)
+      if (!Number.isNaN(+modelId)) {
+        modelId = +modelId
       }
       model = entityPageEntities.getById(modelId)
 
