@@ -89,6 +89,9 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
       const entityPageEntities = currentEntityLists[entityPageModelName]
       const idSelector = props.entityPageModelIdSelector || entityPageModelIdSelector
       modelId = idSelector(state, props)
+      if (!Number.isNaN(+modelId)) {
+        modelId = +modelId
+      }
       model = entityPageEntities.getById(modelId)
 
       const currentChildFormRegexp = getChildFormRegexp({ parentModel: entityPageModelName, parentId: modelId })
