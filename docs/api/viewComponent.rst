@@ -70,16 +70,16 @@ We have props that are implicitly passed to components, but you can interact wit
 
 -------------
 
-* entityId - entity id on Redux Store
+* entityId - entity id in Redux Store
 * parents - parent entity data from page or modal of what this viewModal was called
 * title - modal window title
 * closeAction - an action to close modal
-* size - // modal window size, could be one of [full, large, medium, small, confirm, confirmMedium]
-* serverModel - same as model, here for keep consistance with editComponent
+* size - modal window size, could be one of [``full``, ``large``, ``medium``, ``small``, ``confirm``, ``confirmMedium``]
+* serverModel - same as model, here for keep consistance with ``editComponent``
 * authData - current logined user data, sush as login, token, abac rules obj, etc.
 * deleteAction - an action to delete current viewing object
-* editAction - an action to call editComponent for current viewing object
-* cancelAction - an action to cancel current viewModal (for example if this modal was opened from another)
+* editAction - an action to call ``editComponent`` for current viewing object
+* cancelAction - an action to cancel current ``viewModal`` (for example if this modal was opened from another)
 
 -------------
 
