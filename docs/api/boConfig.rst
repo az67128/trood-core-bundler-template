@@ -69,6 +69,10 @@ Here we specify the attributes for the model and its settings
 
         message in the deletion confirmation module
 
+.. attribute:: meta
+
+    Business objects meta information from the custodian
+
 .. code-block:: javascript
 
   import { RestifyForeignKey } from 'redux-restify'
@@ -127,9 +131,9 @@ Business object actions
 
 .. _`redux-restify docs`: https://github.com/DeyLak/redux-restify/blob/master/docs/
 
-In actions, we describe our custom actions that we will use in components for working with business objects.
+In actions, we describe the custom actions that we will use in components for working with business objects.
 
-We can use APIs and Forms from 'redux-restify', in more detail in `redux-restify docs`_
+We can use APIs and Forms from 'redux-restify', more details in `redux-restify docs`_
 
 **************************
 Business object constants
@@ -152,8 +156,8 @@ Business object edit & view components
 
 .. _`Edit component`: /troodsdk/front/api/editComponent.html
 
-| To view an entity in a modal window, we use the "View component", you can read in the `View component`_ section
-| Styles for "View component" are written in the viewComponent.css file
+| To view an entity in a modal window, we use the "View component", you can read more in the `View component`_ section
+| Styles for ``View component`` are written in the ``viewComponent.css`` file
 
 | To edit a business object, we use the "Edit component", you can read in the `Edit component`_ section
 | Styles for "Edit component" are written in the index.css file
@@ -167,20 +171,20 @@ Business object custom modals
 
 **Custom modal file**
 
-To create a custom modal window, we need to create a file "<modalName>.modal.js" in the modals folder
+To create a custom modal window, we need to create a file ``<modalName>.modal.js`` in the modals folder
 
-| In this file we describe the stateToProps function to which two state parameters, startProps, are passed.
+| In this file, we describe the ``stateToProps`` function to which of two state parameters, ``startProps``, are passed.
 | This function returns an object with parameters for the modal window.
 | Here we can set the settings for the title and size modal windows.
-| From state, through api `redux-restify api docs`_ we can take the Entities we need
-| And also from state, through forms `redux-restify forms docs`_ we can take the model data we need (model, modelErrors, modelValid)
-| Also transfer startProps there
+| From the state, through api `redux-restify api docs`_ we can take the Entities we need
+| And also from the state, through forms `redux-restify forms docs`_ we can take the model data we need (``model``, ``modelErrors``, ``modelValid``)
+| Also transfer ``startProps`` there
 
 To create a custom modal window, we need to create a file "<modalName> .modal.js" in the modals folder
 
-Also in this file we describe dispatchToProps through which we pass actions
+Also in this file, we describe ``dispatchToProps`` function through which we pass actions
 
-Next, we do the registerModal export to which we transfer: the name of the modal, stateToProps and dispatchToProps and indicate to which component it should be transferred.
+Next, we do the ``registerModal`` export to which we transfer: the ``name`` of the modal, ``stateToProps`` and ``dispatchToProps`` and indicate to which component it should be transferred.
 
 .. code-block:: javascript
 
@@ -218,14 +222,14 @@ Next, we do the registerModal export to which we transfer: the name of the modal
 
 **Modal component**
 
-For custom modals, a component is created along the "/src/businessObjects/<BOLibName>/<BOName>/components/<componentName>" path to which all the props and actions that we transferred from stateToProps and dispatchToProps will be transferred
+For custom modals, a component is created along the ``/src/businessObjects/<BOLibName>/<BOName>/components/<componentName>`` path to which all the props and actions that we transferred from ``stateToProps`` and ``dispatchToProps`` will be transferred
 
 --------
 
-| To invoke a modal window, an action is created in which createForm is called from forms.actions to create the form
-| In createForm we pass: the name of the form, we can pass the default props and we can specify the allowRecreate flag. allowRecreate flag is used to show, if we allow to rewrite already existing config.
+| To invoke a modal window, an action is created in which ``createForm`` is called from ``forms.actions`` to create the form
+| In ``createForm`` we pass: the ``name`` of the form, the default props and we can specify the ``allowRecreate`` flag. ``allowRecreate`` flag is used to show, if we allow rewriting already existing config or not.
 
-And then, to output the modal from modals.actions, showModal is called and pass there: whether to display the modal or not, the name of the modal and startProps
+And then, to output the modal from ``modals.actions``, ``showModal`` is called. Pass there: boolean value whether to display the modal or not, the ``name`` of the modal and ``startProps``
 
 .. code-block:: javascript
 

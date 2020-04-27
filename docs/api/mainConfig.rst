@@ -213,7 +213,7 @@ Each page has the following attributes:
 
 .. attribute:: icon
 
-    iconType constants that will be used as TIcon.ICONS_TYPES[iconType]
+    iconType constants that will be used as TIcon.ICONS_TYPES[iconType] in menu
 
 .. attribute:: components
 
