@@ -141,6 +141,18 @@ Array of string. List of column names to include in table output
 
 Array of string. List of column names to exclude in table output
 
+.. attribute:: filters
+
+Array of string. List of column names to include in filters
+
+.. attribute:: search
+
+Array of string or boolean. If array passed, search will be applied for listed fields. If bool passed, search will be applied for all columns in table with type ``string`` and ``number``
+
+.. attribute:: query
+
+String. String will be added to all table queries.
+
 Simple usage in ``./src/config.js``
 
 .. code-block:: javascript

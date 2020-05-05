@@ -22,6 +22,7 @@ const Table = ({
   formActions,
   filters,
   search,
+  query,
 }) => {
   const fieldList = Object.keys(config.meta).filter((fieldName) => {
     if (exclude.includes(fieldName)) return false
@@ -87,7 +88,7 @@ const Table = ({
 
   const tableApiConfig = {
     filter: {
-      q: [sort, ...filterQuery, ...searchQuery()].join(','),
+      q: [sort, ...filterQuery, ...searchQuery(), ...(query ? [query] : [])].join(','),
     },
   }
 

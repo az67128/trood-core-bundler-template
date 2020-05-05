@@ -21,6 +21,7 @@ const TableView = ({
   formActions,
   filters = [],
   search,
+  query,
   ...restProps
 }) => {
   const config = RESTIFY_CONFIG.registeredModels[tableEntities.modelType]
@@ -42,6 +43,7 @@ const TableView = ({
           formActions,
           filters,
           search,
+          query,
         }}
       />
     </div>
@@ -55,5 +57,6 @@ TableView.propTypes = {
   exclude: PropTypes.arrayOf(PropTypes.string),
   filters: PropTypes.arrayOf(PropTypes.string),
   search: PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.string)]),
+  query: PropTypes.string,
 }
 export default TableView
