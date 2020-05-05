@@ -1,0 +1,28 @@
+.root {
+}
+
+.filterBlock {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px 13px 0 13px;
+  align-items: flex-start;
+}
+
+.filterItem {
+  margin-right: 20px;
+  margin-bottom: 10px;
+  width: 200px;
+}
+
+.numberFilter {
+  display: flex;
+}
+
+.numberFilterMin {
+  margin-right: 8px;
+}
+
+.resetButton {
+  margin-left: auto;
+  align-self: center;
+}
