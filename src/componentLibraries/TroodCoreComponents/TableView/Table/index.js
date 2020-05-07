@@ -71,7 +71,20 @@ const Table = ({
       : fieldList.filter((fieldName) => ['string', 'number'].includes(config.meta[fieldName].type))
     const searchArray = searchFields.reduce((memo, fieldName) => {
       const fieldNameSnake = camelToLowerSnake(fieldName)
-      const fieldType = config.meta[fieldName].type
+
+      const fieldType = fieldName.split('.').reduce((memo, nestedFieldName, i) => {
+        if (Array.isArray(memo)) return RESTIFY_CONFIG.registeredModels[nestedFieldName]
+        if (!memo || !memo.meta || !memo.meta[nestedFieldName]) return null
+        const fieldMeta = memo.meta[nestedFieldName]
+        if (fieldMeta.linkMetaList) return fieldMeta.linkMetaList
+        return fieldMeta.linkMeta ? RESTIFY_CONFIG.registeredModels[fieldMeta.linkMeta] : fieldMeta.type
+      }, config)
+
+      if (!fieldType) {
+        console.warn(`Search field '${fieldName}' not found`)
+        return memo
+      }
+
       if (fieldType === 'string') {
         return [...memo, `like(${fieldNameSnake},${encodeURIComponent('*' + form.search + '*')})`]
       }
