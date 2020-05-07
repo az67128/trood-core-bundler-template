@@ -41,6 +41,7 @@ We have props with which we can interact with forms:
     },
   }
 
+Form is in sync with localStorage, you can save values between sessions. To cleanup form in localStorage dispatch the action with type ``'STATE_REPLACE'``
 
 *********************
 Page component props
@@ -143,11 +144,12 @@ Array of string. List of column names to exclude in table output
 
 .. attribute:: filters
 
-Array of string. List of column names to include in filters
+Array of string. List of column names to include in filters.
 
 .. attribute:: search
 
-Array of string or boolean. If array passed, search will be applied for listed fields. If bool passed, search will be applied for all columns in table with type ``string`` and ``number``
+Array of string or boolean. If array passed, search will be applied for listed fields. If bool passed, search will be applied for all columns in table with type ``string`` and ``number``.
+Nested fileds such as ``['matter.employee.name']`` also supported
 
 .. attribute:: query
 
