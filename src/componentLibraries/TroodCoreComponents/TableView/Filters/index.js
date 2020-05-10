@@ -1,14 +1,23 @@
 import React from 'react'
 import PeriodSelector from '$trood/components/PeriodSelector'
 import TButton, { BUTTON_TYPES } from '$trood/components/TButton'
-import { camelToLowerSnake, snakeToCamel } from '$trood/helpers/namingNotation'
+import { camelToLowerSnake, snakeToCamel, camelToUpperHuman } from '$trood/helpers/namingNotation'
 import DropdownFilter from './DropdownFilter'
 import NumberFilter from './NumberFilter'
 import BoolFilter from './BoolFilter'
 import { getInterval } from '$trood/helpers/dateTime'
+import { messages } from '../constants'
+import { intlObject } from '$trood/localeService'
 import style from './style.css'
 
 const Filters = ({ filters, config, form, formActions, ...restProps }) => {
+  const getLabel = (fieldName) => {
+    return intlObject.intl.formatMessage({
+      id: `entityNameMessages.${config.name}.${fieldName}`,
+      defaultMessage: camelToUpperHuman(fieldName),
+    })
+  }
+
   const resetFilters = () => {
     const value = {}
     filters.forEach((fieldName) => {
@@ -30,6 +39,7 @@ const Filters = ({ filters, config, form, formActions, ...restProps }) => {
           if (field.type === 'string') return null
           const value = form[fieldNameSnake]
           const onChange = (val) => formActions.changeField(fieldNameSnake, val)
+          const label = getLabel(fieldName)
           if (field.linkType) {
             const linkName = snakeToCamel(field.linkMeta)
             const modelEntities = restProps[`${linkName}Entities`]
@@ -41,7 +51,17 @@ const Filters = ({ filters, config, form, formActions, ...restProps }) => {
 
             const modelApiActions = restProps[`${linkName}ApiActions`]
             return (
-              <DropdownFilter {...{ key: fieldName, value, fieldName, onChange, modelEntities, modelApiActions }} />
+              <DropdownFilter
+                {...{
+                  key: fieldName,
+                  value,
+                  fieldName,
+                  onChange,
+                  modelEntities,
+                  modelApiActions,
+                  label,
+                }}
+              />
             )
           }
           if (field.type === 'datetime') {
@@ -50,7 +70,7 @@ const Filters = ({ filters, config, form, formActions, ...restProps }) => {
               <PeriodSelector
                 {...{
                   key: fieldName,
-                  label: fieldName,
+                  label,
                   periodType: periodValue.periodType,
                   startDate: periodValue.startDate,
                   endDate: periodValue.endDate,
@@ -66,17 +86,20 @@ const Filters = ({ filters, config, form, formActions, ...restProps }) => {
             )
           }
           if (field.type === 'number') {
-            return <NumberFilter {...{ key: fieldName, value, fieldName, onChange }} />
+            return <NumberFilter {...{ key: fieldName, value, label }} />
           }
-          if (field.type === 'bool') return <BoolFilter {...{ value, fieldName, onChange }} />
-          return (
-            <div key={fieldName} className={style.filterItem}>
-              {fieldName}-{field.type}
-            </div>
-          )
+          if (field.type === 'bool') return <BoolFilter {...{ key: fieldName, value, label, onChange }} />
+          return null
         })
         .filter((v) => v)}
-      <TButton {...{ className: style.resetButton, label: 'Reset', onClick: resetFilters, type: BUTTON_TYPES.text }} />
+      <TButton
+        {...{
+          className: style.resetButton,
+          label: intlObject.intl.formatMessage(messages.reset),
+          onClick: resetFilters,
+          type: BUTTON_TYPES.text,
+        }}
+      />
     </div>
   )
 }

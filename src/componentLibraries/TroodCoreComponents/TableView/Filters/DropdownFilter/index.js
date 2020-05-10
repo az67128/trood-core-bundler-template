@@ -3,9 +3,11 @@ import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
 import { templateApplyValues } from '$trood/helpers/templates'
 import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 import { RESTIFY_CONFIG } from 'redux-restify'
+import { intlObject } from '$trood/localeService'
+import { messages } from '../../constants'
 import style from '../style.css'
 
-const DropdownFilter = ({ fieldName, value, onChange, modelEntities, modelApiActions }) => {
+const DropdownFilter = ({ fieldName, label, value, onChange, modelEntities, modelApiActions }) => {
   const [modelSearch, modelSearchSet] = useState('')
   const modelConfig = RESTIFY_CONFIG.registeredModels[modelEntities.modelType]
   const modelTemplate =
@@ -39,7 +41,7 @@ const DropdownFilter = ({ fieldName, value, onChange, modelEntities, modelApiAct
     <TSelect
       {...{
         className: style.filterItem,
-        label: fieldName,
+        label,
         items: modelArray.map((item) => ({
           value: item[modelConfig.idField],
           label: templateApplyValues(modelTemplate, item),
@@ -54,7 +56,7 @@ const DropdownFilter = ({ fieldName, value, onChange, modelEntities, modelApiAct
         type: SELECT_TYPES.filterDropdown,
         multi: true,
         clearable: true,
-        placeHolder: 'All',
+        placeHolder: intlObject.intl.formatMessage(messages.all),
       }}
     />
   )

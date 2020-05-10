@@ -2,11 +2,13 @@ import React from 'react'
 import TTable from '$trood/components/TTable'
 import AsyncEntitiesList from '$trood/components/AsyncEntitiesList'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
-import { camelToLowerSnake } from '$trood/helpers/namingNotation'
+import { camelToLowerSnake, camelToUpperHuman } from '$trood/helpers/namingNotation'
 import SmartDate, { SMART_DATE_FORMATS } from '$trood/components/SmartDate'
 import { templateApplyValues } from '$trood/helpers/templates'
 import { EntityPageLink } from '$trood/pageManager'
 import { RESTIFY_CONFIG } from 'redux-restify'
+import { messages } from '../constants'
+import { intlObject } from '$trood/localeService'
 import style from './style.css'
 
 const Table = ({
@@ -38,7 +40,7 @@ const Table = ({
     if (!formField) return memo
 
     const field = config.meta[fieldName]
-
+    if (!field) return memo
     if (field.linkType && Array.isArray(formField) && formField.length) {
       return [...memo, `in(${fieldNameSnake},(${formField}))`]
     }
@@ -58,7 +60,7 @@ const Table = ({
       const max = formField.max ? `ge(${fieldNameSnake},${formField.max})` : ''
       return [...memo, ...(min && max ? [`${memo},and(${min},${max})`] : [`${memo},${min}${max}`])]
     }
-    if (field.type === 'bool' && formField && formField[0] !== null) {
+    if (field.type === 'bool' && formField && formField.length) {
       return [...memo, `eq(${fieldNameSnake},${formField})`]
     }
     return memo
@@ -118,8 +120,11 @@ const Table = ({
       if (field.linkType === 'outer') return null
 
       return {
-        title: fieldName,
-        name: fieldNameSnake,
+        title: intlObject.intl.formatMessage({
+          id: `entityNameMessages.${config.name}.${fieldName}`,
+          defaultMessage: camelToUpperHuman(fieldName),
+        }),
+        name: fieldName,
         sortable: field.type !== 'generic',
         model: (item) => {
           if (field.linkType) {
@@ -177,7 +182,7 @@ const Table = ({
 
   const editColumn = [
     {
-      title: 'Edit',
+      title: intlObject.intl.formatMessage(messages.edit),
       model: (item) => (
         <TIcon
           {...{

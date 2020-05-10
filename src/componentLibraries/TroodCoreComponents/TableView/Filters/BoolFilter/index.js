@@ -1,25 +1,23 @@
 import React from 'react'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
+import { intlObject } from '$trood/localeService'
+import { messages } from '../../constants'
 import style from '../style.css'
 
-const BoolFilter = ({ fieldName, value, onChange }) => {
+const BoolFilter = ({ label, value, onChange }) => {
   return (
     <TSelect
       {...{
         className: style.filterItem,
-        label: fieldName,
+        label: label,
         items: [
           {
             value: true,
-            label: 'Yes',
+            label: intlObject.intl.formatMessage(messages.yes),
           },
           {
             value: false,
-            label: 'No',
-          },
-          {
-            value: null,
-            label: 'All',
+            label: intlObject.intl.formatMessage(messages.no),
           },
         ],
         values: value ? value : [],
@@ -27,7 +25,7 @@ const BoolFilter = ({ fieldName, value, onChange }) => {
         type: SELECT_TYPES.dropdown,
         multi: false,
         clearable: true,
-        placeHolder: 'All',
+        placeHolder: intlObject.intl.formatMessage(messages.all),
       }}
     />
   )
