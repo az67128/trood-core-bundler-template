@@ -155,6 +155,14 @@ Nested fileds such as ``['matter.employee.name']`` also supported
 
 String. String will be added to all table queries.
 
+.. attribute:: title
+
+String. Title of the table
+
+.. attribute:: addNew
+
+Bool. If ``true`` the button to add new entity will be added to the header of the table.
+
 Simple usage in ``./src/config.js``
 
 .. code-block:: javascript
