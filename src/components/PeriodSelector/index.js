@@ -13,9 +13,9 @@ import {
   REPORTING_PERIOD_TYPES_DICT,
   DEFAULT_PERIODS,
   getPeriodSelector,
+  messages,
 } from './constants'
 
-// import globalMessages from '$trood/globalMessages'
 import { intlObject } from '$trood/localeService'
 
 
@@ -105,7 +105,7 @@ class PeriodSelector extends PureComponent {
           <DateTimePicker {...{
             className: style.filterInput,
             type: PICKER_TYPES.date,
-            placeholder: 'startDate',//intlObject.intl.formatMessage(globalMessages.startDate),
+            placeholder: intlObject.intl.formatMessage(messages.startDate),
             value: startDate,
             onChange: value => {
               if (resetFieldsArray) {
@@ -120,7 +120,7 @@ class PeriodSelector extends PureComponent {
           <DateTimePicker {...{
             className: style.filterInput,
             type: PICKER_TYPES.date,
-            placeholder: 'endDate', //intlObject.intl.formatMessage(globalMessages.endDate),
+            placeholder: intlObject.intl.formatMessage(messages.endDate),
             value: endDate,
             onChange: value => {
               if (resetFieldsArray) {
@@ -137,7 +137,7 @@ class PeriodSelector extends PureComponent {
           <TButton {...{
             className: style.addContactButton,
             onClick: () => onSubmit({ startDate, endDate }),
-            label: 'ok', //intlObject.intl.formatMessage(globalMessages.ok),
+            label: intlObject.intl.formatMessage(messages.ok),
             type: BUTTON_TYPES.border,
             color: BUTTON_COLORS.gray,
           }} />
