@@ -2,13 +2,14 @@ import React from 'react'
 import TTable from '$trood/components/TTable'
 import AsyncEntitiesList from '$trood/components/AsyncEntitiesList'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
-import { camelToLowerSnake, camelToUpperHuman } from '$trood/helpers/namingNotation'
+import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 import SmartDate, { SMART_DATE_FORMATS } from '$trood/components/SmartDate'
 import { templateApplyValues } from '$trood/helpers/templates'
 import { EntityPageLink } from '$trood/pageManager'
 import { RESTIFY_CONFIG } from 'redux-restify'
 import { messages } from '../constants'
 import { intlObject } from '$trood/localeService'
+import entityNameMessages from '$trood/businessObjects/entityNameMessages'
 import style from './style.css'
 
 const Table = ({
@@ -120,10 +121,7 @@ const Table = ({
       if (field.linkType === 'outer') return null
 
       return {
-        title: intlObject.intl.formatMessage({
-          id: `entityNameMessages.${config.name}.${fieldName}`,
-          defaultMessage: camelToUpperHuman(fieldName),
-        }),
+        title: intlObject.intl.formatMessage(entityNameMessages[`${tableEntities.modelType}.${fieldName}`]),
         name: fieldName,
         sortable: field.type !== 'generic',
         model: (item) => {
@@ -145,21 +143,20 @@ const Table = ({
             const template = views.tableCell || views.default || `${name}/{${idField}}`
 
             return (
-              <EntityPageLink key={fieldName} model={item[fieldName]}>
+              <EntityPageLink model={item[fieldName]}>
                 {templateApplyValues(template, item[fieldName])}
               </EntityPageLink>
             )
           }
 
           if (field.type === 'bool') {
-            return <div key={fieldName}>{item[fieldName] ? 'true' : 'false'}</div>
+            return item[fieldName] ? 'true' : 'false'
           }
 
           if (field.type === 'datetime') {
             return (
               <SmartDate
                 {...{
-                  key: fieldName,
                   date: item[fieldName],
                   format: SMART_DATE_FORMATS.shortWithTime,
                 }}
@@ -169,7 +166,7 @@ const Table = ({
 
           if (config.idField === fieldNameSnake) {
             return (
-              <EntityPageLink key={fieldName} model={item[fieldName]}>
+              <EntityPageLink model={item[fieldName]}>
                 {item[fieldName]}
               </EntityPageLink>
             )

@@ -3,7 +3,13 @@ export default {
   components: [
     {
       title: 'TableView',
-      models: [],
+      models: [
+        {
+          name: 'table',
+          required: true,
+        },
+      ],
+      canUseOn: ['page'],
     },
   ],
 }

@@ -10,10 +10,10 @@ import { messages } from '../constants'
 import { intlObject } from '$trood/localeService'
 import style from './style.css'
 
-const Filters = ({ filters, config, form, formActions, ...restProps }) => {
+const Filters = ({ filters, config, form, formActions, tableEntities, ...restProps }) => {
   const getLabel = (fieldName) => {
     return intlObject.intl.formatMessage({
-      id: `entityNameMessages.${config.name}.${fieldName}`,
+      id: `entityNameMessages.${tableEntities.modelType}.${fieldName}`,
       defaultMessage: camelToUpperHuman(fieldName),
     })
   }

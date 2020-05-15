@@ -4,6 +4,7 @@ const gulp = require('gulp')
 const template = require('gulp-template')
 const rename = require('gulp-rename')
 const { PAGE_TYPES_DEFAULT_TITLE, PAGE_TYPES_GET_PAGE_ID, getPageConfig } = require('./src/pageManager')
+const {camelToUpperHuman} = require('./src/helpers/namingNotation')
 
 
 const getPageId = (page, ...args) => PAGE_TYPES_GET_PAGE_ID[page.type](page, ...args)
@@ -237,9 +238,47 @@ gulp.task('make-locale', () => {
     .pipe(gulp.dest('./src'))
 })
 
-gulp.task('default', gulp.parallel(
-  'make-components',
-  'make-business-objects',
-  'make-layouts',
-  'make-locale',
-))
+gulp.task('make-bo-intil', () => {
+  const context = require.context('./src/businessObjects/', true, /model\.js(on)?$/)
+  const models = context
+    .keys()
+    .reduce(
+      (libraries, key) => [
+        ...libraries,
+        ...Object.keys(context(key).default.defaults).reduce((memo, fieldName) => {
+          const id = `${key.split('/')[2]}.${fieldName}`
+          return [
+            ...memo,
+            `  '${id}': {
+    id: 'entityNameMessages.${id}',
+    defaultMessage: '${camelToUpperHuman(fieldName)}',
+  }`,
+          ]
+        }, []),
+      ],
+      [],
+    )
+    .join(',\n')
+
+  return gulp
+    .src('./src/businessObjects/entityNameMessages.js.template')
+    .pipe(template({ models }))
+    .pipe(
+      rename((path) => {
+        path.basename = 'entityNameMessages'
+        path.extname = '.js'
+      }),
+    )
+    .pipe(gulp.dest('./src/businessObjects'))
+})
+
+gulp.task(
+  'default',
+  gulp.parallel(
+    'make-components',
+    'make-business-objects',
+    'make-layouts',
+    'make-locale',
+    'make-bo-intil',
+  ),
+)
