@@ -8,8 +8,7 @@ import { templateApplyValues } from '$trood/helpers/templates'
 import { EntityPageLink } from '$trood/pageManager'
 import { RESTIFY_CONFIG } from 'redux-restify'
 import { messages } from '../constants'
-import { intlObject } from '$trood/localeService'
-import entityNameMessages from '$trood/businessObjects/entityNameMessages'
+import localeService, { intlObject } from '$trood/localeService'
 import style from './style.css'
 
 const Table = ({
@@ -121,7 +120,7 @@ const Table = ({
       if (field.linkType === 'outer') return null
 
       return {
-        title: intlObject.intl.formatMessage(entityNameMessages[`${tableEntities.modelType}.${fieldName}`]),
+        title: intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName]),
         name: fieldName,
         sortable: field.type !== 'generic',
         model: (item) => {

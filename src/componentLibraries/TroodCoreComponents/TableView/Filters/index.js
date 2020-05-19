@@ -1,21 +1,18 @@
 import React from 'react'
 import PeriodSelector from '$trood/components/PeriodSelector'
 import TButton, { BUTTON_TYPES } from '$trood/components/TButton'
-import { camelToLowerSnake, snakeToCamel, camelToUpperHuman } from '$trood/helpers/namingNotation'
+import { camelToLowerSnake, snakeToCamel } from '$trood/helpers/namingNotation'
 import DropdownFilter from './DropdownFilter'
 import NumberFilter from './NumberFilter'
 import BoolFilter from './BoolFilter'
 import { getInterval } from '$trood/helpers/dateTime'
 import { messages } from '../constants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 import style from './style.css'
 
 const Filters = ({ filters, config, form, formActions, tableEntities, ...restProps }) => {
   const getLabel = (fieldName) => {
-    return intlObject.intl.formatMessage({
-      id: `entityNameMessages.${tableEntities.modelType}.${fieldName}`,
-      defaultMessage: camelToUpperHuman(fieldName),
-    })
+    return intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName])
   }
 
   const resetFilters = () => {

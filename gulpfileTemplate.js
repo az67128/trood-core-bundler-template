@@ -240,32 +240,39 @@ gulp.task('make-locale', () => {
 
 gulp.task('make-bo-intil', () => {
   const context = require.context('./src/businessObjects/', true, /model\.js(on)?$/)
+  const getFieldDefines = (defaults, entityName) => Object.keys(defaults).reduce((memo, fieldName) => {
+    return [
+      ...memo,
+      `    ${fieldName}: {
+      id: 'entityMessages.${entityName}.${fieldName}',
+      defaultMessage: '${camelToUpperHuman(fieldName)}',
+    }`,
+    ]
+  }, []).join(',\n')
+
   const models = context
     .keys()
-    .reduce(
-      (libraries, key) => [
+    .reduce((libraries, key) => {
+      const entityName = key.split('/')[2]
+      return [
         ...libraries,
-        ...Object.keys(context(key).default.defaults).reduce((memo, fieldName) => {
-          const id = `${key.split('/')[2]}.${fieldName}`
-          return [
-            ...memo,
-            `  '${id}': {
-    id: 'entityNameMessages.${id}',
-    defaultMessage: '${camelToUpperHuman(fieldName)}',
-  }`,
-          ]
-        }, []),
-      ],
-      [],
-    )
-    .join(',\n')
+        `  ${entityName}: defineMessages({
+    _object: {
+      id: 'entityMessages.${entityName}',
+      defaultMessage: '${camelToUpperHuman(entityName)}',
+    },
+${getFieldDefines(context(key).default.defaults, entityName)}
+  }),\n`
+      ]
+    }, [])
+    .join('')
 
   return gulp
-    .src('./src/businessObjects/entityNameMessages.js.template')
+    .src('./src/businessObjects/entityMessages.js.template')
     .pipe(template({ models }))
     .pipe(
       rename((path) => {
-        path.basename = 'entityNameMessages'
+        path.basename = 'entityMessages'
         path.extname = '.js'
       }),
     )
