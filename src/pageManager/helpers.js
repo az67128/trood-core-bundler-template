@@ -11,9 +11,9 @@ import urlSchema, { getBaseUrl } from './urlSchema'
 
 const getAbacPageId = id => `${id}Page`
 
-export const getPagesHeaderRenderers = (pages, entityPageModelName) => {
+export const getPagesHeaderRenderers = (pages, entityPageModelName, prevPageId) => {
   return pages.reduce((memo, page) => {
-    const pageConfig = getPageLayoutProps(page, entityPageModelName)
+    const pageConfig = getPageLayoutProps(page, entityPageModelName, prevPageId)
     if (pageConfig.pageConfig.hideMenu) return memo
     return {
       ...memo,
