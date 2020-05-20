@@ -5,5 +5,15 @@ export default {
       title: 'TableView',
       models: [],
     },
+    {
+      title: 'InfoBlock',
+      models: [
+        {
+          name: 'model',
+          required: true,
+        },
+      ],
+      canUseOn: ['entityPage'],
+    },
   ],
 }
