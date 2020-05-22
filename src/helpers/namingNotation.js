@@ -4,6 +4,7 @@ import { isPureObject } from '$trood/helpers/def'
 
 
 export const camelToHuman = s => s.replace(/([a-z])([A-Z]+)/g, '$1 $2').toLowerCase()
+export const camelToUpperHuman = s => s.charAt(0).toUpperCase() + s.replace(/([a-z])([A-Z]+)/g, '$1 $2').substring(1)
 const camelToSnake = (s = '') => s.replace(/([a-z])([A-Z]+)/g, '$1_$2')
 export const camelToLowerSnake = s => camelToSnake(s).toLowerCase()
 export const camelToUpperSnake = s => camelToSnake(s).toUpperCase()

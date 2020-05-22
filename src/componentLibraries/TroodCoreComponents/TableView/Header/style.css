@@ -1,0 +1,28 @@
+.root {
+}
+
+.header {
+  padding: 8px 13px 0 13px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.headerTitle {
+  margin-right: auto;
+  min-width: 200px;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.searchBar {
+  padding: 8px 13px 0 13px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.searchInput {
+  margin-right: auto;
+  min-width: 200px;
+}

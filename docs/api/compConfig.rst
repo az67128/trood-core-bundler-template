@@ -41,6 +41,7 @@ We have props with which we can interact with forms:
     },
   }
 
+Form is in sync with localStorage, you can save values between sessions. To cleanup form in localStorage dispatch the action with type ``'STATE_REPLACE'``
 
 *********************
 Page component props
@@ -142,6 +143,28 @@ Array of string. List of column names to include in table output
 .. attribute:: exclude
 
 Array of string. List of column names to exclude in table output
+
+.. attribute:: filters
+
+Array of string. List of column names to include in filters. If target field depends on another object, you should pass linked model to `models` section of page configuration.
+If model is not passed, filter will be skipped.
+
+.. attribute:: search
+
+Array of string or boolean. If array passed, search will be applied for listed fields. If bool passed, search will be applied for all columns in table with type ``string`` and ``number``.
+Nested fileds such as ``['matter.employee.name']`` also supported
+
+.. attribute:: query
+
+String. String will be added to all table queries.
+
+.. attribute:: title
+
+String. Title of the table
+
+.. attribute:: addNew
+
+Bool. If ``true`` the button to add new entity will be added to the header of the table.
 
 Simple usage in ``./src/config.js``
 
