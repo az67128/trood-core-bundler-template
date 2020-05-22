@@ -124,7 +124,7 @@ const PageGridLayout = (props) => {
                   }}>
                     {React.createElement(currentLayout.nestedPageMenuComponent, {
                       basePageTitleArgs,
-                      menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
+                      menuRenderers: getPagesHeaderRenderers([], entityPageModelName, pageId),
                       basePath,
                       authActions,
                       layoutProps,
@@ -259,7 +259,7 @@ const PageGridLayout = (props) => {
                     }}>
                       {React.createElement(currentLayout.nestedPageMenuComponent, {
                         basePageTitleArgs,
-                        menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
+                        menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName, pageId),
                         basePath,
                         authActions,
                         layoutProps,

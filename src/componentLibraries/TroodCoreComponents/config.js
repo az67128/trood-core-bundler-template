@@ -11,5 +11,15 @@ export default {
       ],
       canUseOn: ['page'],
     },
+    {
+      title: 'InfoBlock',
+      models: [
+        {
+          name: 'model',
+          required: true,
+        },
+      ],
+      canUseOn: ['entityPage'],
+    },
   ],
 }
