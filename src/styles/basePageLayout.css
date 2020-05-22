@@ -6,6 +6,20 @@
   padding: 20px var(--trood-sides);
 }
 
+.pageTitle {
+  color: var(--trood-gray-extra-dark);
+  font-weight: 400;
+  font-size: 32px;
+}
+
+.pageSubTitle {
+  font-family: Trood, sans-serif;
+  color: var(--trood-gray-text);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
 .children {
   width: 100%;
 }
@@ -69,4 +83,36 @@
   width: 1px;
   margin: 0 20px;
   background-color: var(--trood-gray-bg);
+}
+
+.blockFiltersContainer {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+  margin-bottom: -10px;
+}
+
+.blockHeaderSubContainer:not(:first-child),
+.blockFiltersContainer:not(:first-child) {
+  margin-top: 10px;
+}
+
+.blockFiltersContainer > * {
+  margin-bottom: 10px;
+}
+
+.blockFilter {
+  width: 200px;
+}
+
+.blockFilter:not(:last-child) {
+  margin-right: 20px;
+}
+
+.blockContent:not(:first-child) {
+  margin-top: 20px;
+}
+
+.blockContentThin:not(:first-child) {
+  margin-top: 10px;
 }
