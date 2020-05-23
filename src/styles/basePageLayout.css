@@ -79,7 +79,6 @@
   margin-bottom: -10px;
 }
 
-.blockHeaderSubContainer:not(:first-child),
 .blockFiltersContainer:not(:first-child) {
   margin-top: 10px;
 }
