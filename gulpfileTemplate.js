@@ -261,6 +261,10 @@ gulp.task('make-bo-intil', () => {
       id: 'entityMessages.${entityName}',
       defaultMessage: '${camelToUpperHuman(entityName)}',
     },
+    _objectView: {
+      id: 'entityMessages.${entityName}._objectView',
+      defaultMessage: '${camelToUpperHuman(entityName)}',
+    },
 ${getFieldDefines(context(key).default.defaults, entityName)}
   }),\n`
       ]
@@ -282,10 +286,11 @@ ${getFieldDefines(context(key).default.defaults, entityName)}
 gulp.task(
   'default',
   gulp.parallel(
+    'make-bo-intil',
     'make-components',
     'make-business-objects',
     'make-layouts',
     'make-locale',
-    'make-bo-intil',
+    
   ),
 )

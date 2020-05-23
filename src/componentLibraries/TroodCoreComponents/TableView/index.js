@@ -21,6 +21,7 @@ const TableView = ({
   query,
   title,
   addNew,
+  hideView,
   ...restProps
 }) => {
   const config = RESTIFY_CONFIG.registeredModels[tableEntities.modelType]
@@ -43,6 +44,7 @@ const TableView = ({
           filters,
           search,
           query,
+          hideView,
         }}
       />
     </div>
@@ -59,5 +61,6 @@ TableView.propTypes = {
   query: PropTypes.string,
   title: PropTypes.string,
   addNew: PropTypes.bool,
+  hideView: PropTypes.bool,
 }
 export default TableView

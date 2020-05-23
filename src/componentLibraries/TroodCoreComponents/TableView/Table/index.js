@@ -25,6 +25,7 @@ const Table = ({
   filters,
   search,
   query,
+  hideView,
 }) => {
   const fieldList = Object.keys(config.meta).filter((fieldName) => {
     if (exclude.includes(fieldName)) return false
@@ -120,14 +121,21 @@ const Table = ({
       if (field.linkType === 'outer') return null
 
       return {
-        title: intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName]),
+        title:
+          config.idField === fieldNameSnake && !hideView
+            ? intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType]._objectView)
+            : intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName]),
         name: fieldName,
         sortable: field.type !== 'generic',
         model: (item) => {
-          if (fieldName === config.idField) {
+          if (fieldNameSnake === config.idField) {
             const template =
               config.views.tableCell || config.views.default || `${tableEntities.modelType}/{${fieldName}}`
-            return <EntityPageLink model={tableEntities}>{templateApplyValues(template, item)}</EntityPageLink>
+            return (
+              <EntityPageLink model={tableEntities}>
+                {hideView ? item[fieldName] : templateApplyValues(template, item)}
+              </EntityPageLink>
+            )
           }
           if (field.linkType) {
             if (!item[fieldName]) return null
@@ -164,10 +172,6 @@ const Table = ({
                 }}
               />
             )
-          }
-
-          if (config.idField === fieldNameSnake) {
-            return <EntityPageLink model={item[fieldName]}>{item[fieldName]}</EntityPageLink>
           }
           return item[fieldName]
         },
