@@ -26,8 +26,8 @@ const TableView = ({
   const config = RESTIFY_CONFIG.registeredModels[tableEntities.modelType]
   return (
     <div className={basePageLayout.block}>
-      <Header {...{ title, addNew, tableEditorActions, form, formActions, filters, search }} />
-      <Filters {...{ filters, config, form, formActions, ...restProps }} />
+      <Header {...{ title, tableEntities, addNew, tableEditorActions, form, formActions, filters, search }} />
+      <Filters {...{ filters, config, form, formActions, tableEntities, ...restProps }} />
       <Table
         {...{
           config,

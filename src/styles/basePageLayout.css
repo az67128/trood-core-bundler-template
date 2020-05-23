@@ -70,3 +70,20 @@
   margin: 0 20px;
   background-color: var(--trood-gray-bg);
 }
+
+.blockFiltersContainer {
+  padding: 15px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+  margin-bottom: -10px;
+}
+
+.blockHeaderSubContainer:not(:first-child),
+.blockFiltersContainer:not(:first-child) {
+  margin-top: 10px;
+}
+
+.blockFiltersContainer > * {
+  margin-bottom: 10px;
+}
