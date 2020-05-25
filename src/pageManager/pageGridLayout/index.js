@@ -14,7 +14,7 @@ export default {
   getPageConfig,
   getPageId,
   getPageContainer: (page, entityModelName) =>
-    getPageContainer(getPageConfig(page), entityModelName, getModelIdSelector()),
+    getPageContainer(getPageConfig(page, entityModelName), entityModelName, getModelIdSelector()),
   getPageHeaderRendererConfig,
   getModelType,
   getModelIdSelector,
