@@ -27,79 +27,81 @@ const Filters = ({ filters, config, form, formActions, tableEntities, ...restPro
   }
   if (!form.isFiltersOpen) return null
   return (
-    <div className={basePageLayout.blockFiltersContainer}>
-      {filters
-        .map((fieldName) => {
-          const fieldNameSnake = camelToLowerSnake(fieldName)
-          const field = config.meta[fieldName]
-          if (!field) {
-            console.warn(`Filter field '${fieldName}' is not exists in model`)
-            return null
-          }
-          if (field.type === 'string') return null
-          const value = form[fieldNameSnake]
-          const onChange = (val) => formActions.changeField(fieldNameSnake, val)
-          const label = getLabel(fieldName)
-          if (field.linkType) {
-            const linkName = snakeToCamel(field.linkMeta)
-            const modelEntities = restProps[`${linkName}Entities`]
-
-            if (!modelEntities) {
-              console.warn(`Entity model '${linkName}' for filter '${fieldName}' is not provided`)
+    <div className={basePageLayout.blockHeaderSubContainer}>
+      <div className={basePageLayout.blockFiltersContainer}>
+        {filters
+          .map((fieldName) => {
+            const fieldNameSnake = camelToLowerSnake(fieldName)
+            const field = config.meta[fieldName]
+            if (!field) {
+              console.warn(`Filter field '${fieldName}' is not exists in model`)
               return null
             }
+            if (field.type === 'string') return null
+            const value = form[fieldNameSnake]
+            const onChange = (val) => formActions.changeField(fieldNameSnake, val)
+            const label = getLabel(fieldName)
+            if (field.linkType) {
+              const linkName = snakeToCamel(field.linkMeta)
+              const modelEntities = restProps[`${linkName}Entities`]
 
-            const modelApiActions = restProps[`${linkName}ApiActions`]
-            return (
-              <DropdownFilter
-                {...{
-                  key: fieldName,
-                  value,
-                  fieldName,
-                  onChange,
-                  modelEntities,
-                  modelApiActions,
-                  label,
-                }}
-              />
-            )
-          }
-          if (field.type === 'datetime') {
-            const periodValue = value || {}
-            return (
-              <PeriodSelector
-                {...{
-                  key: fieldName,
-                  label,
-                  periodType: periodValue.periodType,
-                  startDate: periodValue.startDate,
-                  endDate: periodValue.endDate,
-                  onSubmit: ({ startDate, endDate, periodType }) =>
-                    onChange({
-                      startDate,
-                      endDate,
-                      periodType: periodType || periodValue.periodType,
-                      interval: getInterval(startDate, endDate),
-                    }),
-                }}
-              />
-            )
-          }
-          if (field.type === 'number') {
-            return <NumberFilter {...{ key: fieldName, value, label, onChange }} />
-          }
-          if (field.type === 'bool') return <BoolFilter {...{ key: fieldName, value, label, onChange }} />
-          return null
-        })
-        .filter((v) => v)}
-      <TButton
-        {...{
-          className: style.resetButton,
-          label: intlObject.intl.formatMessage(messages.reset),
-          onClick: resetFilters,
-          type: BUTTON_TYPES.text,
-        }}
-      />
+              if (!modelEntities) {
+                console.warn(`Entity model '${linkName}' for filter '${fieldName}' is not provided`)
+                return null
+              }
+
+              const modelApiActions = restProps[`${linkName}ApiActions`]
+              return (
+                <DropdownFilter
+                  {...{
+                    key: fieldName,
+                    value,
+                    fieldName,
+                    onChange,
+                    modelEntities,
+                    modelApiActions,
+                    label,
+                  }}
+                />
+              )
+            }
+            if (field.type === 'datetime') {
+              const periodValue = value || {}
+              return (
+                <PeriodSelector
+                  {...{
+                    key: fieldName,
+                    label,
+                    periodType: periodValue.periodType,
+                    startDate: periodValue.startDate,
+                    endDate: periodValue.endDate,
+                    onSubmit: ({ startDate, endDate, periodType }) =>
+                      onChange({
+                        startDate,
+                        endDate,
+                        periodType: periodType || periodValue.periodType,
+                        interval: getInterval(startDate, endDate),
+                      }),
+                  }}
+                />
+              )
+            }
+            if (field.type === 'number') {
+              return <NumberFilter {...{ key: fieldName, value, label, onChange }} />
+            }
+            if (field.type === 'bool') return <BoolFilter {...{ key: fieldName, value, label, onChange }} />
+            return null
+          })
+          .filter((v) => v)}
+        <TButton
+          {...{
+            className: style.resetButton,
+            label: intlObject.intl.formatMessage(messages.reset),
+            onClick: resetFilters,
+            type: BUTTON_TYPES.text,
+          }}
+        />
+      </div>
     </div>
   )
 }

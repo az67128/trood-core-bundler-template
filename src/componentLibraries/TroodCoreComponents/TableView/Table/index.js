@@ -10,6 +10,7 @@ import { RESTIFY_CONFIG } from 'redux-restify'
 import { messages } from '../constants'
 import localeService, { intlObject } from '$trood/localeService'
 import style from './style.css'
+import basePageLayout from '$trood/styles/basePageLayout.css'
 
 const Table = ({
   config,
@@ -200,6 +201,7 @@ const Table = ({
   return (
     <AsyncEntitiesList
       {...{
+        className: basePageLayout.blockContentThin,
         nextPage: tableNextPage,
         isLoading: tableIsLoading,
         nextPageAction: tableNextPageAction,

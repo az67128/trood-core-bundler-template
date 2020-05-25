@@ -25,25 +25,24 @@
 }
 
 .block {
+  padding: 15px;
   border: 1px solid var(--trood-gray-bg);
   border-radius: 3px;
   background-color: var(--trood-white);
 }
 
-.blockHeaderContainer {
-  padding: 15px;
+.blockHeaderContainer,
+.blockHeaderSubContainer {
+  padding: 10px 0;
   display: flex;
   align-items: center;
-  height: 55px;
   border-bottom: 1px solid var(--trood-gray-bg);
   justify-content: space-between;
 }
 
-.blockHeaderSubContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
+.blockHeaderContainer:empty,
+.blockHeaderSubContainer:empty {
+  display: none;
 }
 
 .blockHeaderButtons {
@@ -89,12 +88,8 @@
   display: flex;
   flex-flow: row wrap;
   align-items: flex-end;
+  width: 100%;
   margin-bottom: -10px;
-}
-
-.blockHeaderSubContainer:not(:first-child),
-.blockFiltersContainer:not(:first-child) {
-  margin-top: 10px;
 }
 
 .blockFiltersContainer > * {

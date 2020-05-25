@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import TLabel from '$trood/components/TLabel'
 import TButton, { BUTTON_SPECIAL_TYPES } from '$trood/components/TButton'
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import ToggleFiltersButton from './ToggleFiltersButton'
@@ -13,7 +12,7 @@ const Header = ({ title, addNew, tableEditorActions, form, formActions, filters,
     <Fragment>
       {title || addNew || !search ? (
         <div className={basePageLayout.blockHeaderContainer}>
-          {title && <TLabel label={title} className={basePageLayout.blockTitle} />}
+          {title && <div className={basePageLayout.blockTitle}>{title}</div>}
           {!search || !search.length ? <ToggleFiltersButton {...{ form, formActions, filters }} /> : null}
           {addNew && (
             <TButton
@@ -29,18 +28,20 @@ const Header = ({ title, addNew, tableEditorActions, form, formActions, filters,
         </div>
       ) : null}
       {search && (
-        <div className={basePageLayout.blockFiltersContainer}>
-          <TInput
-            {...{
-              className: style.searchInput,
-              value: form.search,
-              type: INPUT_TYPES.search,
-              onChange: (value) => formActions.changeField('search', value),
-              placeholder: intlObject.intl.formatMessage(messages.searchPlaceholder),
-              label: intlObject.intl.formatMessage(messages.search),
-            }}
-          />
-          <ToggleFiltersButton {...{ form, formActions, filters }} />
+        <div className={basePageLayout.blockHeaderSubContainer}>
+          <div className={basePageLayout.blockFiltersContainer}>
+            <TInput
+              {...{
+                className: style.searchInput,
+                value: form.search,
+                type: INPUT_TYPES.search,
+                onChange: (value) => formActions.changeField('search', value),
+                placeholder: intlObject.intl.formatMessage(messages.searchPlaceholder),
+                label: intlObject.intl.formatMessage(messages.search),
+              }}
+            />
+            <ToggleFiltersButton {...{ form, formActions, filters }} />
+          </div>
         </div>
       )}
     </Fragment>
