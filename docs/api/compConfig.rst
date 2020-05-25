@@ -168,7 +168,7 @@ Bool. If ``true`` the button to add new entity will be added to the header of th
 
 .. attribute:: hideView
 
-Bool. If ``true`` id field of the entity will be displayed as number.
+Bool. If ``true`` column with view template will not be displayed.
 
 Simple usage in ``./src/config.js``
 

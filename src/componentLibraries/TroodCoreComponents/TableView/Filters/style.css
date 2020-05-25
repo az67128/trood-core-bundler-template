@@ -1,12 +1,6 @@
 .root {
 }
 
-.filterItem {
-  margin-right: 20px;
-  margin-bottom: 10px;
-  width: 200px;
-}
-
 .numberFilter {
   display: flex;
 }

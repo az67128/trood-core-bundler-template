@@ -3,6 +3,7 @@ import TLabel from '$trood/components/TLabel'
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import { intlObject } from '$trood/localeService'
 import { messages } from '../../constants'
+import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from '../style.css'
 
 const NumberFilter = ({ value = {}, label, onChange }) => {
@@ -13,7 +14,7 @@ const NumberFilter = ({ value = {}, label, onChange }) => {
   }, [value])
 
   return (
-    <div className={style.filterItem}>
+    <div className={basePageLayout.blockFilter}>
       <TLabel label={label} />
       <div className={style.numberFilter}>
         <TInput

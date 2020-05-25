@@ -5,7 +5,7 @@ import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 import { RESTIFY_CONFIG } from 'redux-restify'
 import { intlObject } from '$trood/localeService'
 import { messages } from '../../constants'
-import style from '../style.css'
+import basePageLayout from '$trood/styles/basePageLayout.css'
 
 const DropdownFilter = ({ fieldName, label, value, onChange, modelEntities, modelApiActions }) => {
   const [modelSearch, modelSearchSet] = useState('')
@@ -40,7 +40,7 @@ const DropdownFilter = ({ fieldName, label, value, onChange, modelEntities, mode
   return (
     <TSelect
       {...{
-        className: style.filterItem,
+        className: basePageLayout.blockFilter,
         label,
         items: modelArray.map((item) => ({
           value: item[modelConfig.idField],

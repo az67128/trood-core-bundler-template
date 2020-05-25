@@ -2,13 +2,13 @@ import React from 'react'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
 import { intlObject } from '$trood/localeService'
 import { messages } from '../../constants'
-import style from '../style.css'
+import basePageLayout from '$trood/styles/basePageLayout.css'
 
 const BoolFilter = ({ label, value, onChange }) => {
   return (
     <TSelect
       {...{
-        className: style.filterItem,
+        className: basePageLayout.blockFilter,
         label: label,
         items: [
           {

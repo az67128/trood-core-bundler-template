@@ -121,21 +121,12 @@ const Table = ({
       if (field.linkType === 'outer') return null
 
       return {
-        title:
-          config.idField === fieldNameSnake && !hideView
-            ? intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType]._objectView)
-            : intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName]),
+        title: intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName]),
         name: fieldName,
         sortable: field.type !== 'generic',
         model: (item) => {
           if (fieldNameSnake === config.idField) {
-            const template =
-              config.views.tableCell || config.views.default || `${tableEntities.modelType}/{${fieldName}}`
-            return (
-              <EntityPageLink model={tableEntities}>
-                {hideView ? item[fieldName] : templateApplyValues(template, item)}
-              </EntityPageLink>
-            )
+            return <EntityPageLink model={item}>{item[fieldName]}</EntityPageLink>
           }
           if (field.linkType) {
             if (!item[fieldName]) return null
@@ -195,6 +186,17 @@ const Table = ({
     },
   ]
 
+  const viewColumns = [
+    {
+      title: intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType]._objectView),
+      model: (item) => {
+        const template =
+          config.views.tableCell || config.views.default || `${tableEntities.modelType}/{${config.idField}}`
+        return <EntityPageLink model={item}>{templateApplyValues(template, item)}</EntityPageLink>
+      },
+    },
+  ]
+
   return (
     <AsyncEntitiesList
       {...{
@@ -215,7 +217,7 @@ const Table = ({
             })
           },
           body: tableArray,
-          header: [...header, ...(editable ? editColumn : [])],
+          header: [...(hideView ? [] : viewColumns), ...header, ...(editable ? editColumn : [])],
           checking,
         }}
       />
