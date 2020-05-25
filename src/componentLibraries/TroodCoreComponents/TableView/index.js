@@ -21,13 +21,14 @@ const TableView = ({
   query,
   title,
   addNew,
+  hideView,
   ...restProps
 }) => {
   const config = RESTIFY_CONFIG.registeredModels[tableEntities.modelType]
   return (
     <div className={basePageLayout.block}>
-      <Header {...{ title, addNew, tableEditorActions, form, formActions, filters, search }} />
-      <Filters {...{ filters, config, form, formActions, ...restProps }} />
+      <Header {...{ title, tableEntities, addNew, tableEditorActions, form, formActions, filters, search }} />
+      <Filters {...{ filters, config, form, formActions, tableEntities, ...restProps }} />
       <Table
         {...{
           config,
@@ -43,6 +44,7 @@ const TableView = ({
           filters,
           search,
           query,
+          hideView,
         }}
       />
     </div>
@@ -59,5 +61,6 @@ TableView.propTypes = {
   query: PropTypes.string,
   title: PropTypes.string,
   addNew: PropTypes.bool,
+  hideView: PropTypes.bool,
 }
 export default TableView

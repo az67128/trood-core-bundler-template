@@ -25,6 +25,7 @@ const Table = ({
   filters,
   search,
   query,
+  hideView,
 }) => {
   const fieldList = Object.keys(config.meta).filter((fieldName) => {
     if (exclude.includes(fieldName)) return false
@@ -32,7 +33,7 @@ const Table = ({
     return include.includes(fieldName)
   })
 
-  const sort = form.sortColumn ? `sort(${form.sortOrder > 0 ? '+' : '-'}${form.sortColumn})` : ''
+  const sort = form.sortColumn ? [`sort(${form.sortOrder > 0 ? '+' : '-'}${form.sortColumn})`] : []
 
   const filterQuery = filters.reduce((memo, fieldName) => {
     const fieldNameSnake = camelToLowerSnake(fieldName)
@@ -57,8 +58,8 @@ const Table = ({
 
     if (field.type === 'number' && (formField.min || formField.max)) {
       const min = formField.min ? `ge(${fieldNameSnake},${formField.min})` : ''
-      const max = formField.max ? `ge(${fieldNameSnake},${formField.max})` : ''
-      return [...memo, ...(min && max ? [`${memo},and(${min},${max})`] : [`${memo},${min}${max}`])]
+      const max = formField.max ? `le(${fieldNameSnake},${formField.max})` : ''
+      return [...memo, ...(min && max ? [`and(${min},${max})`] : [`${min}${max}`])]
     }
     if (field.type === 'bool' && formField && formField.length) {
       return [...memo, `eq(${fieldNameSnake},${formField})`]
@@ -92,7 +93,7 @@ const Table = ({
       }
 
       if (fieldType === 'number') {
-        if (!Number.isNaN(parseFloat(form.search))) return memo
+        if (Number.isNaN(parseFloat(form.search))) return memo
         return [...memo, `eq(${fieldNameSnake},${form.search})`]
       }
       console.warn(`Search by field '${fieldNameSnake}' of type '${fieldType}' is not supported`)
@@ -103,7 +104,7 @@ const Table = ({
 
   const tableApiConfig = {
     filter: {
-      q: [sort, ...filterQuery, ...searchQuery(), ...(query ? [query] : [])].join(','),
+      q: [...sort, ...filterQuery, ...searchQuery(), ...(query ? [query] : [])].join(','),
     },
   }
 
@@ -124,6 +125,9 @@ const Table = ({
         name: fieldName,
         sortable: field.type !== 'generic',
         model: (item) => {
+          if (fieldNameSnake === config.idField) {
+            return <EntityPageLink model={item}>{item[fieldName]}</EntityPageLink>
+          }
           if (field.linkType) {
             if (!item[fieldName]) return null
             if (field.type === 'objects') {
@@ -142,9 +146,7 @@ const Table = ({
             const template = views.tableCell || views.default || `${name}/{${idField}}`
 
             return (
-              <EntityPageLink model={item[fieldName]}>
-                {templateApplyValues(template, item[fieldName])}
-              </EntityPageLink>
+              <EntityPageLink model={item[fieldName]}>{templateApplyValues(template, item[fieldName])}</EntityPageLink>
             )
           }
 
@@ -160,14 +162,6 @@ const Table = ({
                   format: SMART_DATE_FORMATS.shortWithTime,
                 }}
               />
-            )
-          }
-
-          if (config.idField === fieldNameSnake) {
-            return (
-              <EntityPageLink model={item[fieldName]}>
-                {item[fieldName]}
-              </EntityPageLink>
             )
           }
           return item[fieldName]
@@ -192,6 +186,17 @@ const Table = ({
     },
   ]
 
+  const viewColumns = [
+    {
+      title: intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType]._objectView),
+      model: (item) => {
+        const template =
+          config.views.tableCell || config.views.default || `${tableEntities.modelType}/{${config.idField}}`
+        return <EntityPageLink model={item}>{templateApplyValues(template, item)}</EntityPageLink>
+      },
+    },
+  ]
+
   return (
     <AsyncEntitiesList
       {...{
@@ -212,7 +217,7 @@ const Table = ({
             })
           },
           body: tableArray,
-          header: [...header, ...(editable ? editColumn : [])],
+          header: [...(hideView ? [] : viewColumns), ...header, ...(editable ? editColumn : [])],
           checking,
         }}
       />

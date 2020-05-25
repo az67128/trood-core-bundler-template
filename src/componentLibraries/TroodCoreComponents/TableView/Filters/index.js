@@ -8,11 +8,14 @@ import BoolFilter from './BoolFilter'
 import { getInterval } from '$trood/helpers/dateTime'
 import { messages } from '../constants'
 import localeService, { intlObject } from '$trood/localeService'
+import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from './style.css'
 
 const Filters = ({ filters, config, form, formActions, tableEntities, ...restProps }) => {
   const getLabel = (fieldName) => {
-    return intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName])
+    return tableEntities
+      ? intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName])
+      : fieldName
   }
 
   const resetFilters = () => {
@@ -24,7 +27,7 @@ const Filters = ({ filters, config, form, formActions, tableEntities, ...restPro
   }
   if (!form.isFiltersOpen) return null
   return (
-    <div className={style.filterBlock}>
+    <div className={basePageLayout.blockFiltersContainer}>
       {filters
         .map((fieldName) => {
           const fieldNameSnake = camelToLowerSnake(fieldName)
@@ -83,7 +86,7 @@ const Filters = ({ filters, config, form, formActions, tableEntities, ...restPro
             )
           }
           if (field.type === 'number') {
-            return <NumberFilter {...{ key: fieldName, value, label }} />
+            return <NumberFilter {...{ key: fieldName, value, label, onChange }} />
           }
           if (field.type === 'bool') return <BoolFilter {...{ key: fieldName, value, label, onChange }} />
           return null

@@ -166,6 +166,10 @@ String. Title of the table
 
 Bool. If ``true`` the button to add new entity will be added to the header of the table.
 
+.. attribute:: hideView
+
+Bool. If ``true`` column with view template will not be displayed.
+
 Simple usage in ``./src/config.js``
 
 .. code-block:: javascript
