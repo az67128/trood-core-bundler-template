@@ -1,19 +1,13 @@
-.infoHeaderWrap {
-  padding: 15px;
-}
-
 .infoRowWrap {
   display: flex;
   flex-flow: row wrap;
-  padding: 15px;
+  margin-right: -20px;
+  margin-bottom: -20px;
 }
 
 .infoRow {
   display: flex;
   flex-flow: column nowrap;
-}
-
-.infoRow:not(:last-child) {
   margin-right: 20px;
   margin-bottom: 20px;
 }

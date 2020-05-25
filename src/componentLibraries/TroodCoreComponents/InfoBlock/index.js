@@ -12,6 +12,7 @@ import { isDefAndNotNull } from '$trood/helpers/def'
 
 import { EntityPageLink } from '$trood/pageManager'
 import { RESTIFY_CONFIG } from 'redux-restify'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 const InfoBlock = ({
@@ -25,6 +26,7 @@ const InfoBlock = ({
   exclude = [],
 }) => {
   const config = RESTIFY_CONFIG.registeredModels[model.$modelType]
+  const objectMessages = localeService.entityMessages[model.$modelType]
   let dataArray = []
 
   Object.keys(config.meta)
@@ -36,6 +38,7 @@ const InfoBlock = ({
     .forEach(fieldName => {
       if (isDefAndNotNull(model[fieldName])) {
         const field = config.meta[fieldName]
+        const label = intlObject.intl.formatMessage(objectMessages[fieldName])
 
         if (field.linkType && (field.linkType !== 'outer')) {
           const valuesArray = (field.type === 'objects' ? model[fieldName] : [model[fieldName]]).filter(v => v)
@@ -44,7 +47,7 @@ const InfoBlock = ({
             const template = views.tableCell || views.default || `${name}/{${item[idField]}}`
 
             dataArray.push({
-              label: fieldName,
+              label,
               value: (
                 <EntityPageLink key={item[idField]} model={item}>
                   {templateApplyValues(template, item)}
@@ -56,21 +59,21 @@ const InfoBlock = ({
 
         if (field.type === 'string' || field.type === 'number') {
           dataArray.push({
-            label: fieldName,
+            label,
             value: model[fieldName],
           })
         }
 
         if (field.type === 'bool') {
           dataArray.push({
-            label: fieldName,
+            label,
             value: model[fieldName] ? 'true' : 'false',
           })
         }
 
         if (field.type === 'datetime') {
           dataArray.push({
-            label: fieldName,
+            label,
             value :
               <SmartDate
                 {...{

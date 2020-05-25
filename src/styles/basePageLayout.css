@@ -111,3 +111,8 @@
 .blockContentThin:not(:first-child) {
   margin-top: 10px;
 }
+
+.block > :first-child:empty + .blockContent,
+.block > :first-child:empty + .blockContentThin {
+  margin-top: 0;
+}
