@@ -51,6 +51,7 @@ We have props that are implicitly passed to components, but you can interact wit
 .. _qhistory: https://www.npmjs.com/package/qhistory
 
 * history - object of qhistory_
+* title - i18n transformed component parameter ``title``
 * model - entity model, only if the component is added on entityPage
 * modelIsLoading  - entity model loading, only if the component is added on entityPage
 * modalsActions - actions for calling modal windows
@@ -127,7 +128,7 @@ TableView
 
 Represents preconfigured table view for business entity passed to ``table`` model.
 
-props:
+supported additional props:
 
 .. attribute:: checking
 
@@ -183,6 +184,7 @@ Simple usage in ``./src/config.js``
       components: [
         {
           type: 'TroodCoreComponents/TableView',
+          title: 'Table',
           span: 3,
           withMargin: true,
           models: {
@@ -204,7 +206,7 @@ InfoBlock
 
 Component for outputting data from a Business object to its page.
 
-props:
+supported additional props:
 
 .. attribute:: title
 
@@ -239,13 +241,13 @@ Simple usage in ``./src/config.js``
       components: [
         {
           type: 'TroodCoreComponents/InfoBlock',
+          title: 'Client info',
           span: 12,
           withMargin: true,
           models: {
             model: 'client', // name of business object in system
           },
           props: {
-            title: 'Client info',
             editable: true,
             exclude: ['id'],
           },

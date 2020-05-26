@@ -48,6 +48,7 @@ import {
 } from '$trood/serviceManager'
 
 import { currentLayout } from '$trood/layoutsManager'
+import localeService, { intlObject } from '$trood/localeService'
 
 import ErrorBoundary from '$trood/components/ErrorBoundary'
 
@@ -199,9 +200,16 @@ const PageGridLayout = (props) => {
                   ...componentServices,
                 })
 
+                let title = localeService.localeMessages[comp.id]
+                if (title) {
+                  title = intlObject.intl.formatMessage(title)
+                } else {
+                  title = comp.title || comp.props.title
+                }
                 compToRender = (
                   <CurrentComponent {...{
                     ...comp.props,
+                    title,
                     ...currentComponentProps,
                   }} />
                 )

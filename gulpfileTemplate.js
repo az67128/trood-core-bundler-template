@@ -3,12 +3,9 @@ require('regenerator-runtime/runtime')
 const gulp = require('gulp')
 const template = require('gulp-template')
 const rename = require('gulp-rename')
-const { PAGE_TYPES_DEFAULT_TITLE, PAGE_TYPES_GET_PAGE_ID, getPageConfig } = require('./src/pageManager')
+const { getPageConfig } = require('./src/pageManager')
 const {camelToUpperHuman} = require('./src/helpers/namingNotation')
 
-
-const getPageId = (page, ...args) => PAGE_TYPES_GET_PAGE_ID[page.type](page, ...args)
-const getPageTitle = (page) => page.title || PAGE_TYPES_DEFAULT_TITLE[page.type] || ''
 
 const isTest = process.env.NODE_ENV === 'testing'
 
@@ -57,10 +54,10 @@ const getComponentFormTemplate = ({ id, config }) => {
   return `'${id}': require('${config}').default`
 }
 
-const getPageIntlMessage = (pageId, pageTitle) => {
-  return `'${pageId}': {
-    id: '${pageId}',
-    defaultMessage: '${pageTitle}',
+const getIntlMessage = (id, message) => {
+  return `'${id}': {
+    id: '${id}',
+    defaultMessage: '${message}',
   }`
 }
 
@@ -182,53 +179,34 @@ gulp.task('make-layouts', () => {
 gulp.task('make-locale', () => {
   const config = require('./src/config').default
 
-  const reducePages = (modelType, prevPageId) => (memo, page) => {
-    const currentPageId = getPageId(page, modelType, undefined, prevPageId)
-    let currentPageTitles = [
-      {
-        id: currentPageId,
-        title: getPageTitle(page),
-      },
+  const pages = [
+    ...config.pages.map(p => getPageConfig(p)),
+    ...Object.keys(config.entityPages).map(key => getPageConfig(config.entityPages[key], key)),
+  ]
+
+  const reducePages = (memo, page) => {
+    return [
+      ...memo,
+      page,
+      ...(page.pages && page.pages.length ? page.pages.reduce(reducePages, []) : []),
     ]
-    if (page.pages) {
-      currentPageTitles = [
-        ...currentPageTitles,
-        ...page.pages.reduce(
-          reducePages(page.modelType || modelType, currentPageId),
-          [],
-        ),
-      ]
-    }
-    return memo.concat(currentPageTitles)
   }
-  const flattenPages = config.pages.reduce(
-    reducePages(),
-    Object.keys(config.entityPages).reduce((memo, key) => {
-      const currentPage = config.entityPages[key]
-      const currentPageId = getPageId(currentPage, key)
-      let currentPageTitles = [
-        {
-          id: currentPageId,
-          title: getPageTitle(currentPage),
-        },
-      ]
-      if (currentPage.pages) {
-        currentPageTitles = [
-          ...currentPageTitles,
-          ...currentPage.pages.reduce(
-            reducePages(key, currentPageId),
-            [],
-          ),
-        ]
-      }
-      return memo.concat(currentPageTitles)
-    }, []),
-  )
+  const allPages = pages.reduce(reducePages, [])
+
+  const reduceComponents = (memo, comp) => {
+    return [
+      ...memo,
+      ...(comp.components || []),
+      ...(comp.components && comp.components.length ? comp.components.reduce(reduceComponents, []) : []),
+    ]
+  }
+  const allComps = allPages.reduce(reduceComponents, [])
+
   return gulp.src('./src/configMessages.js.template')
     .pipe(template({
-      pages: flattenPages
-        .filter(page => page.title)
-        .map(page => getPageIntlMessage(page.id, page.title))
+      pages: allPages.concat(allComps)
+        .filter(item => item.title)
+        .map(item => getIntlMessage(item.id, item.title))
         .join(',\n'),
     }))
     .pipe(rename(path => {
@@ -238,7 +216,7 @@ gulp.task('make-locale', () => {
     .pipe(gulp.dest('./src'))
 })
 
-gulp.task('make-bo-intil', () => {
+gulp.task('make-bo-locale', () => {
   const context = require.context('./src/businessObjects/', true, /model\.js(on)?$/)
   const getFieldDefines = (defaults, entityName) => Object.keys(defaults).reduce((memo, fieldName) => {
     return [
@@ -286,11 +264,10 @@ ${getFieldDefines(context(key).default.defaults, entityName)}
 gulp.task(
   'default',
   gulp.parallel(
-    'make-bo-intil',
     'make-components',
     'make-business-objects',
     'make-layouts',
     'make-locale',
-    
+    'make-bo-locale',
   ),
 )

@@ -46,6 +46,7 @@ const getGridPageConfig = (page, ...args) => {
   return {
     ...page,
     id: pageId,
+    title: page.title || PAGE_TYPES_DEFAULT_TITLE[page.type] || '',
     components: getPageComponents(pageId, page),
     pages: page.pages && page.pages.map(p => getGridPageConfig(p, args[0], args[1], pageId)),
   }
