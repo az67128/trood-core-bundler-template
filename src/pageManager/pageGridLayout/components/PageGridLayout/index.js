@@ -204,11 +204,11 @@ const PageGridLayout = (props) => {
                 if (title) {
                   title = intlObject.intl.formatMessage(title)
                 } else {
-                  title = comp.title || comp.props.title
+                  title = comp.title || (comp.props || {}).title
                 }
                 compToRender = (
                   <CurrentComponent {...{
-                    ...comp.props,
+                    ...(comp.props || {}),
                     title,
                     ...currentComponentProps,
                   }} />
