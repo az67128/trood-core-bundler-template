@@ -190,6 +190,7 @@ const PageGridLayout = (props) => {
                 }, {
                   history,
                   model: other.model,
+                  modelIsLoading: other.modelIsLoading,
                   form: other[getFormPropName(comp.id)],
                   formActions: other[getFormActionsName(comp.id)],
                   modalsActions: other.modalsActions,

@@ -83,6 +83,7 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
 
     let modelId
     let model
+    let modelIsLoading
     let childForms = []
     let childEntitiesByModel = {}
     if (entityPageModelName) {
@@ -93,6 +94,7 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
         modelId = +modelId
       }
       model = entityPageEntities.getById(modelId)
+      modelIsLoading = entityPageEntities.getIsLoadingById(modelId)
 
       const currentChildFormRegexp = getChildFormRegexp({ parentModel: entityPageModelName, parentId: modelId })
       childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
@@ -107,6 +109,7 @@ const getPageContainer = (pageConfig, entityPageModelName, entityPageModelIdSele
       ...childEntitiesByModel,
       ...currentForms,
       model,
+      modelIsLoading,
       modelId,
       entityPageModelName,
     }
