@@ -94,8 +94,8 @@ const Table = ({
       }
 
       if (fieldType === 'number') {
-        if (Number.isNaN(parseFloat(form.search))) return memo
-        return [...memo, `eq(${fieldNameSnake},${form.search})`]
+        const numberSearch = form.search.replace(/[^0-9]/g, '')
+        return numberSearch.length > 0 ? [...memo, `eq(${fieldNameSnake},${numberSearch})`] : memo
       }
       console.warn(`Search by field '${fieldNameSnake}' of type '${fieldType}' is not supported`)
       return memo

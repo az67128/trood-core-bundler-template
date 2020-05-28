@@ -23,7 +23,7 @@ const NumberFilter = ({ value = {}, label, onChange }) => {
             placeholder: intlObject.intl.formatMessage(messages.min),
             onChange: (val) => onChange({ ...internaValue.current, min: val }),
             value: value.min || '',
-            type: INPUT_TYPES.number,
+            type: INPUT_TYPES.float,
           }}
         />
         <TInput
@@ -31,7 +31,7 @@ const NumberFilter = ({ value = {}, label, onChange }) => {
             placeholder: intlObject.intl.formatMessage(messages.max),
             onChange: (val) => onChange({ ...internaValue.current, max: val }),
             value: value.max || '',
-            type: INPUT_TYPES.number,
+            type: INPUT_TYPES.float,
           }}
         />
       </div>
