@@ -14,7 +14,7 @@ const TableView = ({
   editable = false,
   include = [],
   exclude = [],
-  form,
+  form = {},
   formActions,
   filters = [],
   search,
@@ -45,6 +45,7 @@ const TableView = ({
           search,
           query,
           hideView,
+          ...restProps,
         }}
       />
     </div>
