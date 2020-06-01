@@ -112,7 +112,6 @@ const Table = ({
     if (model && childTable) {
       const ids = childTable
         .getChildArray()
-        .filter((item) => item.$modelType === tableEntities.modelType)
         .map((item) => item[config.idField])
       const queryArray = []
       if (query) queryArray.push(query)

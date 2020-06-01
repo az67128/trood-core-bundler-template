@@ -19,7 +19,7 @@ export default {
           required: true,
         },
       ],
-      canUseOn: ['entityPage'],
+      canUseOn: ['entityPage', 'entityPage'],
     },
   ],
 }
