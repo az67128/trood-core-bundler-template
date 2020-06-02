@@ -158,7 +158,8 @@ Nested fileds such as ``['matter.employee.name']`` also supported
 
 .. attribute:: query
 
-String. String will be added to all table queries.
+String. String will be added to all table queries. 
+If you are using table on the `entityPage` you can use mask like `eq(table_field,{entity_value})`. Value from the entity will be passed to query.
 
 .. attribute:: title
 

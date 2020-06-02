@@ -27,6 +27,8 @@ const Table = ({
   search,
   query,
   hideView,
+  model,
+  childTable,
 }) => {
   const fieldList = Object.keys(config.meta).filter((fieldName) => {
     if (exclude.includes(fieldName)) return false
@@ -68,7 +70,7 @@ const Table = ({
     return memo
   }, [])
 
-  const searchQuery = () => {
+  const getSearchQuery = () => {
     if (!search || !form.search) return []
     const searchFields = Array.isArray(search)
       ? search
@@ -103,9 +105,25 @@ const Table = ({
     return searchArray.length ? [`or(${searchArray.join(',')})`] : []
   }
 
+  const getQuery = () => {
+    if (model && /.*\{.*\}.*/.test(query)) {
+      return [templateApplyValues(query, model)]
+    }
+    if (model && childTable) {
+      const ids = childTable
+        .getChildArray()
+        .map((item) => item[config.idField])
+      const queryArray = []
+      if (query) queryArray.push(query)
+      if (ids.length) queryArray.push(`in(${config.idField},(${ids.join(',')}))`)
+      return queryArray
+    }
+    return query ? [query] : []
+  }
+
   const tableApiConfig = {
     filter: {
-      q: [...sort, ...filterQuery, ...searchQuery(), ...(query ? [query] : [])].join(','),
+      q: [...sort, ...filterQuery, ...getSearchQuery(), ...getQuery()].join(','),
     },
   }
 
