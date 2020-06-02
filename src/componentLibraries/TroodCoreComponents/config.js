@@ -9,7 +9,7 @@ export default {
           required: true,
         },
       ],
-      canUseOn: ['page'],
+      canUseOn: ['page', 'entityPage'],
     },
     {
       title: 'InfoBlock',
@@ -19,7 +19,7 @@ export default {
           required: true,
         },
       ],
-      canUseOn: ['entityPage', 'entityPage'],
+      canUseOn: ['entityPage'],
     },
   ],
 }
