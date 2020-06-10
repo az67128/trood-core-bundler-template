@@ -26,63 +26,54 @@ const getPageChildContainer = (dispatch, getState) => ({
   const currentEntitiyListsSelectors = applySelectors(`pageContainerEntityLists${Math.random()}`)
 
   const currentParents = []
+  const modelConfig = RESTIFY_CONFIG.registeredModels[model.$modelType]
   if (model.$modelType) {
     currentParents.push({
       modelName: model.$modelType,
-      id: model.id,
+      id: model[modelConfig.idField],
       skipSubmit: true,
     })
   }
 
-  const entitiesToBusinessObjectsDict = {}
   const entityListsGetters = {}
   const entitiesToGet = Object.keys(models).reduce((memo, key) => {
-    const currentBusinessObject = models[key]
-    const currentModel = RESTIFY_CONFIG.registeredModels[currentBusinessObject]
-    entitiesToBusinessObjectsDict[key] = currentBusinessObject
-    const entititiesListGetter = (state) => api.selectors.entityManager[currentBusinessObject].getEntities(state)
-    entityListsGetters[key] = entititiesListGetter
+    const modelType = models[key]
+    const currentModelConfig = RESTIFY_CONFIG.registeredModels[modelType]
+    entityListsGetters[key] = api.selectors.entityManager[modelType].getEntities
+
+    const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
+      ...prevActions,
+      [action]: entityManager.actions[action](modelType, currentParents),
+    }), {})
+    const apiActions = api.actions.entityManager[modelType]
+
     return {
       ...memo,
-      [getModelEntitiesName(key)]: entititiesListGetter,
-      [getModelComponentsName(key)]: () => currentModel.components,
-      [getModelConstantsName(key)]: () => currentModel.constants,
+      [getModelEntitiesName(key)]: entityListsGetters[key],
+      [getModelComponentsName(key)]: () => currentModelConfig.components,
+      [getModelConstantsName(key)]: () => currentModelConfig.constants,
+
+      [getModelEditorActionsName(key)]: () => bindActionCreators(mapedActions, dispatch),
+      [getModelActionsName(key)]: () => bindActionCreators(currentModelConfig.actions, dispatch),
+      [getModelApiActionsName(key)]: () => bindActionCreators(apiActions, dispatch),
     }
   }, {})
 
   const state = getState()
   const currentEntities = currentEntitiesSelectors(state, entitiesToGet)
 
-  const modelConfig = RESTIFY_CONFIG.registeredModels[model.$modelType]
   const currentEntityLists = currentEntitiyListsSelectors(state, entityListsGetters)
   const currentChildFormRegexp = getChildFormRegexp({ parentModel: model.$modelType, parentId: model.id })
   const childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
   const childEntitiesByModel =
     getChildEntitiesByModel(model.$modelType, modelConfig, currentEntityLists, model.id, { childForms, model })
 
-  const currentEntitiesActions = Object.keys(entitiesToBusinessObjectsDict).reduce((memo, modelName) => {
-    const currentModel = RESTIFY_CONFIG.registeredModels[entitiesToBusinessObjectsDict[modelName]]
-    const mapedActions = Object.keys(entityManager.actions).reduce((prevActions, action) => ({
-      ...prevActions,
-      [action]: entityManager.actions[action](entitiesToBusinessObjectsDict[modelName], currentParents),
-    }), {})
-
-    const apiActions = api.actions.entityManager[entitiesToBusinessObjectsDict[modelName]]
-    return {
-      ...memo,
-      [getModelEditorActionsName(modelName)]: bindActionCreators(mapedActions, dispatch),
-      [getModelActionsName(modelName)]: bindActionCreators(currentModel.actions, dispatch),
-      [getModelApiActionsName(modelName)]: bindActionCreators(apiActions, dispatch),
-      PageChildContainer: dispatch(getPageChildContainer),
-    }
-  }, {})
-
   const props = {
     model,
     ...currentEntities,
     ...childEntitiesByModel,
-    ...currentEntitiesActions,
     parents: currentParents,
+    PageChildContainer: dispatch(memoizedGetPageChildContainer),
   }
 
   const childrenArray = Array.isArray(children) ? children : [children]
@@ -101,4 +92,6 @@ const getPageChildContainer = (dispatch, getState) => ({
   )
 }
 
-export default memoizeOne(getPageChildContainer)
+const memoizedGetPageChildContainer = memoizeOne(getPageChildContainer)
+
+export default memoizedGetPageChildContainer

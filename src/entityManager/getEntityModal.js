@@ -61,32 +61,35 @@ const formatMessage = msg => {
   return intlObject.intl.formatMessage(msg)
 }
 
-const linkChildWithParent = (modelName, parentName, parentId, formActions, form) => (dispatch) => {
+export const linkChildWithParent = (modelName, parentName, parentId, formActions, form) => (dispatch) => {
   const currentParentModel = RESTIFY_CONFIG.registeredModels[parentName]
   const currentModel = RESTIFY_CONFIG.registeredModels[modelName]
-  // Define, what type of fk is used and assign it for child model
-  // We have 2 types: generic foreign key with _object and id field, or direct foreign key by entity name
-  // TODO by @deylak here we use model endpoint as model name and change field, that will be converted to snake_case
-  // This would work for topline app, but in general, we should add smth like realModelName
-  const currentLinkKey = Object.keys(currentModel.defaults).find(key => {
-    const currentDefault = currentModel.defaults[key]
-    if (currentDefault instanceof RestifyForeignKey) {
-      return currentDefault.modelType === parentName
-    } else if (currentDefault instanceof RestifyGenericForeignKey) {
-      return currentDefault.modelType.includes(parentName)
-    }
-    return false
-  })
 
-  if (!form[currentLinkKey]) {
-    if (currentModel.defaults[currentLinkKey] instanceof RestifyGenericForeignKey) {
-      dispatch(formActions.changeField(currentLinkKey, {
-        _object: currentParentModel.endpoint,
-        [currentParentModel.idField]: parentId,
-      }))
-    } else if (currentModel.defaults[currentLinkKey] instanceof RestifyForeignKey) {
-      dispatch(formActions.changeField(currentLinkKey, parentId))
+  const currentLinkValues = Object.keys(currentModel.defaults).reduce((memo, key) => {
+    const currentDefault = currentModel.defaults[key]
+    if (!form[key]) {
+      if (currentDefault instanceof RestifyForeignKey
+        && currentDefault.modelType === parentName) {
+        return {
+          ...memo,
+          [key]: parentId,
+        }
+      } else if (currentDefault instanceof RestifyGenericForeignKey
+        && currentDefault.modelType.includes(parentName)) {
+        return {
+          ...memo,
+          [key]: {
+            _object: currentParentModel.endpoint,
+            [currentParentModel.idField]: parentId,
+          },
+        }
+      }
     }
+    return memo
+  }, {})
+
+  if (Object.keys(currentLinkValues).length) {
+    dispatch(formActions.changeSomeFields(currentLinkValues))
   }
 }
 

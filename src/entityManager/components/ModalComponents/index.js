@@ -86,6 +86,7 @@ const ModalComponentWrapper = type => props => {
         <TSelect
           {...{
             ...commonProps,
+            value: undefined,
             // eslint-disable-next-line no-nested-ternary
             values: props.multi ? value : value ? [value] : [],
             onChange: vals => onChange(props.multi ? vals : vals[0]),

@@ -17,6 +17,7 @@ import {
   modalQueryToString,
   messages,
 } from './constants'
+import { linkChildWithParent } from './getEntityModal'
 import { messages as mainMessages } from '$trood/mainConstants'
 
 import { intlObject } from '$trood/localeService'
@@ -231,6 +232,16 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
     }
     if (!currentForm) {
       currentForm = await dispatch(createEntityForm(modelName, parents)(idToEdit, config))
+    }
+    if (parents.length) {
+      const lastParent = parents[parents.length - 1]
+      dispatch(linkChildWithParent(
+        modelName,
+        lastParent.modelName,
+        lastParent.id,
+        currentForm.formActions,
+        currentForm.form,
+      ))
     }
     if (showModal) {
       dispatch(modals.actions.showModal(true, getEditModalName(modelName), {
