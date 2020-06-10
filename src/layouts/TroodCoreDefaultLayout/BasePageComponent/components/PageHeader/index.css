@@ -8,8 +8,14 @@
   padding: 0 var(--trood-page-padding);
 }
 
+.pieMenu,
 .button {
   z-index: 10;
+}
+
+.root .pieMenu {
+  display: none;
+  color: var(--trood-blue);
 }
 
 .logo {
@@ -22,4 +28,19 @@
   z-index: 1;
   height: 30px;
   width: 60px;
+}
+
+@media (--trood-media-portable) {
+  .root {
+    padding: 0 calc(var(--trood-page-padding) / 2);
+  }
+
+  .root .button {
+    display: none;
+  }
+
+  .root .pieMenu {
+    display: flex;
+    color: var(--trood-blue);
+  }
 }

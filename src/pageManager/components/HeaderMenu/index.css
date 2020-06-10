@@ -159,11 +159,11 @@
 }
 
 @media (--trood-media-desktop-small) {
-  .autoResize .vertical {
+  .autoResize.vertical {
     width: var(--trood-menu-width-small);
   }
 
-  .autoResize .vertical .url {
+  .autoResize.vertical .url {
     flex-flow: column nowrap;
     justify-content: center;
     text-align: center;
