@@ -233,7 +233,7 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
     if (!currentForm) {
       currentForm = await dispatch(createEntityForm(modelName, parents)(idToEdit, config))
     }
-    if (parents.length) {
+    if (parents.length && model && model.id) {
       const lastParent = parents[parents.length - 1]
       dispatch(linkChildWithParent(
         modelName,
