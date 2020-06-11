@@ -1,5 +1,6 @@
 import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 import { RESTIFY_CONFIG } from 'redux-restify'
+import { templateApplyValues } from '$trood/helpers/templates'
 
 export function filterFields({ meta, include, exclude }) {
   return Object.keys(meta).filter((fieldName) => {
@@ -76,4 +77,17 @@ export function getSearchQuery({ search, form, fieldList, config }) {
     return memo
   }, [])
   return searchArray.length ? [`or(${searchArray.join(',')})`] : []
+}
+
+export function getQuery({model, childTable, query, childIds, config}){
+  if (model && /.*\{.*\}.*/.test(query)) {
+    return [templateApplyValues(query, model)]
+  }
+  if (model && childTable && childIds) {
+    const queryArray = []
+    if (query) queryArray.push(query)
+    if (childIds.length) queryArray.push(`in(${config.idField},(${childIds.join(',')}))`)
+    return queryArray
+  }
+  return query ? [query] : []
 }

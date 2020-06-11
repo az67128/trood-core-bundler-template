@@ -35,7 +35,7 @@ const Card = ({ item, config, fieldList, listEntities, hideView, listEditorActio
             size: 24,
             type: ICONS_TYPES.edit,
             className: style.editIcon,
-            onClick: () => listEditorActions.editInlineChildEntity(item),
+            onClick: () => listEditorActions.editEntity(item),
           }}
         />
       )}

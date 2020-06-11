@@ -12,6 +12,7 @@ import {
   filterFields,
   getFilterQuery,
   getSearchQuery,
+  getQuery,
 } from '$trood/componentLibraries/TroodCoreComponents/internal/helpers'
 import getDataComponent from '$trood/componentLibraries/TroodCoreComponents/internal/helpers/getDataComponent'
 
@@ -33,44 +34,33 @@ const Table = ({
   model,
   childTable,
 }) => {
+  const childIds = model && childTable ? childTable.getChildArray().map((item) => item[config.idField]) : null
   const fieldList = filterFields({ meta: config.meta, exclude, include })
-
   const sort = form.sortColumn ? [`sort(${form.sortOrder > 0 ? '+' : '-'}${form.sortColumn})`] : []
   const filterQuery = getFilterQuery({ filters, form, config })
-
   const searchQuery = getSearchQuery({ search, form, fieldList, config })
-
-  const getQuery = () => {
-    if (model && /.*\{.*\}.*/.test(query)) {
-      return [templateApplyValues(query, model)]
-    }
-    if (model && childTable) {
-      const ids = childTable.getChildArray().map((item) => item[config.idField])
-      const queryArray = []
-      if (query) queryArray.push(query)
-      if (ids.length) queryArray.push(`in(${config.idField},(${ids.join(',')}))`)
-      return queryArray
-    }
-    return query ? [query] : []
-  }
+  const generalQuery = getQuery({ model, childTable, query, childIds, config })
 
   const tableApiConfig = {
     filter: {
-      q: [...sort, ...filterQuery, ...searchQuery, ...getQuery()].join(','),
+      q: [...sort, ...filterQuery, ...searchQuery, ...generalQuery].join(','),
     },
   }
-
-  const tableArray = tableEntities.getArray(tableApiConfig)
-  const tableNextPage = tableEntities.getNextPage(tableApiConfig)
-  const tableIsLoading = tableEntities.getIsLoadingArray(tableApiConfig)
+  let tableArray = tableEntities.getArray(tableApiConfig)
+  let tableNextPage = tableEntities.getNextPage(tableApiConfig)
+  let tableIsLoading = tableEntities.getIsLoadingArray(tableApiConfig)
   const tableNextPageAction = () => tableApiActions.loadNextPage(tableApiConfig)
+
+  if (childIds && childIds.length === 0) {
+    tableArray = []
+    tableNextPage = null
+    tableIsLoading = false
+  }
 
   const header = fieldList
     .map((fieldName) => {
       const field = config.meta[fieldName]
-
       if (field.linkType === 'outer') return null
-
       return {
         title: intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName]),
         name: fieldName,
