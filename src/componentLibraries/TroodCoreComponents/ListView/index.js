@@ -3,13 +3,13 @@ import basePageLayout from '$trood/styles/basePageLayout.css'
 import { RESTIFY_CONFIG } from 'redux-restify'
 import Header from '$trood/componentLibraries/TroodCoreComponents/internal/components/Header'
 import Filters from '$trood/componentLibraries/TroodCoreComponents/internal/components/Filters'
-import Table from './Table'
+import List from './List'
 import PropTypes from 'prop-types'
 
-const TableView = ({
-  tableEntities,
-  tableApiActions,
-  tableEditorActions = {},
+const ListView = ({
+  listEntities,
+  listApiActions,
+  listEditorActions = {},
   checking = false,
   editable = false,
   include = [],
@@ -24,29 +24,28 @@ const TableView = ({
   hideView,
   ...restProps
 }) => {
-  const config = RESTIFY_CONFIG.registeredModels[tableEntities.modelType]
+  const config = RESTIFY_CONFIG.registeredModels[listEntities.modelType]
   return (
     <div className={basePageLayout.block}>
       <Header
         {...{
           title,
-          entities: tableEntities,
+          entities: listEntities,
           addNew,
-          editorActions: tableEditorActions,
+          editorActions: listEditorActions,
           form,
           formActions,
           filters,
           search,
         }}
       />
-      <Filters {...{ filters, config, form, formActions, entities: tableEntities, ...restProps }} />
-      <Table
+      <Filters {...{ filters, config, form, formActions, entities: listEntities, ...restProps }} />
+      <List
         {...{
           config,
-          tableEntities,
-          tableApiActions,
-          tableEditorActions,
-          checking,
+          listEntities,
+          listApiActions,
+          listEditorActions,
           editable,
           include,
           exclude,
@@ -63,8 +62,7 @@ const TableView = ({
   )
 }
 
-TableView.propTypes = {
-  checking: PropTypes.bool,
+ListView.propTypes = {
   editable: PropTypes.bool,
   include: PropTypes.arrayOf(PropTypes.string),
   exclude: PropTypes.arrayOf(PropTypes.string),
@@ -75,4 +73,4 @@ TableView.propTypes = {
   addNew: PropTypes.bool,
   hideView: PropTypes.bool,
 }
-export default TableView
+export default ListView

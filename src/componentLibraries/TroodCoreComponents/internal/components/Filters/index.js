@@ -11,10 +11,10 @@ import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from './style.css'
 
-const Filters = ({ filters, config, form, formActions, tableEntities, ...restProps }) => {
+const Filters = ({ filters, config, form, formActions, entities, ...restProps }) => {
   const getLabel = (fieldName) => {
-    return tableEntities
-      ? intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType][fieldName])
+    return entities
+      ? intlObject.intl.formatMessage(localeService.entityMessages[entities.modelType][fieldName])
       : fieldName
   }
 

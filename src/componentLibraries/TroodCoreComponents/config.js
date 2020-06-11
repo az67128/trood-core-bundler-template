@@ -21,5 +21,15 @@ export default {
       ],
       canUseOn: ['entityPage'],
     },
+    {
+      title: 'ListView',
+      models: [
+        {
+          name: 'list',
+          required: true,
+        },
+      ],
+      canUseOn: ['page', 'entityPage'],
+    },
   ],
 }

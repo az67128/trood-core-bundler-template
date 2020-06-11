@@ -1,0 +1,53 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldContainer:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  color: var(--trood-gray-extra-dark);
+  margin-bottom: 4px;
+}
+
+.fieldValue {
+  font-weight: 400;
+}
+
+.editIcon {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  cursor: pointer;
+  color: var(--trood-blue);
+}
+
+.root:hover .editIcon {
+  display: block;
+}
+
+@media (--trood-media-portable) {
+  .fieldContainer {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .fieldLabel:after {
+    content: ':';
+    margin-right: 15px;
+  }
+
+  .fieldValue {
+    text-align: right;
+  }
+}
