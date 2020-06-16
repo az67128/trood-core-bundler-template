@@ -182,6 +182,10 @@ class Input extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.props.onValid()
+  }
+
   heightChange() {
     const { shadow } = this
     if (shadow) {

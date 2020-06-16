@@ -230,6 +230,7 @@ class DropDown extends PureComponent {
           <div className={classNames(style.optionsContainer, openUp && style.openUp, !open && style.hide)}>
             <List {...{
               ...this.props,
+              show: open,
               type,
               items,
               onChange: this.handleChange,

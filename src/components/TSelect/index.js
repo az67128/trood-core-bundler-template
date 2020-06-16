@@ -173,6 +173,10 @@ class TSelect extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.props.onValid()
+  }
+
   getSelectComponent(errors) {
     const {
       type,

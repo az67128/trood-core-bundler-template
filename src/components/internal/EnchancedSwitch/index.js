@@ -97,6 +97,10 @@ class EnchancedSwitch extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.props.onValid()
+  }
+
   onValidationUpdate() {
     const { disabled } = this.props
     const { innerErrors } = this.state

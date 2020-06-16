@@ -103,6 +103,9 @@ class List extends PureComponent {
     if (!deepEqual(prevProps.items, this.props.items)) {
       this.scrollToEndFired = false
     }
+    if (this.props.show && !prevProps.show) {
+      this.scrollToFirstSelected()
+    }
   }
 
   calcMaxHeight() {

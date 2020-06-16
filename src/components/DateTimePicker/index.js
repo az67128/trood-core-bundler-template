@@ -137,6 +137,10 @@ class DateTimePicker extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.props.onValid()
+  }
+
   getAllErrors() {
     const { dateTimeErrors, dateErrors, timeErrors } = this.state
     const allErrors = [...dateTimeErrors, ...dateErrors, ...timeErrors]
