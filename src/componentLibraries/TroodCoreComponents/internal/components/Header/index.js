@@ -7,7 +7,7 @@ import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from './style.css'
 
-const Header = ({ title, addNew, tableEditorActions, form, formActions, filters, search, tableEntities }) => {
+const Header = ({ title, addNew, editorActions, form, formActions, filters, search, entities }) => {
   return (
     <Fragment>
       {title || addNew || !search ? (
@@ -17,10 +17,10 @@ const Header = ({ title, addNew, tableEditorActions, form, formActions, filters,
           {addNew && (
             <TButton
               {...{
-                label: tableEntities
-                  ? intlObject.intl.formatMessage(localeService.entityMessages[tableEntities.modelType]._object)
+                label: entities
+                  ? intlObject.intl.formatMessage(localeService.entityMessages[entities.modelType]._object)
                   : intlObject.intl.formatMessage(messages.add),
-                onClick: () => tableEditorActions.editEntity(undefined),
+                onClick: () => editorActions.editEntity(undefined),
                 specialType: BUTTON_SPECIAL_TYPES.addFill,
               }}
             />

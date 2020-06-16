@@ -202,6 +202,80 @@ Simple usage in ``./src/config.js``
   ],
 
 ++++++++++
+ListView
+++++++++++
+
+Represents preconfigured list view for business entity passed to ``list`` model.
+
+supported additional props:
+
+.. attribute:: editable
+
+Boolean. If true adds edit icon which allow edit entity.
+
+.. attribute:: include
+
+Array of string. List of column names to include in list output
+
+.. attribute:: exclude
+
+Array of string. List of column names to exclude in list output
+
+.. attribute:: filters
+
+Array of string. List of column names to include in filters. If target field depends on another object, you should pass linked model to `models` section of page configuration.
+If model is not passed, filter will be skipped.
+
+.. attribute:: search
+
+Array of string or boolean. If array passed, search will be applied for listed fields. If bool passed, search will be applied for all columns in list with type ``string`` and ``number``.
+Nested fileds such as ``['matter.employee.name']`` also supported
+
+.. attribute:: query
+
+String. String will be added to all list queries. 
+If you are using list on the `entityPage` you can use mask like `eq(table_field,{entity_value})`. Value from the entity will be passed to query.
+
+.. attribute:: title
+
+String. Title of the list
+
+.. attribute:: addNew
+
+Bool. If ``true`` the button to add new entity will be added to the header of the list.
+
+.. attribute:: hideView
+
+Bool. If ``true`` row with view template will not be displayed.
+
+Simple usage in ``./src/config.js``
+
+.. code-block:: javascript
+
+  pages: [
+    {
+      title: 'Employee',
+      url: 'list',
+      type: 'grid',
+      components: [
+        {
+          type: 'TroodCoreComponents/ListView',
+          title: 'List',
+          span: 3,
+          withMargin: true,
+          models: {
+            list: 'employee',
+          },
+          props: {
+            editable: true,
+            exclude: ['id'],
+          },
+        },
+      ],
+    },
+  ],
+
+++++++++++
 InfoBlock
 ++++++++++
 
