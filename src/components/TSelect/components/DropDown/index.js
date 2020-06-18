@@ -186,7 +186,8 @@ class DropDown extends PureComponent {
 
     let { children } = this.props
 
-    if (!isLoading && onAdd && innerSearch && !items.length) {
+    if (!isLoading && onAdd && innerSearch
+      && !items.some(item => item.value === innerSearch || item.label === innerSearch)) {
       children = [
         <TButton {...{
           key: 'add',
