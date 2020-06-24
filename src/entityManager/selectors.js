@@ -65,9 +65,10 @@ export const getChildEntitiesByModel =
               currentArray = model[currentChildModelField]
                 // Filter out temporary forms, while submitting entitites
                 .filter(form => typeof form !== 'object')
-                .map(id => currentEntities[currentModelName].getById(id))
+                .map(id => currentEntities[key].getById(id))
             } else if (model && model[currentChildModelField]) {
-              currentArray = model[currentChildModelField]
+              currentArray = model[`${currentChildModelField}Ids`]
+                .map(id => currentEntities[key].getById(id)) // TODO fix depth in restify & delete this
             }
             // Replace entities with their existing editing forms
             const editedArray = currentArray
@@ -92,7 +93,7 @@ export const getChildEntitiesByModel =
           },
           getIsLoadingChildArray: () => {
             if (model && !model.$modelType && model.id && model[currentChildModelField]) {
-              return model[currentChildModelField].some(id => currentEntities[currentModelName].getIsLoadingById(id))
+              return model[currentChildModelField].some(id => currentEntities[key].getIsLoadingById(id))
             }
             return false
           },
