@@ -1,8 +1,8 @@
 import React from 'react'
 import AsyncEntitiesList from '$trood/components/AsyncEntitiesList'
-import { templateApplyValues } from '$trood/helpers/templates'
 import style from './style.css'
 import Card from './Card'
+import SubList from './SubList'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import {
   filterFields,
@@ -26,6 +26,8 @@ const List = ({
   hideView,
   model,
   childList,
+  PageChildContainer,
+  sublist,
 }) => {
   const childIds = model && childList ? childList.getChildArray().map((item) => item[config.idField]) : null
   const fieldList = filterFields({ meta: config.meta, exclude, include })
@@ -61,7 +63,10 @@ const List = ({
     >
       {listArray.map((item) => (
         <div className={style.cardItem} key={item[config.idField]}>
-          <Card {...{ item, fieldList, config, listEntities, hideView, listEditorActions, editable }} />
+          <Card
+            {...{ item, fieldList, config, modelType: listEntities.modelType, hideView, listEditorActions, editable }}
+          />
+          {sublist && sublist.model ? <SubList {...{ sublist, PageChildContainer, item }} /> : null}
         </div>
       ))}
     </AsyncEntitiesList>

@@ -15,6 +15,7 @@ const getDataComponent = ({ fieldName, config, item }) => {
   }
   if (field.linkType) {
     if (!item[fieldName]) return null
+
     if (field.type === 'objects') {
       if (!item[fieldName].length) return null
       return item[fieldName].map((item2) => {
@@ -27,6 +28,8 @@ const getDataComponent = ({ fieldName, config, item }) => {
         )
       })
     }
+    // TODO fix sub item $modelConfig
+    if (!item[fieldName].$modelType) return null
     const { name, idField, views } = RESTIFY_CONFIG.registeredModels[item[fieldName].$modelType]
     const template = views.tableCell || views.default || `${name}/{${idField}}`
     return <EntityPageLink model={item[fieldName]}>{templateApplyValues(template, item[fieldName])}</EntityPageLink>

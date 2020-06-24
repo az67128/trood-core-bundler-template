@@ -215,11 +215,11 @@ Boolean. If true adds edit icon which allow edit entity.
 
 .. attribute:: include
 
-Array of string. List of column names to include in list output
+Array of string. List of column names to include in the list output
 
 .. attribute:: exclude
 
-Array of string. List of column names to exclude in list output
+Array of string. List of column names to exclude in the list output
 
 .. attribute:: filters
 
@@ -247,6 +247,35 @@ Bool. If ``true`` the button to add new entity will be added to the header of th
 .. attribute:: hideView
 
 Bool. If ``true`` row with view template will not be displayed.
+
+.. attribute:: sublist
+
+If props pussed, a sublist will be added to each list item. Object with shape of:
+
+    .. attribute:: model
+
+        business entity model name to display as sublist
+    
+    .. attribute:: editable
+
+        Boolean. If true adds edit icon which allow edit entity.
+
+    .. attribute:: addNew
+
+        Bool. If ``true`` the button to add new entity will be added to the header of the sublist.
+
+    .. attribute:: include
+
+        Array of string. List of column names to include in the sublist output
+
+    .. attribute:: exclude
+
+        Array of string. List of column names to exclude in the sublist output
+
+    .. attribute:: hideView
+
+        Bool. If ``true`` row with view template will not be displayed in the sublist.
+
 
 Simple usage in ``./src/config.js``
 
