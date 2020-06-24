@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 import localeService, { intlObject } from '$trood/localeService'
 import { EntityPageLink } from '$trood/pageManager'
 import { templateApplyValues } from '$trood/helpers/templates'
