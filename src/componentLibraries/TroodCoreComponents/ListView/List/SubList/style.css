@@ -7,3 +7,18 @@
   justify-content: space-between;
   padding: 20px 0;
 }
+
+.sublist {
+  margin-left: 20px;
+}
+
+.sublistItem {
+  border-bottom: 1px solid var(--trood-gray-bg);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.sublistItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
