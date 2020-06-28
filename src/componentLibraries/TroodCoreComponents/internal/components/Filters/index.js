@@ -11,7 +11,7 @@ import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from './style.css'
 
-const Filters = ({ filters, config, form, formActions, entities, ...restProps }) => {
+const Filters = ({ filters, config, form, formActions, entities, PageChildContainer }) => {
   const getLabel = (fieldName) => {
     return entities
       ? intlObject.intl.formatMessage(localeService.entityMessages[entities.modelType][fieldName])
@@ -43,14 +43,6 @@ const Filters = ({ filters, config, form, formActions, entities, ...restProps })
             const label = getLabel(fieldName)
             if (field.linkType) {
               const linkName = snakeToCamel(field.linkMeta)
-              const modelEntities = restProps[`${linkName}Entities`]
-
-              if (!modelEntities) {
-                console.warn(`Entity model '${linkName}' for filter '${fieldName}' is not provided`)
-                return null
-              }
-
-              const modelApiActions = restProps[`${linkName}ApiActions`]
               return (
                 <DropdownFilter
                   {...{
@@ -58,9 +50,9 @@ const Filters = ({ filters, config, form, formActions, entities, ...restProps })
                     value,
                     fieldName,
                     onChange,
-                    modelEntities,
-                    modelApiActions,
+                    linkName,
                     label,
+                    PageChildContainer,
                   }}
                 />
               )

@@ -15,6 +15,7 @@ import {
   getQuery,
 } from '$trood/componentLibraries/TroodCoreComponents/internal/helpers'
 import getDataComponent from '$trood/componentLibraries/TroodCoreComponents/internal/helpers/getDataComponent'
+import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 
 const Table = ({
   config,
@@ -36,7 +37,7 @@ const Table = ({
 }) => {
   const childIds = model && childTable ? childTable.getChildArray().map((item) => item[config.idField]) : null
   const fieldList = filterFields({ meta: config.meta, exclude, include })
-  const sort = form.sortColumn ? [`sort(${form.sortOrder > 0 ? '+' : '-'}${form.sortColumn})`] : []
+  const sort = form.sortColumn ? [`sort(${form.sortOrder > 0 ? '+' : '-'}${camelToLowerSnake(form.sortColumn)})`] : []
   const filterQuery = getFilterQuery({ filters, form, config })
   const searchQuery = getSearchQuery({ search, form, fieldList, config })
   const generalQuery = getQuery({ model, childTable, query, childIds, config })

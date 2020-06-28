@@ -148,8 +148,7 @@ Array of string. List of column names to exclude in table output
 
 .. attribute:: filters
 
-Array of string. List of column names to include in filters. If target field depends on another object, you should pass linked model to `models` section of page configuration.
-If model is not passed, filter will be skipped.
+Array of string. List of column names to include in filters.
 
 .. attribute:: search
 
@@ -223,8 +222,7 @@ Array of string. List of column names to exclude in the list output
 
 .. attribute:: filters
 
-Array of string. List of column names to include in filters. If target field depends on another object, you should pass linked model to `models` section of page configuration.
-If model is not passed, filter will be skipped.
+Array of string. List of column names to include in filters.
 
 .. attribute:: search
 
