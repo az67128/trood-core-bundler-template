@@ -62,11 +62,14 @@ const getPageChildContainer = (dispatch, getState) => ({
   const state = getState()
   const currentEntities = currentEntitiesSelectors(state, entitiesToGet)
 
-  const currentEntityLists = currentEntitiyListsSelectors(state, entityListsGetters)
-  const currentChildFormRegexp = getChildFormRegexp({ parentModel: model.$modelType, parentId: model.id })
-  const childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
-  const childEntitiesByModel =
-    getChildEntitiesByModel(model.$modelType, modelConfig, currentEntityLists, model.id, { childForms, model })
+  let childEntitiesByModel = {}
+  if (model.$modelType) {
+    const currentEntityLists = currentEntitiyListsSelectors(state, entityListsGetters)
+    const currentChildFormRegexp = getChildFormRegexp({ parentModel: model.$modelType, parentId: model.id })
+    const childForms = forms.selectors.getForm(currentChildFormRegexp)(state)
+    childEntitiesByModel =
+      getChildEntitiesByModel(model.$modelType, modelConfig, currentEntityLists, model.id, { childForms, model })
+  }
 
   const props = {
     model,
