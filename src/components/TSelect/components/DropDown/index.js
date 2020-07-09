@@ -2,6 +2,8 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
+import { KEY_CODES } from '$trood/mainConstants'
+
 import TClickOutside from '$trood/components/TClickOutside'
 import TIcon, { ROTATE_TYPES, ICONS_TYPES } from '$trood/components/TIcon'
 import TButton, { BUTTON_SPECIAL_TYPES } from '$trood/components/TButton'
@@ -10,6 +12,7 @@ import TInput from '$trood/components/TInput'
 import List, { LIST_TYPES } from '../List'
 
 import { DEFAULT_MAX_ROWS, defaultFilterFunction } from './constants'
+import { selectValue } from '../../constants'
 
 import style from './index.css'
 
@@ -77,6 +80,7 @@ class DropDown extends PureComponent {
     this.state = {
       open: this.props.defaultOpen,
       innerSearch: undefined,
+      focusedItem: undefined,
     }
 
     this.renderDisplayValue = this.renderDisplayValue.bind(this)
@@ -84,6 +88,7 @@ class DropDown extends PureComponent {
     this.handleChange = this.handleChange.bind(this)
     this.handleChangeSearchValue = this.handleChangeSearchValue.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.getItems = this.getItems.bind(this)
   }
 
@@ -119,7 +124,7 @@ class DropDown extends PureComponent {
           this.handleSearch()
         }
       }
-      this.setState({ open, innerSearch: undefined })
+      this.setState({ open, innerSearch: undefined, focusedItem: undefined })
     }
   }
 
@@ -127,6 +132,44 @@ class DropDown extends PureComponent {
     const { multi, onChange } = this.props
     if (!multi) this.toggleOpen(false)
     onChange(value)
+  }
+
+  handleKeyDown(e) {
+    const { open, focusedItem } = this.state
+
+    const items = this.getItems()
+
+    if (e.key === KEY_CODES.arrowDown) {
+      if (!open) {
+        this.toggleOpen()
+      } else {
+        this.setState({
+          focusedItem: focusedItem === undefined || focusedItem === items.length - 1 ? 0 : focusedItem + 1,
+        })
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.arrowUp) {
+      if (open) {
+        this.setState({
+          focusedItem: focusedItem === undefined || focusedItem === 0 ? items.length - 1 : focusedItem - 1,
+        })
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.esc) {
+      if (open) {
+        this.toggleOpen()
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.enter) {
+      if (open) {
+        const focusedItemValue = (items[focusedItem] || {}).value
+        selectValue(focusedItemValue, {
+          ...this.props,
+          onChange: this.handleChange,
+        })
+      }
+      e.preventDefault()
+    }
   }
 
   renderDisplayValue = () => {
@@ -180,7 +223,7 @@ class DropDown extends PureComponent {
       onAdd,
     } = this.props
 
-    const { open, innerSearch } = this.state
+    const { open, innerSearch, focusedItem } = this.state
 
     const items = this.getItems()
 
@@ -204,13 +247,18 @@ class DropDown extends PureComponent {
 
     return (
       <TClickOutside onClick={() => this.toggleOpen(false)}>
-        <div style={mainSelectContainerStyle} className={classNames(
-          controlClassName,
-          style.root,
-          errors.length && style.error,
-          disabled && style.disabled,
-          open && style.open,
-        )}>
+        <div {...{
+          tabIndex: 0,
+          style: mainSelectContainerStyle,
+          className: classNames(
+            controlClassName,
+            style.root,
+            errors.length && style.error,
+            disabled && style.disabled,
+            open && style.open,
+          ),
+          onKeyDown: this.handleKeyDown,
+        }}>
           <span {...{
             className: style.content,
             onClick: showSearch && open ? undefined : () => this.toggleOpen(),
@@ -231,6 +279,7 @@ class DropDown extends PureComponent {
           <div className={classNames(style.optionsContainer, openUp && style.openUp, !open && style.hide)}>
             <List {...{
               ...this.props,
+              focusedItem,
               show: open,
               type,
               items,

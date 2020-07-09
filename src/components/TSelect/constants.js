@@ -11,6 +11,27 @@ export const mapArrayToOptions = (array, intl) => {
   }))
 }
 
+export const selectValue = (value, props) => {
+  const {
+    multi,
+    values,
+    clearable,
+    onChange,
+  } = props
+  const newValues = values.filter(v => v !== value)
+  if (values.length === newValues.length) {
+    if (multi) {
+      onChange([...values, value])
+    } else {
+      onChange([value])
+    }
+  } else if (!newValues.length && !clearable) {
+    onChange([value])
+  } else {
+    onChange(newValues)
+  }
+}
+
 const SELECT_DROPDOWN = 'dropdown'
 const SELECT_FILTER_DROPDOWN = 'filterDropdown'
 const SELECT_TILE = 'tile'

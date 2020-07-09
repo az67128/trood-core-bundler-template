@@ -56,13 +56,19 @@ class ModalWrapper extends PureComponent {
       buttons,
     } = this.props
 
-    const closeAndCancel = () => {
+    const closeAndCancel = (e = {}) => {
+      if (e.nativeEvent instanceof KeyboardEvent) {
+        if (e.target.tabIndex > -1) {
+          return undefined
+        }
+      }
       if (cancelAction) {
         cancelAction()
       }
       if (closeAction) {
         closeAction()
       }
+      return undefined
     }
 
     const closeButton = (

@@ -11,6 +11,8 @@ import {
   SCROLL_THRESHOLD,
 } from './constants'
 
+import { selectValue } from '../../constants'
+
 import { messages } from '$trood/mainConstants'
 import { intlObject } from '$trood/localeService'
 
@@ -87,6 +89,7 @@ class List extends PureComponent {
     super(props)
     this.state = {}
     this.calcMaxHeight = this.calcMaxHeight.bind(this)
+    this.scrollToItem = this.scrollToItem.bind(this)
     this.scrollToFirstSelected = this.scrollToFirstSelected.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
@@ -106,6 +109,10 @@ class List extends PureComponent {
     if (this.props.show && !prevProps.show) {
       this.scrollToFirstSelected()
     }
+    if (this.props.focusedItem !== undefined && this.props.focusedItem !== prevProps.focusedItem) {
+      const item = this.props.items[this.props.focusedItem]
+      this.scrollToItem(item, true)
+    }
   }
 
   calcMaxHeight() {
@@ -114,6 +121,21 @@ class List extends PureComponent {
       const maxHeight = this.list.firstChild.offsetHeight * maxRows
       if (!Number.isNaN(maxHeight)) this.setState({ maxHeight })
     }
+  }
+
+  scrollToItem(item, force) {
+    const element = this[`option${item.value}`]
+    setTimeout(() => {
+      if (element && this.list) {
+        let newScrollPositions = element.offsetTop + element.offsetHeight - this.list.offsetHeight
+        if (force) {
+          newScrollPositions = newScrollPositions < 0 ? 0 : newScrollPositions
+        } else {
+          newScrollPositions = newScrollPositions < this.list.scrollTop ? this.list.scrollTop : newScrollPositions
+        }
+        this.list.scrollTop = newScrollPositions
+      }
+    }, 0)
   }
 
   scrollToFirstSelected() {
@@ -125,14 +147,7 @@ class List extends PureComponent {
     } = this.props
     if (autoScroll && maxRows && values.length && this.list) {
       const firstSelected = items.find(item => values.some(v => v === item.value)) || {}
-      const firstSelectedElement = this[`option${firstSelected.value}`]
-      setTimeout(() => {
-        if (firstSelectedElement && this.list) {
-          const newScrollPositions =
-            firstSelectedElement.offsetTop + firstSelectedElement.offsetHeight - this.list.offsetHeight
-          this.list.scrollTop = newScrollPositions < this.list.scrollTop ? this.list.scrollTop : newScrollPositions
-        }
-      }, 0)
+      this.scrollToItem(firstSelected)
     }
   }
 
@@ -147,25 +162,8 @@ class List extends PureComponent {
   }
 
   handleSelect(value) {
-    const {
-      multi,
-      values,
-      clearable,
-      onChange,
-      onBlur,
-    } = this.props
-    const newValues = values.filter(v => v !== value)
-    if (values.length === newValues.length) {
-      if (multi) {
-        onChange([...values, value])
-      } else {
-        onChange([value])
-      }
-    } else if (!newValues.length && !clearable) {
-      onChange([value])
-    } else {
-      onChange(newValues)
-    }
+    const { onBlur } = this.props
+    selectValue(value, this.props)
     onBlur()
   }
 
@@ -180,6 +178,7 @@ class List extends PureComponent {
       emptyItemsLabel = intlObject.intl.formatMessage(messages.emptyMessage),
       disabled,
       isLoading,
+      focusedItem,
     } = this.props
 
     const { maxHeight } = this.state
@@ -196,7 +195,7 @@ class List extends PureComponent {
         },
         style: { maxHeight },
       }}>
-        {items.map(item => (
+        {items.map((item, i) => (
           <li {...{
             className: type === LIST_TYPES.tile ? style.tileItemWrapper : style.itemWrapper,
             key: item.value || `${item.value}`,
@@ -206,7 +205,11 @@ class List extends PureComponent {
             },
           }}>
             <ItemComponent {...{
-              className: classNames(type === LIST_TYPES.tile ? style.tileItem : style.item, itemClassName),
+              className: classNames(
+                type === LIST_TYPES.tile ? style.tileItem : style.item,
+                i === focusedItem && style.itemHover,
+                itemClassName,
+              ),
               value: isSelected(item),
               label: item.label || item.value,
               disabled,
