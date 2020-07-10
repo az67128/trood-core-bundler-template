@@ -142,14 +142,14 @@ class DropDown extends PureComponent {
     if (e.key === KEY_CODES.arrowDown) {
       if (!open) {
         this.toggleOpen()
-      } else {
+      } else if (items.length) {
         this.setState({
           focusedItem: focusedItem === undefined || focusedItem === items.length - 1 ? 0 : focusedItem + 1,
         })
       }
       e.preventDefault()
     } else if (e.key === KEY_CODES.arrowUp) {
-      if (open) {
+      if (open && items.length) {
         this.setState({
           focusedItem: focusedItem === undefined || focusedItem === 0 ? items.length - 1 : focusedItem - 1,
         })
