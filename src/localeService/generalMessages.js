@@ -107,7 +107,7 @@ export default defineMessages({
     defaultMessage: 'Search',
   },
   searching: {
-    id: '$trood.search',
+    id: '$trood.searching',
     defaultMessage: 'Searching...',
   },
   upload: {

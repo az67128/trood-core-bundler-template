@@ -263,11 +263,14 @@ ${getFieldDefines(context(key).default.defaults, entityName)}
 
 gulp.task(
   'default',
-  gulp.parallel(
-    'make-components',
-    'make-business-objects',
-    'make-layouts',
-    'make-locale',
-    'make-bo-locale',
+  gulp.series(
+    gulp.parallel(
+      'make-locale',
+      'make-bo-locale',
+    ),
+    gulp.parallel(
+      'make-locale',
+      'make-bo-locale',
+    ),
   ),
 )
