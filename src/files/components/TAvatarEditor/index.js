@@ -11,9 +11,7 @@ import ImageDataConverter from '$trood/helpers/imageDataConverter'
 import TButton from '$trood/components/TButton'
 import TRange from '$trood/components/TRange'
 
-import { messages as mainMessages } from '$trood/mainConstants'
-
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 const isBase64 = (str = '') => {
@@ -288,7 +286,7 @@ class TAvatarEditor extends PureComponent {
           <TButton {...{
             className: modalsStyle.button,
             onClick: this.onSubmit,
-            label: intlObject.intl.formatMessage(mainMessages.save),
+            label: intlObject.intl.formatMessage(localeService.generalMessages.save),
           }} />
         </div>
       </div>

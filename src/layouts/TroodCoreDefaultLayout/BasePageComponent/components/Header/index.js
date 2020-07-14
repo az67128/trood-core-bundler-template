@@ -2,8 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import style from './index.css'
 
@@ -56,7 +55,7 @@ class Header extends Component {
               className: style.clearButton,
             },
             {
-              label: intlObject.intl.formatMessage(messages.logout),
+              label: intlObject.intl.formatMessage(localeService.generalMessages.logout),
               onClick: authActions.logout,
               iconType: ICONS_TYPES.logout,
               className: style.logot,

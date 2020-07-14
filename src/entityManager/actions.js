@@ -18,9 +18,8 @@ import {
   messages,
 } from './constants'
 import { linkChildWithParent } from './getEntityModal'
-import { messages as mainMessages } from '$trood/mainConstants'
 
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 export const createEntityForm = (modelName, parents = []) => (
@@ -202,7 +201,9 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       },
     })
     if (!access) {
-      return dispatch(modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied)))
+      return dispatch(modals.actions.showErrorPopup(
+        intlObject.intl.formatMessage(localeService.generalMessages.accessDenied)),
+      )
     }
 
     let currentForm

@@ -5,8 +5,7 @@ import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
-import { intlObject } from '$trood/localeService'
-import { messages } from '$trood/mainConstants'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { ICONS_TYPES } from '$trood/components/TIcon'
 
@@ -241,7 +240,8 @@ class TSelect extends PureComponent {
     } = this.props
 
     if (!disabled) {
-      const errors = required && !values.length ? [intlObject.intl.formatMessage(messages.requiredField)] : []
+      const errors = required && !values.length ?
+        [intlObject.intl.formatMessage(localeService.generalMessages.requiredField)] : []
 
       if (errors.length) {
         onInvalid(errors)

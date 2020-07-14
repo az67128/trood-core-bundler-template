@@ -7,8 +7,7 @@ import {
   POPUP_COLORS,
 } from './constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 export const showModal = (open, name, params) => ({
@@ -42,9 +41,9 @@ export const showInputModal = ({
     onAccept,
     onDecline,
     size: MODAL_SIZES.small,
-    text: intlObject.intl.formatMessage(messages.selectValue),
-    acceptButtonText: intlObject.intl.formatMessage(messages.ok),
-    declineButtonText: intlObject.intl.formatMessage(messages.cancel),
+    text: intlObject.intl.formatMessage(localeService.generalMessages.selectValue),
+    acceptButtonText: intlObject.intl.formatMessage(localeService.generalMessages.ok),
+    declineButtonText: intlObject.intl.formatMessage(localeService.generalMessages.cancel),
     ...other,
   }))
 }
@@ -58,7 +57,7 @@ export const showMessageBoxModal = ({
     onAccept,
     showDecline: false,
     size: MODAL_SIZES.confirm,
-    acceptButtonText: intlObject.intl.formatMessage(messages.ok),
+    acceptButtonText: intlObject.intl.formatMessage(localeService.generalMessages.ok),
     ...other,
   }))
 }

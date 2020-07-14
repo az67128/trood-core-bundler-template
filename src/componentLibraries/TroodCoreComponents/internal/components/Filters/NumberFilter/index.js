@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import TLabel from '$trood/components/TLabel'
 import TInput, { INPUT_TYPES } from '$trood/components/TInput'
-import { intlObject } from '$trood/localeService'
-import { messages } from '../../constants'
+import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from '../style.css'
 
@@ -20,7 +19,7 @@ const NumberFilter = ({ value = {}, label, onChange }) => {
         <TInput
           {...{
             className: style.numberFilterMin,
-            placeholder: intlObject.intl.formatMessage(messages.min),
+            placeholder: intlObject.intl.formatMessage(localeService.generalMessages.min),
             onChange: (val) => onChange({ ...internaValue.current, min: val }),
             value: value.min || '',
             type: INPUT_TYPES.float,
@@ -28,7 +27,7 @@ const NumberFilter = ({ value = {}, label, onChange }) => {
         />
         <TInput
           {...{
-            placeholder: intlObject.intl.formatMessage(messages.max),
+            placeholder: intlObject.intl.formatMessage(localeService.generalMessages.max),
             onChange: (val) => onChange({ ...internaValue.current, max: val }),
             value: value.max || '',
             type: INPUT_TYPES.float,

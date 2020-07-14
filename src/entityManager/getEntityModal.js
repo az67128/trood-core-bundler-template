@@ -44,9 +44,7 @@ import {
   getCurrentEntitiesActions,
 } from './selectors'
 
-import { messages as mainMessages } from '$trood/mainConstants'
-
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { applySelectors } from '$trood/helpers/selectors'
 import { ruleChecker } from '$trood/helpers/abac'
@@ -227,7 +225,7 @@ const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
       }
       const { access, mask } = checkAccess(ctx)
       if (!access || mask.some(m => snakeToCamel(m) === name)) {
-        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(localeService.generalMessages.accessDenied))
       }
       return formActions.changeField(name, val)
     },
@@ -247,7 +245,7 @@ const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
       }
       const { access, mask } = checkAccess(ctx)
       if (!access || mask.some(m => valuesKeys.includes(snakeToCamel(m)))) {
-        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(localeService.generalMessages.accessDenied))
       }
       return formActions.changeSomeFields(vals, forceUndefines)
     },
@@ -259,7 +257,7 @@ const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
       }
       const { access, mask } = checkAccess(ctx)
       if (!access || mask.some(m => snakeToCamel(m) === name)) {
-        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(localeService.generalMessages.accessDenied))
       }
       return formActions.resetField(name)
     },
@@ -373,7 +371,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         const saveButton = (
           <TButton {...{
             className: modalsStyle.button,
-            label: intlObject.intl.formatMessage(isEditing ? messages.change : mainMessages.save),
+            label: intlObject.intl.formatMessage(isEditing ? messages.change : localeService.generalMessages.save),
             disabled: !modelValid || this.state.buttonLocked,
             color: BUTTON_COLORS.blue,
             onClick: () => {
@@ -418,7 +416,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
             {saveButton}
             <TButton {...{
               className: modalsStyle.button,
-              label: intlObject.intl.formatMessage(mainMessages.cancel),
+              label: intlObject.intl.formatMessage(localeService.generalMessages.cancel),
               color: BUTTON_COLORS.gray,
               onClick: cancelAction,
             }} />

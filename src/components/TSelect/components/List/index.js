@@ -13,8 +13,7 @@ import {
 
 import { selectValue } from '../../constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import TRadioButton from '$trood/components/TRadioButton'
 import TCheckbox from '$trood/components/TCheckbox'
@@ -175,7 +174,7 @@ class List extends PureComponent {
       orientation,
       items,
       values,
-      emptyItemsLabel = intlObject.intl.formatMessage(messages.emptyMessage),
+      emptyItemsLabel = intlObject.intl.formatMessage(localeService.generalMessages.emptyMessage),
       disabled,
       isLoading,
       focusedItem,

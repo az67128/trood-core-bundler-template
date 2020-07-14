@@ -1,7 +1,6 @@
 import React from 'react'
 import TButton, { BUTTON_TYPES } from '$trood/components/TButton'
-import { messages } from '../../constants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 const ToggleFiltersButton = ({ form, filters, formActions }) => {
   const hasFilter = filters.length > 0
@@ -12,8 +11,8 @@ const ToggleFiltersButton = ({ form, filters, formActions }) => {
     <TButton
       {...{
         label: form.isFiltersOpen
-          ? intlObject.intl.formatMessage(messages.closeFilters)
-          : intlObject.intl.formatMessage(messages.openFilters),
+          ? intlObject.intl.formatMessage(localeService.generalMessages.closeFilters)
+          : intlObject.intl.formatMessage(localeService.generalMessages.openFilters),
         onClick: toggleFilters,
         type: BUTTON_TYPES.text,
       }}

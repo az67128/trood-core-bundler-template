@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
-import { messages as mainMessages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import TClickOutside from '$trood/components/TClickOutside'
 import TCheckbox, { CHECK_COLORS } from '$trood/components/TCheckbox'
 import TIcon, { ICONS_TYPES, ROTATE_TYPES, LABEL_POSITION_TYPES } from '$trood/components/TIcon'
 
-import { messages } from '../../constants'
 import style from './index.css'
 
 
@@ -75,7 +73,7 @@ class ListView extends PureComponent {
               headerItemsSortable.length > 0 &&
               <div className={classNames(style.listSortControls, style.listHeaderRow)}>
                 <span className={style.listSortControlsLabel}>
-                  {intlObject.intl.formatMessage(messages.sortBy)}:
+                  {intlObject.intl.formatMessage(localeService.generalMessages.sortBy)}:
                 </span>
                 <TIcon {...{
                   className: style.sortOrderIcon,
@@ -91,7 +89,7 @@ class ListView extends PureComponent {
                       type: ICONS_TYPES.arrow,
                       rotate: sortListExpanded ? ROTATE_TYPES.down : ROTATE_TYPES.up,
                       label: (headerItemsSortable.find(item => item.name === sortingColumn) ||
-                        { title: intlObject.intl.formatMessage(mainMessages.notSet) }).title,
+                        { title: intlObject.intl.formatMessage(localeService.generalMessages.notSet) }).title,
                       labelPosition: LABEL_POSITION_TYPES.left,
                       onClick: () => this.toggleSortListExpand(!sortListExpanded),
                       size: 16,
@@ -123,7 +121,9 @@ class ListView extends PureComponent {
                   onChange: checkAll,
                   color: CHECK_COLORS.orange,
                 }} />
-                <span className={style.tableListTitle}>{intlObject.intl.formatMessage(messages.checkAll)}</span>
+                <span className={style.tableListTitle}>
+                  {intlObject.intl.formatMessage(localeService.generalMessages.checkAll)}
+                </span>
               </div>
             }
           </div>

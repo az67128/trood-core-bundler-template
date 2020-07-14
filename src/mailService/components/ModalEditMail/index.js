@@ -14,8 +14,7 @@ import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import HideableContent from '$trood/components/HideableContent'
 
 import { messages } from '../../constants'
-import { messages as mainMessages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
@@ -91,7 +90,7 @@ class ModalEditMail extends PureComponent {
       className: modalsStyle.thinControl,
       labelClassName: modalsStyle.thinControlLabel,
       controlClassName: modalsStyle.thinControlControl,
-      placeHolder: intlObject.intl.formatMessage(mainMessages.notSet),
+      placeHolder: intlObject.intl.formatMessage(localeService.generalMessages.notSet),
       values: model[name] && [model[name]],
       onChange: values => mailFormActions.changeField(name, values[0]),
       onInvalid: errs => mailFormActions.setFieldError(name, errs),

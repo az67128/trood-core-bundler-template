@@ -4,7 +4,6 @@ import AsyncEntitiesList from '$trood/components/AsyncEntitiesList'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import { templateApplyValues } from '$trood/helpers/templates'
 import { EntityPageLink } from '$trood/pageManager'
-import { messages } from '../constants'
 import localeService, { intlObject } from '$trood/localeService'
 import style from './style.css'
 import basePageLayout from '$trood/styles/basePageLayout.css'
@@ -73,7 +72,7 @@ const Table = ({
 
   const editColumn = [
     {
-      title: intlObject.intl.formatMessage(messages.edit),
+      title: intlObject.intl.formatMessage(localeService.generalMessages.edit),
       model: (item) => (
         <TIcon
           {...{

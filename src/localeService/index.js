@@ -1,3 +1,4 @@
+import generalMessages from './generalMessages'
 import localeMessages from '$trood/configMessages'
 import entityMessages from '$trood/businessObjects/entityMessages'
 
@@ -8,4 +9,5 @@ export { intlObject, translateDictionary } from './constants'
 export default {
   localeMessages,
   entityMessages,
+  generalMessages,
 }

@@ -9,8 +9,7 @@ import TInput, { INPUT_TYPES } from '$trood/components/TInput'
 import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 
 import { messages } from '../../constants'
-import { messages as mainMessages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
@@ -110,12 +109,14 @@ class FoldersSettingsMailService extends PureComponent {
               <TButton {...{
                 className: style.buttonAdd,
                 onClick: editFolderFormActions.submit,
-                label: intlObject.intl.formatMessage(editFolderForm.id ? mainMessages.edit : mainMessages.create),
+                label: intlObject.intl.formatMessage(
+                  editFolderForm.id ? localeService.generalMessages.edit : localeService.generalMessages.create,
+                ),
                 disabled: !editFolderFormValid,
               }} />
               <TButton {...{
                 className: style.buttonCancel,
-                label: intlObject.intl.formatMessage(mainMessages.cancel),
+                label: intlObject.intl.formatMessage(localeService.generalMessages.cancel),
                 color: BUTTON_COLORS.gray,
                 onClick: editFolderFormActions.deleteForm,
               }} />

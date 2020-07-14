@@ -10,8 +10,7 @@ import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
 import TSelect from '$trood/components/TSelect'
 import TCheckbox from '$trood/components/TCheckbox'
 import { ENCRYPTION_TYPES, messages } from '../../constants'
-import { messages as mainMessages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
@@ -79,7 +78,7 @@ class MailboxesSettingsMailService extends PureComponent {
 
     const getFormChangeSelectProps = (name) => ({
       className: style.selectBlock,
-      placeHolder: intlObject.intl.formatMessage(mainMessages.notSet),
+      placeHolder: intlObject.intl.formatMessage(localeService.generalMessages.notSet),
       values: editMailboxesForm[name] && [editMailboxesForm[name]],
       items: Object.keys(ENCRYPTION_TYPES).map(item => ({ value: item, label: item })),
       onInvalid: errs => editMailboxesFormActions.setFieldError(name, errs),
@@ -195,12 +194,14 @@ class MailboxesSettingsMailService extends PureComponent {
               <TButton {...{
                 className: style.buttonAdd,
                 onClick: editMailboxesFormActions.submit,
-                label: intlObject.intl.formatMessage(editMailboxesForm.id ? mainMessages.edit : mainMessages.create),
+                label: intlObject.intl.formatMessage(
+                  editMailboxesForm.id ? localeService.generalMessages.edit : localeService.generalMessages.create,
+                ),
                 disabled: !editMailboxesFormValid,
               }} />
               <TButton {...{
                 className: style.buttonCancel,
-                label: intlObject.intl.formatMessage(mainMessages.cancel),
+                label: intlObject.intl.formatMessage(localeService.generalMessages.cancel),
                 color: BUTTON_COLORS.gray,
                 onClick: editMailboxesFormActions.deleteForm,
               }} />

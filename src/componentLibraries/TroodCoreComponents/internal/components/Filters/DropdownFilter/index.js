@@ -3,8 +3,7 @@ import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
 import { templateApplyValues } from '$trood/helpers/templates'
 import { camelToLowerSnake } from '$trood/helpers/namingNotation'
 import { RESTIFY_CONFIG } from 'redux-restify'
-import { intlObject } from '$trood/localeService'
-import { messages } from '../../constants'
+import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 
 const DropdownFilter = ({ fieldName, linkName, label, value, onChange, PageChildContainer }) => {
@@ -65,7 +64,7 @@ const DropdownFilter = ({ fieldName, linkName, label, value, onChange, PageChild
               type: SELECT_TYPES.filterDropdown,
               multi: true,
               clearable: true,
-              placeHolder: intlObject.intl.formatMessage(messages.all),
+              placeHolder: intlObject.intl.formatMessage(localeService.generalMessages.all),
             }}
           />
         )

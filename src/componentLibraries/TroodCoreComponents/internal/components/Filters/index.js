@@ -6,7 +6,6 @@ import DropdownFilter from './DropdownFilter'
 import NumberFilter from './NumberFilter'
 import BoolFilter from './BoolFilter'
 import { getInterval } from '$trood/helpers/dateTime'
-import { messages } from '../constants'
 import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 import style from './style.css'
@@ -88,7 +87,7 @@ const Filters = ({ filters, config, form, formActions, entities, PageChildContai
         <TButton
           {...{
             className: style.resetButton,
-            label: intlObject.intl.formatMessage(messages.reset),
+            label: intlObject.intl.formatMessage(localeService.generalMessages.reset),
             onClick: resetFilters,
             type: BUTTON_TYPES.text,
           }}

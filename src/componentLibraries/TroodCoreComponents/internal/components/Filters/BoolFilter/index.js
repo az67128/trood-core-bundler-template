@@ -1,7 +1,6 @@
 import React from 'react'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
-import { intlObject } from '$trood/localeService'
-import { messages } from '../../constants'
+import localeService, { intlObject } from '$trood/localeService'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 
 const BoolFilter = ({ label, value, onChange }) => {
@@ -13,11 +12,11 @@ const BoolFilter = ({ label, value, onChange }) => {
         items: [
           {
             value: true,
-            label: intlObject.intl.formatMessage(messages.yes),
+            label: intlObject.intl.formatMessage(localeService.generalMessages.true),
           },
           {
             value: false,
-            label: intlObject.intl.formatMessage(messages.no),
+            label: intlObject.intl.formatMessage(localeService.generalMessages.false),
           },
         ],
         values: value ? value : [],
@@ -25,7 +24,7 @@ const BoolFilter = ({ label, value, onChange }) => {
         type: SELECT_TYPES.dropdown,
         multi: false,
         clearable: true,
-        placeHolder: intlObject.intl.formatMessage(messages.all),
+        placeHolder: intlObject.intl.formatMessage(localeService.generalMessages.all),
       }}
     />
   )

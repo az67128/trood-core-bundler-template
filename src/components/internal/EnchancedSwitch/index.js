@@ -6,8 +6,7 @@ import style from './index.css'
 
 import { INNER_INPUT_TYPES, LABEL_POSITION_TYPES } from './constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 class EnchancedSwitch extends PureComponent {
@@ -116,7 +115,7 @@ class EnchancedSwitch extends PureComponent {
 
   validate(value) {
     const innerErrors = this.props.validate.required && !value ?
-      [intlObject.intl.formatMessage(messages.requiredField)] : []
+      [intlObject.intl.formatMessage(localeService.generalMessages.requiredField)] : []
     this.setState({ innerErrors }, this.onValidationUpdate)
   }
 
