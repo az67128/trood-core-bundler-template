@@ -269,8 +269,9 @@ gulp.task(
       'make-bo-locale',
     ),
     gulp.parallel(
-      'make-locale',
-      'make-bo-locale',
+      'make-components',
+      'make-business-objects',
+      'make-layouts',
     ),
   ),
 )
