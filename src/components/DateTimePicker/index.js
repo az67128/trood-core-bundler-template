@@ -11,8 +11,8 @@ import DatePicker from './DatePicker'
 import TimePicker from './TimePicker'
 
 import { PICKER_TYPES, TIME_FORMAT, CALENDAR_POSITIONS } from './constants'
-import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT, messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 const allMomentPropTypes = PropTypes.oneOfType([
@@ -191,7 +191,7 @@ class DateTimePicker extends PureComponent {
     const { minDate, maxDate } = this.props.validate
     const errors = []
     if ((minDate && moment(value).isBefore(minDate)) || (maxDate && moment(value).isAfter(maxDate))) {
-      errors.push(intlObject.intl.formatMessage(messages.outOfRangeValue))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.outOfRangeValue))
     }
     this.setState({ dateTimeErrors: errors }, this.callOnInvalid)
   }

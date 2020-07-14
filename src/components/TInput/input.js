@@ -6,9 +6,9 @@ import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import objectHash from 'object-hash'
 
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
-import { KEY_CODES, NAVIGATION_KEYS, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE, messages } from '$trood/mainConstants'
+import { KEY_CODES, NAVIGATION_KEYS, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE } from '$trood/mainConstants'
 import {
   INPUT_TYPES,
   ROW_HEIGHT,
@@ -219,11 +219,11 @@ class Input extends PureComponent {
     // Required validation, overrides all other errors
     if (required) {
       if (/^\s*$/.test(value)) {
-        return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
+        return [requiredError || intlObject.intl.formatMessage(localeService.generalMessages.requiredField)]
       }
       if (numberTypes.includes(type) && !zeroIsValue) {
         if (value === 0 || value === '0') {
-          return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
+          return [requiredError || intlObject.intl.formatMessage(localeService.generalMessages.requiredField)]
         }
       }
     }
@@ -232,15 +232,15 @@ class Input extends PureComponent {
 
     const regexpToMatch = (format && format.regexp) || format
     if (value && regexpToMatch && !regexpToMatch.test(value)) {
-      errors.push(format.error || intlObject.intl.formatMessage(messages.incorrectFormat))
+      errors.push(format.error || intlObject.intl.formatMessage(localeService.generalMessages.incorrectFormat))
     }
 
     if (maxLen && value.length > maxLen) {
-      errors.push(intlObject.intl.formatMessage(messages.maxLength, { number: maxLen }))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.maxLength, { number: maxLen }))
     }
 
     if (minLen && (required || value.length > 0) && value.length < minLen) {
-      errors.push(intlObject.intl.formatMessage(messages.minLength, { number: minLen }))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.minLength, { number: minLen }))
     }
 
     return errors
