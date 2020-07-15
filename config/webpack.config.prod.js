@@ -321,8 +321,7 @@ module.exports = {
     // the HTML & assets that are part of the Webpack build.
     new GenerateSW({
       swDest: 'service-worker.js',
-      navigateFallbackDenylist: [/.*/],
-      exclude: ['/', '/index.html'],
+      navigateFallbackDenylist: [/.*/, /\/$/, /\/index.html/],
       runtimeCaching: [
         {
           urlPattern: /\/static\/fonts\/.+$/,
