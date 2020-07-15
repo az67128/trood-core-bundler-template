@@ -1,4 +1,5 @@
 import generalMessages from './generalMessages'
+import projectMessages from './projectMessages'
 import localeMessages from '$trood/configMessages'
 import entityMessages from '$trood/businessObjects/entityMessages'
 
@@ -10,4 +11,5 @@ export default {
   localeMessages,
   entityMessages,
   generalMessages,
+  projectMessages,
 }
