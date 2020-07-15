@@ -322,6 +322,7 @@ module.exports = {
     new GenerateSW({
       swDest: 'service-worker.js',
       navigateFallbackDenylist: [/.*/],
+      exclude: ['/', '/index.html'],
       runtimeCaching: [
         {
           urlPattern: /\/static\/fonts\/.+$/,
