@@ -324,10 +324,26 @@ module.exports = {
       navigateFallbackDenylist: [/.*/],
       runtimeCaching: [
         {
-          urlPattern: /\/static\/.+$/,
+          urlPattern: /\/static\/fonts\/.+$/,
           handler: 'CacheFirst',
+          options: {
+            cacheName: 'fonts',
+            expiration: {
+              maxAgeSeconds: 7 * 24 * 60 * 60,
+            },
+          },
         },
-      ]
+        {
+          urlPattern: /\/.+$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'images',
+            expiration: {
+              maxAgeSeconds: 24 * 60 * 60,
+            },
+          },
+        },
+      ],
     }),
     // By default, webpack bundles all Moment.js locales
     // (in Moment.js 2.18.1, that’s 160 minified KBs).
