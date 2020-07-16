@@ -321,7 +321,7 @@ module.exports = {
     // the HTML & assets that are part of the Webpack build.
     new GenerateSW({
       swDest: 'service-worker.js',
-      navigateFallbackDenylist: [/.*/, /\/$/, /\/index.html/],
+      navigateFallbackDenylist: [/.*/],
       runtimeCaching: [
         {
           urlPattern: /\/static\/fonts\/.+$/,
@@ -334,7 +334,7 @@ module.exports = {
           },
         },
         {
-          urlPattern: /\/.+$/,
+          urlPattern: /\/static\/.+$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'images',
