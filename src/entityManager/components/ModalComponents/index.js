@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import TInput, { INPUT_TYPES } from '$trood/components/TInput'
+import TInput from '$trood/components/TInput'
 import TCheckbox from '$trood/components/TCheckbox'
 import DateTimePicker, { PICKER_TYPES } from '$trood/components/DateTimePicker'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
@@ -15,8 +15,8 @@ const validateInput = {
 }
 const validateDateTime = {
   checkOnBlur: true,
-  requiredDate: false,
-  requiredTime: false,
+  dateRequired: false,
+  timeRequired: false,
 }
 
 const ModalComponentWrapper = type => props => {
@@ -54,7 +54,6 @@ const ModalComponentWrapper = type => props => {
         <TInput
           {...{
             ...commonProps,
-            type: INPUT_TYPES.multi,
             validate: validateInput,
             ...props,
           }}
