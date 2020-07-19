@@ -4,6 +4,7 @@ import TCheckbox from '$trood/components/TCheckbox'
 import DateTimePicker, { PICKER_TYPES } from '$trood/components/DateTimePicker'
 import TSelect, { SELECT_TYPES } from '$trood/components/TSelect'
 import modalsStyle from '$trood/styles/modals.css'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
 
@@ -92,7 +93,7 @@ const ModalComponentWrapper = type => props => {
             type: SELECT_TYPES.filterDropdown,
             multi: false,
             clearable: true,
-            placeHolder: 'Not set',
+            placeHolder: intlObject.intl.formatMessage(localeService.generalMessages.notSet),
             ...props,
           }}
         />
