@@ -332,7 +332,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
                 const editMask = editMaskChecker(objectToCheck).mask.map(item => snakeToCamel(item))
                 const getMask = checkCustodianGetRule(objectToCheck).mask.map(item => snakeToCamel(item))
                 return (
-                  <ModalContext.Provider value={{ editMask, getMask, model, modelFormActions, modelErrors }}>
+                  <ModalContext.Provider value={{ editMask, getMask, model, modelFormActions, modelErrors, modelName }}>
                     <EntityComponent {...{ ...this.props, editMask, getMask, ModalComponents }} />
                   </ModalContext.Provider>
                 )
