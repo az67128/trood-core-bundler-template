@@ -27,6 +27,7 @@ const ModalComponentWrapper = type => props => {
     model,
     modelFormActions: { changeField, setFieldError, resetFieldError },
     modelErrors,
+    modelName,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = useContext(ModalContext)
   const { fieldName } = props
@@ -37,9 +38,10 @@ const ModalComponentWrapper = type => props => {
   const onValid = () => resetFieldError(fieldName)
   const value = getNestedObjectField(model, fieldName)
   const errors = getNestedObjectField(modelErrors, fieldName)
+  const label = intlObject.intl.formatMessage(localeService.entityMessages[modelName][fieldName])
 
   const commonProps = {
-    label: fieldName,
+    label,
     disabled: editMask.includes(Array.isArray(fieldName) ? fieldName[0] : fieldName),
     className: modalsStyle.control,
     errors,
