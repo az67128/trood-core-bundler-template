@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
-import { Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import { stringify } from 'qs'
 
@@ -33,7 +33,7 @@ class QueryRedirect extends PureComponent {
     } = this.props
 
     return (
-      <Redirect {...this.props} to={{ to, search: stringify(to.query) }} />
+      <Redirect {...this.props} to={{ ...to, search: stringify(to.query) }} />
     )
   }
 }

@@ -13,7 +13,7 @@ class StyleButton extends PureComponent {
     color: PropTypes.string,
     label: PropTypes.node,
     icon: PropTypes.oneOf(Object.keys(ICONS_TYPES)),
-    style: PropTypes.object,
+    style: PropTypes.string,
     onToggle: PropTypes.func,
   }
 
