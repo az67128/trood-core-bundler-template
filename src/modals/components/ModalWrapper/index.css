@@ -158,7 +158,6 @@
   width: 72px;
   height: 100%;
   border-left: 1px solid var(--trood-gray-bg);
-  margin-left: auto;
 }
 
 .full .titleText {
@@ -176,6 +175,7 @@
 .fullButtons {
   order: 0;
   height: 100%;
+  margin-right: auto;
 }
 
 @media (--trood-media-portable) {
