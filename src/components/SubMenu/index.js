@@ -13,17 +13,19 @@ class SubMenu extends PureComponent {
     /** class name for styling component */
     className: PropTypes.string,
     /** array with item for menu */
-    items: PropTypes.arrayOf(PropTypes.object),
+    items: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool]),
+      label: PropTypes.node,
+    })),
     /** thin or not */
     thin: PropTypes.bool,
     /** vertical or not */
     vertical: PropTypes.bool,
     /** id of selected item */
-    selectedItem: PropTypes.number,
+    selectedItem: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool]),
     /** onChange function */
     onChange: PropTypes.func,
   }
-
 
   render() {
     const {
