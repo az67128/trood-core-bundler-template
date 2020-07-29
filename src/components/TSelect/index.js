@@ -154,9 +154,13 @@ class TSelect extends PureComponent {
 
   constructor(props) {
     super(props)
+
     this.state = {
       wasBlured: false,
     }
+
+    this.lastValid = true
+
     this.handleValidate = this.handleValidate.bind(this)
     this.toggleBlur = this.toggleBlur.bind(this)
     this.getSelectComponent = this.getSelectComponent.bind(this)
@@ -173,7 +177,10 @@ class TSelect extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.onValid()
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
+    }
   }
 
   getSelectComponent(errors) {
@@ -234,18 +241,22 @@ class TSelect extends PureComponent {
       validate: {
         required,
       },
+      errors,
       disabled,
       onValid,
       onInvalid,
     } = this.props
 
     if (!disabled) {
-      const errors = required && !values.length ?
+      const newErrors = required && !values.length ?
         [intlObject.intl.formatMessage(localeService.generalMessages.requiredField)] : []
 
-      if (errors.length) {
-        onInvalid(errors)
-      } else {
+      if (newErrors.length) {
+        this.lastValid = false
+        if (!deepEqual(errors, newErrors)) onInvalid(newErrors)
+      } else
+      if (!this.lastValid) {
+        this.lastValid = true
         onValid()
       }
     }

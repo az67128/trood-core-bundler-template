@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import objectHash from 'object-hash'
+import deepEqual from 'deep-equal'
 
 import localeService, { intlObject } from '$trood/localeService'
 
@@ -151,6 +152,8 @@ class Input extends PureComponent {
       settings: { formatValue },
     } = props
 
+    this.lastValid = true
+
     this.state = {
       formattedValue: formatValue(value.toString()),
       height: props.minRows * ROW_HEIGHT,
@@ -183,7 +186,10 @@ class Input extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.onValid()
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
+    }
   }
 
   heightChange() {
@@ -254,12 +260,12 @@ class Input extends PureComponent {
       onInvalid,
     } = this.props
     const validateErrors = this.validate(value)
-    if (validateErrors !== errors) {
-      if (validateErrors && validateErrors.length) {
-        onInvalid(validateErrors)
-      } else {
-        onValid()
-      }
+    if (validateErrors && validateErrors.length) {
+      this.lastValid = false
+      if (!deepEqual(errors, validateErrors)) onInvalid(validateErrors)
+    } else if (!this.lastValid) {
+      this.lastValid = true
+      onValid()
     }
   }
 

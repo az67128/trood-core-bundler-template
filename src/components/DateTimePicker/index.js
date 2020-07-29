@@ -119,6 +119,8 @@ class DateTimePicker extends PureComponent {
       timeErrors: [],
     }
 
+    this.lastValid = true
+
     this.handleChangeDate = this.handleChangeDate.bind(this)
     this.handleChangeTime = this.handleChangeTime.bind(this)
     this.handleOnChange = this.handleOnChange.bind(this)
@@ -138,7 +140,10 @@ class DateTimePicker extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.onValid()
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
+    }
   }
 
   getAllErrors() {
@@ -200,8 +205,10 @@ class DateTimePicker extends PureComponent {
     const errors = this.getAllErrors()
     const { onValid, onInvalid } = this.props
     if (errors.length) {
+      this.lastValid = false
       onInvalid(errors)
-    } else {
+    } else if (!this.lastValid) {
+      this.lastValid = true
       onValid()
     }
   }

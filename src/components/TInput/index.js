@@ -82,7 +82,7 @@ class TInput extends PureComponent {
     showTextErrors: PropTypes.bool,
     /** children node */
     children: PropTypes.node,
-    /** onValid function */
+    /** onChange function */
     onChange: PropTypes.func,
     /** onValid function */
     onValid: PropTypes.func,
