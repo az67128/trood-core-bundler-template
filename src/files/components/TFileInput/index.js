@@ -142,6 +142,7 @@ class TFileInput extends PureComponent {
         }
         <label {...{
           className: classNames(withStyling && style.inputContainer, errors.length && style.error),
+          'data-cy': 'upload_button',
           style: {
             ...backgroundStyle,
             height,
@@ -161,7 +162,6 @@ class TFileInput extends PureComponent {
           <input {...{
             className: style.fileInput,
             type: 'file',
-            'data-cy': 'upload_button',
             accept,
             multiple,
             disabled: disabled || isUploading,
