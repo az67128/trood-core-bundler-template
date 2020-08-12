@@ -273,10 +273,48 @@ class Input extends PureComponent {
     const {
       type,
       value,
-      settings: { getValue, formatValue },
+      settings: {
+        include,
+        exclude,
+        getValue,
+        formatValue,
+      },
     } = this.props
     const { formattedValue } = this.state
-    let newFormattedValue = formatValue(e.target.value)
+    let { value: targetValue } = e.target
+    if (include) {
+      let targetValueArray = [...targetValue]
+      if (Array.isArray(include)) {
+        targetValueArray = targetValueArray.map(char => {
+          if (!include.includes(char)) return ''
+          return char
+        })
+      }
+      if (include instanceof RegExp) {
+        targetValueArray = targetValueArray.map(char => {
+          if (!include.test(char)) return ''
+          return char
+        })
+      }
+      targetValue = targetValueArray.join('')
+    }
+    if (exclude) {
+      let targetValueArray = [...targetValue]
+      if (Array.isArray(exclude)) {
+        targetValueArray = targetValueArray.map(char => {
+          if (exclude.includes(char)) return ''
+          return char
+        })
+      }
+      if (exclude instanceof RegExp) {
+        targetValueArray = targetValueArray.map(char => {
+          if (exclude.test(char)) return ''
+          return char
+        })
+      }
+      targetValue = targetValueArray.join('')
+    }
+    let newFormattedValue = formatValue(targetValue)
     if (type === INPUT_TYPES.time) {
       const isValid = checkTime(newFormattedValue)
       if (!isValid) {
@@ -371,11 +409,13 @@ class Input extends PureComponent {
           !(char === '.' || char === ',') &&
           this.selectionStart <= roundFormattedValue.length
       }
-      if (exclude && !include) {
-        shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
-      }
       if (include) {
         shouldPreventDefault += (Array.isArray(include) ? !include.includes(char) : !include.test(char))
+        if (exclude) {
+          shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
+        }
+      } else if (exclude) {
+        shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
       }
       if (shouldPreventDefault) {
         e.preventDefault()
