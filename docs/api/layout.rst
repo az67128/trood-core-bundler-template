@@ -28,7 +28,7 @@ Which should export basePageComponent and nestedPageMenuComponent
 Base page component
 ********************
 
-Base page component used for render main menu and content block.
+Base page component used to render the main menu and content block.
 
 For render main menu you can use HeaderMenu ``import { HeaderMenu } from '$trood/pageManager'``
 
@@ -117,7 +117,7 @@ Nested page menu component
 
 Nested page menu component used for render menu for subpages.
 
-Its rendered by pageGridLayout in content block of `Base page component`_
+Its rendered by pageGridLayout in the content block of `Base page component`_
 
 For render menu you can use HeaderMenu ``import { HeaderMenu } from '$trood/pageManager'``
 

@@ -2,7 +2,6 @@ import { matchPath } from 'react-router-dom'
 import objectHash from 'object-hash'
 
 import { getNestedObjectField } from '$trood/helpers/nestedObjects'
-import { snakeToCamel } from '$trood/helpers/namingNotation'
 import { ruleChecker } from '$trood/helpers/abac'
 
 import { getPageLayoutProps } from './pageLayouts'
@@ -10,11 +9,11 @@ import { getPageLayoutProps } from './pageLayouts'
 import urlSchema, { getBaseUrl } from './urlSchema'
 
 
-const getPageGlobalId = (id, baseId) => snakeToCamel(`${baseId ? `${baseId}_` : ''}${id}_page`)
+const getAbacPageId = id => `${id}Page`
 
-export const getPagesHeaderRenderers = (pages, entityPageModelName) => {
+export const getPagesHeaderRenderers = (pages, entityPageModelName, prevPageId) => {
   return pages.reduce((memo, page) => {
-    const pageConfig = getPageLayoutProps(page, entityPageModelName)
+    const pageConfig = getPageLayoutProps(page, entityPageModelName, prevPageId)
     if (pageConfig.pageConfig.hideMenu) return memo
     return {
       ...memo,
@@ -57,6 +56,7 @@ export const getPagesRouteShemaRenderers = (
     extraPages = {},
     entityPageModelName,
     entityPageModelIdSelector,
+    parentPageId,
     parentPath = '/',
   } = {},
   permission,
@@ -72,10 +72,9 @@ export const getPagesRouteShemaRenderers = (
   const getSubpages = (subpages, baseId, pageEntityName) => {
     if (!subpages || !subpages.length) return undefined
     const filtredSubpages = subpages.filter(subPage => {
-      const pageProps = getPageLayoutProps(subPage, pageEntityName)
-      const pageId = pageProps.id
-      const pageGlobalId = getPageGlobalId(pageId, baseId)
-      return !permission || getIsAllowPage(pageGlobalId, permission)
+      const pageProps = getPageLayoutProps(subPage, pageEntityName, baseId)
+      const abacPageId = getAbacPageId(pageProps.id)
+      return !permission || getIsAllowPage(abacPageId, permission)
     })
     return filtredSubpages.length ? filtredSubpages : undefined
   }
@@ -88,14 +87,14 @@ export const getPagesRouteShemaRenderers = (
     (memo, curr) => {
       const pageConfig = getPageConfig(curr)
       const pageEntityName = getPageEntityName(curr)
-      const pageProps = getPageLayoutProps(pageConfig, pageEntityName)
+      const pageProps = getPageLayoutProps(pageConfig, pageEntityName, parentPageId)
       const realPageConfig = pageProps.pageConfig
       const {
         modelIdSelector,
         id: pageId,
       } = pageProps
-      const pageGlobalId = getPageGlobalId(pageId)
-      if (permission && !getIsAllowPage(pageGlobalId, permission)) return memo
+      const abacPageId = getAbacPageId(pageId)
+      if (permission && !getIsAllowPage(abacPageId, permission)) return memo
       return {
         ...memo,
         [pageId]: {
@@ -146,10 +145,11 @@ export const getAllPaths = (pagesRouteSchema, parentPath, basePath = [], nestLev
     }
     paths.push(currentPath)
     const currentPageProps = pagesRouteSchema[key].props
-    const { pages = [] } = currentPageProps.page
+    const { id: pageId, pages = [] } = currentPageProps.page
     if (pages.length) {
       const subPages = getPagesRouteShemaRenderers(pages, {
         nestLevel: nestLevel + 1,
+        parentPageId: pageId,
         parentPath: currentPath,
         entityPageModelName: currentPageProps.entityPageModelName,
         entityPageModelIdSelector: currentPageProps.entityPageModelIdSelector,

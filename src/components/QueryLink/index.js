@@ -41,7 +41,7 @@ class QueryLink extends PureComponent {
     const LinkComp = activeClassName || activeStyle ? NavLink : Link
 
     return (
-      <LinkComp {...this.props} to={{ to, search: stringify(to.query) }} />
+      <LinkComp {...this.props} to={{ ...to, search: stringify(to.query) }} />
     )
   }
 }

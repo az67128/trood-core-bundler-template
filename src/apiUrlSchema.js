@@ -40,6 +40,7 @@ export const API_TYPES = {
       return `${url}?depth=3`
     },
     getPaginationQuery: (query, page, pageSize) => {
+      if (pageSize >= Number.MAX_SAFE_INTEGER) return query
       if (/limit\u0028[0-9]+\u002c[0-9]+\u0029/.test(query.q)) return query // for custom limit
       const limitStr = `limit(${(page - 1) * pageSize},${pageSize})`
       return {

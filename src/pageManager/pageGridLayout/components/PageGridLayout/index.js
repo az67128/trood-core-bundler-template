@@ -11,7 +11,6 @@ import componentsManifest from '$trood/componentLibraries/manifest'
 import {
   GRID_COLUMNS,
   DEFAULT_SPAN,
-  GRID_COMPONENT_TYPE,
   GRID_MARGIN,
   TROOD_PAGE_PADDING,
   getMobileMargin,
@@ -49,6 +48,7 @@ import {
 } from '$trood/serviceManager'
 
 import { currentLayout } from '$trood/layoutsManager'
+import localeService, { intlObject } from '$trood/localeService'
 
 import ErrorBoundary from '$trood/components/ErrorBoundary'
 
@@ -67,10 +67,21 @@ const getEntityManagerContext = (modelName, entityId) => {
 }
 const memoizedGetEntityManagerContext = memoizeOne(getEntityManagerContext)
 
+const compPropsNameFunctions = [
+  getModelEditorActionsName,
+  getModelApiActionsName,
+  getModelActionsName,
+  getModelComponentsName,
+  getModelConstantsName,
+  getModelEntitiesName,
+  getChildEntityName,
+]
+
 const PageGridLayout = (props) => {
   const {
     history,
     page: {
+      id: pageId,
       components = [],
       pages,
       url,
@@ -91,7 +102,6 @@ const PageGridLayout = (props) => {
   return (
     <AppContext.Consumer>
       {({ media = {} }) => {
-
         const basePageTitleArgs = props.basePageTitleArgs || getBasePageTitleArgs(props.page, entityPageModelName)
         if (entityPageModelName && !modelId) return null
         let prevColumn = 0
@@ -115,7 +125,7 @@ const PageGridLayout = (props) => {
                   }}>
                     {React.createElement(currentLayout.nestedPageMenuComponent, {
                       basePageTitleArgs,
-                      menuRenderers: getPagesHeaderRenderers([], entityPageModelName),
+                      menuRenderers: getPagesHeaderRenderers([], entityPageModelName, pageId),
                       basePath,
                       authActions,
                       layoutProps,
@@ -133,7 +143,8 @@ const PageGridLayout = (props) => {
               prevColumn = (prevColumn + currentSpan) % currentGridColumns
 
               let compToRender
-              if (comp.type === GRID_COMPONENT_TYPE) {
+              const CurrentComponent = componentsManifest.components[comp.type]
+              if (!CurrentComponent) {
                 compToRender = (
                   <PageGridLayout {...{
                     basePageTitleArgs,
@@ -153,7 +164,6 @@ const PageGridLayout = (props) => {
                   }} />
                 )
               } else {
-                const CurrentComponent = componentsManifest.components[comp.type]
                 let componentServices = {}
                 if (componentsManifest.services[comp.type]) {
                   // Here we get all services injected props for the component
@@ -168,39 +178,38 @@ const PageGridLayout = (props) => {
                   }), {})
                 }
 
-                const currentComponentProps = Object.keys(comp.models || {}).reduce((memo, key) => {
-                  const currentEditorActionsName = getModelEditorActionsName(key)
-                  const currentApiActionsName = getModelApiActionsName(key)
-                  const currentActionsName = getModelActionsName(key)
-                  const currentComponentsName = getModelComponentsName(key)
-                  const currentConstantsName = getModelConstantsName(key)
-                  const currentEntitiesName = getModelEntitiesName(key)
-                  const currentChildEntitiesName = getChildEntityName(key)
+                const currentComponentProps = Object.keys(comp.models || {}).reduce((memo, modelAlias) => {
+                  const modelName = (comp.models || {})[modelAlias]
+
                   return {
                     ...memo,
-                    [key]: other[key],
-                    [currentEditorActionsName]: other[currentEditorActionsName],
-                    [currentActionsName]: other[currentActionsName],
-                    [currentComponentsName]: other[currentComponentsName],
-                    [currentConstantsName]: other[currentConstantsName],
-                    [currentEntitiesName]: other[currentEntitiesName],
-                    [currentApiActionsName]: other[currentApiActionsName],
-                    [currentChildEntitiesName]: other[currentChildEntitiesName],
+                    ...compPropsNameFunctions.reduce((memoProps, nameFunc) => ({
+                      ...memoProps,
+                      [nameFunc(modelAlias)]: other[nameFunc(modelName)],
+                    }), {}),
                   }
                 }, {
                   history,
                   model: other.model,
-                  form: other[getFormPropName(comp.type)],
-                  formActions: other[getFormActionsName(comp.type)],
+                  modelIsLoading: other.modelIsLoading,
+                  form: other[getFormPropName(comp.id)],
+                  formActions: other[getFormActionsName(comp.id)],
                   modalsActions: other.modalsActions,
                   pageParams: other.match.params,
                   PageChildContainer: other.PageChildContainer,
                   ...componentServices,
                 })
 
+                let title = localeService.localeMessages[comp.id]
+                if (title) {
+                  title = intlObject.intl.formatMessage(title)
+                } else {
+                  title = comp.title || (comp.props || {}).title
+                }
                 compToRender = (
                   <CurrentComponent {...{
-                    ...comp.props,
+                    ...(comp.props || {}),
+                    title,
                     ...currentComponentProps,
                   }} />
                 )
@@ -259,7 +268,7 @@ const PageGridLayout = (props) => {
                     }}>
                       {React.createElement(currentLayout.nestedPageMenuComponent, {
                         basePageTitleArgs,
-                        menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName),
+                        menuRenderers: getPagesHeaderRenderers(pages, entityPageModelName, pageId),
                         basePath,
                         authActions,
                         layoutProps,
@@ -277,6 +286,7 @@ const PageGridLayout = (props) => {
                         renderers: getPagesRouteShemaRenderers(pages, {
                           nestLevel: nestLevel + 1,
                           entityPageModelName,
+                          parentPageId: pageId,
                           parentPath: parentPath.concat(url),
                           entityPageModelIdSelector: other.entityPageModelIdSelector,
                         }),

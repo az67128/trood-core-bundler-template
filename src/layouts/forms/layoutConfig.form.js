@@ -1,3 +1,5 @@
 export default {
-  defaults: {},
+  defaults: {
+    showMenu: false,
+  },
 }

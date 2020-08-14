@@ -7,8 +7,7 @@ import style from './index.css'
 import TButton from '$trood/components/TButton'
 import { BUTTON_COLORS } from '$trood/components/TButton/constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 const ConfirmModal = ({
@@ -21,11 +20,11 @@ const ConfirmModal = ({
 
   ...other
 }) => {
-  const text = other.text || intlObject.intl.formatMessage(messages.sureAsk)
+  const text = other.text || intlObject.intl.formatMessage(localeService.generalMessages.sureAsk)
 
-  const acceptButtonText = other.acceptButtonText || intlObject.intl.formatMessage(messages.yes)
+  const acceptButtonText = other.acceptButtonText || intlObject.intl.formatMessage(localeService.generalMessages.yes)
 
-  const declineButtonText = other.declineButtonText || intlObject.intl.formatMessage(messages.no)
+  const declineButtonText = other.declineButtonText || intlObject.intl.formatMessage(localeService.generalMessages.no)
 
   const handleAny = (action) => {
     onAny()

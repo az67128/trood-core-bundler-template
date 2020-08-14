@@ -5,8 +5,7 @@ import classNames from 'classnames'
 import style from './index.css'
 import basePageLayout from '$trood/styles/basePageLayout.css'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 /**
  * Error output component.
@@ -42,7 +41,7 @@ class ErrorBoundary extends PureComponent {
         <div className={classNames(errorClassName, style.root)}>
           <div className={basePageLayout.blockHeaderContainer}>
             <h2 className={classNames(basePageLayout.blockTitle, style.error)}>
-              {intlObject.intl.formatMessage(messages.error).toUpperCase()} {error.message}
+              {intlObject.intl.formatMessage(localeService.generalMessages.error).toUpperCase()} {error.message}
             </h2>
           </div>
           <div className={classNames(basePageLayout.blockContent, style.errorInfo)}>

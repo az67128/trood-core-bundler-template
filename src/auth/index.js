@@ -18,12 +18,14 @@ export * from './constants'
 
 const getModelIdSelector = () => selectors.getProfileId
 const getModelType = () => ((systemConfig.services || {}).auth || {}).profile
+const getPageId = () => TROOD_PERSONAL_ACCOUNT_PAGE_ID
 const getPageConfig = (pageConfig) => {
   const profile = getModelType()
+  let resultConfig = pageConfig
   if (profile && !pageConfig.components && !pageConfig.pages) {
-    return defaults(pageConfig, systemConfig.entityPages[profile])
+    resultConfig = defaults(resultConfig, systemConfig.entityPages[profile])
   }
-  return pageConfig
+  return { ...resultConfig, id: getPageId() }
 }
 const getPageContainer = (pageConfig, entityPageName, defaultLayout) => {
   const profile = getModelType()
@@ -33,7 +35,6 @@ const getPageContainer = (pageConfig, entityPageName, defaultLayout) => {
   }
   return defaultLayout.getPageContainer(pageConfig, profile, idSelector)
 }
-const getPageId = () => TROOD_PERSONAL_ACCOUNT_PAGE_ID
 const getPageHeaderRendererConfig = page => ({
   label: page.title || TROOD_PERSONAL_ACCOUNT_PAGE_DEFAULT_TITLE,
   iconType: page.icon || TROOD_PERSONAL_ACCOUNT_PAGE_DEFAULT_ICON,

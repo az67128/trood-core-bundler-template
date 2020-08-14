@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
+import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
 import { INNER_INPUT_TYPES, LABEL_POSITION_TYPES } from './constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 class EnchancedSwitch extends PureComponent {
@@ -78,6 +78,8 @@ class EnchancedSwitch extends PureComponent {
   constructor(props) {
     super(props)
 
+    this.lastValid = true
+
     this.validate = this.validate.bind(this)
     this.onValidationUpdate = this.onValidationUpdate.bind(this)
 
@@ -97,22 +99,31 @@ class EnchancedSwitch extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
+    }
+  }
+
   onValidationUpdate() {
-    const { disabled } = this.props
+    const { errors, onInvalid, onValid, disabled } = this.props
     const { innerErrors } = this.state
 
     if (!disabled) {
       if (innerErrors.length) {
-        this.props.onInvalid(innerErrors)
-      } else {
-        this.props.onValid()
+        this.lastValid = false
+        if (!deepEqual(errors, innerErrors)) onInvalid(innerErrors)
+      } else if (!this.lastValid) {
+        this.lastValid = true
+        onValid()
       }
     }
   }
 
   validate(value) {
     const innerErrors = this.props.validate.required && !value ?
-      [intlObject.intl.formatMessage(messages.requiredField)] : []
+      [intlObject.intl.formatMessage(localeService.generalMessages.requiredField)] : []
     this.setState({ innerErrors }, this.onValidationUpdate)
   }
 

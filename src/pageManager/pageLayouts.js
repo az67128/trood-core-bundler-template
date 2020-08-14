@@ -22,10 +22,9 @@ export const getPageLayoutProps = (page, entityPageName, prevPageId) => {
   const currentPageService = pageTypesLayoutsDict[page.type]
   const propsArgs = [page, entityPageName, pageGridLayout, prevPageId]
   return {
-    pageConfig: currentPageService.getPageConfig(...propsArgs),
-    id: currentPageService.getPageId(...propsArgs),
-    // TODO by @deylak add getPageBaseId to other pages and ideally refactor all pages in urlSchema to use baseId
-    baseId: currentPageService.getPageBaseId && currentPageService.getPageBaseId(...propsArgs),
+    pageConfig: pageTypesLayoutsDict[PAGE_TYPES.grid].getPageConfig(...propsArgs),
+    // TODO export other only from grid
+    id: page.id || currentPageService.getPageId(...propsArgs),
     headerRenderer: currentPageService.getPageHeaderRendererConfig(...propsArgs),
     container: currentPageService.getPageContainer(...propsArgs),
     modelType: currentPageService.getModelType(...propsArgs),

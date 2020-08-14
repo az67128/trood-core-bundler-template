@@ -18,11 +18,12 @@ import { intlObject } from '$trood/localeService'
 import { FileListView } from '$trood/files'
 
 
-const sanitizeHtml = loadable.lib(() => import('sanitize-html'))
-const html2reactParser = loadable.lib(() => import('html-to-react')
-  .then(h2r => new h2r.Paser()))
-const processNodeDefinitions = loadable.lib(() => import('html-to-react')
-  .then(h2r => new h2r.ProcessNodeDefinitions()))
+const SanitizeHtml = loadable.lib(() => import('sanitize-html')
+  .then(sh => sh.default))
+const Html2ReactParser = loadable.lib(() => import('html-to-react')
+  .then(h2r => new h2r.default.Parser()))
+const ProcessNodeDefinitions = loadable.lib(() => import('html-to-react')
+  .then(h2r => new h2r.default.ProcessNodeDefinitions()))
 
 linkify.set({ fuzzyIP: true, fuzzyEmail: false })
 
@@ -68,6 +69,7 @@ class Mail extends PureComponent {
     }
     this.toggleOpen = this.toggleOpen.bind(this)
     this.onMailAttach = this.onMailAttach.bind(this)
+    this.setBody = this.setBody.bind(this)
   }
 
   componentDidMount() {
@@ -130,6 +132,51 @@ class Mail extends PureComponent {
     })
   }
 
+  setBody() {
+    if (this.sanitizeHtml && this.html2reactParser && this.processNodeDefinitions) {
+      const { model } = this.props
+      const { open } = this.state
+
+      const allTags = getTagsFromHtml(model.body)
+      const allowedTags = allTags.filter(tag => !excludeTags.includes(tag))
+      const sanitizeProps = {
+        allowedTags,
+        allowedAttributes: false,
+        nonTextTags: excludeTags,
+      }
+      let body = this.sanitizeHtml(model.body, sanitizeProps)
+
+      const reactBody = this.html2reactParser.parseWithInstructions(body, () => true, [
+        {
+          shouldProcessNode: (node) => {
+            return node && node.name === 'a'
+          },
+          processNode: (node, children, index) => {
+            return this.processNodeDefinitions.processDefaultNode(
+              {
+                ...node,
+                attribs: {
+                  ...node.attribs,
+                  target: '_blank',
+                  rel: 'nofollow noopener',
+                },
+              },
+              children,
+              index,
+            )
+          },
+        },
+        {
+          shouldProcessNode: () => true,
+          processNode: this.processNodeDefinitions.processDefaultNode,
+        },
+      ])
+      if (!open) body = html2text(body)
+
+      this.setState({ body, reactBody })
+    }
+  }
+
   render() {
     const {
       className,
@@ -145,46 +192,24 @@ class Mail extends PureComponent {
 
     const {
       open,
+      body,
+      reactBody,
     } = this.state
-
-    const allTags = getTagsFromHtml(model.body)
-    const allowedTags = allTags.filter(tag => !excludeTags.includes(tag))
-    const sanitizeProps = {
-      allowedTags,
-      allowedAttributes: false,
-      nonTextTags: excludeTags,
-    }
-    let body = sanitizeHtml(model.body, sanitizeProps)
-
-    const reactBody = html2reactParser.parseWithInstructions(body, () => true, [
-      {
-        shouldProcessNode: (node) => {
-          return node && node.name === 'a'
-        },
-        processNode: (node, children, index) => {
-          return processNodeDefinitions.processDefaultNode(
-            {
-              ...node,
-              attribs: {
-                ...node.attribs,
-                target: '_blank',
-                rel: 'nofollow noopener',
-              },
-            },
-            children,
-            index,
-          )
-        },
-      },
-      {
-        shouldProcessNode: () => true,
-        processNode: processNodeDefinitions.processDefaultNode,
-      },
-    ])
-    if (!open) body = html2text(body)
 
     return (
       <div className={classNames(style.root, className, !open && style.short)}>
+        <SanitizeHtml ref={f => {
+          this.sanitizeHtml = f
+          this.setBody()
+        }} />
+        <Html2ReactParser ref={f => {
+          this.html2reactParser = f
+          this.setBody()
+        }} />
+        <ProcessNodeDefinitions ref={f => {
+          this.processNodeDefinitions = f
+          this.setBody()
+        }} />
         <div className={style.header}>
           <div className={style.left} onClick={this.toggleOpen}>
             <div className={style.title}>

@@ -5,10 +5,11 @@ import classNames from 'classnames'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import objectHash from 'object-hash'
+import deepEqual from 'deep-equal'
 
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
-import { KEY_CODES, NAVIGATION_KEYS, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE, messages } from '$trood/mainConstants'
+import { KEY_CODES, NAVIGATION_KEYS, DISPATCH_DEBOUNCE, SEARCH_DEBOUNCE } from '$trood/mainConstants'
 import {
   INPUT_TYPES,
   ROW_HEIGHT,
@@ -151,6 +152,8 @@ class Input extends PureComponent {
       settings: { formatValue },
     } = props
 
+    this.lastValid = true
+
     this.state = {
       formattedValue: formatValue(value.toString()),
       height: props.minRows * ROW_HEIGHT,
@@ -179,6 +182,13 @@ class Input extends PureComponent {
   componentDidUpdate(prevProps) {
     if (this.props.value !== prevProps.value || objectHash(this.props.settings) !== objectHash(prevProps.settings)) {
       this.handleValidate()
+    }
+  }
+
+  componentWillUnmount() {
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
     }
   }
 
@@ -215,11 +225,11 @@ class Input extends PureComponent {
     // Required validation, overrides all other errors
     if (required) {
       if (/^\s*$/.test(value)) {
-        return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
+        return [requiredError || intlObject.intl.formatMessage(localeService.generalMessages.requiredField)]
       }
       if (numberTypes.includes(type) && !zeroIsValue) {
         if (value === 0 || value === '0') {
-          return [requiredError || intlObject.intl.formatMessage(messages.requiredField)]
+          return [requiredError || intlObject.intl.formatMessage(localeService.generalMessages.requiredField)]
         }
       }
     }
@@ -228,15 +238,15 @@ class Input extends PureComponent {
 
     const regexpToMatch = (format && format.regexp) || format
     if (value && regexpToMatch && !regexpToMatch.test(value)) {
-      errors.push(format.error || intlObject.intl.formatMessage(messages.incorrectFormat))
+      errors.push(format.error || intlObject.intl.formatMessage(localeService.generalMessages.incorrectFormat))
     }
 
     if (maxLen && value.length > maxLen) {
-      errors.push(intlObject.intl.formatMessage(messages.maxLength, { number: maxLen }))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.maxLength, { number: maxLen }))
     }
 
     if (minLen && (required || value.length > 0) && value.length < minLen) {
-      errors.push(intlObject.intl.formatMessage(messages.minLength, { number: minLen }))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.minLength, { number: minLen }))
     }
 
     return errors
@@ -250,12 +260,12 @@ class Input extends PureComponent {
       onInvalid,
     } = this.props
     const validateErrors = this.validate(value)
-    if (validateErrors !== errors) {
-      if (validateErrors && validateErrors.length) {
-        onInvalid(validateErrors)
-      } else {
-        onValid()
-      }
+    if (validateErrors && validateErrors.length) {
+      this.lastValid = false
+      if (!deepEqual(errors, validateErrors)) onInvalid(validateErrors)
+    } else if (!this.lastValid) {
+      this.lastValid = true
+      onValid()
     }
   }
 
@@ -263,10 +273,48 @@ class Input extends PureComponent {
     const {
       type,
       value,
-      settings: { getValue, formatValue },
+      settings: {
+        include,
+        exclude,
+        getValue,
+        formatValue,
+      },
     } = this.props
     const { formattedValue } = this.state
-    let newFormattedValue = formatValue(e.target.value)
+    let { value: targetValue } = e.target
+    if (include) {
+      let targetValueArray = [...targetValue]
+      if (Array.isArray(include)) {
+        targetValueArray = targetValueArray.map(char => {
+          if (!include.includes(char)) return ''
+          return char
+        })
+      }
+      if (include instanceof RegExp) {
+        targetValueArray = targetValueArray.map(char => {
+          if (!include.test(char)) return ''
+          return char
+        })
+      }
+      targetValue = targetValueArray.join('')
+    }
+    if (exclude) {
+      let targetValueArray = [...targetValue]
+      if (Array.isArray(exclude)) {
+        targetValueArray = targetValueArray.map(char => {
+          if (exclude.includes(char)) return ''
+          return char
+        })
+      }
+      if (exclude instanceof RegExp) {
+        targetValueArray = targetValueArray.map(char => {
+          if (exclude.test(char)) return ''
+          return char
+        })
+      }
+      targetValue = targetValueArray.join('')
+    }
+    let newFormattedValue = formatValue(targetValue)
     if (type === INPUT_TYPES.time) {
       const isValid = checkTime(newFormattedValue)
       if (!isValid) {
@@ -361,11 +409,13 @@ class Input extends PureComponent {
           !(char === '.' || char === ',') &&
           this.selectionStart <= roundFormattedValue.length
       }
-      if (exclude && !include) {
-        shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
-      }
       if (include) {
         shouldPreventDefault += (Array.isArray(include) ? !include.includes(char) : !include.test(char))
+        if (exclude) {
+          shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
+        }
+      } else if (exclude) {
+        shouldPreventDefault += (Array.isArray(exclude) ? exclude.includes(char) : exclude.test(char))
       }
       if (shouldPreventDefault) {
         e.preventDefault()

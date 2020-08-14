@@ -26,7 +26,7 @@ For example:
     export default {editComponent}
 
 
-Simple example of ``editComponent.js``
+A simple example of ``editComponent.js``
 
 .. code-block:: jsx
 
@@ -56,10 +56,10 @@ Edit component props
 * model - redux store values for current form
 * modelErrors - errors for current form by fields
 * modelValid - valid form or not
-* serverModel - redux store values for current entity (before changes)
+* serverModel - redux store values for the current entity (before changes)
 * authData - account information
-* getMask - list of fields not available for viewing for current user by ABAC rules
-* editMask - list of fields not available for editing for current user by ABAC rules
+* getMask - list of fields not available for viewing for the current user by ABAC rules
+* editMask - list of fields not available for editing for the current user by ABAC rules
 * modelActions - custom actions for current BO
 * modelApiActions - `redux-restify api docs`_
 * modelFormActions - `redux-restify forms docs`_
@@ -78,7 +78,7 @@ more details can be found here `manual-configuration-bo`_
 ``editComponent.js`` also gets prop ``ModalComponents`` which contains ``ModalInput``, ``ModalCheckbox``, ``ModalDateTimePicker`` and ``ModalSelect`` components.
 These are pre-configured wrappers on `TInput`_, `TCheckbox`_, `DateTimePicker`_ and `TSelect`_
 
-To use them in ``editComponent.js`` you need to pass ``fieldName`` props with name of the edited field. String and array of strings are supported.
+To use them in ``editComponent.js`` you need to pass ``fieldName`` props with the name of the edited field. String and array of strings are supported.
 
 For example:
 
@@ -110,7 +110,7 @@ With this call, a modal window opens with the component described in the file ``
 
   More about form config: `redux-restify forms docs`_
 
-  You can change data not through a modal window, but in line in the component itself
+  You can change data not through a modal window, but inline in the component itself
 
 For inline render editComponent we need ``import { InlineEntityEditor } from '$trood/entityManager'``
 

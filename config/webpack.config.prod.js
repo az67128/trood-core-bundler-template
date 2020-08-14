@@ -322,12 +322,29 @@ module.exports = {
     new GenerateSW({
       swDest: 'service-worker.js',
       navigateFallbackDenylist: [/.*/],
+      exclude: ['index.html'],
       runtimeCaching: [
+        {
+          urlPattern: /\/static\/fonts\/.+$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'fonts',
+            expiration: {
+              maxAgeSeconds: 7 * 24 * 60 * 60,
+            },
+          },
+        },
         {
           urlPattern: /\/static\/.+$/,
           handler: 'CacheFirst',
+          options: {
+            cacheName: 'images',
+            expiration: {
+              maxAgeSeconds: 24 * 60 * 60,
+            },
+          },
         },
-      ]
+      ],
     }),
     // By default, webpack bundles all Moment.js locales
     // (in Moment.js 2.18.1, that’s 160 minified KBs).

@@ -5,8 +5,7 @@ import deepEqual from 'deep-equal'
 
 import style from './index.css'
 
-import { intlObject } from '$trood/localeService'
-import { messages } from '$trood/mainConstants'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { ICONS_TYPES } from '$trood/components/TIcon'
 
@@ -155,9 +154,13 @@ class TSelect extends PureComponent {
 
   constructor(props) {
     super(props)
+
     this.state = {
       wasBlured: false,
     }
+
+    this.lastValid = true
+
     this.handleValidate = this.handleValidate.bind(this)
     this.toggleBlur = this.toggleBlur.bind(this)
     this.getSelectComponent = this.getSelectComponent.bind(this)
@@ -170,6 +173,13 @@ class TSelect extends PureComponent {
   componentDidUpdate(prevProps) {
     if (!deepEqual(prevProps.values, this.props.values) || !deepEqual(prevProps.validate, this.props.validate)) {
       this.handleValidate(this.props.values)
+    }
+  }
+
+  componentWillUnmount() {
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
     }
   }
 
@@ -231,17 +241,22 @@ class TSelect extends PureComponent {
       validate: {
         required,
       },
+      errors,
       disabled,
       onValid,
       onInvalid,
     } = this.props
 
     if (!disabled) {
-      const errors = required && !values.length ? [intlObject.intl.formatMessage(messages.requiredField)] : []
+      const newErrors = required && !values.length ?
+        [intlObject.intl.formatMessage(localeService.generalMessages.requiredField)] : []
 
-      if (errors.length) {
-        onInvalid(errors)
-      } else {
+      if (newErrors.length) {
+        this.lastValid = false
+        if (!deepEqual(errors, newErrors)) onInvalid(newErrors)
+      } else
+      if (!this.lastValid) {
+        this.lastValid = true
         onValid()
       }
     }

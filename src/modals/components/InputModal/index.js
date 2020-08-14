@@ -8,8 +8,7 @@ import TSelect from '$trood/components/TSelect'
 import TButton from '$trood/components/TButton'
 import { BUTTON_COLORS } from '$trood/components/TButton/constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 class InputModal extends PureComponent {
@@ -81,7 +80,7 @@ class InputModal extends PureComponent {
           <TSelect {...{
             items: options,
             className: modalsStyle.control,
-            placeHolder: intlObject.intl.formatMessage(messages.notSet),
+            placeHolder: intlObject.intl.formatMessage(localeService.generalMessages.notSet),
             values: selected && [selected],
             onChange: values => this.setState({ selected: values[0] }),
           }} />

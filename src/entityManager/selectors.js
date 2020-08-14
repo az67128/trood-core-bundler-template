@@ -41,7 +41,8 @@ export const getChildEntitiesByModel =
     // For child entities let's try to pre-construct array of child entities from childForms
     // If we have edit form of some entity, form will be used, instead of initial restify model
     // Here we create a lazy-getters for child arrays, so we don't trigger any requests
-    return Object.keys(currentEntities).reduce((memo, currentModelName) => {
+    return Object.keys(currentEntities).reduce((memo, key) => {
+      const currentModelName = currentEntities[key].modelType
       const currentChildForms = Object.keys(childForms).reduce((memoArray, formName) => {
         if (currentModelName !== getModelNameFromFormName(formName)) {
           return memoArray
@@ -56,7 +57,7 @@ export const getChildEntitiesByModel =
 
       return {
         ...memo,
-        [getChildEntityName(currentModelName)]: {
+        [getChildEntityName(key)]: {
           getChildArray: (filterSubmitted = false) => {
             let currentArray = []
             // By checking model type, we define, if the model is form, or restify model
@@ -64,9 +65,10 @@ export const getChildEntitiesByModel =
               currentArray = model[currentChildModelField]
                 // Filter out temporary forms, while submitting entitites
                 .filter(form => typeof form !== 'object')
-                .map(id => currentEntities[currentModelName].getById(id))
+                .map(id => currentEntities[key].getById(id))
             } else if (model && model[currentChildModelField]) {
-              currentArray = model[currentChildModelField]
+              currentArray = model[`${currentChildModelField}Ids`]
+                .map(id => currentEntities[key].getById(id)) // TODO fix depth in restify & delete this
             }
             // Replace entities with their existing editing forms
             const editedArray = currentArray
@@ -91,7 +93,7 @@ export const getChildEntitiesByModel =
           },
           getIsLoadingChildArray: () => {
             if (model && !model.$modelType && model.id && model[currentChildModelField]) {
-              return model[currentChildModelField].some(id => currentEntities[currentModelName].getIsLoadingById(id))
+              return model[currentChildModelField].some(id => currentEntities[key].getIsLoadingById(id))
             }
             return false
           },

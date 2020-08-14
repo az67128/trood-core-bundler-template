@@ -2,8 +2,7 @@ import merge from 'lodash/merge'
 
 import customApiConfig from './customApiConfig'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { getToken } from './storage'
 import {
@@ -81,7 +80,7 @@ const configRestify = () => {
   const defaultHttpCodesCallbacks = (code, customCodes = {}) => {
     if (code >= 500) {
       return () => modals.actions.showMessageBoxModal({
-        text: intlObject.intl.formatMessage(messages.serverError),
+        text: intlObject.intl.formatMessage(localeService.generalMessages.serverError),
         size: MODAL_SIZES.mediumSmall,
       })
     }
@@ -105,7 +104,9 @@ const configRestify = () => {
       apiPrefix: '',
       allowedNoTokenEndpoints: DEFAULT_ALLOWED_NO_TOKEN_ENDPOINTS,
       httpCodesCallbacks: code => defaultHttpCodesCallbacks(code, {
-        403: () => modals.actions.showErrorPopup(intlObject.intl.formatMessage(messages.accessDenied)),
+        403: () => modals.actions.showErrorPopup(
+          intlObject.intl.formatMessage(localeService.generalMessages.accessDenied),
+        ),
       }),
       ...API_TYPES[library.type],
     }

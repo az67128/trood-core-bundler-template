@@ -11,8 +11,8 @@ import DatePicker from './DatePicker'
 import TimePicker from './TimePicker'
 
 import { PICKER_TYPES, TIME_FORMAT, CALENDAR_POSITIONS } from './constants'
-import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT, messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 const allMomentPropTypes = PropTypes.oneOfType([
@@ -119,6 +119,8 @@ class DateTimePicker extends PureComponent {
       timeErrors: [],
     }
 
+    this.lastValid = true
+
     this.handleChangeDate = this.handleChangeDate.bind(this)
     this.handleChangeTime = this.handleChangeTime.bind(this)
     this.handleOnChange = this.handleOnChange.bind(this)
@@ -134,6 +136,13 @@ class DateTimePicker extends PureComponent {
   componentDidUpdate(prevProps) {
     if (!deepEqual(propsForCheckUpdate(this.props), propsForCheckUpdate(prevProps))) {
       this.handleValidate()
+    }
+  }
+
+  componentWillUnmount() {
+    if (!this.lastValid) {
+      this.lastValid = true
+      this.props.onValid()
     }
   }
 
@@ -187,7 +196,7 @@ class DateTimePicker extends PureComponent {
     const { minDate, maxDate } = this.props.validate
     const errors = []
     if ((minDate && moment(value).isBefore(minDate)) || (maxDate && moment(value).isAfter(maxDate))) {
-      errors.push(intlObject.intl.formatMessage(messages.outOfRangeValue))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.outOfRangeValue))
     }
     this.setState({ dateTimeErrors: errors }, this.callOnInvalid)
   }
@@ -196,8 +205,10 @@ class DateTimePicker extends PureComponent {
     const errors = this.getAllErrors()
     const { onValid, onInvalid } = this.props
     if (errors.length) {
+      this.lastValid = false
       onInvalid(errors)
-    } else {
+    } else if (!this.lastValid) {
+      this.lastValid = true
       onValid()
     }
   }

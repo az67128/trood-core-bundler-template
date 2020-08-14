@@ -25,6 +25,7 @@ class BasePageComponent extends PureComponent {
       menuRenderers,
       match,
       registeredRoutesPaths,
+      layoutProps,
     } = this.props
 
     return (
@@ -32,9 +33,12 @@ class BasePageComponent extends PureComponent {
         <Header {...{
           authActions,
           menuRenderers,
+          layoutProps,
         }} />
         <div id={DEFAULT_SCROLLING_CONTAINER_ID} className={style.components}>
-          <PageHeader />
+          <PageHeader {...{
+            layoutProps,
+          }} />
           <RouteSchema {...{
             renderers,
             registeredRoutesPaths,

@@ -61,13 +61,13 @@ Your can configure access to system pages
 
         .. attribute:: ctx.media
 
-            .. attribute:: mobile
+            .. attribute:: phone
 
                  <bool> - screen width < 1024
 
             .. attribute:: tablet
 
-                 <bool> - screen width < 1024
+                 <bool> - screen width >= 1024 && < 1280
 
             .. attribute:: portable
 

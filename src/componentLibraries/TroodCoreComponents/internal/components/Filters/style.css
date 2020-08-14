@@ -1,0 +1,15 @@
+.root {
+}
+
+.numberFilter {
+  display: flex;
+}
+
+.numberFilterMin {
+  margin-right: 8px;
+}
+
+.resetButton {
+  margin-left: auto;
+  align-self: center;
+}

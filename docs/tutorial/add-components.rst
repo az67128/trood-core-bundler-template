@@ -87,8 +87,8 @@ To display the component on the page, we set the config for the page. For exampl
           type: 'grid', // required
           components: [ // array of page components
             {
-              id: 'clients-table', // id - unique, required Component id
               type: 'TroodCoreBusinessComponents/ClientTableView', // type - required Component type from library
+              title: 'Title', // passed to component props.title after i18n transform
               span: 3, // Grid span for component (How many columns component gets)
               withMargin: true, // Enable/disable render marging (for creating card-like components on a page)
               models: { // Business objects mapping
@@ -115,8 +115,8 @@ We can also add a component to entity pages. To do this, we set these settings i
           type: 'grid', // Page type (Can be: personalAccount, mail or grid)
             components: [
               {
-                id: 'clients-table', // id - unique, required Component id
                 type: 'TroodCoreBusinessComponents/ClientTableView', // type - required Component type from library
+                title: 'Title', // passed to component props.title after i18n transform
                 span: 3, // Grid span for component (How many columns component gets)
                 withMargin: true, // Enable/disable render marging (for creating card-like components on a page)
                 models: { // Business objects mapping
@@ -141,8 +141,9 @@ We have props that are implicitly passed to components, but you can interact wit
 .. _qhistory: https://www.npmjs.com/package/qhistory
 
 * history - object of qhistory_
+* title - i18n transformed component parameter ``title``
 * model - entity model, only if the component is added on entityPage
-* modelActions  - actions for model, only if the component is added on entityPage
+* modelIsLoading  - entity model loading, only if the component is added on entityPage
 * modalsActions - actions for calling modal windows
 * form - only if the component has form.js, contains data from redux storage
 * formActions - only if the component has form.js, redux-restify actions for form.js, `redux-restify forms docs`_

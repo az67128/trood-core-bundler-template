@@ -2,12 +2,11 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import style from './index.css'
 
-import { ICONS_TYPES } from '$trood/components/TIcon/constants'
+import { ICONS_TYPES } from '$trood/components/TIcon'
 
 import { HeaderMenu, HEADER_TYPES } from '$trood/pageManager'
 
@@ -31,18 +30,32 @@ class Header extends Component {
 
       authActions,
       menuRenderers,
+
+      layoutProps: {
+        layoutConfigFormActions,
+        layoutConfigForm: {
+          showMenu,
+        },
+      },
     } = this.props
 
     return (
       <div {...{
-        className: classNames(style.root, className),
+        className: classNames(style.root, className, !showMenu && style.hideMenu),
       }} >
         <HeaderMenu {...{
+          className: style.menu,
           type: HEADER_TYPES.vertical,
           menuRenderers,
           additionalLinks: [
             {
-              label: intlObject.intl.formatMessage(messages.logout),
+              pre: true,
+              onClick: () => layoutConfigFormActions.changeField('showMenu', false),
+              iconType: ICONS_TYPES.clear,
+              className: style.clearButton,
+            },
+            {
+              label: intlObject.intl.formatMessage(localeService.generalMessages.logout),
               onClick: authActions.logout,
               iconType: ICONS_TYPES.logout,
               className: style.logot,

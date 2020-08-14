@@ -33,6 +33,10 @@
   overflow: hidden;
 }
 
+.itemHover {
+  color: var(--trood-blue) !important;
+}
+
 .empty {
   composes: itemWrapper;
   color: var(--trood-gray-extra-dark);

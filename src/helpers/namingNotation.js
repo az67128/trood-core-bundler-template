@@ -4,12 +4,14 @@ import { isPureObject } from '$trood/helpers/def'
 
 
 export const camelToHuman = s => s.replace(/([a-z])([A-Z]+)/g, '$1 $2').toLowerCase()
+export const camelToUpperHuman = s => s.charAt(0).toUpperCase() + s.replace(/([a-z])([A-Z]+)/g, '$1 $2').substring(1)
 const camelToSnake = (s = '') => s.replace(/([a-z])([A-Z]+)/g, '$1_$2')
 export const camelToLowerSnake = s => camelToSnake(s).toLowerCase()
 export const camelToUpperSnake = s => camelToSnake(s).toUpperCase()
 // Using camel to snake for exclude camelCase parts from converting to lower case
 export const snakeToCamel = s => {
-  return camelToSnake(s).toLowerCase().replace(/(.)_+(.)/g, (match, g1, g2) => g1 + g2.toUpperCase())
+  return camelToLowerSnake(s)
+    .replace(/(\B)_+(.)/g, (match, g1, g2) => g1 + g2.toUpperCase())
 }
 
 const objectToCase = convertingFunc => (obj, config = {}) => {

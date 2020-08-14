@@ -12,8 +12,7 @@ import {
   SMART_DATE_FORMATS_FUNCTIONS,
 } from './constants'
 
-import { messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 const UNIX_TIMESTAMP_CHECKER = 1544399
@@ -54,7 +53,7 @@ class SmartDate extends PureComponent {
       date,
       format = FULL_FORMAT,
       customFormat,
-      defaultEmptyMessage = intlObject.intl.formatMessage(messages.notSet),
+      defaultEmptyMessage = intlObject.intl.formatMessage(localeService.generalMessages.notSet),
     } = this.props
 
     let realDate = date

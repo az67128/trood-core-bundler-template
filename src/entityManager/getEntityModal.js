@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import memoizeOne from 'memoize-one'
 
 import {
@@ -45,9 +44,7 @@ import {
   getCurrentEntitiesActions,
 } from './selectors'
 
-import { messages as mainMessages } from '$trood/mainConstants'
-
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { applySelectors } from '$trood/helpers/selectors'
 import { ruleChecker } from '$trood/helpers/abac'
@@ -62,32 +59,35 @@ const formatMessage = msg => {
   return intlObject.intl.formatMessage(msg)
 }
 
-const linkChildWithParent = (modelName, parentName, parentId, formActions, form) => (dispatch) => {
+export const linkChildWithParent = (modelName, parentName, parentId, formActions, form) => (dispatch) => {
   const currentParentModel = RESTIFY_CONFIG.registeredModels[parentName]
   const currentModel = RESTIFY_CONFIG.registeredModels[modelName]
-  // Define, what type of fk is used and assign it for child model
-  // We have 2 types: generic foreign key with _object and id field, or direct foreign key by entity name
-  // TODO by @deylak here we use model endpoint as model name and change field, that will be converted to snake_case
-  // This would work for topline app, but in general, we should add smth like realModelName
-  const currentLinkKey = Object.keys(currentModel.defaults).find(key => {
-    const currentDefault = currentModel.defaults[key]
-    if (currentDefault instanceof RestifyForeignKey) {
-      return currentDefault.modelType === parentName
-    } else if (currentDefault instanceof RestifyGenericForeignKey) {
-      return currentDefault.modelType.includes(parentName)
-    }
-    return false
-  })
 
-  if (!form[currentLinkKey]) {
-    if (currentModel.defaults[currentLinkKey] instanceof RestifyGenericForeignKey) {
-      dispatch(formActions.changeField(currentLinkKey, {
-        _object: currentParentModel.endpoint,
-        [currentParentModel.idField]: parentId,
-      }))
-    } else if (currentModel.defaults[currentLinkKey] instanceof RestifyForeignKey) {
-      dispatch(formActions.changeField(currentLinkKey, parentId))
+  const currentLinkValues = Object.keys(currentModel.defaults).reduce((memo, key) => {
+    const currentDefault = currentModel.defaults[key]
+    if (!form[key]) {
+      if (currentDefault instanceof RestifyForeignKey
+        && currentDefault.modelType === parentName) {
+        return {
+          ...memo,
+          [key]: parentId,
+        }
+      } else if (currentDefault instanceof RestifyGenericForeignKey
+        && currentDefault.modelType.includes(parentName)) {
+        return {
+          ...memo,
+          [key]: {
+            _object: currentParentModel.endpoint,
+            [currentParentModel.idField]: parentId,
+          },
+        }
+      }
     }
+    return memo
+  }, {})
+
+  if (Object.keys(currentLinkValues).length) {
+    dispatch(formActions.changeSomeFields(currentLinkValues))
   }
 }
 
@@ -225,7 +225,7 @@ const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
       }
       const { access, mask } = checkAccess(ctx)
       if (!access || mask.some(m => snakeToCamel(m) === name)) {
-        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(localeService.generalMessages.accessDenied))
       }
       return formActions.changeField(name, val)
     },
@@ -245,7 +245,7 @@ const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
       }
       const { access, mask } = checkAccess(ctx)
       if (!access || mask.some(m => valuesKeys.includes(snakeToCamel(m)))) {
-        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(localeService.generalMessages.accessDenied))
       }
       return formActions.changeSomeFields(vals, forceUndefines)
     },
@@ -257,7 +257,7 @@ const getFormActions = (modelFormName, checkAccess, dispatch, getState) => {
       }
       const { access, mask } = checkAccess(ctx)
       if (!access || mask.some(m => snakeToCamel(m) === name)) {
-        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied))
+        return modals.actions.showErrorPopup(intlObject.intl.formatMessage(localeService.generalMessages.accessDenied))
       }
       return formActions.resetField(name)
     },
@@ -332,7 +332,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
                 const editMask = editMaskChecker(objectToCheck).mask.map(item => snakeToCamel(item))
                 const getMask = checkCustodianGetRule(objectToCheck).mask.map(item => snakeToCamel(item))
                 return (
-                  <ModalContext.Provider value={{ editMask, getMask, model, modelFormActions, modelErrors }}>
+                  <ModalContext.Provider value={{ editMask, getMask, model, modelFormActions, modelErrors, modelName }}>
                     <EntityComponent {...{ ...this.props, editMask, getMask, ModalComponents }} />
                   </ModalContext.Provider>
                 )
@@ -371,7 +371,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
         const saveButton = (
           <TButton {...{
             className: modalsStyle.button,
-            label: intlObject.intl.formatMessage(isEditing ? messages.change : mainMessages.save),
+            label: intlObject.intl.formatMessage(isEditing ? messages.change : localeService.generalMessages.save),
             disabled: !modelValid || this.state.buttonLocked,
             color: BUTTON_COLORS.blue,
             onClick: () => {
@@ -416,7 +416,7 @@ const getEntityEditComponent = (entityComponentName) => (modelName, modelConfig)
             {saveButton}
             <TButton {...{
               className: modalsStyle.button,
-              label: intlObject.intl.formatMessage(mainMessages.cancel),
+              label: intlObject.intl.formatMessage(localeService.generalMessages.cancel),
               color: BUTTON_COLORS.gray,
               onClick: cancelAction,
             }} />

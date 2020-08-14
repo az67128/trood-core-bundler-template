@@ -10,8 +10,8 @@ import TClickOutside from '$trood/components/TClickOutside'
 import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
 import TLabel from '$trood/components/TLabel'
 
-import { DEFAULT_DATE_FORMAT, messages } from '$trood/mainConstants'
-import { intlObject } from '$trood/localeService'
+import { DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
+import localeService, { intlObject } from '$trood/localeService'
 
 import { CALENDAR_TYPES, CALENDAR_TYPES_FORMAT, CALENDAR_POSITIONS } from '../constants'
 
@@ -200,7 +200,7 @@ class DatePicker extends PureComponent {
     const { onValid, onInvalid, validate } = this.props
     const errors = []
     if (validate.required && !value) {
-      errors.push(intlObject.intl.formatMessage(messages.requiredField))
+      errors.push(intlObject.intl.formatMessage(localeService.generalMessages.requiredField))
     }
 
     if (errors.length) {

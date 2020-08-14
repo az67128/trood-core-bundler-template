@@ -17,9 +17,9 @@ import {
   modalQueryToString,
   messages,
 } from './constants'
-import { messages as mainMessages } from '$trood/mainConstants'
+import { linkChildWithParent } from './getEntityModal'
 
-import { intlObject } from '$trood/localeService'
+import localeService, { intlObject } from '$trood/localeService'
 
 
 export const createEntityForm = (modelName, parents = []) => (
@@ -201,7 +201,9 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
       },
     })
     if (!access) {
-      return dispatch(modals.actions.showErrorPopup(intlObject.intl.formatMessage(mainMessages.accessDenied)))
+      return dispatch(modals.actions.showErrorPopup(
+        intlObject.intl.formatMessage(localeService.generalMessages.accessDenied)),
+      )
     }
 
     let currentForm
@@ -231,6 +233,16 @@ const generalEditEntity = (showModal) => (modelName, parents = []) => (model, co
     }
     if (!currentForm) {
       currentForm = await dispatch(createEntityForm(modelName, parents)(idToEdit, config))
+    }
+    if (parents.length && model && model.id) {
+      const lastParent = parents[parents.length - 1]
+      dispatch(linkChildWithParent(
+        modelName,
+        lastParent.modelName,
+        lastParent.id,
+        currentForm.formActions,
+        currentForm.form,
+      ))
     }
     if (showModal) {
       dispatch(modals.actions.showModal(true, getEditModalName(modelName), {

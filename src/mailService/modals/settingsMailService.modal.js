@@ -15,7 +15,7 @@ import * as actions from '../actions'
 const stateToProps = (state) => {
   return {
     title: intlObject.intl.formatMessage(messages.settings),
-    size: MODAL_SIZES.small,
+    size: MODAL_SIZES.medium,
 
     settingsMailServiceForm: forms.selectors.settingsMailServiceForm.getForm(state),
 

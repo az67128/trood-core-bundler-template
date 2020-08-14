@@ -213,7 +213,7 @@ Each page has the following attributes:
 
 .. attribute:: icon
 
-    iconType constants that will be used as TIcon.ICONS_TYPES[iconType]
+    iconType constants that will be used as TIcon.ICONS_TYPES[iconType] in menu
 
 .. attribute:: components
 
@@ -248,7 +248,6 @@ Each page has the following attributes:
               type: 'grid',
               components: [
                 {
-                  id: 'clients-header',
                   type: 'CoreComponents/ClientsHeader',
                   span: 3,
                   withMargin: true,
@@ -306,13 +305,13 @@ entityPages is an object that contains a description of entity objects
 pages components configuration
 ********************************
 
-.. attribute:: id
-
-    component id
-
 .. attribute:: type
 
     type of the component in the component library
+
+.. attribute:: title
+
+    passed to component props.title after i18n transform
 
 .. attribute:: span
 
@@ -326,6 +325,10 @@ pages components configuration
 
     in the model we indicate with which BO the component is associated
 
+.. attribute:: props
+
+   content passed to component props
+
 **components array example:**
 
 .. code-block:: javascript
@@ -333,14 +336,17 @@ pages components configuration
     ...
       components: [
         {
-          id: 'clients-table',
           type: 'CoreComponents/ClientsTableView',
+          title: 'Title',
           span: 12,
           withMargin: true,
           models: {
             client: 'client',
             clientType: 'clientType',
             employee: 'employee',
+          },
+          props: {
+            prop1: true,
           },
         },
       ],
