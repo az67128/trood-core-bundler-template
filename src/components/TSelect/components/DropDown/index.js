@@ -68,6 +68,7 @@ class DropDown extends PureComponent {
     maxRows: DEFAULT_MAX_ROWS,
     autoScroll: true,
     errors: [],
+    tabIndex: 0,
 
     onChange: () => {},
     onBlur: () => {},
@@ -112,7 +113,7 @@ class DropDown extends PureComponent {
     }
   }
 
-  toggleOpen(value) {
+  toggleOpen(value, focusedItem) {
     const { disabled, onBlur, onFocus } = this.props
     if (!disabled) {
       const open = value === undefined ? !this.state.open : value
@@ -124,7 +125,7 @@ class DropDown extends PureComponent {
           this.handleSearch()
         }
       }
-      this.setState({ open, innerSearch: undefined, focusedItem: undefined })
+      this.setState({ open, innerSearch: undefined, focusedItem })
     }
   }
 
@@ -141,7 +142,7 @@ class DropDown extends PureComponent {
 
     if (e.key === KEY_CODES.arrowDown) {
       if (!open) {
-        this.toggleOpen()
+        this.toggleOpen(true, 0)
       } else if (items.length) {
         this.setState({
           focusedItem: focusedItem === undefined || focusedItem === items.length - 1 ? 0 : focusedItem + 1,
@@ -167,6 +168,8 @@ class DropDown extends PureComponent {
           ...this.props,
           onChange: this.handleChange,
         })
+      } else {
+        this.toggleOpen(true, 0)
       }
       e.preventDefault()
     }
@@ -216,6 +219,7 @@ class DropDown extends PureComponent {
       showSearch,
       iconProps,
 
+      tabIndex,
       disabled,
       errors,
       isLoading,
@@ -248,7 +252,7 @@ class DropDown extends PureComponent {
     return (
       <TClickOutside onClick={() => this.toggleOpen(false)}>
         <div {...{
-          tabIndex: 0,
+          tabIndex: disabled ? -1 : tabIndex,
           style: mainSelectContainerStyle,
           className: classNames(
             controlClassName,

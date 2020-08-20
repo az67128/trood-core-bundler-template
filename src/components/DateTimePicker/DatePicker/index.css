@@ -7,6 +7,12 @@
   padding: 0 10px;
 }
 
+.root:focus {
+  border-color: var(--trood-blue);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
 .root.error {
   border-color: var(--trood-red);
 }
