@@ -10,7 +10,7 @@ import TClickOutside from '$trood/components/TClickOutside'
 import TIcon, { ICONS_TYPES, ROTATE_TYPES } from '$trood/components/TIcon'
 import TLabel from '$trood/components/TLabel'
 
-import { DEFAULT_DATE_FORMAT } from '$trood/mainConstants'
+import { DEFAULT_DATE_FORMAT, KEY_CODES } from '$trood/mainConstants'
 import localeService, { intlObject } from '$trood/localeService'
 
 import { CALENDAR_TYPES, CALENDAR_TYPES_FORMAT, CALENDAR_POSITIONS } from '../constants'
@@ -43,6 +43,7 @@ class DatePicker extends PureComponent {
   }
 
   static defaultProps = {
+    tabIndex: 0,
     calendarPosition: CALENDAR_POSITIONS.left,
     validate: {},
     onChange: () => {},
@@ -133,6 +134,8 @@ class DatePicker extends PureComponent {
     this.handleOnChange = this.handleOnChange.bind(this)
     this.handleOnScroll = this.handleOnScroll.bind(this)
     this.handleValidate = this.handleValidate.bind(this)
+    this.changeValueToDiff = this.changeValueToDiff.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
   componentDidMount() {
@@ -168,10 +171,11 @@ class DatePicker extends PureComponent {
     this.setState(newState)
   }
 
-  toggleCalendarType() {
+  toggleCalendarType(offset) {
     const { type } = this.state
-    const nextType = DatePicker.getNextType(type)
+    const nextType = DatePicker.getNextType(type, Number.isInteger(offset) ? offset : undefined)
     if (nextType) this.setState({ type: nextType })
+    return nextType
   }
 
   handleOnChange(value, notTypeChange) {
@@ -184,15 +188,17 @@ class DatePicker extends PureComponent {
       newValue = undefined
     }
     if (notTypeChange) newType = type
-    this.setState({ type: newType })
+    const newState = { type: newType }
+    if (newValue) newState.lastValue = newValue.format(DEFAULT_DATE_FORMAT)
+    this.setState(newState)
     onChange(newValue)
   }
 
   handleOnScroll(offset) {
-    let { type } = this.state
+    let { type, lastValue } = this.state
     let { value } = this.props
     type = DatePicker.getNextType(type) || type
-    value = moment(value).add({ [type]: offset })
+    value = moment(value || lastValue).add({ [type]: offset })
     this.handleOnChange(value, true)
   }
 
@@ -210,6 +216,59 @@ class DatePicker extends PureComponent {
     }
   }
 
+  changeValueToDiff(diff) {
+    const { value } = this.props
+    const { type, lastValue } = this.state
+    const newValue = moment(value || lastValue).add({ [type]: diff })
+    this.handleOnChange(newValue, true)
+  }
+
+  handleKeyDown(e) {
+    const { open, type } = this.state
+
+    if (e.key === KEY_CODES.arrowDown) {
+      if (!open) {
+        this.toggleOpen(true)
+      } else {
+        let diffValue = 7
+        if (type !== CALENDAR_TYPES.day) diffValue = 3
+        this.changeValueToDiff(diffValue)
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.arrowUp) {
+      if (open) {
+        let diffValue = -7
+        if (type !== CALENDAR_TYPES.day) diffValue = -3
+        this.changeValueToDiff(diffValue)
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.arrowLeft) {
+      if (open) {
+        this.changeValueToDiff(-1)
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.arrowRight) {
+      if (open) {
+        this.changeValueToDiff(1)
+      }
+      e.preventDefault()
+    } else if (e.key === KEY_CODES.esc) {
+      if (open) {
+        this.toggleOpen(false)
+      }
+      e.preventDefault()
+    } else {
+      if (e.key === KEY_CODES.enter) {
+        if (open) {
+          if(!this.toggleCalendarType(-1)) this.toggleOpen(false)
+        } else {
+          this.toggleOpen(true)
+        }
+        e.preventDefault()
+      }
+    }
+  }
+
   render() {
     const {
       calendarPosition,
@@ -220,18 +279,21 @@ class DatePicker extends PureComponent {
         checkOnBlur,
         required,
       },
+      tabIndex,
       disabled,
       errors,
       className,
     } = this.props
 
     const {
+      lastValue,
       type,
       open,
       wasBlured,
     } = this.state
 
-    const calendarArray = DatePicker.getCalendarArray(value, type)
+    const renderValue = value || lastValue
+    const calendarArray = DatePicker.getCalendarArray(renderValue, type)
 
     const calendarFirstWeek = calendarArray[0]
 
@@ -256,6 +318,8 @@ class DatePicker extends PureComponent {
               disabled && style.disabled,
               open && style.open,
             ),
+            tabIndex: disabled ? -1 : tabIndex,
+            onKeyDown: this.handleKeyDown,
           }}>
             <div {...{
               className: style.header,
@@ -289,7 +353,7 @@ class DatePicker extends PureComponent {
                     className: style.bodyHeaderTitle,
                     onClick: this.toggleCalendarType,
                   }}>
-                    {nextType && moment(value).format(CALENDAR_TYPES_FORMAT[nextType])}
+                    {nextType && moment(renderValue).format(CALENDAR_TYPES_FORMAT[nextType])}
                   </div>
                   <TIcon {...{
                     type: ICONS_TYPES.arrowWithTail,
@@ -314,7 +378,7 @@ class DatePicker extends PureComponent {
                       {row.map((item, j) => {
                         const isSameAsValue = !!value && DatePicker.getIsSameAsValue(value, item, type)
                         const isCurrentDate = DatePicker.getIsSameAsValue(moment(), item, type)
-                        const isSameAsPeriod = DatePicker.getIsSameAsPeriod(value, item, type)
+                        const isSameAsPeriod = DatePicker.getIsSameAsPeriod(renderValue, item, type)
                         const cellDisabled = this.getIsOutOfRange(item)
                         return (
                           <div {...{

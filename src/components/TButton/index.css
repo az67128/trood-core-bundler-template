@@ -19,6 +19,10 @@
   border-radius: var(--trood-border-radius);
 }
 
+.root:focus {
+  outline: none;
+}
+
 .thin {
   font-size: 10px;
 }
@@ -157,6 +161,10 @@ input.button {
   background-color: var(--trood-red);
 }
 
+.red:focus {
+  box-shadow: 0 0 10px color-mod(var(--trood-red) a(0.5));
+}
+
 .red:not(.disabled):hover {
   color: var(--trood-red-hover);
   background-color: var(--trood-red-hover);
@@ -165,6 +173,10 @@ input.button {
 .blue {
   color: var(--trood-white);
   background-color: var(--trood-blue);
+}
+
+.blue:focus {
+  box-shadow: 0 0 10px color-mod(var(--trood-blue) a(0.5));
 }
 
 .blue.border {
@@ -182,6 +194,10 @@ input.button {
   background-color: var(--trood-gray-super-dark);
 }
 
+.gray:focus {
+  box-shadow: 0 0 10px color-mod(var(--trood-gray-super-dark) a(0.5));
+}
+
 .gray:not(.disabled):hover {
   color: var(--trood-white);
   background-color: var(--trood-gray-extra-dark);
@@ -192,6 +208,10 @@ input.button {
   background-color: var(--trood-orange);
 }
 
+.orange:focus {
+  box-shadow: 0 0 10px color-mod(var(--trood-orange) a(0.5));
+}
+
 .orange:not(.disabled):hover {
   color: var(--trood-white);
   background-color: var(--trood-orange-hover);
@@ -200,6 +220,10 @@ input.button {
 .green {
   color: var(--trood-white);
   background-color: var(--trood-green);
+}
+
+.green:focus {
+  box-shadow: 0 0 10px color-mod(var(--trood-green) a(0.5));
 }
 
 .green:not(.disabled):hover {
