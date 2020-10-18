@@ -13,6 +13,8 @@ import {Link} from 'react-router-dom'
 import { Switch  } from 'react-router-dom'
 import Context from './Context'
 import Route from './Route'
+import Remote from './Remote'
+
 export default {
   Row,
   Cell,
@@ -29,4 +31,5 @@ export default {
   TLabel,
   Spacer,
   Context,
+  Remote,
 }

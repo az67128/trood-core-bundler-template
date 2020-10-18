@@ -2,6 +2,7 @@ import layout from './layout.js'
 import clients from './clients.js'
 import client from './client.js'
 import modal from './modal.js'
+import remote from './remote.js'
 
 export default layout([
   {
@@ -39,5 +40,10 @@ export default layout([
     name: 'Route',
     props:{path: '/modal'},
     components: modal,
+  },
+  {
+    name: 'Route',
+    props:{path: '/remote'},
+    components: remote,
   },
 ])

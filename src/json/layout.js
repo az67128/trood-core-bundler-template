@@ -104,6 +104,29 @@ export default (components) => ({
                         },
                       ],
                     },
+                    {
+                      name: 'Cell',
+                      components: [
+                        {
+                          name: 'Link',
+                          props: {
+                            to: '/remote',
+                            children: {
+                              $type: '$expression',
+                              rule: [
+                                {
+                                  $type: '$data',
+                                  path: '$route.location.pathname',
+                                },
+                                '/remote',
+                                'Remote*',
+                                'Remote',
+                              ],
+                            },
+                          },
+                        },
+                      ],
+                    },
                   ],
                 },
               ],
