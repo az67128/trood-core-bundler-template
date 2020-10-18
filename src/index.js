@@ -3,11 +3,40 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import { getStore } from 'trood-restify';
+import {BrowserRouter as Router} from "react-router-dom";
+import StoreContext from 'core/StoreContext';
 
+const meta = {
+  custodian: {
+      apiHost: 'https://trood.trood.legal/',
+      entityDataAddress: 'data',
+      arrayDataAddress: 'data',
+      arrayCountAddress: 'total_count',
+      objects: {
+         
+          client: {
+              pk: 'id',
+              endpoint: '/custodian/data/client',
+              fields: {
+                  id: 'number',
+                  name: 'string',
+                 
+                  revenue: 'number'
+              },
+          },
+      },
+  },
+};
+const store = getStore(meta, () => 'Token 8dae765ac3e8487e8f5e0a07c617864b');
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+     <StoreContext.Provider value={store}>
+            <Router>
+                <App />
+            </Router>
+        </StoreContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
