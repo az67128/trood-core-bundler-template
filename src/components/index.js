@@ -10,9 +10,9 @@ import TButton from './TButton'
 import TLabel from './TLabel'
 import Spacer from './Spacer'
 import {Link} from 'react-router-dom'
-import { Switch, Route } from 'react-router-dom'
+import { Switch  } from 'react-router-dom'
 import Context from './Context'
-
+import Route from './Route'
 export default {
   Row,
   Cell,

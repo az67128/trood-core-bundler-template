@@ -94,8 +94,6 @@ const BaseComponent = ({ components, $context, $page }) => {
         : {}
       if (!connectedProps.children && component.name !== 'img') connectedProps.children = [childBaseComponent]
 
-      // console.log(`render of ${component.name || component.name}-${component.id}`);
-
       return <Component key={component.id} {...connectedProps} />
     })
   })

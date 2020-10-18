@@ -28,18 +28,7 @@ export default layout([
       path: '/client/:id',
       title: 'Client',
     },
-    components: [
-      {
-        name: 'Context',
-        props: {
-          context: {
-            $type: '$data',
-            path: '$store.apis.custodian.client.getByPk[{"$type":"$data", "path":"$route.params.id"}]',
-          },
-          components: client,
-        },
-      },
-    ],
+    components: client,
   },
   {
     name: 'Route',
