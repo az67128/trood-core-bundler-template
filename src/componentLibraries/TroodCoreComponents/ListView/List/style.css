@@ -1,5 +1,0 @@
-.cardItem:not(:last-child) {
-  border-bottom: 1px solid var(--trood-gray-bg);
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-}
