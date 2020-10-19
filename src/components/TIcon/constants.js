@@ -1,4 +1,4 @@
-import { snakeToCamel, camelToLowerSnake } from '$trood/helpers/namingNotation'
+import { snakeToCamel, camelToLowerSnake } from 'components/helpers/namingNotation'
 const context = require.context('./components', true, /\.js$/)
 
 

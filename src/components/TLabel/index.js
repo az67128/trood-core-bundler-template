@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 
-import style from './index.css'
+import style from './index.module.css'
 
 /**
  * Component for output label.

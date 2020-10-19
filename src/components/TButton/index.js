@@ -1,13 +1,12 @@
+
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
+import styled from "styled-components"
+import style from './index.module.css'
 
-import { KEY_CODES } from '$trood/mainConstants'
-
-import style from './index.css'
-
-import TIcon, { ICONS_TYPES } from '$trood/components/TIcon'
+import TIcon, { ICONS_TYPES } from 'components/TIcon'
 
 import {
   BUTTON_TYPES,
@@ -123,44 +122,12 @@ class TButton extends PureComponent {
   }
 
   static defaultProps = {
-    tabIndex: 0,
     type: BUTTON_TYPES.fill,
     color: BUTTON_COLORS.blue,
     disabled: false,
     thin: false,
     className: '',
     onClick: () => {},
-  }
-
-  constructor(props) {
-    super(props)
-    this.setRef = this.setRef.bind(this)
-    this.setControlRef = this.setControlRef.bind(this)
-    this.handleClick = this.handleClick.bind(this)
-    this.handleKeyDown = this.handleKeyDown.bind(this)
-  }
-
-  setRef(node) {
-    this.node = node
-  }
-
-  setControlRef(node) {
-    this.control = node
-  }
-
-  handleClick() {
-    const { onClick } = this.props
-    if (onClick) {
-      onClick()
-    }
-  }
-
-  handleKeyDown(e) {
-    if (e.key === KEY_CODES.enter) {
-      e.preventDefault()
-      if (this.control) this.control.click()
-      if (this.node) this.node.blur()
-    }
   }
 
   render() {
@@ -174,6 +141,7 @@ class TButton extends PureComponent {
       onClick,
       className,
       link,
+      tooltip,
     } = this.props
 
     const specialLabel = BUTTON_SPECIAL_ICONS[specialType]
@@ -189,43 +157,35 @@ class TButton extends PureComponent {
     )
 
     return (
-      <div {...{
-        ref: this.setRef,
-        tabIndex: disabled ? -1 : tabIndex,
-        onKeyDown: this.handleKeyDown,
-        className: classNames(
-          style.root,
-          className,
-          style[type],
-          style[color],
-          specialType && style[specialType],
-          thin && style.thin,
-          disabled && style.disabled,
-        ),
-      }}>
-        {onClick && !link && (
+      <acronym title={tooltip} className={classNames(
+        style.root,
+        className,
+        style[type],
+        style[color],
+        specialType && style[specialType],
+        thin && style.thin,
+        disabled && style.disabled,
+      )}>
+        {!link &&
           <button {...{
-            ref: this.setControlRef,
             'data-cy': this.props.label,
             className: style.button,
             disabled,
-            onClick: this.handleClick,
-            tabIndex: -1,
+            onClick: () => onClick(),
+            tabIndex,
           }} >
           </button>
-        )}
-        {link && (
+        }
+        {link &&
           <Link {...{
-            ref: this.setControlRef,
             'data-cy': this.props.label,
             to: link,
             className: style.link,
-            onClick: this.handleClick,
-            tabIndex: -1,
+            onClick: () => onClick(),
           }} />
-        )}
+        }
         {label}
-      </div>
+      </acronym>
     )
   }
 }
@@ -236,4 +196,6 @@ export {
   BUTTON_TYPES,
 } from './constants'
 
-export default TButton
+export default styled(TButton)`
+${props => props.style || ''}
+`

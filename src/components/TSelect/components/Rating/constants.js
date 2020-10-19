@@ -1,1 +1,0 @@
-export const MOUSE_EVENT_DEBOUNCE = 500

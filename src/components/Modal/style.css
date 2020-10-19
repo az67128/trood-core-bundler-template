@@ -1,0 +1,10 @@
+.modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: silver;
+    min-width: 100px;
+    min-height: 100px;
+    z-index: 2;
+}

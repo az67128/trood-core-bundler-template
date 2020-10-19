@@ -10,7 +10,7 @@ import {
   ROTATE_VALUES,
 } from './constants'
 
-import style from './index.css'
+import style from './index.module.css'
 
 /**
  * Component for output icon.
