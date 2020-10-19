@@ -1,10 +1,7 @@
 import React from 'react'
 import { createRequires, createUseRemoteComponent } from '@paciolan/remote-component'
+import { resolve } from 'remote-component.config.js'
 
-const resolve = {
-  react: require('react'),
-  'prop-types': require('prop-types'),
-}
 const requires = createRequires(resolve)
 const useRemoteComponent = createUseRemoteComponent({ requires })
 
