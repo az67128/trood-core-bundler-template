@@ -4,4 +4,3 @@ module.exports = {
     'prop-types': require('prop-types'),
   },
 }
-  
