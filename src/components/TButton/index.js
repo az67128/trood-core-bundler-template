@@ -1,9 +1,8 @@
-
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import styled from "styled-components"
+import styled from 'styled-components'
 import style from './index.module.css'
 
 import TIcon, { ICONS_TYPES } from 'components/TIcon'

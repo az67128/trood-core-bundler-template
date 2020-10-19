@@ -6,7 +6,15 @@ import './index.css'
 
 
 
-const Row = ({children, className = '', noGutters = false, verticalPadding, topPadding, bottomPadding, bddmark = 'строка'}) => {
+const Row = ({
+  children,
+  className = '',
+  noGutters = false,
+  verticalPadding,
+  topPadding,
+  bottomPadding,
+  bddmark = 'строка',
+}) => {
   const style = {
     paddingTop: `${verticalPadding || topPadding}px`,
     paddingBottom: `${verticalPadding || bottomPadding}px`,
