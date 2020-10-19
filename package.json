@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "classnames": "^2.2.6",
+    "cross-env": "^7.0.2",
     "lodash": "^4.17.20",
     "mobx": "^5.15.6",
     "mobx-react": "^6.3.0",
@@ -23,8 +24,8 @@
     "trood-restify": "git+https://github.com/Q-CIS-DEV/trood-restify.git"
   },
   "scripts": {
-    "start": "EXTEND_ESLINT=true react-scripts start",
-    "build": "EXTEND_ESLINT=true react-scripts build",
+    "start": "cross-env EXTEND_ESLINT=true react-scripts start",
+    "build": "cross-env EXTEND_ESLINT=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
