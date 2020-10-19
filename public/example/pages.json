@@ -1,0 +1,48 @@
+{
+    "components": [
+        {
+            "name": "Route",
+            "props": { "path": "/", "title": "Root", "exact": true },
+
+            "components": [
+                {
+                    "name": "div",
+                    "props": {
+                        "children": "Main"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Route",
+            "props": { "path": "/clients", "title": "Clients", "exact": true },
+            "chunk": "example/clients.json"
+            
+        },
+        {
+            "name": "Route",
+            "props": {
+                "path": "/client/:id",
+                "title": "Client"
+            },
+            "chunk": "example/client.json"
+            
+        },
+        {
+            "name": "Route",
+            "props": { "path": "/matters", "title": "Matters" },
+            "components": [{ "name": "div", "props": { "children": "matters" } }]
+        },
+        {
+            "name": "Route",
+            "props": { "path": "/modal" },
+            "chunk": "example/modal.json"
+            
+        },
+        {
+            "name": "Route",
+            "props": { "path": "/remote" },
+            "chunk": "example/remote.json"
+        }
+    ]
+}

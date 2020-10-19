@@ -25,14 +25,14 @@ const List = ({
   return useObserver(() => (
     <div>
       {topComponents && (
-        <BaseComponent $context={{ nextPage, prevPage }} components={topComponentsStore.components} />
+        <BaseComponent $context={{ nextPage, prevPage }} component={topComponentsStore} />
       )}
       {entity.getPage(page, 5).map((item) => (
-        <BaseComponent key={item.name} $context={item} components={componentsStore.components} />
+        <BaseComponent key={item.name} $context={item} component={componentsStore} />
       ))}
            
       {bottomComponents && (
-        <BaseComponent $context={{ nextPage, prevPage }} components={bottomComponentsStore.components} />
+        <BaseComponent $context={{ nextPage, prevPage }} component={bottomComponentsStore} />
       )}
     </div>
   ))

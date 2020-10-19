@@ -4,10 +4,8 @@ import StoreContext from 'core/StoreContext'
 import { useObserver } from 'mobx-react-lite'
 import { useLocation, useParams } from 'react-router-dom'
 
-
 const getData = (path, $data) => {
-    
-  const connectedPath = path.replace(/\[.*?\]/g, (replacement)=>{
+  const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
     const parsedParams = JSON.parse(replacement)
     const connectedParams = parsedParams.map((param) => {
       // TODO: fix conveersion id from string to number
@@ -15,9 +13,9 @@ const getData = (path, $data) => {
     })
     return JSON.stringify(connectedParams)
   })
-    
+
   const paths = connectedPath.split('.')
-    
+
   return paths.reduce((memo, key) => {
     if (memo === undefined) return memo
     if (memo[key]) return memo[key]
@@ -31,42 +29,50 @@ const getData = (path, $data) => {
   }, $data)
 }
 
-function applyTemplate(template, map, fallback='') {
-  return template.replace(/\$\{[^}]+\}/g, (match) => 
+function applyTemplate(template, map, fallback = '') {
+  return template.replace(/\$\{[^}]+\}/g, (match) =>
     match
       .slice(2, -1)
       .trim()
       .split('.')
-      .reduce(
-        (searchObject, key) => searchObject[key] || fallback || match,
-        map,
-      ),
+      .reduce((searchObject, key) => searchObject[key] || fallback || match, map),
   )
 }
 
-const BaseComponent = ({ components, $context, $page }) => {
+const BaseComponent = ({ component, $context, $page, chunk }) => {
+  
   const store = React.useContext(StoreContext)
+  React.useEffect(()=>{
+    if(component) component.loadChunk()
+  },[component])
   const location = useLocation()
   const params = useParams()
-    
-  const $data = { $store: store, $route:{params, location}, $context, $page }
 
+  const $data = { $store: store, $route: { params, location }, $context, $page }
+  
   return useObserver(() => {
-    if (!components) return null
-    return components.map((component) => {
-      const Component = coreComponents[component.name] || component.name
+    
+    if (!component || !component.components) return null
+    if(component.isLoading) return 'Loading...'
+    return component.components.map((childComponent) => {
+      const Component = coreComponents[childComponent.name] || childComponent.name
       const childBaseComponent = (
-        <BaseComponent key="Base" components={component.components} $context={$context} $page={$page} />
+        <BaseComponent
+          key="Base"
+          component={childComponent}
+          $context={$context}
+          $page={$page}
+        />
       )
-      const connectedProps = component.props
-        ? Object.keys(component.props).reduce(
+      const connectedProps = childComponent.props
+        ? Object.keys(childComponent.props).reduce(
           (memo, key) => {
-            const item = component.props[key]
+            const item = childComponent.props[key]
             if (typeof item === 'object' && item.$type === '$data') {
               let propValue = getData(item.path, $data)
-              
-              if(item.tamplate) {
-                propValue = applyTemplate(item.tamplate, {value:propValue})
+
+              if (item.tamplate) {
+                propValue = applyTemplate(item.tamplate, { value: propValue })
               }
               return { ...memo, [key]: propValue }
             }
@@ -83,18 +89,18 @@ const BaseComponent = ({ components, $context, $page }) => {
             if (key === 'children') {
               return {
                 ...memo,
-                [key]: [...component.props[key], childBaseComponent],
+                [key]: [...childComponent.props[key], childBaseComponent],
               }
             }
 
             return memo
           },
-          { ...component.props },
+          { ...childComponent.props },
         )
         : {}
-      if (!connectedProps.children && component.name !== 'img') connectedProps.children = [childBaseComponent]
+      if (!connectedProps.children && childComponent.name !== 'img') connectedProps.children = [childBaseComponent]
 
-      return <Component key={component.id} {...connectedProps} />
+      return <Component key={childComponent.id} {...connectedProps} />
     })
   })
 }

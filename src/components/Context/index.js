@@ -5,7 +5,7 @@ import { Component } from 'core/pageStore/index.js'
 const Context = ({context, components})=>{
   const componentsStore = Component.create({ components })
   
-  return <BaseComponent $context={ context } components={componentsStore.components} />
+  return <BaseComponent $context={ context } component={componentsStore} />
 }
 
 export default Context
