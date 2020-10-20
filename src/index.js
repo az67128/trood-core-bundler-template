@@ -38,7 +38,7 @@ const meta = {
   },
 }
 const store = getStore(meta, () => 'Token 8dae765ac3e8487e8f5e0a07c617864b')
-window.store = store
+
 ReactDOM.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
