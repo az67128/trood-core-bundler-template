@@ -45,7 +45,6 @@ const BaseComponent = ({ component, $context, $page, chunk }) => {
   return useObserver(() => {
     
     if (!component || !component.components) return null
-    if(component.isLoading && component.components.length === 0) return 'Loading...'
     return component.components.map((childComponent) => {
       const Component = coreComponents[childComponent.name] || childComponent.name
       const childBaseComponent = (

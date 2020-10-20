@@ -16,6 +16,9 @@
         {
             "name": "Route",
             "props": { "path": "/clients", "title": "Clients", "exact": true },
+            "components": [
+                { "name": "div", "props": { "children": "Loading..." } }
+            ],
             "chunk": "example/clients.json"
             
         },
@@ -25,6 +28,9 @@
                 "path": "/client/:id",
                 "title": "Client"
             },
+            "components": [
+                { "name": "div", "props": { "children": "Loading..." } }
+            ],
             "chunk": "example/client.json"
             
         },
@@ -36,12 +42,18 @@
         {
             "name": "Route",
             "props": { "path": "/modal" },
+            "components": [
+                { "name": "div", "props": { "children": "Loading..." } }
+            ],
             "chunk": "example/modal.json"
             
         },
         {
             "name": "Route",
             "props": { "path": "/remote" },
+            "components": [
+                { "name": "div", "props": { "children": "Loading..." } }
+            ],
             "chunk": "example/remote.json"
         }
     ]

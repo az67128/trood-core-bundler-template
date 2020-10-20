@@ -46,7 +46,7 @@
                                                         "to": "/clients",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/clients\" ? \"Clients*\" : \"Clients\"" 
+                                                            "expression": "data(\"$route.location.pathname\") == \"/clients\" ? \"Clients*\" : \"Clients\""
                                                         }
                                                     }
                                                 }
@@ -61,7 +61,7 @@
                                                         "to": "/matters",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/matters\" ? \"Matters*\" : \"Matters\"" 
+                                                            "expression": "data(\"$route.location.pathname\") == \"/matters\" ? \"Matters*\" : \"Matters\""
                                                         }
                                                     }
                                                 }
@@ -76,7 +76,7 @@
                                                         "to": "/modal",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/modal\" ? \"Modal*\" : \"Modal\"" 
+                                                            "expression": "data(\"$route.location.pathname\") == \"/modal\" ? \"Modal*\" : \"Modal\""
                                                         }
                                                     }
                                                 }
@@ -91,7 +91,7 @@
                                                         "to": "/remote",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/remote\" ? \"Remote*\" : \"Remote\"" 
+                                                            "expression": "data(\"$route.location.pathname\") == \"/remote\" ? \"Remote*\" : \"Remote\""
                                                         }
                                                     }
                                                 }
@@ -116,7 +116,20 @@
                                 },
                                 {
                                     "name": "Row",
-                                    "components": [{ "name": "Cell", "components": [{ "name": "Switch", "chunk":"example/pages.json" }] }]
+                                    "components": [
+                                        {
+                                            "name": "Cell",
+                                            "components": [
+                                                {
+                                                    "name": "Switch",
+                                                    "components": [
+                                                        { "name": "div", "props": { "children": "Loading..." } }
+                                                    ],
+                                                    "chunk": "example/pages.json"
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 }
                             ]
                         }
