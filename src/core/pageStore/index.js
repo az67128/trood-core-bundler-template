@@ -37,6 +37,11 @@ export const Page = types
   .model('Page', {
     modals: types.map(types.model('Modal', { isOpen: types.optional(types.boolean, false) })),
   })
+  .views((model) => ({
+    isModalOpen(name) {
+      return model.modals.get(name)?.isOpen
+    },
+  }))
   .actions((model) => ({
     openModal(name) {
       model.modals.set(name, { isOpen: true })
@@ -45,8 +50,4 @@ export const Page = types
       model.modals.set(name, { isOpen: false })
     },
   }))
-  .views((model) => ({
-    isModalOpen(name) {
-      return model.modals.get(name)?.isOpen
-    },
-  }))
+  
