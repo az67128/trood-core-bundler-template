@@ -31,9 +31,8 @@
                                                 "name": "Link",
                                                 "props": {
                                                     "to": {
-                                                        "$type": "$data",
-                                                        "path": "$context.id",
-                                                        "tamplate": "/client/${value}"
+                                                        "$type": "$expression",
+                                                        "expression": "\"/client/\" || data(\"$context.id\")"
                                                     },
                                                     "children": { "$type": "$data", "path": "$context.name" }
                                                 }

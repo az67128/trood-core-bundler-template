@@ -46,15 +46,7 @@
                                                         "to": "/clients",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "rule": [
-                                                                {
-                                                                    "$type": "$data",
-                                                                    "path": "$route.location.pathname"
-                                                                },
-                                                                "/clients",
-                                                                "Clients*",
-                                                                "Clients"
-                                                            ]
+                                                            "expression": "data(\"$route.location.pathname\") == \"/clients\" ? \"Clients*\" : \"Clients\"" 
                                                         }
                                                     }
                                                 }
@@ -69,15 +61,7 @@
                                                         "to": "/matters",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "rule": [
-                                                                {
-                                                                    "$type": "$data",
-                                                                    "path": "$route.location.pathname"
-                                                                },
-                                                                "/matters",
-                                                                "Matters*",
-                                                                "Matters"
-                                                            ]
+                                                            "expression": "data(\"$route.location.pathname\") == \"/matters\" ? \"Matters*\" : \"Matters\"" 
                                                         }
                                                     }
                                                 }
@@ -92,15 +76,7 @@
                                                         "to": "/modal",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "rule": [
-                                                                {
-                                                                    "$type": "$data",
-                                                                    "path": "$route.location.pathname"
-                                                                },
-                                                                "/modal",
-                                                                "Modal*",
-                                                                "Modal"
-                                                            ]
+                                                            "expression": "data(\"$route.location.pathname\") == \"/modal\" ? \"Modal*\" : \"Modal\"" 
                                                         }
                                                     }
                                                 }
@@ -115,15 +91,7 @@
                                                         "to": "/remote",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "rule": [
-                                                                {
-                                                                    "$type": "$data",
-                                                                    "path": "$route.location.pathname"
-                                                                },
-                                                                "/remote",
-                                                                "Remote*",
-                                                                "Remote"
-                                                            ]
+                                                            "expression": "data(\"$route.location.pathname\") == \"/remote\" ? \"Remote*\" : \"Remote\"" 
                                                         }
                                                     }
                                                 }

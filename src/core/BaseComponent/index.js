@@ -3,6 +3,8 @@ import coreComponents from 'components'
 import StoreContext from 'core/StoreContext'
 import { useObserver } from 'mobx-react-lite'
 import { useLocation, useParams } from 'react-router-dom'
+import {Parser} from 'expr-eval'
+
 
 const getData = (path, $data) => {
   const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
@@ -29,16 +31,6 @@ const getData = (path, $data) => {
   }, $data)
 }
 
-function applyTemplate(template, map, fallback = '') {
-  return template.replace(/\$\{[^}]+\}/g, (match) =>
-    match
-      .slice(2, -1)
-      .trim()
-      .split('.')
-      .reduce((searchObject, key) => searchObject[key] || fallback || match, map),
-  )
-}
-
 const BaseComponent = ({ component, $context, $page, chunk }) => {
   
   const store = React.useContext(StoreContext)
@@ -53,7 +45,7 @@ const BaseComponent = ({ component, $context, $page, chunk }) => {
   return useObserver(() => {
     
     if (!component || !component.components) return null
-    if(component.isLoading) return 'Loading...'
+    if(component.isLoading && component.components.length === 0) return 'Loading...'
     return component.components.map((childComponent) => {
       const Component = coreComponents[childComponent.name] || childComponent.name
       const childBaseComponent = (
@@ -69,17 +61,17 @@ const BaseComponent = ({ component, $context, $page, chunk }) => {
           (memo, key) => {
             const item = childComponent.props[key]
             if (typeof item === 'object' && item.$type === '$data') {
-              let propValue = getData(item.path, $data)
-
-              if (item.tamplate) {
-                propValue = applyTemplate(item.tamplate, { value: propValue })
-              }
+              const propValue = getData(item.path, $data)
               return { ...memo, [key]: propValue }
             }
 
             if (typeof item === 'object' && item.$type === '$expression') {
-              const val = getData(item.rule[0].path, $data)
-              return { ...memo, [key]: val === item.rule[1] ? item.rule[2] : item.rule[3] }
+              const  parser = new Parser()
+              parser.functions.data = function (path) {
+                return getData(path, $data)
+              }
+              const val = parser.evaluate(item.expression)
+              return { ...memo, [key]: val }
             }
 
             if (typeof item === 'object' && item.$type === '$action') {
