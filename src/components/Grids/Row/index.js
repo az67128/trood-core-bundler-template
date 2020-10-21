@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import './index.css'
-
 
 
 const Row = ({
@@ -41,4 +39,4 @@ Row.propTypes = {
   bddmark: PropTypes.string,
 }
 
-export default styled(Row)`${props => props.style || ''}`
+export default Row

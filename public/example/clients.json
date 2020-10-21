@@ -1,6 +1,6 @@
 {
     "components": [
-        { "name": "TLabel", "props": { "label": "Clients" } },
+        { "name": "Label", "props": { "label": "Clients" } },
         { "name": "Spacer", "props": { "size": 16 } },
         {
             "name": "Cell",
@@ -44,7 +44,7 @@
                         ],
                         "topComponents": [
                             {
-                                "name": "TButton",
+                                "name": "Button",
                                 "props": {
                                     "specialType": "arrowLeft",
                                     "type": "text",
@@ -53,7 +53,7 @@
                                 }
                             },
                             {
-                                "name": "TButton",
+                                "name": "Button",
                                 "props": {
                                     "specialType": "arrowRight",
                                     "type": "text",
@@ -61,8 +61,7 @@
                                     "onClick": { "$type": "$data", "path": "$context.nextPage" }
                                 }
                             }
-                        ],
-                        "bottomComponents": []
+                        ]
                     }
                 }
             ]

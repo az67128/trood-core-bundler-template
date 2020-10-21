@@ -1,0 +1,89 @@
+{
+  "components": [
+    {
+      "name": "Label",
+      "props": {
+        "label": "Components"
+      }
+    },
+    {
+      "name": "Spacer",
+      "props": {
+        "size": 16
+      }
+    },
+    {
+      "name": "Cell",
+      "components": [
+        {
+          "name": "DateTimePicker",
+          "props": {
+            "label": "DateTimePicker",
+            "value": "2020-09-18"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Spacer",
+      "props": {
+        "size": 16
+      }
+    },
+    {
+      "name": "Cell",
+      "components": [
+        {
+          "name": "Checkbox",
+          "props": {
+            "label": "Checkbox",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Spacer",
+      "props": {
+        "size": 16
+      }
+    },
+    {
+      "name": "Cell",
+      "components": [
+        {
+          "name": "Icon",
+          "props": {
+            "label": "Icon",
+            "type": "edit",
+            "size": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "Spacer",
+      "props": {
+        "size": 16
+      }
+    },
+    {
+      "name": "Cell",
+      "components": [
+        {
+          "name": "Input",
+          "props": {
+            "label": "Input",
+            "value": "Input"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Spacer",
+      "props": {
+        "size": 16
+      }
+    }
+  ]
+}

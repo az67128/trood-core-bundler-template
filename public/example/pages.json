@@ -55,6 +55,14 @@
                 { "name": "div", "props": { "children": "Loading..." } }
             ],
             "chunk": "example/remote.json"
+        },
+        {
+          "name": "Route",
+          "props": { "path": "/components" },
+          "components": [
+            { "name": "div", "props": { "children": "Loading..." } }
+          ],
+          "chunk": "example/components.json"
         }
     ]
 }

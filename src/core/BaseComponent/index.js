@@ -3,7 +3,7 @@ import coreComponents from 'components'
 import StoreContext from 'core/StoreContext'
 import { useObserver } from 'mobx-react-lite'
 import { useLocation, useParams } from 'react-router-dom'
-import {Parser} from 'expr-eval'
+import { Parser } from 'expr-eval'
 
 
 const getData = (path, $data) => {
@@ -34,7 +34,7 @@ const getData = (path, $data) => {
 const BaseComponent = ({ component, $context, $page, chunk }) => {
   
   const store = React.useContext(StoreContext)
-  React.useEffect(()=>{
+  React.useEffect(() => {
     if(component) component.loadChunk()
   },[component])
   const location = useLocation()

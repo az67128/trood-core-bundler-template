@@ -24,7 +24,7 @@
         },
 
         {
-            "name": "TButton",
+            "name": "Button",
             "props": {
                 "label": "open modal",
 
