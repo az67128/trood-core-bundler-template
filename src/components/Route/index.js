@@ -9,7 +9,6 @@ const Page = ({ children, title }) => {
 }
 
 const Route = ({ title, children, ...rest }) => {
-    
   return <RouterRoute {...rest}>
     <Page title={title}>{children}</Page>
   </RouterRoute>

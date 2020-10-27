@@ -6,19 +6,23 @@ import Row from './Grids/Row'
 import Cell from './Grids/Cell'
 import Container from './Grids/Container'
 
+import { Link, Switch } from 'react-router-dom'
+
 import Button from './Button'
 import Checkbox from './Checkbox'
 import DateTimePicker from './DateTimePicker'
 import Icon from './Icon'
 import Input from './Input'
-import List from './List'
-import Modal from './Modal'
 import Label from './Label'
-import Spacer from './Spacer'
-import { Link } from 'react-router-dom'
-import { Switch } from 'react-router-dom'
-import Route from './Route'
+import List from './List'
+import LoadingIndicator from './LoadingIndicator'
+import Modal from './Modal'
+import PeriodSelector from './PeriodSelector'
+import RadioButton from './RadioButton'
+import Range from './Range'
 import Remote from './Remote'
+import Route from './Route'
+import Spacer from './Spacer'
 
 const components = {
   Context,
@@ -27,19 +31,24 @@ const components = {
   Cell,
   Container,
 
+  Link,
+  Switch,
+
   Button,
   Checkbox,
   DateTimePicker,
   Icon,
   Input,
-  List,
-  Link,
-  Modal,
-  Switch,
-  Route,
   Label,
-  Spacer,
+  List,
+  LoadingIndicator,
+  Modal,
+  PeriodSelector,
+  RadioButton,
+  Range,
   Remote,
+  Route,
+  Spacer,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({

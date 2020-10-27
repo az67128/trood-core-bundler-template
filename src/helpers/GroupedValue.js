@@ -1,4 +1,4 @@
-import { mutateObject } from '$trood/helpers/nestedObjects'
+import { mutateObject } from './nestedObjects'
 
 
 const round = (value, roundCount = 2) => {

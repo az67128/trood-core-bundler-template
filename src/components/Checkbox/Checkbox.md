@@ -1,23 +1,23 @@
-TCheckbox checked example:
+Checkbox checked example:
 
 ```js
-import TCheckbox from 'components/TCheckbox';
+import Checkbox from 'components/Checkbox';
 
-<TCheckbox {...{
-  label: 'TCheckbox checked',
+<Checkbox {...{
+  label: 'Checkbox checked',
   value: true,
   onChange: (...args) => console.log('onChange', ...args),
   onInvalid: (...args) => console.log('onInvalid', ...args),
   onValid: (...args) => console.log('onValid', ...args),
 }} />
 ```
-TCheckbox unchecked example:
+Checkbox unchecked example:
 
 ```js
-import TCheckbox from 'components/TCheckbox';
+import Checkbox from 'components/Checkbox';
 
-<TCheckbox {...{
-  label: 'TCheckbox unchecked',
+<Checkbox {...{
+  label: 'Checkbox unchecked',
   value: false,
   onChange: (...args) => console.log('onChange', ...args),
   onInvalid: (...args) => console.log('onInvalid', ...args),

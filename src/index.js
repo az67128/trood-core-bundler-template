@@ -11,7 +11,7 @@ import StoreContext from 'core/StoreContext'
 
 const meta = {
   custodian: {
-    apiHost: 'http://topline.dev.trood.ru/',
+    apiHost: 'https://topline.dev.trood.ru/',
     entityDataAddress: 'data',
     arrayDataAddress: 'data',
     arrayCountAddress: 'total_count',

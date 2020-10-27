@@ -21,7 +21,7 @@ class Checkbox extends PureComponent {
     value: PropTypes.bool,
     /** set icon type, default 'confirm', all iconType you can see in component Icon */
     iconType: PropTypes.oneOf(Object.values(ICONS_TYPES)),
-    /** view type is one of CHECK_VIEW_TYPES.checkbox, CHECK_VIEW_TYPES.toggler */
+    /** view type is one of CHECK_VIEW_TYPES.checkbox, CHECK_VIEW_TYPES.toggle */
     viewType: PropTypes.oneOf(Object.values(CHECK_VIEW_TYPES)),
     /** set label color is one of CHECK_COLORS.blue, CHECK_COLORS.black */
     color: PropTypes.oneOf(Object.values(CHECK_COLORS)),

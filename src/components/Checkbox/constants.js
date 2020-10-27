@@ -7,9 +7,9 @@ export const CHECK_COLORS = {
 }
 
 export const CHECK_BOX = 'checkbox'
-export const CHECK_TOGGLER = 'toggler'
+export const CHECK_TOGGLE = 'toggle'
 
 export const CHECK_VIEW_TYPES = {
   [CHECK_BOX]: CHECK_BOX,
-  [CHECK_TOGGLER]: CHECK_TOGGLER,
+  [CHECK_TOGGLE]: CHECK_TOGGLE,
 }

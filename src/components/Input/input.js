@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-// import loadable from '@loadable/component'
+import loadable from '@loadable/component'
 import classNames from 'classnames'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
@@ -19,18 +19,16 @@ import {
 
 import Icon, { ICONS_TYPES } from '../Icon'
 import Label from '../Label'
-// import LoadingIndicator from '../LoadingIndicator'
+import LoadingIndicator from '../LoadingIndicator'
 
 import style from './index.module.css'
 
-/*
 const WysiwygEditor = loadable(
-  () => import('../WysiwygEditor'),
+  () => import('./Wysiwyg'),
   {
     fallback: (<LoadingIndicator />),
   },
 )
-*/
 
 const noopFunc = () => {}
 
@@ -505,7 +503,6 @@ class Input extends PureComponent {
 
     const getInputComp = () => {
       switch (type) {
-        /* TODO WysiwygEditor
         case INPUT_TYPES.wysiwyg:
           return (
             <WysiwygEditor {...{
@@ -513,7 +510,6 @@ class Input extends PureComponent {
               ref: undefined,
             }} />
           )
-        */
         case INPUT_TYPES.multi:
           return (
             <textarea {...{

@@ -10,6 +10,7 @@ const getData = (path, $data) => {
   const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
     const parsedParams = JSON.parse(replacement)
     const connectedParams = parsedParams.map((param) => {
+      console.log(typeof param === 'object' && param.$type === '$data' ? Number(getData(param.path, $data)) : param)
       // TODO: fix conveersion id from string to number
       return typeof param === 'object' && param.$type === '$data' ? Number(getData(param.path, $data)) : param
     })

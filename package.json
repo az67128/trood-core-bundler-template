@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@loadable/component": "^5.14.1",
     "@paciolan/remote-component": "^2.8.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -11,6 +12,8 @@
     "country-telephone-data": "^0.6.2",
     "cross-env": "^7.0.2",
     "deep-equal": "^2.0.4",
+    "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "expr-eval": "^2.0.2",
     "lodash": "^4.17.20",
     "memoize-one": "^5.1.1",

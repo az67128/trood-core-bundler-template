@@ -1,0 +1,29 @@
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.components {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.root:not(:last-child) {
+  margin-right: 20px;
+}
+
+.label {
+  width: 100%;
+}
+
+.filterInput {
+  min-height: 38px;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.filterInput:not(:last-child) {
+  margin-right: 20px;
+}
