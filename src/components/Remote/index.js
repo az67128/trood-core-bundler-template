@@ -1,6 +1,9 @@
 import React from 'react'
 import { createRequires, createUseRemoteComponent } from '@paciolan/remote-component'
-import { resolve } from 'remote-component.config.js'
+import { resolve } from 'remote-component.config'
+
+import LoadingIndicator from '../LoadingIndicator'
+
 
 const requires = createRequires(resolve)
 const useRemoteComponent = createUseRemoteComponent({ requires })
@@ -9,7 +12,7 @@ const Remote = (props) => {
   const [loading, err, Component] = useRemoteComponent(props.url)
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingIndicator />
   }
 
   if (err != null) {

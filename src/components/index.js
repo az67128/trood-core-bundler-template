@@ -1,35 +1,57 @@
+import styled from 'styled-components'
+
+import Context from './Context'
+
 import Row from './Grids/Row'
 import Cell from './Grids/Cell'
 import Container from './Grids/Container'
 
-import List from './List'
-import Button from './Button'
-import Modal from './Modal'
-import TIcon from './TIcon'
-import TButton from './TButton'
-import TLabel from './TLabel'
-import Spacer from './Spacer'
-import {Link} from 'react-router-dom'
-import { Switch  } from 'react-router-dom'
-import Context from './Context'
-import Route from './Route'
-import Remote from './Remote'
+import { Link, Switch } from 'react-router-dom'
 
-export default {
+import Button from './Button'
+import Checkbox from './Checkbox'
+import DateTimePicker from './DateTimePicker'
+import Icon from './Icon'
+import Input from './Input'
+import Label from './Label'
+import List from './List'
+import LoadingIndicator from './LoadingIndicator'
+import Modal from './Modal'
+import PeriodSelector from './PeriodSelector'
+import RadioButton from './RadioButton'
+import Range from './Range'
+import Remote from './Remote'
+import Route from './Route'
+import Spacer from './Spacer'
+
+const components = {
+  Context,
+
   Row,
   Cell,
   Container,
-    
-  List,
+
   Link,
-  Button,
-  Modal,
-  TIcon,
-  TButton,
   Switch,
-  Route,
-  TLabel,
-  Spacer,
-  Context,
+
+  Button,
+  Checkbox,
+  DateTimePicker,
+  Icon,
+  Input,
+  Label,
+  List,
+  LoadingIndicator,
+  Modal,
+  PeriodSelector,
+  RadioButton,
+  Range,
   Remote,
+  Route,
+  Spacer,
 }
+
+export default Object.keys(components).reduce((memo, key) => ({
+  ...memo,
+  [key]: styled(components[key])`${(props = {}) => props.style || ''}`,
+}), {})

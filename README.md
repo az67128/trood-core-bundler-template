@@ -11,7 +11,7 @@ JSON recursively has the following structure
     "chunk": <string>
 }
 ```
-* "name" can contains core component name (TButton, TLabel) or HTML tag name (div, span)
+* "name" can contains core component name (Button, Label) or HTML tag name (div, span)
 
 * "props" object with any props that will be passed to component
 

@@ -1,0 +1,215 @@
+.root {
+  position: relative;
+  display: flex;
+  height: 38px;
+  border: 1px solid var(--trood-gray-border);
+  border-radius: 3px;
+  padding: 0 10px;
+  background-color: var(--trood-white);
+}
+
+.root:focus {
+  border-color: var(--trood-blue);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.root.error {
+  border-color: var(--trood-red);
+}
+
+.root.open {
+  border-color: var(--trood-blue);
+  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.3);
+}
+
+.rootWrapper {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.root .disabled .header {
+  cursor: default;
+  color: var(--trood-gray-text);
+}
+
+.value {
+  font-weight: 500;
+}
+
+.placeholder {
+  color: var(--trood-gray-extra-dark);
+}
+
+.icon svg {
+  width: 10px;
+  height: 10px;
+  color: var(--trood-gray-extra-dark);
+}
+
+.body {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + 12px);
+  width: 280px;
+  border: 1px solid var(--trood-gray-border);
+  border-radius: 3px;
+  background-color: var(--trood-white);
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.body.left {
+  left: 0;
+}
+
+.body.right {
+  right: 0;
+}
+
+.body:before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  border: 10px solid transparent;
+  border-top-width: 8px;
+  border-bottom-width: 8px;
+  border-bottom-color: var(--trood-gray-border);
+}
+
+.body:after {
+  content: '';
+  position: absolute;
+  top: -15px;
+  border: 10px solid transparent;
+  border-top-width: 8px;
+  border-bottom-width: 8px;
+  border-bottom-color: var(--trood-white);
+}
+
+.body.left:before,
+.body.left:after {
+  left: 30px;
+}
+
+.body.right:before,
+.body.right:after {
+  right: 30px;
+}
+
+.bodyHeader {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+}
+
+.calendarArrow {
+  cursor: pointer;
+  color: var(--trood-gray-extra-dark);
+}
+
+.calendarArrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bodyHeaderTitle {
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--trood-blue);
+  cursor: pointer;
+}
+
+.calendar {
+  display: flex;
+  flex-flow: column nowrap;
+  font-size: 12px;
+  text-transform: uppercase;
+  background-color: var(--trood-background-light);
+}
+
+.calendarRow {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+}
+
+.calendarHeader {
+  font-weight: 500;
+  text-transform: capitalize;
+  color: var(--trood-gray-extra-dark);
+}
+
+.calendarCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.calendarBodyCell.month,
+.calendarBodyCell.year {
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+}
+
+.calendarBodyCell.otherCell {
+  color: var(--trood-gray-dark);
+}
+
+.calendarBodyCell:not(.disabledCell):hover {
+  background-color: var(--trood-blue-extra-light);
+  font-weight: 500;
+  color: var(--trood-black);
+  cursor: pointer;
+}
+
+.calendar .disabledCell {
+  color: var(--trood-gray-bg);
+}
+
+.calendar .currentCell {
+  color: var(--trood-blue);
+  font-weight: 500;
+  border: 1px solid var(--trood-blue);
+}
+
+.calendar .calendarBodyCell.activeCell {
+  background-color: var(--trood-blue);
+  font-weight: 500;
+  color: var(--trood-white);
+}
+
+.bodyFooter {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 50px;
+}
+
+.button {
+  height: 32px;
+}
+
+.timeInput {
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 12px;
+}

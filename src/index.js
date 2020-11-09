@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import './styles/reset.css'
+import './styles/global.css'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
@@ -9,19 +11,19 @@ import StoreContext from 'core/StoreContext'
 
 const meta = {
   custodian: {
-    apiHost: 'https://trood.trood.legal/',
+    apiHost: 'https://topline.dev.trood.ru/',
     entityDataAddress: 'data',
     arrayDataAddress: 'data',
     arrayCountAddress: 'total_count',
+    genericTypeAddress: '_object',
+    paginationTemplate: 'q=limit({offset},{pageSize})',
     objects: {
       client: {
         pk: 'id',
-        endpoint: '/custodian/data/client',
+        endpoint: '/custodian/data/contractor',
         fields: {
           id: 'number',
           name: 'string',
-
-          revenue: 'number',
         },
       },
       employee: {
@@ -30,14 +32,13 @@ const meta = {
         fields: {
           id: 'number',
           name: 'string',
-
           email: 'string',
         },
       },
     },
   },
 }
-const store = getStore(meta, () => 'Token 8dae765ac3e8487e8f5e0a07c617864b')
+const store = getStore(meta, () => 'Token 3ad0a38e56264934a91f32ec3128b5fb')
 
 ReactDOM.render(
   <React.StrictMode>

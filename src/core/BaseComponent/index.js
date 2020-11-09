@@ -3,13 +3,14 @@ import coreComponents from 'components'
 import StoreContext from 'core/StoreContext'
 import { useObserver } from 'mobx-react-lite'
 import { useLocation, useParams } from 'react-router-dom'
-import {Parser} from 'expr-eval'
+import { Parser } from 'expr-eval'
 
 
 const getData = (path, $data) => {
   const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
     const parsedParams = JSON.parse(replacement)
     const connectedParams = parsedParams.map((param) => {
+      console.log(typeof param === 'object' && param.$type === '$data' ? Number(getData(param.path, $data)) : param)
       // TODO: fix conveersion id from string to number
       return typeof param === 'object' && param.$type === '$data' ? Number(getData(param.path, $data)) : param
     })
@@ -34,7 +35,7 @@ const getData = (path, $data) => {
 const BaseComponent = ({ component, $context, $page, chunk }) => {
   
   const store = React.useContext(StoreContext)
-  React.useEffect(()=>{
+  React.useEffect(() => {
     if(component) component.loadChunk()
   },[component])
   const location = useLocation()

@@ -96,7 +96,22 @@
                                                     }
                                                 }
                                             ]
-                                        }
+                                        },
+                                      {
+                                        "name": "Cell",
+                                        "components": [
+                                          {
+                                            "name": "Link",
+                                            "props": {
+                                              "to": "/components",
+                                              "children": {
+                                                "$type": "$expression",
+                                                "expression": "data(\"$route.location.pathname\") == \"/components\" ? \"Components*\" : \"Components\""
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
                                     ]
                                 }
                             ]
@@ -123,7 +138,7 @@
                                                 {
                                                     "name": "Switch",
                                                     "components": [
-                                                        { "name": "div", "props": { "children": "Loading..." } }
+                                                        { "name": "LoadingIndicator" }
                                                     ],
                                                     "chunk": "example/pages.json"
                                                 }
