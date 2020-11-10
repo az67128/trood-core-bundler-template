@@ -48,7 +48,7 @@ const List = ({
         <BaseComponent $context={{ nextPage, prevPage }} component={topComponentsStore} />
       )}
       {entity.getPage(page, 5).map((item) => (
-        <BaseComponent key={item.name} $context={item} component={componentsStore} />
+        <BaseComponent key={item.id} $context={item} component={componentsStore} />
       ))}
       {bottomComponents && (
         <BaseComponent $context={{ nextPage, prevPage }} component={bottomComponentsStore} />

@@ -63,6 +63,25 @@
             { "name": "LoadingIndicator" }
           ],
           "chunk": "example/components.json"
+        },
+        {
+            "name": "Route",
+            "props": { "path": "/form" },
+            "components": [
+                { "name": "LoadingIndicator" }
+            ],
+            "chunk": "example/form.json"
+        },
+        {
+            "name": "Route",
+            "props": {
+                "path": "/activity/:id",
+                "title": "Activity"
+            },
+            "components": [
+              { "name": "LoadingIndicator" }
+            ],
+            "chunk": "example/activity.json"
         }
     ]
 }

@@ -24,16 +24,14 @@ import Remote from './Remote'
 import Route from './Route'
 import Spacer from './Spacer'
 
+
 const components = {
   Context,
-
   Row,
   Cell,
   Container,
-
   Link,
   Switch,
-
   Button,
   Checkbox,
   DateTimePicker,

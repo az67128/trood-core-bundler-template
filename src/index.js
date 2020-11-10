@@ -8,15 +8,19 @@ import * as serviceWorker from './serviceWorker'
 import { getStore } from 'trood-restify'
 import { BrowserRouter as Router } from 'react-router-dom'
 import StoreContext from 'core/StoreContext'
+import PageStoreContext from 'core/PageStoreContext'
+import { Page } from 'core/pageStore'
+
+const pageStore = Page.create({})
 
 const meta = {
   custodian: {
-    apiHost: 'https://topline.dev.trood.ru/',
+    apiHost: 'https://trood.trood.legal/',
     entityDataAddress: 'data',
     arrayDataAddress: 'data',
     arrayCountAddress: 'total_count',
     genericTypeAddress: '_object',
-    paginationTemplate: 'q=limit({offset},{pageSize})',
+    // paginationTemplate: 'q=limit({offset},{pageSize})',
     objects: {
       client: {
         pk: 'id',
@@ -35,17 +39,35 @@ const meta = {
           email: 'string',
         },
       },
+      task: {
+        pk: 'id',
+        endpoint: '/custodian/data/task',
+        fields: {
+          id: 'number',
+          name: 'string',
+        },
+      },
+      activity: {
+        pk: 'id',
+        endpoint: '/custodian/data/activity',
+        fields: {
+          id: 'number',
+          name: 'string',
+        },
+      },
     },
   },
 }
-const store = getStore(meta, () => 'Token 3ad0a38e56264934a91f32ec3128b5fb')
-
+const store = getStore(meta, () => 'Token 8dae765ac3e8487e8f5e0a07c617864b')
+window.store = store
 ReactDOM.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
-      <Router>
-        <App />
-      </Router>
+      <PageStoreContext.Provider value={pageStore}>
+        <Router>
+          <App />
+        </Router>
+      </PageStoreContext.Provider>
     </StoreContext.Provider>
   </React.StrictMode>,
   document.getElementById('root'),

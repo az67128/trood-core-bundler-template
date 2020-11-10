@@ -111,7 +111,22 @@
                                             }
                                           }
                                         ]
-                                      }
+                                      },
+                                        {
+                                            "name": "Cell",
+                                            "components": [
+                                                {
+                                                    "name": "Link",
+                                                    "props": {
+                                                        "to": "/form",
+                                                        "children": {
+                                                            "$type": "$expression",
+                                                            "expression": "data(\"$route.location.pathname\") == \"/form\" ? \"Form*\" : \"Form\""
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
                                     ]
                                 }
                             ]

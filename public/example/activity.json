@@ -5,7 +5,7 @@
             "props": {
                 "context": {
                     "$type": "$data",
-                    "path": "$store.apis.custodian.client.getByPk[{\"$type\":\"$data\", \"path\":\"$route.params.id\"}]"
+                    "path": "$store.apis.custodian.activity.getByPk[{\"$type\":\"$expression\",\"expression\":\"+data('$route.params.id')\"}]"
                 }
                 
             },
@@ -18,8 +18,7 @@
                             "props": {
                                 "children": {
                                     "$type": "$data",
-                                    "path": "$route.params.id",
-                                    "tamplate": "Client ${value}"
+                                    "path": "$route.params.id"
                                 }
                             }
                         },

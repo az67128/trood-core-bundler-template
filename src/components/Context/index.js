@@ -1,11 +1,7 @@
 import React from 'react'
-import BaseComponent from 'core/BaseComponent'
-import { Component } from 'core/pageStore'
 
-const Context = ({ context, components }) => {
-  const componentsStore = Component.create({ components })
-  
-  return <BaseComponent $context={ context } component={componentsStore} />
+const Context = ({ context, children, ...rest }) => {
+  return React.Children.map(children, (child) => React.cloneElement(child, { ...rest, $context: context }))
 }
 
 export default Context
