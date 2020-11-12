@@ -51,7 +51,8 @@
                                                         "form": {
                                                             "$type": "$data",
                                                             "path": "$store.forms.getForm[{\"apiName\":\"custodian\",\"modelName\":\"activity\",\"modelPk\":{\"$type\":\"$expression\",\"expression\":\"data('$context.id')\"}}]"
-                                                        }
+                                                        },
+                                                        "isLoading": false
                                                     }
                                                 ]
                                             }
@@ -103,22 +104,43 @@
                             }
                         },
                         {
+                            "name": "Label",
+                            "props": {
+                                "label":  {
+                                    "$type": "$expression",
+                                    "expression": "data(\"$context.isLoading\") == true ? \"Loading\" : \"\""
+                                }
+                                
+                            }
+                        },
+                        {
                             "name": "Button",
                             "props": {
                                 "onClick": {
                                     "$type": "$action",
                                     "sequense": [
+                                        {
+                                            "$type": "$action",
+                                            "path": "$page.modifyContext",
+                                            "args": ["editTask", "isLoading", true]
+                                        },
                                         { "$type": "$action", "path": "$context.form.submit" },
                                         {
                                             "$type": "$action",
                                             "path": "$page.closeModal",
                                             "args": ["editTask"]
+                                        },
+                                        {
+                                            "$type": "$action",
+                                            "path": "$page.modifyContext",
+                                            "args": ["editTask", "isLoading", false]
                                         }
                                     ]
                                 },
                                 "label": "Submit"
                             }
                         }
+                        
                     ]
                 }
             ]

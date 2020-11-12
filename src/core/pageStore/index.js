@@ -45,25 +45,47 @@ const Modal = types
     },
   }))
 
+const Context = types
+  .model('Context', {
+    isOpen: types.optional(types.boolean, false),
+    context: types.optional(types.frozen({}), {}),
+  })
+  .actions(model => ({
+    setContext(context){
+      model.context = context
+    },
+    modifyProp(prop, value){
+      model.context = { ...model.context, [prop]:value }
+    },
+  }))
+  
+
 export const Page = types
   .model('Page', {
     modals: types.map(Modal),
+    contexts: types.map(Context),
   })
   .views((model) => ({
     isModalOpen(name) {
       return model.modals.get(name)?.isOpen
     },
     getContext(name) {
-      return model.modals.get(name)?.context
+      return model.contexts.get(name)?.context
     },
   }))
   .actions((model) => ({
+    setContext(name, context) {
+      model.contexts.set(name, {  })
+      model.contexts.get(name).setContext(context)
+    },
     openModal(name, context) {
       model.modals.set(name, { isOpen: true  })
-      model.modals.get(name).setContext(context)
-      
+      model.setContext(name, context)
     },
     closeModal(name) {
       model.modals.set(name, { isOpen: false })
+    },
+    modifyContext(name, prop, value){
+      model.contexts.get(name).modifyProp(prop, value)
     },
   }))

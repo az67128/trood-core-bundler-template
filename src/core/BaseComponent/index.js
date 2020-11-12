@@ -10,7 +10,6 @@ const connectProps = (props, $data, childBaseComponent) => {
   const getData = (path, $data) => {
     const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
       const parsedParams = JSON.parse(replacement)
-      console.log(parsedParams)
       const connectedParams = parsedParams.map((param) => {
         return param.$type ? connectProps([param], $data)[0] : connectProps(param, $data)
       })
@@ -50,6 +49,7 @@ const connectProps = (props, $data, childBaseComponent) => {
           return getData(path, $data)
         }
         const val = parser.evaluate(item.expression)
+        console.log(item.expression, val)
         return { ...memo, [key]: val }
       }
 
@@ -66,16 +66,24 @@ const connectProps = (props, $data, childBaseComponent) => {
                     : connectProps(param, { ...$data, $event })
                 })
                 : {}
-              console.log(connectedArgs)
               return typeof connectedAction === 'function'
                 ? connectedAction(...Object.values(connectedArgs))
                 : undefined
             }
             return action
           })
-          for await (const currentAction of connectedActions) {
-            currentAction($event)
+          try{
+            for (const currentAction of connectedActions) {
+              await currentAction($event)
+            }
+          } catch(error){
+            //TODO add catch action
+            console.log(error)
+          } finally{
+            //TODO add finally action
+            console.log('finally')
           }
+         
         }
         return { ...memo, [key]: executor }
       }
