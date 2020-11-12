@@ -12,15 +12,15 @@ import PageStoreContext from 'core/PageStoreContext'
 import { Page } from 'core/pageStore'
 
 const pageStore = Page.create({})
-
+window.pageStore = pageStore
 const meta = {
   custodian: {
-    apiHost: 'https://trood.trood.legal/',
+    apiHost: 'https://legal.dev.trood.ru/',
     entityDataAddress: 'data',
     arrayDataAddress: 'data',
     arrayCountAddress: 'total_count',
     genericTypeAddress: '_object',
-    // paginationTemplate: 'q=limit({offset},{pageSize})',
+    paginationTemplate: 'q=limit({offset},{pageSize})',
     objects: {
       client: {
         pk: 'id',
@@ -58,7 +58,7 @@ const meta = {
     },
   },
 }
-const store = getStore(meta, () => 'Token 8dae765ac3e8487e8f5e0a07c617864b')
+const store = getStore(meta, () => 'Token 96ac1d5e7ed24ab8b7dba9f8b0cb9b37')
 window.store = store
 ReactDOM.render(
   <React.StrictMode>

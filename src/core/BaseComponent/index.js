@@ -10,7 +10,11 @@ const connectProps = (props, $data, childBaseComponent) => {
   const getData = (path, $data) => {
     const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
       const parsedParams = JSON.parse(replacement)
-      const connectedParams = parsedParams.map(param => connectProps(param, $data))
+      console.log(parsedParams)
+      const connectedParams = parsedParams.map((param) => {
+        return param.$type ? connectProps([param], $data)[0] : connectProps(param, $data)
+      })
+
       return JSON.stringify(Object.values(connectedParams))
     })
 
@@ -28,13 +32,15 @@ const connectProps = (props, $data, childBaseComponent) => {
       return undefined
     }, $data)
   }
-  if(typeof props !== 'object') return props
+
+  if (typeof props !== 'object') return props
   if (!props) return {}
   return Object.keys(props).reduce(
     (memo, key) => {
       const item = props[key]
       if (typeof item === 'object' && item.$type === '$data') {
-        const propValue = typeof item.path === 'object' ? connectProps(item.path, $data) : getData(item.path, $data)
+        const propValue =
+                    typeof item.path === 'object' ? connectProps(item.path, $data) : getData(item.path, $data)
         return { ...memo, [key]: propValue }
       }
 
@@ -48,12 +54,30 @@ const connectProps = (props, $data, childBaseComponent) => {
       }
 
       if (typeof item === 'object' && item.$type === '$action') {
-        const connectedFunction = getData(item.path, $data)
-        const action = ($event) => {
-          const connectedArgs = connectProps(item.args, { ...$data, $event })
-          return connectedFunction(...Object.values(connectedArgs))
+        const sequense = item.sequense ? item.sequense : [item]
+        const executor = async ($event) => {
+          const connectedActions = sequense.map((actionItem) => {
+            const connectedAction = getData(actionItem.path, $data)
+            const action = ($event) => {
+              const connectedArgs = actionItem.args
+                ? actionItem.args.map((param) => {
+                  return param.$type
+                    ? connectProps([param], { ...$data, $event })[0]
+                    : connectProps(param, { ...$data, $event })
+                })
+                : {}
+              console.log(connectedArgs)
+              return typeof connectedAction === 'function'
+                ? connectedAction(...Object.values(connectedArgs))
+                : undefined
+            }
+            return action
+          })
+          for await (const currentAction of connectedActions) {
+            currentAction($event)
+          }
         }
-        return { ...memo, [key]: action }
+        return { ...memo, [key]: executor }
       }
       if (key === 'children' && childBaseComponent) {
         return {

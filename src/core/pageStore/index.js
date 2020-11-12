@@ -60,8 +60,7 @@ export const Page = types
   .actions((model) => ({
     openModal(name, context) {
       model.modals.set(name, { isOpen: true  })
-      
-      if(context) context.then(result => model.modals.get(name).setContext(result))
+      model.modals.get(name).setContext(context)
       
     },
     closeModal(name) {

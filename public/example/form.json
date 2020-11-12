@@ -48,8 +48,10 @@
                                                 "args": [
                                                     "editTask",
                                                     {
-                                                        "$type": "$data",
-                                                        "path": "$store.forms.asyncGetForm[{\"apiName\":\"custodian\",\"modelName\":\"activity\",\"modelPk\":{\"$type\":\"$expression\",\"expression\":\"data('$context.id')\"}}]"
+                                                        "form": {
+                                                            "$type": "$data",
+                                                            "path": "$store.forms.getForm[{\"apiName\":\"custodian\",\"modelName\":\"activity\",\"modelPk\":{\"$type\":\"$expression\",\"expression\":\"data('$context.id')\"}}]"
+                                                        }
                                                     }
                                                 ]
                                             }
@@ -81,20 +83,20 @@
                         {
                             "name": "div",
                             "props": {
-                                "children": { "$type": "$data", "path": "$context.data.name" }
+                                "children": { "$type": "$data", "path": "$context.form.data.name" }
                             }
                         },
                         {
-                            "name": "input",
+                            "name": "Input",
                             "props": {
-                                "value": { "$type": "$data", "path": "$context.data.name" },
+                                "value": { "$type": "$data", "path": "$context.form.data.name" },
                                 "onChange": {
                                     "$type": "$action",
-                                    "path": "$context.changeFields",
+                                    "path": "$context.form.changeFields",
                                     "args": [
                                         {
                                             "$type": "$data",
-                                            "path": { "name": { "$type": "$data", "path": "$event.target.value" } }
+                                            "path": { "name": { "$type": "$data", "path": "$event" } }
                                         }
                                     ]
                                 }
@@ -103,7 +105,17 @@
                         {
                             "name": "Button",
                             "props": {
-                                "onClick": { "$type": "$action", "path": "$context.submit" },
+                                "onClick": {
+                                    "$type": "$action",
+                                    "sequense": [
+                                        { "$type": "$action", "path": "$context.form.submit" },
+                                        {
+                                            "$type": "$action",
+                                            "path": "$page.closeModal",
+                                            "args": ["editTask"]
+                                        }
+                                    ]
+                                },
                                 "label": "Submit"
                             }
                         }
@@ -111,6 +123,5 @@
                 }
             ]
         }
-      
     ]
 }
