@@ -12,6 +12,7 @@ import PageStoreContext from 'core/PageStoreContext'
 import { Page } from 'core/pageStore'
 
 const pageStore = Page.create({})
+//TODO remove after debug
 window.pageStore = pageStore
 const meta = {
   custodian: {
@@ -59,6 +60,7 @@ const meta = {
   },
 }
 const store = getStore(meta, () => 'Token 96ac1d5e7ed24ab8b7dba9f8b0cb9b37')
+//TODO remove after debug
 window.store = store
 ReactDOM.render(
   <React.StrictMode>
