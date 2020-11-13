@@ -29,6 +29,8 @@ const valueTypes = PropTypes.oneOfType([
 
 class Select extends PureComponent {
   static propTypes = {
+    labelProp: PropTypes.string,
+    valueProp: PropTypes.string,
     /** class name for styling component */
     className: PropTypes.string,
     /** class name for styling label */
@@ -139,6 +141,8 @@ class Select extends PureComponent {
   }
 
   static defaultProps = {
+    labelProp: 'label',
+    valueProp: 'value',
     type: SELECT_TYPES.dropdown,
     values: [],
 
@@ -187,10 +191,14 @@ class Select extends PureComponent {
       multi,
       clearable,
       listType,
+      items,
+      labelProp,
+      valueProp,
     } = this.props
 
     const generalProps = {
       ...this.props,
+      items: items.map(item => ({ label: item[labelProp], value:item[valueProp] })),
       className: undefined,
       type: listType,
       clearable: clearable === undefined ? multi : clearable,

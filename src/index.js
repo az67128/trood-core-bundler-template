@@ -25,10 +25,11 @@ const meta = {
     objects: {
       client: {
         pk: 'id',
-        endpoint: '/custodian/data/contractor',
+        endpoint: '/custodian/data/client',
         fields: {
           id: 'number',
           name: 'string',
+          client_type: 'fk(client_type)',
         },
       },
       employee: {
@@ -54,6 +55,15 @@ const meta = {
         fields: {
           id: 'number',
           name: 'string',
+        },
+      },
+      client_type:{
+        pk: 'id',
+        endpoint: '/custodian/data/activity',
+        fields: {
+          id: 'number',
+          name: 'string',
+          code: 'string',
         },
       },
     },

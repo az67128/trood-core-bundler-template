@@ -49,7 +49,6 @@ const connectProps = (props, $data, childBaseComponent) => {
           return getData(path, $data)
         }
         const val = parser.evaluate(item.expression)
-        console.log(item.expression, val)
         return { ...memo, [key]: val }
       }
 
@@ -58,7 +57,7 @@ const connectProps = (props, $data, childBaseComponent) => {
         const executor = async ($event) => {
           const connectedActions = sequense.map((actionItem) => {
             const connectedAction = getData(actionItem.path, $data)
-            const action = ($event) => {
+            return ($event) => {
               const connectedArgs = actionItem.args
                 ? actionItem.args.map((param) => {
                   return param.$type
@@ -70,18 +69,18 @@ const connectProps = (props, $data, childBaseComponent) => {
                 ? connectedAction(...Object.values(connectedArgs))
                 : undefined
             }
-            return action
           })
           try{
             for (const currentAction of connectedActions) {
+              // TODO move connect props to async function
               await currentAction($event)
             }
           } catch(error){
             //TODO add catch action
-            console.log(error)
+            // console.log(error)
           } finally{
             //TODO add finally action
-            console.log('finally')
+            // console.log('finally')
           }
          
         }

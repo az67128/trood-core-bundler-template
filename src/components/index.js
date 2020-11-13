@@ -23,6 +23,7 @@ import Range from './Range'
 import Remote from './Remote'
 import Route from './Route'
 import Spacer from './Spacer'
+import Select from './Select'
 
 
 const components = {
@@ -47,6 +48,7 @@ const components = {
   Remote,
   Route,
   Spacer,
+  Select,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({
