@@ -71,13 +71,12 @@ const connectProps = (props, $data, childBaseComponent) => {
             }
           })
           try{
-            for (const currentAction of connectedActions) {
-              // TODO move connect props to async function
+            for (const currentAction of connectedActions) {           
               await currentAction($event)
             }
           } catch(error){
             //TODO add catch action
-            // console.log(error)
+            console.log(error)
           } finally{
             //TODO add finally action
             // console.log('finally')

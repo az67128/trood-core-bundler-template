@@ -30,6 +30,8 @@ const meta = {
           id: 'number',
           name: 'string',
           client_type: 'fk(client_type)',
+          client_active_status: 'fk(client_active_status)',
+          responsible: 'fk(employee)',
         },
       },
       employee: {
@@ -60,6 +62,15 @@ const meta = {
       client_type:{
         pk: 'id',
         endpoint: '/custodian/data/activity',
+        fields: {
+          id: 'number',
+          name: 'string',
+          code: 'string',
+        },
+      },
+      client_active_status:{
+        pk: 'id',
+        endpoint: '/custodian/data/client_active_status',
         fields: {
           id: 'number',
           name: 'string',

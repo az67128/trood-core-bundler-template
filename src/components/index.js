@@ -24,7 +24,7 @@ import Remote from './Remote'
 import Route from './Route'
 import Spacer from './Spacer'
 import Select from './Select'
-
+import Conditional from './Conditional'
 
 const components = {
   Context,
@@ -49,6 +49,7 @@ const components = {
   Route,
   Spacer,
   Select,
+  Conditional,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({
