@@ -179,8 +179,14 @@
                             "name": "Select",
                             "props": {
                                 "label": "Type",
-                                "values": { "$type": "$expression", "expression": "[(data('$context.form.data.client_type'))]" },
-                                "items": { "$type": "$data", "path": "$store.apis.custodian.client_type.getPage[0, 10]" },
+                                "values": {
+                                    "$type": "$expression",
+                                    "expression": "[(data('$context.form.data.client_type'))]"
+                                },
+                                "items": {
+                                    "$type": "$data",
+                                    "path": "$store.apis.custodian.client_type.getPage[0, 10]"
+                                },
                                 "labelProp": "name",
                                 "valueProp": "id",
                                 "onChange": {
@@ -189,7 +195,12 @@
                                     "args": [
                                         {
                                             "$type": "$data",
-                                            "path": { "client_type": { "$type": "$expression", "expression": "(data('$event'))[0]"} }
+                                            "path": {
+                                                "client_type": {
+                                                    "$type": "$expression",
+                                                    "expression": "(data('$event'))[0]"
+                                                }
+                                            }
                                         }
                                     ]
                                 }
@@ -200,7 +211,10 @@
                             "name": "Select",
                             "props": {
                                 "label": "Responsible",
-                                "values": { "$type": "$expression", "expression": "[(data('$context.form.data.responsible'))]" },
+                                "values": {
+                                    "$type": "$expression",
+                                    "expression": "[(data('$context.form.data.responsible'))]"
+                                },
                                 "items": { "$type": "$data", "path": "$store.apis.custodian.employee.getPage[0, 10]" },
                                 "labelProp": "name",
                                 "valueProp": "id",
@@ -210,14 +224,19 @@
                                     "args": [
                                         {
                                             "$type": "$data",
-                                            "path": { "responsible": { "$type": "$expression", "expression": "(data('$event'))[0]" } }
+                                            "path": {
+                                                "responsible": {
+                                                    "$type": "$expression",
+                                                    "expression": "(data('$event'))[0]"
+                                                }
+                                            }
                                         }
                                     ]
                                 }
                             }
                         },
                         { "name": "Spacer", "size": 8 },
-                       
+
                         {
                             "name": "Row",
                             "components": [
@@ -243,34 +262,36 @@
                                                     "$type": "$expression",
                                                     "expression": "data('$context.form.data.id')"
                                                 },
-                                                "ifTrue": [{
-                                                    "name": "Button",
-                                                    "props": {
-                                                        "label": "Delete",
-                                                        "color":"red",
-                                                        "type":"text",
-                                                        "onClick": {
-                                                            "$type": "$action",
-                                                            "sequense": [
-                                                                {
-                                                                    "$type": "$action",
-                                                                    "path": "$page.modifyContext",
-                                                                    "args": ["editClient", "isLoading", true]
-                                                                },
-                                                                {
-                                                                    "$type": "$action",
-                                                                    "path": "$context.form.submit",
-                                                                    "args": [{"method":"DELETE"}]
-                                                                },
-                                                                {
-                                                                    "$type": "$action",
-                                                                    "path": "$page.modifyContext",
-                                                                    "args": ["editClient", "isLoading", false]
-                                                                }
-                                                            ]
+                                                "ifTrue": [
+                                                    {
+                                                        "name": "Button",
+                                                        "props": {
+                                                            "label": "Delete",
+                                                            "color": "red",
+                                                            "type": "text",
+                                                            "onClick": {
+                                                                "$type": "$action",
+                                                                "sequense": [
+                                                                    {
+                                                                        "$type": "$action",
+                                                                        "path": "$page.modifyContext",
+                                                                        "args": ["editClient", "isLoading", true]
+                                                                    },
+                                                                    {
+                                                                        "$type": "$action",
+                                                                        "path": "$context.form.submit",
+                                                                        "args": [{ "method": "DELETE" }]
+                                                                    },
+                                                                    {
+                                                                        "$type": "$action",
+                                                                        "path": "$page.modifyContext",
+                                                                        "args": ["editClient", "isLoading", false]
+                                                                    }
+                                                                ]
+                                                            }
                                                         }
                                                     }
-                                                }]
+                                                ]
                                             }
                                         }
                                     ]
@@ -304,17 +325,16 @@
                                                         },
                                                         {
                                                             "$type": "$action",
-                                                            "path": "$context.form.submit"
+                                                            "path": "$context.form.submit",
+                                                            "finally": {
+                                                                "path": "$page.modifyContext",
+                                                                "args": ["editClient", "isLoading", false]
+                                                            }
                                                         },
                                                         {
                                                             "$type": "$action",
                                                             "path": "$page.closeModal",
                                                             "args": ["editClient"]
-                                                        },
-                                                        {
-                                                            "$type": "$action",
-                                                            "path": "$page.modifyContext",
-                                                            "args": ["editClient", "isLoading", false]
                                                         }
                                                     ]
                                                 }
