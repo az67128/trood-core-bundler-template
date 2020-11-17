@@ -1,7 +1,10 @@
 import React from 'react'
+import ContextContext from 'core/ContextContext'
 
-const Context = ({ context, children, ...rest }) => {
-  return React.Children.map(children, (child) => React.cloneElement(child, { ...rest, $context: context }))
+const Context = ({ context, children }) => {
+  return <ContextContext.Provider value={context}>
+    {children}
+  </ContextContext.Provider>
 }
 
 export default Context

@@ -12,7 +12,7 @@ const Conditional = ({
 }) => {
   const componentsIfTrue = Component.create({ components: ifTrue })
   const componentsIfFalse = Component.create({ components: ifFalse })
-  console.log(props)
+  
   return useObserver(() =>  <BaseComponent component={condition ? componentsIfTrue : componentsIfFalse } {...props} /> )
   
 }

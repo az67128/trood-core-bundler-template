@@ -2,6 +2,7 @@ import React from 'react'
 import coreComponents from 'components'
 import StoreContext from 'core/StoreContext'
 import PageStoreContext from 'core/PageStoreContext'
+import ContextContext from 'core/ContextContext'
 import { useObserver } from 'mobx-react-lite'
 import { useLocation, useParams } from 'react-router-dom'
 import { Parser } from 'expr-eval'
@@ -99,10 +100,11 @@ const connectProps = (props, $data, childBaseComponent) => {
 }
 const skipElements = ['img', 'input']
 
-const BaseComponent = ({ component, $context }) => {
+const BaseComponent = ({ component }) => {
   const $store = React.useContext(StoreContext)
   const $page = React.useContext(PageStoreContext)
-
+  const $context = React.useContext(ContextContext)
+  
   React.useEffect(() => {
     if (component) component.loadChunk()
   }, [component])
@@ -115,7 +117,7 @@ const BaseComponent = ({ component, $context }) => {
     if (!component || !component.components) return null
     return component.components.map((childComponent) => {
       const Component = coreComponents[childComponent.name] || childComponent.name
-      const childBaseComponent = <BaseComponent key="Base" component={childComponent} $context={$context} />
+      const childBaseComponent = <BaseComponent key="Base" component={childComponent} />
       const connectedProps = childComponent.props
         ? connectProps(childComponent.props, $data, childBaseComponent)
         : {}

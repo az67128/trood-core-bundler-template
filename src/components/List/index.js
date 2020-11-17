@@ -2,7 +2,7 @@ import React from 'react'
 import { useObserver } from 'mobx-react-lite'
 import BaseComponent from 'core/BaseComponent'
 import { Component } from 'core/pageStore'
-
+import Context from 'components/Context'
 
 const defaultControlComponents = [
   {
@@ -45,13 +45,20 @@ const List = ({
   return useObserver(() => (
     <div>
       {topComponents && (
-        <BaseComponent $context={{ nextPage, prevPage }} component={topComponentsStore} />
+        <Context context={{ nextPage, prevPage }}>
+          <BaseComponent component={topComponentsStore} />
+        </Context>
       )}
+      
       {entity.getPage(page, 5).map((item) => (
-        <BaseComponent key={item.id} $context={item} component={componentsStore} />
+        <Context key={item.id} context={item}>
+          <BaseComponent  $context={item} component={componentsStore} />
+        </Context>
       ))}
       {bottomComponents && (
-        <BaseComponent $context={{ nextPage, prevPage }} component={bottomComponentsStore} />
+        <Context context={{ nextPage, prevPage }}>
+          <BaseComponent component={bottomComponentsStore} />
+        </Context>
       )}
     </div>
   ))
