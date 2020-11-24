@@ -23,17 +23,16 @@ import Range from './Range'
 import Remote from './Remote'
 import Route from './Route'
 import Spacer from './Spacer'
+import Select from './Select'
+import Conditional from './Conditional'
 
 const components = {
   Context,
-
   Row,
   Cell,
   Container,
-
   Link,
   Switch,
-
   Button,
   Checkbox,
   DateTimePicker,
@@ -49,6 +48,8 @@ const components = {
   Remote,
   Route,
   Spacer,
+  Select,
+  Conditional,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({

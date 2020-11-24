@@ -8,10 +8,15 @@ import * as serviceWorker from './serviceWorker'
 import { getStore } from 'trood-restify'
 import { BrowserRouter as Router } from 'react-router-dom'
 import StoreContext from 'core/StoreContext'
+import PageStoreContext from 'core/PageStoreContext'
+import { Page } from 'core/pageStore'
 
+const pageStore = Page.create({})
+//TODO remove after debug
+window.pageStore = pageStore
 const meta = {
   custodian: {
-    apiHost: 'https://topline.dev.trood.ru/',
+    apiHost: 'https://legal.dev.trood.ru/',
     entityDataAddress: 'data',
     arrayDataAddress: 'data',
     arrayCountAddress: 'total_count',
@@ -20,10 +25,13 @@ const meta = {
     objects: {
       client: {
         pk: 'id',
-        endpoint: '/custodian/data/contractor',
+        endpoint: '/custodian/data/client',
         fields: {
           id: 'number',
           name: 'string',
+          client_type: 'fk(client_type)',
+          client_active_status: 'fk(client_active_status)',
+          responsible: 'fk(employee)',
         },
       },
       employee: {
@@ -35,17 +43,54 @@ const meta = {
           email: 'string',
         },
       },
+      task: {
+        pk: 'id',
+        endpoint: '/custodian/data/task',
+        fields: {
+          id: 'number',
+          name: 'string',
+        },
+      },
+      activity: {
+        pk: 'id',
+        endpoint: '/custodian/data/activity',
+        fields: {
+          id: 'number',
+          name: 'string',
+        },
+      },
+      client_type:{
+        pk: 'id',
+        endpoint: '/custodian/data/activity',
+        fields: {
+          id: 'number',
+          name: 'string',
+          code: 'string',
+        },
+      },
+      client_active_status:{
+        pk: 'id',
+        endpoint: '/custodian/data/client_active_status',
+        fields: {
+          id: 'number',
+          name: 'string',
+          code: 'string',
+        },
+      },
     },
   },
 }
-const store = getStore(meta, () => 'Token 3ad0a38e56264934a91f32ec3128b5fb')
-
+const store = getStore(meta, () => 'Token 96ac1d5e7ed24ab8b7dba9f8b0cb9b37')
+//TODO remove after debug
+window.store = store
 ReactDOM.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
-      <Router>
-        <App />
-      </Router>
+      <PageStoreContext.Provider value={pageStore}>
+        <Router>
+          <App />
+        </Router>
+      </PageStoreContext.Provider>
     </StoreContext.Provider>
   </React.StrictMode>,
   document.getElementById('root'),

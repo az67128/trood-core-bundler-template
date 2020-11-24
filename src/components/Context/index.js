@@ -1,11 +1,10 @@
 import React from 'react'
-import BaseComponent from 'core/BaseComponent'
-import { Component } from 'core/pageStore'
+import ContextContext from 'core/ContextContext'
 
-const Context = ({ context, components }) => {
-  const componentsStore = Component.create({ components })
-  
-  return <BaseComponent $context={ context } component={componentsStore} />
+const Context = ({ context, children }) => {
+  return <ContextContext.Provider value={context}>
+    {children}
+  </ContextContext.Provider>
 }
 
 export default Context

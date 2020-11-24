@@ -1,0 +1,149 @@
+{
+    "components": [
+        {
+            "name": "List",
+            "props": {
+                "entity": {
+                    "$type": "$data",
+                    "path": "$store.apis.custodian.activity"
+                },
+                "components": [
+                    {
+                        "name": "Row",
+                        "components": [
+                            {
+                                "name": "Cell",
+                                "props": {
+                                    "xsAuto": true,
+                                    "children": { "$type": "$data", "path": "$context.id" }
+                                }
+                            },
+                            {
+                                "name": "Cell",
+
+                                "components": [
+                                    {
+                                        "name": "Link",
+                                        "props": {
+                                            "to": {
+                                                "$type": "$expression",
+                                                "expression": "\"/activity/\" || data(\"$context.id\")"
+                                            },
+                                            "children": { "$type": "$data", "path": "$context.name" }
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Cell",
+                                "components": [
+                                    {
+                                        "name": "Button",
+                                        "props": {
+                                            "label": "edit",
+                                            "type": "text",
+                                            "onClick": {
+                                                "$type": "$action",
+                                                "path": "$page.openModal",
+                                                "args": [
+                                                    "editTask",
+                                                    {
+                                                        "form": {
+                                                            "$type": "$data",
+                                                            "path": "$store.forms.getForm[{\"apiName\":\"custodian\",\"modelName\":\"activity\",\"modelPk\":{\"$type\":\"$expression\",\"expression\":\"data('$context.id')\"}}]"
+                                                        },
+                                                        "isLoading": false
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Modal",
+            "props": {
+                "children": "modal",
+                "isOpen": { "$type": "$data", "path": "$page.isModalOpen[\"editTask\"]" },
+                "close": {
+                    "$type": "$action",
+                    "path": "$page.closeModal",
+                    "args": ["editTask"]
+                }
+            },
+            "components": [
+                {
+                    "name": "Context",
+                    "props": { "context": { "$type": "$data", "path": "$page.getContext[\"editTask\"]" } },
+                    "components": [
+                        {
+                            "name": "div",
+                            "props": {
+                                "children": { "$type": "$data", "path": "$context.form.data.name" }
+                            }
+                        },
+                        {
+                            "name": "Input",
+                            "props": {
+                                "value": { "$type": "$data", "path": "$context.form.data.name" },
+                                "onChange": {
+                                    "$type": "$action",
+                                    "path": "$context.form.changeFields",
+                                    "args": [
+                                        {
+                                            "$type": "$data",
+                                            "path": { "name": { "$type": "$data", "path": "$event" } }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Label",
+                            "props": {
+                                "label":  {
+                                    "$type": "$expression",
+                                    "expression": "data(\"$context.isLoading\") == true ? \"Loading\" : \"\""
+                                }
+                                
+                            }
+                        },
+                        {
+                            "name": "Button",
+                            "props": {
+                                "onClick": {
+                                    "$type": "$action",
+                                    "sequense": [
+                                        {
+                                            "$type": "$action",
+                                            "path": "$page.modifyContext",
+                                            "args": ["editTask", "isLoading", true]
+                                        },
+                                        { "$type": "$action", "path": "$context.form.submit" },
+                                        {
+                                            "$type": "$action",
+                                            "path": "$page.closeModal",
+                                            "args": ["editTask"]
+                                        },
+                                        {
+                                            "$type": "$action",
+                                            "path": "$page.modifyContext",
+                                            "args": ["editTask", "isLoading", false]
+                                        }
+                                    ]
+                                },
+                                "label": "Submit"
+                            }
+                        }
+                        
+                    ]
+                }
+            ]
+        }
+    ]
+}
