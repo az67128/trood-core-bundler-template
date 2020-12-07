@@ -28,7 +28,7 @@
 }
 
 .public-DraftEditorPlaceholder-root {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
   position: absolute;
 }
 

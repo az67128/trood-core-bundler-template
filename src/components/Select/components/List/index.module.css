@@ -39,7 +39,7 @@
 
 .empty {
   composes: itemWrapper;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
   cursor: default;
 }
 

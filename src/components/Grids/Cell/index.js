@@ -6,7 +6,15 @@ import './index.css'
 const SIZES = ['xs', 'sm', 'md', 'lg', 'xl']
 
 const Cell = (props) => {
-  const { children, className, verticalPadding, topPadding, bottomPadding, bddmark = 'ячейка' } = props
+  const {
+    children,
+    className,
+    verticalPadding,
+    topPadding,
+    bottomPadding,
+    bddmark = 'ячейка',
+    ...other
+  } = props
 
   const sizeClasses = SIZES.map((size) => {
     const sizeProp = props[size]
@@ -35,6 +43,7 @@ const Cell = (props) => {
 
   return (
     <div
+      {...other}
       bddmark={bddmark}
       style={style}
       className={`aa-Cell ${className || ''} ${sizeClasses} ${hiddenClasses} ${autoClasses} ${offsetClasses}`}

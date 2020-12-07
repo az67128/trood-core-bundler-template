@@ -4,8 +4,15 @@ import PropTypes from 'prop-types'
 import './index.css'
 
 
-const Container = ({ children, className = '', fluid = false, bddmark = 'контейнер' }) => (
+const Container = ({
+  children,
+  className = '',
+  fluid = false,
+  bddmark = 'контейнер',
+  ...other
+}) => (
   <div
+    {...other}
     className={`aa-Container ${!fluid ? 'aa-Container_withMaxWidth':''} ${className}`}
     bddmark={bddmark}
   >

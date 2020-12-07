@@ -1,6 +1,6 @@
 .root {
   position: relative;
-  border: 1px solid var(--trood-gray-border);
+  border: 1px solid var(--trood-border);
   border-radius: 2px;
   background-color: var(--trood-white);
   display: flex;
@@ -29,7 +29,7 @@
 
 .phoneCode {
   margin-right: 0.2rem;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,19 +48,19 @@
 }
 
 .input::-webkit-input-placeholder {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .input::-moz-placeholder {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .input:-moz-placeholder {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .input:-ms-input-placeholder {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .textarea {
@@ -68,7 +68,7 @@
 }
 
 .root .disabled {
-  color: var(--trood-gray-text);
+  color: var(--trood-text-gray);
 }
 
 .shadow {

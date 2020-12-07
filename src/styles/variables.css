@@ -1,138 +1,37 @@
 :root {
-  --trood-black: #333;
-  --trood-black-hover: #2a2a2a;
-  --trood-black-hover-light: #3a3a3a;
-  --trood-black-light: #1b1b1b;
-  --trood-black-border: #323232;
+  --trood-background: #f0f0f5;
+  --trood-background-dark: #1e1e32;
 
-  --trood-background: #fafafa;
-  --trood-background-dark: #ebf0f1;
-  --trood-background-light: #f6f6f6;
+  --trood-text: #1e1e32;
+  --trood-text-gray: #7d7d7d;
 
   --trood-white: #fff;
-  --trood-white-hover: #f4f4f4;
+  --trood-gray-light: #f0f0f5;
+  --trood-gray-medium-light: #e8e8e8;
+  --trood-gray: #c0c0c0;
+  --trood-gray-medium-dark: #9a9a9a;
+  --trood-gray-dark: #7d7d7d;
+  --trood-black: #000;
 
-  --trood-light-gray: #f9f9f9;
-  --trood-gray: #f0f0f0;
-  --trood-gray-hover: #dcdcdc;
-  --trood-gray-dark: #cacaca;
-  --trood-gray-text: #555;
-  --trood-gray-extra-dark: #787878;
-  --trood-gray-icon: #979797;
-  --trood-gray-super-dark: #9a9a9a;
-  --trood-gray-border-light: #999;
-  --trood-gray-bg: #e8e8e8;
-  --trood-gray-medium-dark: #eee;
-  --trood-gray-border: #e3e3e3;
+  --trood-border-light: #f0f0f5cc;
+  --trood-border: #e8e8e8;
+  --trood-border-active: #5daded;
 
-  --trood-blue: #0070d2;
-  --trood-blue-hover: #0060b2;
-  --trood-blue-extra-light: #e0f0ff;
-  --trood-blue-gray: #54698d;
-  --trood-blue-dark: #2e3e4e;
-  --trood-blue-dark-hover: #37495a;
-  --trood-blue-icon: #95aec5;
-  --trood-blue-border: #22e;
+  --trood-blue: #0180e2;
+  --trood-blue-hover: #0180e220;
+  --trood-blue-light: #5daded;
 
-  --trood-red: #eb6258;
-  --trood-red-hover: #d74439;
-  --trood-magenta-extra-light: #f6effc;
+  --trood-green: #00b807;
+  --trood-green-hover: #00b80720;
 
-  --trood-pink: #fff7f6;
+  --trood-red: #e95c5c;
+  --trood-red-hover: #e95c5c20;
 
-  --trood-orange: #f63;
-  --trood-orange-hover: #e55905;
+  --trood-orange: #ff6633;
+  --trood-orange-hover: #ff663320;
 
-  --trood-yellow: #f9e825;
+  --trood-input-shadow: 0px 0px 2px rgba(1, 128, 226, 0.4);
 
-  --trood-green: #4dad33;
-  --trood-green-hover: #53b338;
-  --trood-green-dark: #0e964c;
-  --trood-green-blue: #48c3cc;
-
-  --trood-sides: 100px;
-  --trood-sides-small: 50px;
-  --trood-menu-width: 220px;
-  --trood-menu-width-small: 80px;
-  --trood-grid-gap: 20px;
-  --trood-page-padding: 40px;
-  --trood-header-height: 60px;
-  --trood-border-radius: 2px;
-
-  --trood-phone: 1024px;
-  --trood-tablet: 1280px;
-  --trood-desktop: 1400px;
-}
-
-@custom-media --trood-media-desktop-large only screen and (width > 1400px);
-@custom-media --trood-media-desktop-small only screen and (width >= 1280px) and (width <= 1400px);
-@custom-media --trood-media-desktop only screen and (width >= 1280px);
-@custom-media --trood-media-tablet only screen and (width >= 1024px) and (width < 1280px);
-@custom-media --trood-media-phone only screen and (width < 1024px);
-@custom-media --trood-media-portable only screen and (width < 1280px);
-
-:export {
-  troodBlack: var(--trood-black);
-  troodBlackHover: var(--trood-black-hover);
-  troodBlackHover-light: var(--trood-black-hover-light);
-  troodBlackLight: var(--trood-black-light);
-  troodBlackBorder: var(--trood-black-border);
-
-  troodBackground: var(--trood-background);
-  troodBackgroundDark: var(--trood-background-dark);
-  troodBackgroundLight: var(--trood-background-light);
-
-  troodWhite: var(--trood-white);
-  troodWhiteHover: var(--trood-white-hover);
-
-  troodLightGray: var(--trood-light-gray);
-  troodGray: var(--trood-gray);
-  troodGrayHover: var(--trood-gray-hover);
-  troodGrayDark: var(--trood-gray-dark);
-  troodGrayText: var(--trood-gray-text);
-  troodGrayExtraDark: var(--trood-gray-extra-dark);
-  troodGrayIcon: var(--trood-gray-icon);
-  troodGraySuperDark: var(--trood-gray-super-dark);
-  troodGrayBorderLight: var(--trood-gray-border-light);
-  troodGrayBg: var(--trood-gray-bg);
-  troodGrayMediumDark: var(--trood-gray-medium-dark);
-  troodGrayBorder: var(--trood-gray-border);
-
-  troodBlue: var(--trood-blue);
-  troodBlueHover: var(--trood-blue-hover);
-  troodBlueExtraLight: var(--trood-blue-extra-light);
-  troodBlueGray: var(--trood-blue-gray);
-  troodBlueDark: var(--trood-blue-dark);
-  troodBlueDarkHover: var(--trood-blue-dark-hover);
-  troodBlueIcon: var(--trood-blue-icon);
-  troodBlueBorder: var(--trood-blue-border);
-
-  troodRed: var(--trood-red);
-  troodRedHover: var(--trood-red-hover);
-  troodMagentaExtraLight: var(--trood-magenta-extra-light);
-
-  troodPink: var(--trood-pink);
-
-  troodOrange: var(--trood-orange);
-  troodOrangeHover: var(--trood-orange-hover);
-
-  troodYellow: var(--trood-yellow);
-
-  troodGreen: var(--trood-green);
-  troodGreenHover: var(--trood-green-hover);
-  troodGreenDark: var(--trood-green-dark);
-  troodGreenBlue: var(--trood-green-blue);
-
-  troodSides: var(--trood-sides);
-  troodSidesSmall: var(--trood-sides-small);
-  troodMenuWidth: var(--trood-menu-width);
-  troodMenuWidthSmall: var(--trood-menu-width-small);
-  troodGridGap: var(--trood-grid-gap);
-  troodPagePadding: var(--trood-page-padding);
-  troodHeaderHeight: var(--trood-header-height);
-  troodBorderRadius: var(--trood-border-radius);
-
-  troodPhone: var(--trood-phone);
-  troodTablet: var(--trood-tablet);
-  troodDesktop: var(--trood-desktop);
+  --trood-border-radius: 8px;
+  --trood-border-radius-small: 4px;
 }

@@ -9,7 +9,7 @@ export const Component = types
   .model('Component', {
     id: types.optional(types.string, () => nanoid()),
     name: types.optional(types.string, ''),
-    components: types.array(types.late(() => Component)),
+    components: types.array(types.maybeNull(types.late(() => Component))),
     props: types.optional(types.frozen({}), {}),
     chunk: types.maybeNull(types.string),
     isLoading: types.optional(types.boolean, false),

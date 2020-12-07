@@ -4,6 +4,7 @@ import Context from './Context'
 
 import Row from './Grids/Row'
 import Cell from './Grids/Cell'
+import Conditional from './Conditional'
 import Container from './Grids/Container'
 
 import { Link, Switch } from 'react-router-dom'
@@ -24,12 +25,13 @@ import Remote from './Remote'
 import Route from './Route'
 import Spacer from './Spacer'
 import Select from './Select'
-import Conditional from './Conditional'
+import Table from './Table'
 
 const components = {
   Context,
   Row,
   Cell,
+  Conditional,
   Container,
   Link,
   Switch,
@@ -49,7 +51,7 @@ const components = {
   Route,
   Spacer,
   Select,
-  Conditional,
+  Table,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({

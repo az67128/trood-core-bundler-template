@@ -2,7 +2,7 @@
   padding: 8px;
   align-items: center;
   cursor: pointer;
-  color: var(--trood-gray-super-dark);
+  color: var(--trood-gray-medium-dark);
 }
 
 .active,
