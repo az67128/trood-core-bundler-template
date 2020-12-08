@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   height: 38px;
-  border: 1px solid var(--trood-gray-border);
+  border: 1px solid var(--trood-border);
   border-radius: 3px;
   padding: 0 10px;
   background-color: var(--trood-white);
@@ -40,7 +40,7 @@
 
 .root .disabled .header {
   cursor: default;
-  color: var(--trood-gray-text);
+  color: var(--trood-text-gray);
 }
 
 .value {
@@ -48,13 +48,13 @@
 }
 
 .placeholder {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .icon svg {
   width: 10px;
   height: 10px;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .body {
@@ -62,7 +62,7 @@
   z-index: 1000;
   top: calc(100% + 12px);
   width: 280px;
-  border: 1px solid var(--trood-gray-border);
+  border: 1px solid var(--trood-border);
   border-radius: 3px;
   background-color: var(--trood-white);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
@@ -83,7 +83,7 @@
   border: 10px solid transparent;
   border-top-width: 8px;
   border-bottom-width: 8px;
-  border-bottom-color: var(--trood-gray-border);
+  border-bottom-color: var(--trood-border);
 }
 
 .body:after {
@@ -116,7 +116,7 @@
 
 .calendarArrow {
   cursor: pointer;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .calendarArrow svg {
@@ -136,7 +136,7 @@
   flex-flow: column nowrap;
   font-size: 12px;
   text-transform: uppercase;
-  background-color: var(--trood-background-light);
+  background-color: var(--trood-background);
 }
 
 .calendarRow {
@@ -148,7 +148,7 @@
 .calendarHeader {
   font-weight: 500;
   text-transform: capitalize;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .calendarCell {
@@ -172,14 +172,14 @@
 }
 
 .calendarBodyCell:not(.disabledCell):hover {
-  background-color: var(--trood-blue-extra-light);
+  background-color: var(--trood-blue-light);
   font-weight: 500;
   color: var(--trood-black);
   cursor: pointer;
 }
 
 .calendar .disabledCell {
-  color: var(--trood-gray-bg);
+  color: var(--trood-text-gray);
 }
 
 .calendar .currentCell {

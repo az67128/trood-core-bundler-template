@@ -6,11 +6,19 @@
             "components": [
                 {
                     "name": "Row",
-                    "props": { "style": { "minHeight": "100vh", "backgroundColor": "#f9fafc" } },
+                    "props": {
+                        "style": { "height": "100vh", "backgroundColor": "#f9fafc" },
+                        "noGutters": true
+                    },
                     "components": [
                         {
                             "name": "Cell",
-                            "props": { "xsAuto": true },
+                            "props": {
+                                "xsAuto": true,
+                                "style": {
+                                    "zIndex": 1
+                                }
+                            },
                             "components": [
                                 {
                                     "name": "div",
@@ -52,6 +60,21 @@
                                                 }
                                             ]
                                         },
+                                      {
+                                        "name": "Cell",
+                                        "components": [
+                                          {
+                                            "name": "Link",
+                                            "props": {
+                                              "to": "/clients_table",
+                                              "children": {
+                                                "$type": "$expression",
+                                                "expression": "data(\"$route.location.pathname\") == \"/clients_table\" ? \"Clients Table*\" : \"Clients Table\""
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
                                         {
                                             "name": "Cell",
                                             "components": [
@@ -133,7 +156,10 @@
                         },
                         {
                             "name": "Cell",
-
+                            "props": {
+                                "style": { "overflowX": "hidden", "overflowY": "auto", "height": "100%" },
+                                "id": "MAIN_SCROLL_CONTAINER"
+                            },
                             "components": [
                                 {
                                     "name": "Row",

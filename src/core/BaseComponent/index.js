@@ -119,7 +119,7 @@ const connectProps = (props, $data, childBaseComponent) => {
       if (key === 'children' && childBaseComponent) {
         return {
           ...memo,
-          [key]: [...props[key], childBaseComponent],
+          [key]: [...(Array.isArray(props[key]) ? props[key] : [props[key]]), childBaseComponent],
         }
       }
 
@@ -128,7 +128,6 @@ const connectProps = (props, $data, childBaseComponent) => {
     { ...props },
   )
 }
-const skipElements = ['img', 'input']
 
 const BaseComponent = ({ component }) => {
   const $store = React.useContext(StoreContext)
@@ -146,12 +145,13 @@ const BaseComponent = ({ component }) => {
   return useObserver(() => {
     if (!component || !component.components) return null
     return component.components.map((childComponent) => {
+      if (!childComponent) return null
       const Component = coreComponents[childComponent.name] || childComponent.name
       const childBaseComponent = <BaseComponent key="Base" component={childComponent} />
       const connectedProps = childComponent.props
         ? connectProps(childComponent.props, $data, childBaseComponent)
         : {}
-      if (!connectedProps.children && !skipElements.includes(childComponent.name)) {
+      if (!connectedProps.children && childComponent.components.length) {
         connectedProps.children = [childBaseComponent]
       }
 

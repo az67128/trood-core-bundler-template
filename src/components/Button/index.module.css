@@ -28,7 +28,7 @@
   min-height: auto;
   width: 40px;
   height: 40px;
-  color: var(--trood-gray-icon) !important;
+  color: var(--trood-gray-medium-dark) !important;
   background-color: var(--trood-white) !important;
   border: none;
 }
@@ -52,11 +52,11 @@
 }
 
 .arrow {
-  color: var(--trood-gray-hover) !important;
+  color: var(--trood-gray) !important;
 }
 
 .arrow:hover svg {
-  fill: var(--trood-blue-border) !important;
+  fill: var(--trood-blue) !important;
 }
 
 .disabled {
@@ -173,18 +173,18 @@ input.button {
 }
 
 .blue:not(.disabled):hover {
-  color: var(--trood-blue-dark-hover);
+  color: var(--trood-blue);
   background-color: var(--trood-blue-hover);
 }
 
 .gray {
   color: var(--trood-white);
-  background-color: var(--trood-gray-super-dark);
+  background-color: var(--trood-gray-medium-dark);
 }
 
 .gray:not(.disabled):hover {
   color: var(--trood-white);
-  background-color: var(--trood-gray-extra-dark);
+  background-color: var(--trood-gray-dark);
 }
 
 .orange {
@@ -213,23 +213,23 @@ input.button {
 }
 
 .border {
-  border: 2px solid var(--trood-gray-border);
+  border: 2px solid var(--trood-border);
   background-color: var(--trood-white);
 }
 
 .border:not(.disabled):hover {
   background-color: var(--trood-white);
-  border-color: var(--trood-gray-border);
+  border-color: var(--trood-border);
 }
 
 .white {
-  color: var(--trood-blue-dark);
+  color: var(--trood-blue);
   background-color: var(--trood-white);
 }
 
 .white:not(.disabled):hover {
-  color: var(--trood-blue-dark-hover);
-  background-color: var(--trood-white-hover);
+  color: var(--trood-blue);
+  background-color: var(--trood-gray-light);
 }
 
 .text {
@@ -238,12 +238,12 @@ input.button {
 
 .border.gray,
 .text.gray {
-  color: var(--trood-gray-super-dark);
+  color: var(--trood-gray-medium-dark);
 }
 
 .border.gray:not(.disabled):hover,
 .text.gray:not(.disabled):hover {
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .border.white,
@@ -253,7 +253,7 @@ input.button {
 
 .border.white:not(.disabled):hover,
 .text.white:not(.disabled):hover {
-  color: var(--trood-white-hover);
+  color: var(--trood-gray-light);
 }
 
 .border.orange,
@@ -283,7 +283,7 @@ input.button {
 .gray.add:not(.disabled):hover {
   font-size: 12px;
   background-color: transparent;
-  color: var(--trood-gray-extra-dark);
+  color: var(--trood-gray-dark);
 }
 
 .delete,

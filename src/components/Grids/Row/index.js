@@ -12,6 +12,7 @@ const Row = ({
   topPadding,
   bottomPadding,
   bddmark = 'строка',
+  ...other
 }) => {
   const style = {
     paddingTop: `${verticalPadding || topPadding}px`,
@@ -20,6 +21,7 @@ const Row = ({
 
   return (
     <div
+      {...other}
       style={style}
       className={`aa-Row ${noGutters ? 'aa-Row_noGutters' : ''} ${className}`}
       bddmark={bddmark}

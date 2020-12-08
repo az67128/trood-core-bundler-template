@@ -11,5 +11,5 @@
 }
 
 .root.disabled {
-  color: var(--trood-gray-text);
+  color: var(--trood-text-gray);
 }
