@@ -16,7 +16,8 @@ const pageStore = Page.create({})
 window.pageStore = pageStore
 const meta = {
   custodian: {
-    apiHost: 'https://legal.dev.trood.ru/',
+    // apiHost: 'https://legal.dev.trood.ru/',
+    apiHost: 'https://new-core.saas.trood.ru/',
     entityDataAddress: 'data',
     arrayDataAddress: 'data',
     arrayCountAddress: 'total_count',
@@ -77,10 +78,29 @@ const meta = {
           code: 'string',
         },
       },
+      page: {
+        pk: 'id',
+        endpoint: '/custodian/data/page',
+        fields: {
+          id: 'number',
+          key: 'string',
+          query: 'string',
+        },
+      },
+      todo: {
+        pk: 'id',
+        endpoint: '/custodian/data/todo',
+        fields: {
+          id: 'number',
+          text: 'string',
+          complete: 'boolean',
+        },
+      },
     },
   },
 }
-const store = getStore(meta, () => 'Token 96ac1d5e7ed24ab8b7dba9f8b0cb9b37')
+// const store = getStore(meta, () => 'Token 96ac1d5e7ed24ab8b7dba9f8b0cb9b37')
+const store = getStore(meta, () => 'Token a11d7a13f6bb4ed5963b0dcc90fd3871')
 //TODO remove after debug
 window.store = store
 ReactDOM.render(

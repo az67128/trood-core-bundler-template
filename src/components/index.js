@@ -26,6 +26,7 @@ import Route from './Route'
 import Spacer from './Spacer'
 import Select from './Select'
 import Table from './Table'
+import Text from './Text'
 
 const components = {
   Context,
@@ -51,8 +52,8 @@ const components = {
   Route,
   Spacer,
   Select,
-  Conditional,
   Table,
+  Text,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({

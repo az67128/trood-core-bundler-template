@@ -5,6 +5,24 @@ const normalizeApiPath = (path) => {
   return `${host}${host.endsWith('/') ? '' : '/'}${path.startsWith('/') ? path.slice(1) : path}`
 }
 
+const convertObject = (cur, data) => {
+  const component = {
+    name: typeof cur.type === 'string' ? cur.type : cur.type.resolvedName,
+    props:cur.props,
+  }
+  if(component.name ==='List'){
+    const linkedNodes = data[cur.linkedNodes.list]
+    linkedNodes.nodes.forEach(id => {
+      const el = data[id]
+      component.props[el.props.id] = [convertObject(el, data)]
+    })
+  }
+  if(cur.nodes.length >0) {
+    component.components = cur.nodes.map(nodeId => convertObject(data[nodeId], data))
+  }
+  console.log(component)
+  return component
+}
 export const Component = types
   .model('Component', {
     id: types.optional(types.string, () => nanoid()),
@@ -23,8 +41,13 @@ export const Component = types
       if (!model.chunk) return
       try {
         model.isLoading = true
-        const { components } = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
-        model.components = components
+        const { data } = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
+        const query =  JSON.parse(data.query)
+        
+        const converted = convertObject(query.ROOT, query)
+        
+        
+        model.components = converted.components
       } catch (err) {
         console.error(err)
       }
