@@ -18,21 +18,25 @@ const Cell = (props) => {
 
   const sizeClasses = SIZES.map((size) => {
     const sizeProp = props[size]
+    delete other[size]
     return sizeProp ? `aa-Cell${size === 'xs' ? '' : '-' + size}-${sizeProp}` : ''
   }).join(' ')
 
   const hiddenClasses = SIZES.map((size) => {
     const sizeProp = props[`${size}Hidden`]
+    delete other[`${size}Hidden`]
     return sizeProp ? `aa-Cell-${size}-hidden` : ''
   }).join(' ')
 
   const autoClasses = SIZES.map((size) => {
     const sizeProp = props[`${size}Auto`]
+    delete other[`${size}Auto`]
     return sizeProp ? `aa-Cell${size === 'xs' ? '' : '-' + size}-auto` : ''
   }).join(' ')
 
   const offsetClasses = SIZES.map((size) => {
     const sizeProp = props[`${size}Offset`]
+    delete other[`${size}Offset`]
     return sizeProp ? `aa-Cell-offset${size === 'xs' ? '' : '-' + size}-${sizeProp}` : ''
   }).join(' ')
 
