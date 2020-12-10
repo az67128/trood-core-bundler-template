@@ -51,6 +51,10 @@
                 {
                     "name": "List",
                     "props": {
+                        "pagination": {
+                            "type": "infinity",
+                            "scrollContainerSelector": "#MAIN_SCROLL_CONTAINER"
+                        },
                         "entity": {
                             "$type": "$data",
                             "path": "$store.apis.custodian.client"
@@ -113,26 +117,6 @@
                                         ]
                                     }
                                 ]
-                            }
-                        ],
-                        "topComponents": [
-                            {
-                                "name": "Button",
-                                "props": {
-                                    "specialType": "arrowLeft",
-                                    "type": "text",
-                                    "style": "& div:last-child{color:var(--trood-red);}",
-                                    "onClick": { "$type": "$data", "path": "$context.prevPage" }
-                                }
-                            },
-                            {
-                                "name": "Button",
-                                "props": {
-                                    "specialType": "arrowRight",
-                                    "type": "text",
-                                    "style": "& div:last-child{color:var(--trood-red);}",
-                                    "onClick": { "$type": "$data", "path": "$context.nextPage" }
-                                }
                             }
                         ]
                     }

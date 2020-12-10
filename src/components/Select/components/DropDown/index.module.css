@@ -14,12 +14,12 @@
 
 .root:focus {
   border-color: var(--trood-blue);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   outline: none;
 }
 
 .root.open {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .root.error {
@@ -74,22 +74,30 @@
 .optionsContainer {
   position: absolute;
   z-index: 1000;
-  top: calc(100% - 3px);
+  top: calc(100% - var(--trood-border-radius));
+  padding-top: calc(var(--trood-border-radius) / 2);
   left: -1px;
   width: calc(100% + 2px);
   background-color: var(--trood-white);
-  box-shadow:
-    inset 0 0 0 1px var(--trood-border),
-    0 6px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 3px 3px;
+  border: 1px solid var(--trood-border);
+  border-top: 0;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 var(--trood-border-radius) var(--trood-border-radius);
 }
 
 .optionsContainer.openUp {
   top: unset;
-  bottom: calc(100% - 3px);
-  box-shadow:
-    inset 0 0 0 1px var(--trood-border),
-    0 -4px 8px rgba(0, 0, 0, 0.1);
+  padding-top: 0;
+  bottom: calc(100% - var(--trood-border-radius));
+  padding-bottom: calc(var(--trood-border-radius) / 2);
+  border-top: 1px solid var(--trood-border);
+  border-bottom: 0;
+  box-shadow: 0 -6px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--trood-border-radius) var(--trood-border-radius) 0 0;
+}
+
+.root:focus .optionsContainer {
+  border-color: var(--trood-blue);
 }
 
 .optionsContainer.hide {
