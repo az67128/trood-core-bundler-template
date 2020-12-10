@@ -25,26 +25,21 @@ class Paginator extends PureComponent {
   constructor(props) {
     super(props)
 
-    this.nextPageActionFired = false
     this.scrollContainerNode = null
+    this.mount = false
 
     this.setScrollEvent = this.setScrollEvent.bind(this)
     this.handleScroll = debounce(this.handleScroll.bind(this), 200)
     this.goToPage = this.goToPage.bind(this)
     this.renderClassicControls = this.renderClassicControls.bind(this)
+    this.renderInfinityControls = this.renderInfinityControls.bind(this)
   }
 
   componentDidMount() {
+    this.mount = true
     this.setScrollEvent()
   }
-  /*
-    componentDidUpdate(prevProps) {
-      this.setScrollEvent()
-      if (this.props.nextPage !== prevProps.nextPage) {
-        this.nextPageActionFired = false
-      }
-    }
-  */
+
   componentWillUnmount() {
     if (this.scrollContainerNode) {
       this.scrollContainerNode.removeEventListener('scroll', this.handleScroll)
@@ -69,7 +64,7 @@ class Paginator extends PureComponent {
       const scrollDelta = this.scrollContainerNode.scrollHeight - 100
       const loading = entity.getInfinityPagesLoading(pageSize, queryOptions)
       const nextPage = entity.getInfinityNextPageNumber(pageSize, queryOptions)
-      if (!this.nextPageActionFired && nextPage && !loading && scrollBottom > scrollDelta) {
+      if (nextPage && !loading && scrollBottom > scrollDelta) {
         entity.getInfinityNextPage(pageSize, queryOptions)
       }
     }
@@ -191,6 +186,40 @@ class Paginator extends PureComponent {
     )
   }
 
+  renderInfinityControls() {
+    const {
+      entity,
+      queryOptions,
+      type,
+      infinityControls,
+    } = this.props
+
+    const { pageSize } = this.paginator
+
+    if (type !== 'infinity' || infinityControls === false || !this.mount || this.scrollContainerNode) return null
+
+    const nextPage = entity.getInfinityNextPageNumber(pageSize, queryOptions)
+
+    if (nextPage === undefined) return null
+
+    if (infinityControls) {
+      const controlsStore = Component.create({ components: infinityControls })
+      return (
+        <Context context={{
+          loadNextPage: () => entity.getInfinityNextPage(pageSize, queryOptions),
+        }}>
+          <BaseComponent component={controlsStore} />
+        </Context>
+      )
+    }
+
+    return (
+      <div className={styles.loadMore} onClick={() => entity.getInfinityNextPage(pageSize, queryOptions)}>
+        Load More...
+      </div>
+    )
+  }
+
   goToPage(p, ps) {
     const { history } = this.props
 
@@ -239,6 +268,7 @@ class Paginator extends PureComponent {
                 <LoadingIndicator />
               )}
               {this.renderClassicControls(true)}
+              {this.renderInfinityControls()}
             </div>
           )
         }}
