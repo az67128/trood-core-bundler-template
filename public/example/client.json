@@ -7,7 +7,6 @@
                     "$type": "$data",
                     "path": "$store.apis.custodian.client.getByPk[{\"$type\":\"$data\", \"path\":\"$route.params.id\"}]"
                 }
-                
             },
             "components": [
                 {
@@ -25,7 +24,12 @@
                         },
                         {
                             "name": "Cell",
-                            "props": { "children": { "$type": "$data", "path": "$context.name" } }
+                            "props": {
+                                "children": {
+                                    "$type": "$data",
+                                    "path": "$context.name"
+                                }
+                            }
                         }
                     ]
                 }

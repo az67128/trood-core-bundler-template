@@ -1,6 +1,11 @@
 {
     "components": [
-        { "name": "div", "props": { "children": "Remote component" } },
+        {
+            "name": "div",
+            "props": {
+                "children": "Remote component"
+            }
+        },
         {
             "name": "Remote",
             "props": {

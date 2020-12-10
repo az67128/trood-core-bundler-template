@@ -2,12 +2,17 @@
     "components": [
         {
             "name": "Container",
-            "props": { "fluid": true },
+            "props": {
+                "fluid": true
+            },
             "components": [
                 {
                     "name": "Row",
                     "props": {
-                        "style": { "height": "100vh", "backgroundColor": "#f9fafc" },
+                        "style": {
+                            "height": "100vh",
+                            "backgroundColor": "var(--trood-background)"
+                        },
                         "noGutters": true
                     },
                     "components": [
@@ -25,14 +30,18 @@
                                     "props": {
                                         "style": {
                                             "height": "100%",
-                                            "boxShadow": "0 0 15px 0 rgba(134,141,170,.2",
-                                            "backgroundColor": "#f9fafc"
+                                            "boxShadow": "0 0 15px 0 var(--trood-shadow)",
+                                            "backgroundColor": "var(--trood-white)"
                                         }
                                     },
                                     "components": [
                                         {
                                             "name": "Cell",
-                                            "props": { "style": { "padding": "8px" } },
+                                            "props": {
+                                                "style": {
+                                                    "padding": "8px"
+                                                }
+                                            },
                                             "components": [
                                                 {
                                                     "name": "Link",
@@ -40,7 +49,12 @@
                                                         "to": "/"
                                                     },
                                                     "components": [
-                                                        { "name": "img", "props": { "src": "/images/logo.svg" } }
+                                                        {
+                                                            "name": "img",
+                                                            "props": {
+                                                                "src": "/images/logo.svg"
+                                                            }
+                                                        }
                                                     ]
                                                 }
                                             ]
@@ -60,21 +74,21 @@
                                                 }
                                             ]
                                         },
-                                      {
-                                        "name": "Cell",
-                                        "components": [
-                                          {
-                                            "name": "Link",
-                                            "props": {
-                                              "to": "/clients_table",
-                                              "children": {
-                                                "$type": "$expression",
-                                                "expression": "data(\"$route.location.pathname\") == \"/clients_table\" ? \"Clients Table*\" : \"Clients Table\""
-                                              }
-                                            }
-                                          }
-                                        ]
-                                      },
+                                        {
+                                            "name": "Cell",
+                                            "components": [
+                                                {
+                                                    "name": "Link",
+                                                    "props": {
+                                                        "to": "/clients_table",
+                                                        "children": {
+                                                            "$type": "$expression",
+                                                            "expression": "data(\"$route.location.pathname\") == \"/clients_table\" ? \"Clients Table*\" : \"Clients Table\""
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
                                         {
                                             "name": "Cell",
                                             "components": [
@@ -96,21 +110,6 @@
                                                 {
                                                     "name": "Link",
                                                     "props": {
-                                                        "to": "/modal",
-                                                        "children": {
-                                                            "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/modal\" ? \"Modal*\" : \"Modal\""
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "Cell",
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
                                                         "to": "/remote",
                                                         "children": {
                                                             "$type": "$expression",
@@ -120,31 +119,16 @@
                                                 }
                                             ]
                                         },
-                                      {
-                                        "name": "Cell",
-                                        "components": [
-                                          {
-                                            "name": "Link",
-                                            "props": {
-                                              "to": "/components",
-                                              "children": {
-                                                "$type": "$expression",
-                                                "expression": "data(\"$route.location.pathname\") == \"/components\" ? \"Components*\" : \"Components\""
-                                              }
-                                            }
-                                          }
-                                        ]
-                                      },
                                         {
                                             "name": "Cell",
                                             "components": [
                                                 {
                                                     "name": "Link",
                                                     "props": {
-                                                        "to": "/form",
+                                                        "to": "/components",
                                                         "children": {
                                                             "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/form\" ? \"Form*\" : \"Form\""
+                                                            "expression": "data(\"$route.location.pathname\") == \"/components\" ? \"Components*\" : \"Components\""
                                                         }
                                                     }
                                                 }
@@ -157,17 +141,42 @@
                         {
                             "name": "Cell",
                             "props": {
-                                "style": { "overflowX": "hidden", "overflowY": "auto", "height": "100%" },
+                                "style": {
+                                    "overflowX": "hidden",
+                                    "overflowY": "auto",
+                                    "height": "100%"
+                                },
                                 "id": "MAIN_SCROLL_CONTAINER"
                             },
                             "components": [
                                 {
                                     "name": "Row",
-                                    "props": { "style": { "backgroundColor": "#fff", "marginBottom": 16 } },
+                                    "props": {
+                                        "style": {
+                                            "backgroundColor": "var(--trood-white)"
+                                        }
+                                    },
                                     "components": [
-                                        { "name": "Cell", "props": { "xsAuto": true, "children": "back" } },
-                                        { "name": "Cell", "props": { "children": "tabs" } },
-                                        { "name": "Cell", "props": { "xsAuto": true, "children": "avatar" } }
+                                        {
+                                            "name": "Cell",
+                                            "props": {
+                                                "xsAuto": true,
+                                                "children": "back"
+                                            }
+                                        },
+                                        {
+                                            "name": "Cell",
+                                            "props": {
+                                                "children": "tabs"
+                                            }
+                                        },
+                                        {
+                                            "name": "Cell",
+                                            "props": {
+                                                "xsAuto": true,
+                                                "children": "avatar"
+                                            }
+                                        }
                                     ]
                                 },
                                 {
@@ -179,7 +188,9 @@
                                                 {
                                                     "name": "Switch",
                                                     "components": [
-                                                        { "name": "LoadingIndicator" }
+                                                        {
+                                                            "name": "LoadingIndicator"
+                                                        }
                                                     ],
                                                     "chunk": "example/pages.json"
                                                 }
