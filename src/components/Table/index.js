@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 import BaseComponent from 'core/BaseComponent'
 import { Component } from 'core/pageStore'
 import Context from 'components/Context'
@@ -7,6 +6,7 @@ import Context from 'components/Context'
 import Paginator from '../internal/Paginator'
 
 import styles from './index.module.css'
+import PropTypes from 'prop-types'
 
 
 const getComponents = (columnComponents, componentKey = 'bodyCell', wrapper = 'td') =>
@@ -34,9 +34,9 @@ const Table = ({
   const bodyComponentsStore = Component.create({ components: bodyComponents })
 
   return (
-    <Paginator {...pagination} entity={entity} queryOptions={queryOptions}>
+    <Paginator {...pagination} className={className} entity={entity} queryOptions={queryOptions}>
       {({ items }) => (
-        <table className={classNames(styles.table, className)}>
+        <table className={styles.table}>
           <thead>
             <tr>
               <BaseComponent component={headerComponentsStore} />
@@ -55,6 +55,39 @@ const Table = ({
       )}
     </Paginator>
   )
+}
+
+Table.propTypes = {
+  className: PropTypes.string,
+  entity: PropTypes.shape({
+    getPage: PropTypes.func,
+    getPageLoading: PropTypes.func,
+    getPagesCount: PropTypes.func,
+    getInfinityPages: PropTypes.func,
+    getInfinityPagesLoading: PropTypes.func,
+    getInfinityNextPage: PropTypes.func,
+    getInfinityNextPageNumber: PropTypes.func,
+  }).isRequired,
+  queryOptions: PropTypes.shape({
+    headers: PropTypes.object,
+    hash: PropTypes.string,
+    cacheMaxAgeMs: PropTypes.number,
+    filters: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  }),
+  columnComponents: PropTypes.arrayOf(PropTypes.shape({
+    headerCell: PropTypes.object,
+    bodyCell: PropTypes.object,
+  })),
+  pagination: PropTypes.shape({
+    type: PropTypes.oneOf(['classic', 'infinity', 'disabled']),
+    defaultPageSize: PropTypes.number,
+    pagesControlsCount: PropTypes.number,
+    pageSizes: PropTypes.arrayOf(PropTypes.number),
+    scrollContainerSelector: PropTypes.string,
+    topControls: PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.object)]),
+    bottomControls: PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.object)]),
+    infinityControls: PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.object)]),
+  }),
 }
 
 export default Table

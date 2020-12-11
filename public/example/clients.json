@@ -70,6 +70,20 @@
                         {
                             "name": "List",
                             "props": {
+                                "queryOptions": {
+                                    "$type": "$data",
+                                    "path": {
+                                        "filters": {
+                                            "$type": "$data",
+                                            "path": {
+                                                "q": {
+                                                    "$type": "$expression",
+                                                    "expression": "if(length data(\"$route.searchParams.getAll[\\\"client_active_status\\\"]\"),join(\"\",[\"in(client_active_status,(\",join(\",\",data(\"$route.searchParams.getAll[\\\"client_active_status\\\"]\")),\"))\"]))"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "pagination": {
                                     "type": "infinity",
                                     "scrollContainerSelector": "#MAIN_SCROLL_CONTAINER"
