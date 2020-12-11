@@ -2,8 +2,11 @@
     "components": [
         {
             "name": "Route",
-            "props": { "path": "/", "title": "Root", "exact": true },
-
+            "props": {
+                "path": "/",
+                "title": "Root",
+                "exact": true
+            },
             "components": [
                 {
                     "name": "div",
@@ -15,21 +18,31 @@
         },
         {
             "name": "Route",
-            "props": { "path": "/clients", "title": "Clients", "exact": true },
+            "props": {
+                "path": "/clients",
+                "title": "Clients",
+                "exact": true
+            },
             "components": [
-              { "name": "LoadingIndicator" }
+                {
+                    "name": "LoadingIndicator"
+                }
             ],
             "chunk": "example/clients.json"
-
         },
         {
-          "name": "Route",
-          "props": { "path": "/clients_table", "title": "Clients Table", "exact": true },
-          "components": [
-            { "name": "LoadingIndicator" }
-          ],
-          "chunk": "example/clientsTable.json"
-
+            "name": "Route",
+            "props": {
+                "path": "/clients_table",
+                "title": "Clients Table",
+                "exact": true
+            },
+            "components": [
+                {
+                    "name": "LoadingIndicator"
+                }
+            ],
+            "chunk": "example/clientsTable.json"
         },
         {
             "name": "Route",
@@ -38,48 +51,50 @@
                 "title": "Client"
             },
             "components": [
-              { "name": "LoadingIndicator" }
+                {
+                    "name": "LoadingIndicator"
+                }
             ],
             "chunk": "example/client.json"
-            
         },
         {
             "name": "Route",
-            "props": { "path": "/matters", "title": "Matters" },
-            "components": [{ "name": "div", "props": { "children": "matters" } }]
-        },
-        {
-            "name": "Route",
-            "props": { "path": "/modal" },
+            "props": {
+                "path": "/matters",
+                "title": "Matters"
+            },
             "components": [
-              { "name": "LoadingIndicator" }
-            ],
-            "chunk": "example/modal.json"
-            
+                {
+                    "name": "div",
+                    "props": {
+                        "children": "matters"
+                    }
+                }
+            ]
         },
         {
             "name": "Route",
-            "props": { "path": "/remote" },
+            "props": {
+                "path": "/remote"
+            },
             "components": [
-              { "name": "LoadingIndicator" }
+                {
+                    "name": "LoadingIndicator"
+                }
             ],
             "chunk": "example/remote.json"
         },
         {
-          "name": "Route",
-          "props": { "path": "/components" },
-          "components": [
-            { "name": "LoadingIndicator" }
-          ],
-          "chunk": "example/components.json"
-        },
-        {
             "name": "Route",
-            "props": { "path": "/form" },
+            "props": {
+                "path": "/components"
+            },
             "components": [
-                { "name": "LoadingIndicator" }
+                {
+                    "name": "LoadingIndicator"
+                }
             ],
-            "chunk": "example/form.json"
+            "chunk": "example/components.json"
         },
         {
             "name": "Route",
@@ -88,7 +103,9 @@
                 "title": "Activity"
             },
             "components": [
-              { "name": "LoadingIndicator" }
+                {
+                    "name": "LoadingIndicator"
+                }
             ],
             "chunk": "example/activity.json"
         }

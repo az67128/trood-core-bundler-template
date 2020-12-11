@@ -1,137 +1,147 @@
 {
     "components": [
         {
-            "name": "Label",
+            "name": "Block",
             "props": {
-                "label": "Clients"
-            }
-        },
-        {
-            "name": "Spacer",
-            "props": {
-                "size": 16
-            }
-        },
-        {
-            "name": "Cell",
-            "props": {
-                "style": {
-                    "borderRadus": "16px",
-                    "backgroundColor": "#fff"
-                }
+                "transparent": true
             },
             "components": [
                 {
-                    "name": "Table",
+                    "name": "div",
                     "props": {
-                        "pagination": {
-                            "topControls": [
-                                {
-                                    "name": "Row",
-                                    "components": [
+                        "children": "Clients",
+                        "style": {
+                            "fontSize": "32px"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Block",
+            "components": [
+                {
+                    "name": "Cell",
+                    "props": {
+                        "style": {
+                            "borderRadus": "16px",
+                            "backgroundColor": "#fff"
+                        }
+                    },
+                    "components": [
+                        {
+                            "name": "Table",
+                            "props": {
+                                "pagination": {
+                                    "topControls": [
                                         {
-                                            "name": "Conditional",
-                                            "props": {
-                                                "condition": {
-                                                    "$type": "$expression",
-                                                    "expression": "data('$context.currentPage') > 0"
-                                                },
-                                                "ifTrue": [
-                                                    {
-                                                        "name": "Button",
-                                                        "props": {
-                                                            "specialType": "arrowLeft",
-                                                            "type": "text",
-                                                            "style": "& div:last-child{color:var(--trood-red);}",
-                                                            "onClick": {
-                                                                "$type": "$action",
-                                                                "path": "$context.goToPage",
-                                                                "args": [
-                                                                    {
-                                                                        "$type": "$expression",
-                                                                        "expression": "data('$context.currentPage') - 1"
+                                            "name": "Row",
+                                            "components": [
+                                                {
+                                                    "name": "Conditional",
+                                                    "props": {
+                                                        "condition": {
+                                                            "$type": "$expression",
+                                                            "expression": "data('$context.currentPage') > 0"
+                                                        },
+                                                        "ifTrue": [
+                                                            {
+                                                                "name": "Button",
+                                                                "props": {
+                                                                    "specialType": "arrowLeft",
+                                                                    "type": "text",
+                                                                    "style": "& div:last-child{color:var(--trood-red);}",
+                                                                    "onClick": {
+                                                                        "$type": "$action",
+                                                                        "path": "$context.goToPage",
+                                                                        "args": [
+                                                                            {
+                                                                                "$type": "$expression",
+                                                                                "expression": "data('$context.currentPage') - 1"
+                                                                            }
+                                                                        ]
                                                                     }
-                                                                ]
+                                                                }
                                                             }
-                                                        }
+                                                        ]
                                                     }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "name": "Conditional",
-                                            "props": {
-                                                "condition": {
-                                                    "$type": "$expression",
-                                                    "expression": "data('$context.currentPage') < (data('$context.pagesCount') - 1)"
                                                 },
-                                                "ifTrue": [
-                                                    {
-                                                        "name": "Button",
-                                                        "props": {
-                                                            "specialType": "arrowRight",
-                                                            "type": "text",
-                                                            "style": "& div:last-child{color:var(--trood-red);}",
-                                                            "onClick": {
-                                                                "$type": "$action",
-                                                                "path": "$context.goToPage",
-                                                                "args": [
-                                                                    {
-                                                                        "$type": "$expression",
-                                                                        "expression": "data('$context.currentPage') + 1"
+                                                {
+                                                    "name": "Conditional",
+                                                    "props": {
+                                                        "condition": {
+                                                            "$type": "$expression",
+                                                            "expression": "data('$context.currentPage') < (data('$context.pagesCount') - 1)"
+                                                        },
+                                                        "ifTrue": [
+                                                            {
+                                                                "name": "Button",
+                                                                "props": {
+                                                                    "specialType": "arrowRight",
+                                                                    "type": "text",
+                                                                    "style": "& div:last-child{color:var(--trood-red);}",
+                                                                    "onClick": {
+                                                                        "$type": "$action",
+                                                                        "path": "$context.goToPage",
+                                                                        "args": [
+                                                                            {
+                                                                                "$type": "$expression",
+                                                                                "expression": "data('$context.currentPage') + 1"
+                                                                            }
+                                                                        ]
                                                                     }
-                                                                ]
+                                                                }
                                                             }
-                                                        }
+                                                        ]
                                                     }
-                                                ]
-                                            }
+                                                }
+                                            ]
                                         }
                                     ]
-                                }
-                            ]
-                        },
-                        "entity": {
-                            "$type": "$data",
-                            "path": "$store.apis.custodian.client"
-                        },
-                        "columnComponents": [
-                            {
-                                "headerCell": {
-                                    "name": "Cell",
-                                    "props": {
-                                        "xsAuto": true,
-                                        "children": "Id"
-                                    }
                                 },
-                                "bodyCell": {
-                                    "name": "Cell",
-                                    "props": {
-                                        "xsAuto": true,
-                                        "children": {
-                                            "$type": "$data",
-                                            "path": "$context.id"
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "bodyCell": {
-                                    "name": "Link",
-                                    "props": {
-                                        "to": {
-                                            "$type": "$expression",
-                                            "expression": "\"/client/\" || data(\"$context.id\")"
+                                "entity": {
+                                    "$type": "$data",
+                                    "path": "$store.apis.custodian.client"
+                                },
+                                "columnComponents": [
+                                    {
+                                        "headerCell": {
+                                            "name": "Cell",
+                                            "props": {
+                                                "xsAuto": true,
+                                                "children": "Id"
+                                            }
                                         },
-                                        "children": {
-                                            "$type": "$data",
-                                            "path": "$context.name"
+                                        "bodyCell": {
+                                            "name": "Cell",
+                                            "props": {
+                                                "xsAuto": true,
+                                                "children": {
+                                                    "$type": "$data",
+                                                    "path": "$context.id"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "bodyCell": {
+                                            "name": "Link",
+                                            "props": {
+                                                "to": {
+                                                    "$type": "$expression",
+                                                    "expression": "\"/client/\" || data(\"$context.id\")"
+                                                },
+                                                "children": {
+                                                    "$type": "$data",
+                                                    "path": "$context.name"
+                                                }
+                                            }
                                         }
                                     }
-                                }
+                                ]
                             }
-                        ]
-                    }
+                        }
+                    ]
                 }
             ]
         }

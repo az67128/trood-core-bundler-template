@@ -9,6 +9,7 @@ import Container from './Grids/Container'
 
 import { Link, Switch } from 'react-router-dom'
 
+import Block from './Block'
 import Button from './Button'
 import Checkbox from './Checkbox'
 import DateTimePicker from './DateTimePicker'
@@ -35,6 +36,7 @@ const components = {
   Container,
   Link,
   Switch,
+  Block,
   Button,
   Checkbox,
   DateTimePicker,

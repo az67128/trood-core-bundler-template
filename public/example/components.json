@@ -1,162 +1,197 @@
 {
-  "components": [
-    {
-      "name": "Label",
-      "props": {
-        "label": "Components"
-      }
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+    "components": [
         {
-          "name": "DateTimePicker",
-          "props": {
-            "label": "DateTimePicker",
-            "value": "2020-09-18"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Label",
+            "props": {
+                "label": "Components"
+            }
+        },
         {
-          "name": "Checkbox",
-          "props": {
-            "label": "Checkbox",
-            "value": true
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
         {
-          "name": "Icon",
-          "props": {
-            "label": "Icon",
-            "type": "edit",
-            "size": 20
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "DateTimePicker",
+                    "props": {
+                        "label": "DateTimePicker",
+                        "value": "2020-09-18"
+                    }
+                }
+            ]
+        },
         {
-          "name": "Input",
-          "props": {
-            "label": "Input",
-            "value": "Input",
-            "type": "wysiwyg"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
         {
-          "name": "Label",
-          "props": {
-            "label": "Label",
-            "required": true
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Checkbox",
+                    "props": {
+                        "label": "Checkbox",
+                        "value": true
+                    }
+                }
+            ]
+        },
         {
-          "name": "PeriodSelector",
-          "props": {
-            "label": "Period Selector",
-            "periodType": "custom"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
         {
-          "name": "RadioButton",
-          "props": {
-            "label": "Radio button",
-            "value": true
-          }
-        }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    },
-    {
-      "name": "Cell",
-      "components": [
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Icon",
+                    "props": {
+                        "label": "Icon",
+                        "type": "edit",
+                        "size": 20
+                    }
+                }
+            ]
+        },
         {
-          "name": "Range",
-          "props": {
-            "label": "Radio button",
-            "value": true
-          }
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Input",
+                    "props": {
+                        "label": "Input",
+                        "value": "Input",
+                        "type": "wysiwyg"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Label",
+                    "props": {
+                        "label": "Label",
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "PeriodSelector",
+                    "props": {
+                        "label": "Period Selector",
+                        "periodType": "custom"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "RadioButton",
+                    "props": {
+                        "label": "Radio button",
+                        "value": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Range",
+                    "props": {
+                        "label": "Radio button",
+                        "value": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Modal",
+                    "props": {
+                        "children": "modal",
+                        "isOpen": {
+                            "$type": "$data",
+                            "path": "$page.isModalOpen[\"modal\"]"
+                        },
+                        "close": {
+                            "$type": "$action",
+                            "path": "$page.closeModal",
+                            "args": [
+                                "modal"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Button",
+                    "props": {
+                        "label": "open modal",
+                        "onClick": {
+                            "$type": "$action",
+                            "path": "$page.openModal",
+                            "args": [
+                                "modal"
+                            ]
+                        }
+                    }
+                }
+            ]
         }
-      ]
-    },
-    {
-      "name": "Spacer",
-      "props": {
-        "size": 16
-      }
-    }
-  ]
+    ]
 }
