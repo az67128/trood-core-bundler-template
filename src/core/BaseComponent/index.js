@@ -4,7 +4,7 @@ import StoreContext from 'core/StoreContext'
 import PageStoreContext from 'core/PageStoreContext'
 import ContextContext from 'core/ContextContext'
 import { useObserver } from 'mobx-react-lite'
-import { useLocation, useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Parser } from 'expr-eval'
 
 const connectProps = (props, $data, childBaseComponent) => {
@@ -22,7 +22,7 @@ const connectProps = (props, $data, childBaseComponent) => {
 
     return paths.reduce((memo, key) => {
       if (memo === undefined) return memo
-      if (memo[key]) return memo[key]
+      if (memo[key] !== undefined) return memo[key]
       const params = /\[.*\]/g.exec(key)
       if (params && params[0]) {
         const action = key.split('[')[0]
@@ -137,10 +137,11 @@ const BaseComponent = ({ component }) => {
   React.useEffect(() => {
     if (component) component.loadChunk()
   }, [component])
+  const history = useHistory()
   const location = useLocation()
   const params = useParams()
 
-  const $data = { $store, $route: { params, location }, $context, $page }
+  const $data = { $store, $route: { history, params, location }, $context, $page }
 
   return useObserver(() => {
     if (!component || !component.components) return null
