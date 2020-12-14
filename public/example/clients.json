@@ -170,9 +170,7 @@
         {
             "name": "Modal",
             "props": {
-                "style": {
-                    "minWidth": "400px"
-                },
+                "type": "right",
                 "isOpen": {
                     "$type": "$data",
                     "path": "$page.isModalOpen[\"editClient\"]"
@@ -305,10 +303,15 @@
                         },
                         {
                             "name": "Spacer",
-                            "size": 8
+                            "size": 800
                         },
                         {
                             "name": "Row",
+                            "props": {
+                                "style": {
+                                    "marginTop": "auto"
+                                }
+                            },
                             "components": [
                                 {
                                     "name": "Cell",
