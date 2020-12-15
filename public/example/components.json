@@ -192,6 +192,110 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "h1",
+                        "value": "Title"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "h2",
+                        "value": "Title",
+                        "bold": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "h3",
+                        "value": "Title"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "h4",
+                        "value": "Title",
+                        "style": {
+                            "color": "#F00"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "h5",
+                        "value": "Title"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "h6",
+                        "value": "Title",
+                        "bold": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
+                    "name": "Typography",
+                    "props": {
+                        "type": "label",
+                        "bold": true
+                    },
+                    "components": [
+                        {
+                            "name": "Typography",
+                            "props": {
+                                "type": "h2",
+                                "value": "Title"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

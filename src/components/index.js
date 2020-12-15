@@ -28,6 +28,7 @@ import Spacer from './Spacer'
 import Select from './Select'
 import Table from './Table'
 import Text from './Text'
+import Typography from './Typography'
 
 const components = {
   Context,
@@ -56,6 +57,7 @@ const components = {
   Select,
   Table,
   Text,
+  Typography,
 }
 
 export default Object.keys(components).reduce((memo, key) => ({
