@@ -1,0 +1,56 @@
+.h1 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.h2 {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.h3 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.h4 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.h1.bold,
+.h2.bold,
+.h3.bold,
+.h4.bold {
+  font-weight: 700;
+}
+
+.h5 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.h6 {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.body {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.label {
+  color: var(--trood-text-gray);
+}
+
+.h5.bold,
+.h6.bold,
+.body.bold,
+.label.bold {
+  font-weight: 500;
+}

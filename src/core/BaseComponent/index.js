@@ -140,8 +140,9 @@ const BaseComponent = ({ component }) => {
   const history = useHistory()
   const location = useLocation()
   const params = useParams()
+  const searchParams = new URLSearchParams(location.search)
 
-  const $data = { $store, $route: { history, params, location }, $context, $page }
+  const $data = { $store, $route: { history, params, location, searchParams }, $context, $page }
 
   return useObserver(() => {
     if (!component || !component.components) return null

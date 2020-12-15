@@ -70,6 +70,20 @@
                         {
                             "name": "List",
                             "props": {
+                                "queryOptions": {
+                                    "$type": "$data",
+                                    "path": {
+                                        "filters": {
+                                            "$type": "$data",
+                                            "path": {
+                                                "q": {
+                                                    "$type": "$expression",
+                                                    "expression": "if(length data(\"$route.searchParams.getAll[\\\"client_active_status\\\"]\"),join(\"\",[\"in(client_active_status,(\",join(\",\",data(\"$route.searchParams.getAll[\\\"client_active_status\\\"]\")),\"))\"]))"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "pagination": {
                                     "type": "infinity",
                                     "scrollContainerSelector": "#MAIN_SCROLL_CONTAINER"
@@ -156,9 +170,7 @@
         {
             "name": "Modal",
             "props": {
-                "style": {
-                    "minWidth": "400px"
-                },
+                "type": "right",
                 "isOpen": {
                     "$type": "$data",
                     "path": "$page.isModalOpen[\"editClient\"]"
@@ -291,10 +303,15 @@
                         },
                         {
                             "name": "Spacer",
-                            "size": 8
+                            "size": 800
                         },
                         {
                             "name": "Row",
+                            "props": {
+                                "style": {
+                                    "marginTop": "auto"
+                                }
+                            },
                             "components": [
                                 {
                                     "name": "Cell",
