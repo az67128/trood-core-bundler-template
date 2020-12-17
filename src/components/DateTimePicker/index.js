@@ -10,6 +10,7 @@ import style from './index.module.css'
 import DatePicker from './DatePicker'
 import TimePicker from './TimePicker'
 
+import useTooltip from '../internal/Tooltip'
 import { PICKER_TYPES, TIME_FORMAT, CALENDAR_POSITIONS } from './constants'
 import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT } from '../internal/constants'
 
@@ -222,6 +223,7 @@ class DateTimePicker extends PureComponent {
       type,
       validate,
       showTextErrors,
+      dataAttributes,
     } = this.props
 
     const {
@@ -247,6 +249,7 @@ class DateTimePicker extends PureComponent {
           {
             showDate &&
             <DatePicker {...{
+              dataAttributes,
               calendarPosition,
               value: dateValue,
               placeholder,
@@ -268,6 +271,7 @@ class DateTimePicker extends PureComponent {
           {
             showTime &&
             <TimePicker {...{
+              dataAttributes,
               value: timeValue,
               label: timeLabel || (type === PICKER_TYPES.time && label),
               errors: [...dateTimeErrors, ...timeErrors],
@@ -301,4 +305,4 @@ class DateTimePicker extends PureComponent {
 
 export * from './constants'
 
-export default DateTimePicker
+export default useTooltip(DateTimePicker)

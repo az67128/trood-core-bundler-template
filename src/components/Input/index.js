@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
+import useTooltip from '../internal/Tooltip'
+
 import InnerInput from './input'
 import {
   VALIDATION_FORMATS,
@@ -185,4 +187,4 @@ class Input extends PureComponent {
 
 export { INPUT_TYPES } from './constants'
 
-export default Input
+export default useTooltip(Input)

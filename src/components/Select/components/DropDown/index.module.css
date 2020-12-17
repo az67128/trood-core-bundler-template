@@ -73,7 +73,7 @@
 
 .optionsContainer {
   position: absolute;
-  z-index: 1000;
+  z-index: 100;
   top: calc(100% - var(--trood-border-radius));
   padding-top: calc(var(--trood-border-radius) / 2);
   left: -1px;

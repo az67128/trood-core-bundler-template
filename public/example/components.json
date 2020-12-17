@@ -18,6 +18,7 @@
                 {
                     "name": "DateTimePicker",
                     "props": {
+                        "tooltip": "DateTimePicker tooltip",
                         "label": "DateTimePicker",
                         "value": "2020-09-18"
                     }
@@ -36,6 +37,7 @@
                 {
                     "name": "Checkbox",
                     "props": {
+                        "tooltip": "Checkbox tooltip",
                         "label": "Checkbox",
                         "value": true
                     }
@@ -56,7 +58,14 @@
                     "props": {
                         "label": "Icon",
                         "type": "edit",
-                        "size": 20
+                        "size": 20,
+                        "tooltip": {
+                            "name": "Typography",
+                            "props": {
+                                "type": "h1",
+                                "value": "Icon tooltip"
+                            }
+                        }
                     }
                 }
             ]
@@ -73,6 +82,22 @@
                 {
                     "name": "Input",
                     "props": {
+                        "tooltip": [
+                            {
+                                "name": "Typography",
+                                "props": {
+                                    "type": "h3",
+                                    "value": "Input"
+                                }
+                            },
+                            {
+                                "name": "Typography",
+                                "props": {
+                                    "type": "h4",
+                                    "value": "tooltip"
+                                }
+                            }
+                        ],
                         "label": "Input",
                         "value": "Input",
                         "type": "wysiwyg"
@@ -111,7 +136,8 @@
                     "name": "PeriodSelector",
                     "props": {
                         "label": "Period Selector",
-                        "periodType": "custom"
+                        "periodType": "custom",
+                        "tooltip": "Period Selector tooltip"
                     }
                 }
             ]
@@ -129,7 +155,8 @@
                     "name": "RadioButton",
                     "props": {
                         "label": "Radio button",
-                        "value": true
+                        "value": true,
+                        "tooltip": "Radio button tooltip"
                     }
                 }
             ]
@@ -146,8 +173,8 @@
                 {
                     "name": "Range",
                     "props": {
-                        "label": "Radio button",
-                        "value": true
+                        "value": true,
+                        "tooltip": "Range tooltip"
                     }
                 }
             ]
@@ -181,6 +208,7 @@
                 {
                     "name": "Button",
                     "props": {
+                        "tooltip": "Button tooltip",
                         "label": "open modal",
                         "onClick": {
                             "$type": "$action",

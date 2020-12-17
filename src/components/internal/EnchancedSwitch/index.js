@@ -3,6 +3,8 @@ import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import deepEqual from 'deep-equal'
 
+import useTooltip from '../Tooltip'
+
 import style from './index.module.css'
 
 import { INNER_INPUT_TYPES, LABEL_POSITION_TYPES } from './constants'
@@ -142,6 +144,7 @@ class EnchancedSwitch extends PureComponent {
       secondLabelPosition,
       errors,
       showTextErrors,
+      dataAttributes,
 
       onChange,
     } = this.props
@@ -150,6 +153,7 @@ class EnchancedSwitch extends PureComponent {
 
     return (
       <div {...{
+        ...dataAttributes,
         tabIndex: 0,
         className: classNames(style.root, className, disabled && style.disabled),
         'data-cy': label,
@@ -212,4 +216,4 @@ class EnchancedSwitch extends PureComponent {
 
 export { INNER_INPUT_TYPES, LABEL_POSITION_TYPES } from './constants'
 
-export default EnchancedSwitch
+export default useTooltip(EnchancedSwitch)
