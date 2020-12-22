@@ -30,6 +30,7 @@
     "react-moment-proptypes": "^1.7.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-tooltip": "^4.2.11",
     "styled-components": "^5.2.0",
     "trood-restify": "git+ssh://git@github.com/Q-CIS-DEV/trood-restify.git"
   },

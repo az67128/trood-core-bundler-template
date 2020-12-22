@@ -11,6 +11,8 @@ import Label from '../Label'
 
 import { SELECT_TYPES } from './constants'
 
+import useTooltip from '../internal/Tooltip'
+
 import List, { LIST_ORIENTATION, LIST_TYPES } from './components/List'
 import DropDown from './components/DropDown'
 import Tile from './components/Tile'
@@ -314,4 +316,4 @@ class Select extends PureComponent {
 export { SELECT_TYPES } from './constants'
 export { LIST_ORIENTATION, LIST_TYPES } from './components/List'
 
-export default Select
+export default useTooltip(Select)

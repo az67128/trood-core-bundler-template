@@ -58,6 +58,7 @@ class Rating extends PureComponent {
 
   render() {
     const {
+      dataAttributes,
       className,
       maxRating,
       value,
@@ -77,6 +78,7 @@ class Rating extends PureComponent {
 
     return (
       <div {...{
+        ...dataAttributes,
         className: classNames(style.root, disabled && style.disabled, className),
         onMouseLeave: () => this.debouncedMouseLeave(),
         onMouseEnter: () => this.debouncedMouseEnter(),

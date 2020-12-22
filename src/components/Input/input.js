@@ -442,6 +442,7 @@ class Input extends PureComponent {
 
   render() {
     const {
+      dataAttributes,
       className,
       labelClassName,
       inputClassName,
@@ -545,7 +546,7 @@ class Input extends PureComponent {
             label,
           }} />
         }
-        <div className={classNames(
+        <div {...dataAttributes} className={classNames(
           style.root,
           inputClassName,
           {

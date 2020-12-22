@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
+import useTooltip from '../internal/Tooltip'
+
 import { DEFAULT_MIN, DEFAULT_MAX, DEFAULT_STEP, DEFAULT_VALUE } from './constants'
 import style from './index.module.css'
 
@@ -35,6 +37,7 @@ class Range extends PureComponent {
 
   render() {
     const {
+      dataAttributes,
       onChange,
       min,
       max,
@@ -45,6 +48,7 @@ class Range extends PureComponent {
 
     return (
       <input {...{
+        ...dataAttributes,
         className: `${style.root} ${className}`,
         type: 'range',
         'data-cy': 'input_range',
@@ -58,4 +62,4 @@ class Range extends PureComponent {
   }
 }
 
-export default Range
+export default useTooltip(Range)

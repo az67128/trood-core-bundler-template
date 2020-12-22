@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
-import React, { PureComponent } from 'react'
+import React from 'react'
 import classNames from 'classnames'
+
+import useTooltip from '../internal/Tooltip'
 
 import {
   ICONS_TYPES,
@@ -12,96 +14,96 @@ import {
 
 import style from './index.module.css'
 
+
 /**
  * Component for output icon.
  */
 
-class Icon extends PureComponent {
-  static propTypes = {
-    /** class name for styling component */
-    className: PropTypes.string,
-    /** width and height size icon in px */
-    size: PropTypes.number,
-    /** all types you can see below in example */
-    type: PropTypes.oneOf(Object.keys(ICONS_TYPES)),
-    /** default type for rotate you can see in constants, or send number in deg */
-    rotate: PropTypes.oneOfType([
-      PropTypes.oneOf(Object.values(ROTATE_TYPES)),
-      PropTypes.number,
-    ]),
-    /** label icon */
-    label: PropTypes.node,
-    /** label position is one of LABEL_POSITION_TYPES.up, LABEL_POSITION_TYPES.right, LABEL_POSITION_TYPES.down,
-     * LABEL_POSITION_TYPES.left, LABEL_POSITION_TYPES.tooltip */
-    labelPosition: PropTypes.oneOf(Object.keys(LABEL_POSITION_TYPES)),
-    /** color icon */
-    color: PropTypes.string,
-    /** disabled or not */
-    disabled: PropTypes.bool,
-    /** onClick function */
-    onClick: PropTypes.func,
+const Icon = ({
+  size,
+  color,
+  type,
+  className,
+  rotate,
+  label,
+  labelPosition,
+  disabled,
+  onClick,
+  dataAttributes,
+  ...other
+}) => {
+
+  const inlineStyle = {
+    transform: `rotate(${typeof rotate === 'string' ? ROTATE_VALUES[rotate] : rotate}deg)`,
+    width: size,
+    height: size,
   }
 
-  static defaultProps = {
-    className: '',
-    rotate: ROTATE_TYPES.up,
-    labelPosition: LABEL_POSITION_TYPES.right,
-    disabled: false,
-  }
-
-  render() {
-    const {
-      size,
-      color,
-      type,
-      className,
-      rotate,
-      label,
-      labelPosition,
-      disabled,
-      onClick,
-      ...other
-    } = this.props
-
-    const inlineStyle = {
-      transform: `rotate(${typeof rotate === 'string' ? ROTATE_VALUES[rotate] : rotate}deg)`,
-      width: size,
-      height: size,
-    }
-
-    return (
+  return (
+    <div {...{
+      ...dataAttributes,
+      className: classNames(
+        style.root,
+        className,
+        labelPosition === LABEL_POSITION_TYPES.down || labelPosition === LABEL_POSITION_TYPES.up ?
+          style['root-column'] : '',
+      ),
+      'data-cy': type,
+      onClick: disabled ? undefined : onClick,
+      style: {
+        cursor: onClick && 'pointer',
+        color,
+      },
+    }} >
       <div {...{
-        className: classNames(
-          style.root,
-          className,
-          labelPosition === LABEL_POSITION_TYPES.down || labelPosition === LABEL_POSITION_TYPES.up ?
-            style['root-column'] : '',
-        ),
-        'data-cy': type,
-        onClick: disabled ? undefined : onClick,
-        style: {
-          cursor: onClick && 'pointer',
-          color,
-        },
+        className: style.svgWrapper,
+        style: inlineStyle,
       }} >
-        <div {...{
-          className: style.svgWrapper,
-          style: inlineStyle,
-        }} >
-          {!!type && React.createElement(ICON_COMPS[type], other)}
-        </div>
-        {label &&
-          <div {...{
-            className: style[labelPosition],
-          }}>
-            {label}
-          </div>
-        }
+        {!!type && React.createElement(ICON_COMPS[type], other)}
       </div>
-    )
-  }
+      {label && (
+        <div {...{
+          className: style[labelPosition],
+        }}>
+          {label}
+        </div>
+      )}
+    </div>
+  )
+}
+
+Icon.propTypes = {
+  /** class name for styling component */
+  className: PropTypes.string,
+  /** width and height size icon in px */
+  size: PropTypes.number,
+  /** all types you can see below in example */
+  type: PropTypes.oneOf(Object.keys(ICONS_TYPES)),
+  /** default type for rotate you can see in constants, or send number in deg */
+  rotate: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(ROTATE_TYPES)),
+    PropTypes.number,
+  ]),
+  /** label icon */
+  label: PropTypes.node,
+  /** label position is one of LABEL_POSITION_TYPES.up, LABEL_POSITION_TYPES.down,
+   * LABEL_POSITION_TYPES.left, LABEL_POSITION_TYPES.right */
+  labelPosition: PropTypes.oneOf(Object.keys(LABEL_POSITION_TYPES)),
+  /** color icon */
+  color: PropTypes.string,
+  /** disabled or not */
+  disabled: PropTypes.bool,
+  /** onClick function */
+  onClick: PropTypes.func,
+}
+
+Icon.defaultProps = {
+  className: '',
+  rotate: ROTATE_TYPES.up,
+  labelPosition: LABEL_POSITION_TYPES.right,
+  disabled: false,
 }
 
 export { ICONS_TYPES, ROTATE_TYPES, LABEL_POSITION_TYPES } from './constants'
 
-export default Icon
+export default useTooltip(Icon)

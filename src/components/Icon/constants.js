@@ -14,10 +14,8 @@ const UP = 'up'
 const RIGHT = 'right'
 const DOWN = 'down'
 const LEFT = 'left'
-const TOOLTIP = 'tooltip'
 
 export const LABEL_POSITION_TYPES = {
-  [TOOLTIP]: TOOLTIP,
   [RIGHT]: RIGHT,
   [LEFT]: LEFT,
   [UP]: UP,

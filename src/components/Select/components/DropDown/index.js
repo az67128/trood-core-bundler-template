@@ -207,6 +207,7 @@ class DropDown extends PureComponent {
 
   render() {
     const {
+      dataAttributes,
       controlClassName,
       valueClassName,
       mainSelectContainerStyle,
@@ -264,6 +265,7 @@ class DropDown extends PureComponent {
           onKeyDown: this.handleKeyDown,
         }}>
           <span {...{
+            ...dataAttributes,
             className: style.content,
             onClick: showSearch && open ? undefined : () => this.toggleOpen(),
             'data-cy': label || placeHolder,
@@ -273,6 +275,7 @@ class DropDown extends PureComponent {
             </span>
           </span>
           <Icon {...{
+            dataAttributes,
             size: 8,
             type: ICONS_TYPES.triangleArrow,
             rotate: open ? ROTATE_TYPES.up : ROTATE_TYPES.down,
@@ -283,6 +286,7 @@ class DropDown extends PureComponent {
           <div className={classNames(style.optionsContainer, openUp && style.openUp, !open && style.hide)}>
             <List {...{
               ...this.props,
+              dataAttributes: undefined,
               focusedItem,
               show: open,
               type,
