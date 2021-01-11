@@ -94,6 +94,7 @@ class Tile extends PureComponent {
 
   render() {
     const {
+      dataAttributes,
       className,
       values,
       label,
@@ -108,6 +109,7 @@ class Tile extends PureComponent {
         {
           !open &&
           <div {...{
+            ...dataAttributes,
             className: values.length ? style.value : style.placeholder,
             onClick: () => this.toggleOpen(),
             'data-cy': label || placeHolder,

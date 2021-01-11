@@ -20,6 +20,7 @@ import List from './List'
 import LoadingIndicator from './LoadingIndicator'
 import Modal from './Modal'
 import PeriodSelector from './PeriodSelector'
+import Popup from './Popup'
 import RadioButton from './RadioButton'
 import Range from './Range'
 import Remote from './Remote'
@@ -48,6 +49,7 @@ const components = {
   LoadingIndicator,
   Modal,
   PeriodSelector,
+  Popup,
   RadioButton,
   Range,
   Remote,

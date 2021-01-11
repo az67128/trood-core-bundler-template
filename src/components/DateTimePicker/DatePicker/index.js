@@ -282,6 +282,7 @@ class DatePicker extends PureComponent {
       disabled,
       errors,
       className,
+      dataAttributes,
     } = this.props
 
     const {
@@ -321,6 +322,7 @@ class DatePicker extends PureComponent {
             onKeyDown: this.handleKeyDown,
           }}>
             <div {...{
+              ...dataAttributes,
               className: style.header,
               onClick: disabled ? () => {} : () => this.toggleOpen(),
               'data-cy': 'dateTimePickerControl',

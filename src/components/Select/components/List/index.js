@@ -165,6 +165,7 @@ class List extends PureComponent {
 
   render() {
     const {
+      dataAttributes,
       className,
       itemClassName,
       type,
@@ -185,6 +186,7 @@ class List extends PureComponent {
 
     return (
       <ul {...{
+        ...dataAttributes,
         className: classNames(style.root, style[orientation], className),
         ref: (node) => {
           this.list = node

@@ -8,6 +8,7 @@ import { toTime, fromTime } from 'helpers/format'
 import Input, { INPUT_TYPES } from '../../Input'
 
 const TimePicker = ({
+  dataAttributes,
   value,
   label,
   errors,
@@ -20,6 +21,7 @@ const TimePicker = ({
   onBlur = () => {},
 }) => (
   <Input {...{
+    dataAttributes,
     className: classNames(style.root, className),
     disabled,
     type: INPUT_TYPES.time,

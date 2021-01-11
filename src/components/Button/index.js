@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
+
+import useTooltip from '../internal/Tooltip'
+
 import style from './index.module.css'
 
 import Icon, { ICONS_TYPES } from 'components/Icon'
@@ -139,7 +142,7 @@ class Button extends PureComponent {
       onClick,
       className,
       link,
-      tooltip,
+      dataAttributes,
     } = this.props
 
     const specialLabel = BUTTON_SPECIAL_ICONS[specialType]
@@ -155,7 +158,7 @@ class Button extends PureComponent {
     )
 
     return (
-      <acronym title={tooltip} className={classNames(
+      <div {...dataAttributes} className={classNames(
         style.root,
         className,
         style[type],
@@ -183,7 +186,7 @@ class Button extends PureComponent {
           }} />
         }
         {label}
-      </acronym>
+      </div>
     )
   }
 }
@@ -194,4 +197,4 @@ export {
   BUTTON_TYPES,
 } from './constants'
 
-export default Button
+export default useTooltip(Button)

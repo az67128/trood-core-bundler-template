@@ -4,6 +4,8 @@ import classNames from 'classnames'
 
 import style from './index.module.css'
 
+import useTooltip from '../internal/Tooltip'
+
 import Label from '../Label'
 import Select from '../Select'
 import Button, { BUTTON_TYPES, BUTTON_COLORS } from '../Button'
@@ -66,6 +68,7 @@ class PeriodSelector extends PureComponent {
       periodType,
       resetField,
       resetFieldsArray,
+      dataAttributes,
 
       onSubmit,
     } = this.props
@@ -80,6 +83,7 @@ class PeriodSelector extends PureComponent {
         <Label label={label} />
         <div className={style.components}>
           <Select {...{
+            dataAttributes,
             className: style.filterInput,
             maxRows: 8,
             values: [periodType || periods[0]],
@@ -150,4 +154,4 @@ class PeriodSelector extends PureComponent {
 
 export * from './constants'
 
-export default PeriodSelector
+export default useTooltip(PeriodSelector)
