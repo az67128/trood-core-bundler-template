@@ -6,21 +6,29 @@ const normalizeApiPath = (path) => {
 }
 
 const convertObject = (cur, data) => {
+  
   const component = {
     name: typeof cur.type === 'string' ? cur.type : cur.type.resolvedName,
     props:cur.props,
+    ...cur.custom,
   }
   if(component.name ==='List'){
-    const linkedNodes = data[cur.linkedNodes.list]
-    linkedNodes.nodes.forEach(id => {
-      const el = data[id]
-      component.props[el.props.id] = [convertObject(el, data)]
+    Object.keys(cur.linkedNodes).forEach(key => {
+      component.props[key] = [convertObject(data[cur.linkedNodes[key]], data)]
     })
+    // const linkedNodes = data[cur.linkedNodes.list]
+    // linkedNodes.nodes.forEach(id => {
+    //   const el = data[id]
+    //   component.props[el.props.id] = [convertObject(el, data)]
+    // })
+  }
+  if(component.name === 'Route') {
+    component.components = [{ name:'LoadingIndicator' }]
   }
   if(cur.nodes.length >0) {
     component.components = cur.nodes.map(nodeId => convertObject(data[nodeId], data))
-  }
-  console.log(component)
+  } 
+  
   return component
 }
 export const Component = types
@@ -45,7 +53,6 @@ export const Component = types
         const query =  JSON.parse(data.query)
         
         const converted = convertObject(query.ROOT, query)
-        
         
         model.components = converted.components
       } catch (err) {
