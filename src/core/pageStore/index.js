@@ -75,6 +75,19 @@ const Modal = types
     },
   }))
 
+const Popup = types
+  .model('Popup', {
+    isOpen: types.optional(types.boolean, false),
+  })
+  .volatile(() => ({
+    context: null,
+  }))
+  .actions((model) => ({
+    setContext(context) {
+      model.context = context
+    },
+  }))
+
 const Context = types
   .model('Context', {
     isOpen: types.optional(types.boolean, false),
@@ -93,11 +106,15 @@ const Context = types
 export const Page = types
   .model('Page', {
     modals: types.map(Modal),
+    popups: types.map(Popup),
     contexts: types.map(Context),
   })
   .views((model) => ({
     isModalOpen(name) {
       return model.modals.get(name)?.isOpen
+    },
+    isPopupOpen(name) {
+      return model.popups.get(name)?.isOpen
     },
     getContext(name) {
       return model.contexts.get(name)?.context
@@ -114,6 +131,13 @@ export const Page = types
     },
     closeModal(name) {
       model.modals.set(name, { isOpen: false })
+    },
+    openPopup(name, timeout = 3000) {
+      model.popups.set(name, { isOpen: true  })
+      setTimeout(() => model.closePopup(name), timeout)
+    },
+    closePopup(name) {
+      model.popups.set(name, { isOpen: false })
     },
     modifyContext(name, prop, value){
       model.contexts.get(name).modifyProp(prop, value)

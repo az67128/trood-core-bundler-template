@@ -231,6 +231,41 @@
             "name": "Cell",
             "components": [
                 {
+                    "name": "Popup",
+                    "props": {
+                        "children": "popup",
+                        "bottom": 80,
+                        "isOpen": {
+                            "$type": "$data",
+                            "path": "$page.isPopupOpen[\"modal\"]"
+                        }
+                    }
+                },
+                {
+                    "name": "Button",
+                    "props": {
+                        "label": "open popup",
+                        "onClick": {
+                            "$type": "$action",
+                            "path": "$page.openPopup",
+                            "args": [
+                                "modal"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "name": "Cell",
+            "components": [
+                {
                     "name": "Typography",
                     "props": {
                         "type": "h1",

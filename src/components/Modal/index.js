@@ -12,7 +12,7 @@ const Modal = ({
   width = 320,
   type = 'center',
   isOpen,
-  close,
+  close = () => {},
   closeOnOverlayClick = true,
   children,
 }) => {
