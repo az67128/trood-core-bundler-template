@@ -1,13 +1,14 @@
 {
     "components": [
         {
-            "name": "Container",
+            "type": "Container",
             "props": {
-                "fluid": true
+                "fluid": true,
+                "children": "test"
             },
             "components": [
                 {
-                    "name": "Row",
+                    "type": "Row",
                     "props": {
                         "style": {
                             "height": "100vh",
@@ -17,7 +18,7 @@
                     },
                     "components": [
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "xsAuto": true,
                                 "style": {
@@ -26,7 +27,7 @@
                             },
                             "components": [
                                 {
-                                    "name": "div",
+                                    "type": "div",
                                     "props": {
                                         "style": {
                                             "height": "100%",
@@ -36,7 +37,7 @@
                                     },
                                     "components": [
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "style": {
                                                     "padding": "8px"
@@ -44,13 +45,13 @@
                                             },
                                             "components": [
                                                 {
-                                                    "name": "Link",
+                                                    "type": "Link",
                                                     "props": {
                                                         "to": "/"
                                                     },
                                                     "components": [
                                                         {
-                                                            "name": "img",
+                                                            "type": "img",
                                                             "props": {
                                                                 "src": "/images/logo.svg"
                                                             }
@@ -60,10 +61,10 @@
                                             ]
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "components": [
                                                 {
-                                                    "name": "Link",
+                                                    "type": "Link",
                                                     "props": {
                                                         "to": "/clients",
                                                         "children": {
@@ -75,10 +76,10 @@
                                             ]
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "components": [
                                                 {
-                                                    "name": "Link",
+                                                    "type": "Link",
                                                     "props": {
                                                         "to": "/clients_table",
                                                         "children": {
@@ -90,10 +91,10 @@
                                             ]
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "components": [
                                                 {
-                                                    "name": "Link",
+                                                    "type": "Link",
                                                     "props": {
                                                         "to": "/matters",
                                                         "children": {
@@ -105,10 +106,10 @@
                                             ]
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "components": [
                                                 {
-                                                    "name": "Link",
+                                                    "type": "Link",
                                                     "props": {
                                                         "to": "/remote",
                                                         "children": {
@@ -120,10 +121,10 @@
                                             ]
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "components": [
                                                 {
-                                                    "name": "Link",
+                                                    "type": "Link",
                                                     "props": {
                                                         "to": "/components",
                                                         "children": {
@@ -139,7 +140,7 @@
                             ]
                         },
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "style": {
                                     "overflowX": "hidden",
@@ -150,7 +151,7 @@
                             },
                             "components": [
                                 {
-                                    "name": "Row",
+                                    "type": "Row",
                                     "props": {
                                         "style": {
                                             "backgroundColor": "var(--trood-white)"
@@ -158,20 +159,20 @@
                                     },
                                     "components": [
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "xsAuto": true,
                                                 "children": "back"
                                             }
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "children": "tabs"
                                             }
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "xsAuto": true,
                                                 "children": "avatar"
@@ -180,16 +181,16 @@
                                     ]
                                 },
                                 {
-                                    "name": "Row",
+                                    "type": "Row",
                                     "components": [
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "components": [
                                                 {
-                                                    "name": "Switch",
+                                                    "type": "Switch",
                                                     "components": [
                                                         {
-                                                            "name": "LoadingIndicator"
+                                                            "type": "LoadingIndicator"
                                                         }
                                                     ],
                                                     "chunk": "example/pages.json"

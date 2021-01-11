@@ -1,7 +1,7 @@
 {
     "components": [
         {
-            "name": "Context",
+            "type": "Context",
             "props": {
                 "context": {
                     "$type": "$data",
@@ -10,10 +10,10 @@
             },
             "components": [
                 {
-                    "name": "Cell",
+                    "type": "Cell",
                     "components": [
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "children": {
                                     "$type": "$data",
@@ -22,7 +22,7 @@
                             }
                         },
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "children": {
                                     "$type": "$data",

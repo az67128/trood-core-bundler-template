@@ -6,9 +6,8 @@ const normalizeApiPath = (path) => {
 }
 
 const convertObject = (cur, data) => {
-  
   const component = {
-    name: typeof cur.type === 'string' ? cur.type : cur.type.resolvedName,
+    type: typeof cur.type === 'string' ? cur.type : cur.type.resolvedName,
     props:cur.props,
     ...cur.custom,
   }
@@ -16,11 +15,6 @@ const convertObject = (cur, data) => {
     Object.keys(cur.linkedNodes).forEach(key => {
       component.props[key] = [convertObject(data[cur.linkedNodes[key]], data)]
     })
-    // const linkedNodes = data[cur.linkedNodes.list]
-    // linkedNodes.nodes.forEach(id => {
-    //   const el = data[id]
-    //   component.props[el.props.id] = [convertObject(el, data)]
-    // })
   }
   if(component.name === 'Route') {
     component.components = [{ name:'LoadingIndicator' }]
@@ -49,12 +43,11 @@ export const Component = types
       if (!model.chunk) return
       try {
         model.isLoading = true
-        const { data } = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
-        const query =  JSON.parse(data.query)
-        
-        const converted = convertObject(query.ROOT, query)
-        
-        model.components = converted.components
+        const data = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
+        // const { data } = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
+        // const query =  typeof data.query === 'string' ? JSON.parse(data.query): data.query
+        // const converted = query.converted ? query : convertObject(query.ROOT, query)
+        model.components = data.components
       } catch (err) {
         console.error(err)
       }

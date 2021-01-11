@@ -1,19 +1,19 @@
 {
     "components": [
         {
-            "name": "Block",
+            "type": "Block",
             "props": {
                 "transparent": true
             },
             "components": [
                 {
-                    "name": "Row",
+                    "type": "Row",
                     "components": [
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "components": [
                                 {
-                                    "name": "div",
+                                    "type": "div",
                                     "props": {
                                         "children": "Clients",
                                         "style": {
@@ -24,13 +24,13 @@
                             ]
                         },
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "xsAuto": true
                             },
                             "components": [
                                 {
-                                    "name": "Button",
+                                    "type": "Button",
                                     "props": {
                                         "label": "New",
                                         "onClick": {
@@ -55,10 +55,10 @@
             ]
         },
         {
-            "name": "Block",
+            "type": "Block",
             "components": [
                 {
-                    "name": "Cell",
+                    "type": "Cell",
                     "props": {
                         "style": {
                             "borderRadius": "3px",
@@ -68,7 +68,7 @@
                     },
                     "components": [
                         {
-                            "name": "List",
+                            "type": "List",
                             "props": {
                                 "queryOptions": {
                                     "$type": "$data",
@@ -94,10 +94,10 @@
                                 },
                                 "components": [
                                     {
-                                        "name": "Row",
+                                        "type": "Row",
                                         "components": [
                                             {
-                                                "name": "Cell",
+                                                "type": "Cell",
                                                 "props": {
                                                     "xsAuto": true,
                                                     "children": {
@@ -107,10 +107,10 @@
                                                 }
                                             },
                                             {
-                                                "name": "Cell",
+                                                "type": "Cell",
                                                 "components": [
                                                     {
-                                                        "name": "Link",
+                                                        "type": "Link",
                                                         "props": {
                                                             "to": {
                                                                 "$type": "$expression",
@@ -125,7 +125,7 @@
                                                 ]
                                             },
                                             {
-                                                "name": "Cell",
+                                                "type": "Cell",
                                                 "props": {
                                                     "children": {
                                                         "$type": "$data",
@@ -134,10 +134,10 @@
                                                 }
                                             },
                                             {
-                                                "name": "Cell",
+                                                "type": "Cell",
                                                 "components": [
                                                     {
-                                                        "name": "Button",
+                                                        "type": "Button",
                                                         "props": {
                                                             "label": "edit",
                                                             "type": "text",
@@ -168,7 +168,7 @@
             ]
         },
         {
-            "name": "Modal",
+            "type": "Modal",
             "props": {
                 "type": "right",
                 "isOpen": {
@@ -178,14 +178,12 @@
                 "close": {
                     "$type": "$action",
                     "path": "$page.closeModal",
-                    "args": [
-                        "editClient"
-                    ]
+                    "args": ["editClient"]
                 }
             },
             "components": [
                 {
-                    "name": "div",
+                    "type": "div",
                     "props": {
                         "children": "Create Client",
                         "style": {
@@ -194,11 +192,11 @@
                     }
                 },
                 {
-                    "name": "Spacer",
+                    "type": "Spacer",
                     "size": 16
                 },
                 {
-                    "name": "Context",
+                    "type": "Context",
                     "props": {
                         "context": {
                             "$type": "$data",
@@ -207,7 +205,7 @@
                     },
                     "components": [
                         {
-                            "name": "Input",
+                            "type": "Input",
                             "props": {
                                 "label": "Name",
                                 "value": {
@@ -232,11 +230,11 @@
                             }
                         },
                         {
-                            "name": "Spacer",
+                            "type": "Spacer",
                             "size": 8
                         },
                         {
-                            "name": "Select",
+                            "type": "Select",
                             "props": {
                                 "label": "Type",
                                 "values": {
@@ -267,11 +265,11 @@
                             }
                         },
                         {
-                            "name": "Spacer",
+                            "type": "Spacer",
                             "size": 8
                         },
                         {
-                            "name": "Select",
+                            "type": "Select",
                             "props": {
                                 "label": "Responsible",
                                 "values": {
@@ -302,11 +300,11 @@
                             }
                         },
                         {
-                            "name": "Spacer",
+                            "type": "Spacer",
                             "size": 800
                         },
                         {
-                            "name": "Row",
+                            "type": "Row",
                             "props": {
                                 "style": {
                                     "marginTop": "auto"
@@ -314,24 +312,22 @@
                             },
                             "components": [
                                 {
-                                    "name": "Cell",
+                                    "type": "Cell",
                                     "components": [
                                         {
-                                            "name": "Button",
+                                            "type": "Button",
                                             "props": {
                                                 "label": "Close",
                                                 "type": "text",
                                                 "onClick": {
                                                     "$type": "$action",
                                                     "path": "$page.closeModal",
-                                                    "args": [
-                                                        "editClient"
-                                                    ]
+                                                    "args": ["editClient"]
                                                 }
                                             }
                                         },
                                         {
-                                            "name": "Conditional",
+                                            "type": "Conditional",
                                             "props": {
                                                 "condition": {
                                                     "$type": "$expression",
@@ -339,7 +335,7 @@
                                                 },
                                                 "ifTrue": [
                                                     {
-                                                        "name": "Button",
+                                                        "type": "Button",
                                                         "props": {
                                                             "label": "Delete",
                                                             "color": "red",
@@ -350,11 +346,7 @@
                                                                     {
                                                                         "$type": "$action",
                                                                         "path": "$page.modifyContext",
-                                                                        "args": [
-                                                                            "editClient",
-                                                                            "isLoading",
-                                                                            true
-                                                                        ]
+                                                                        "args": ["editClient", "isLoading", true]
                                                                     },
                                                                     {
                                                                         "$type": "$action",
@@ -368,11 +360,7 @@
                                                                     {
                                                                         "$type": "$action",
                                                                         "path": "$page.modifyContext",
-                                                                        "args": [
-                                                                            "editClient",
-                                                                            "isLoading",
-                                                                            false
-                                                                        ]
+                                                                        "args": ["editClient", "isLoading", false]
                                                                     }
                                                                 ]
                                                             }
@@ -384,13 +372,13 @@
                                     ]
                                 },
                                 {
-                                    "name": "Cell",
+                                    "type": "Cell",
                                     "props": {
                                         "xsAuto": true
                                     },
                                     "components": [
                                         {
-                                            "name": "Conditional",
+                                            "type": "Conditional",
                                             "props": {
                                                 "condition": {
                                                     "$type": "$data",
@@ -398,13 +386,13 @@
                                                 },
                                                 "ifTrue": [
                                                     {
-                                                        "name": "LoadingIndicator"
+                                                        "type": "LoadingIndicator"
                                                     }
                                                 ]
                                             }
                                         },
                                         {
-                                            "name": "Button",
+                                            "type": "Button",
                                             "props": {
                                                 "label": "Save",
                                                 "onClick": {
@@ -413,30 +401,20 @@
                                                         {
                                                             "$type": "$action",
                                                             "path": "$page.modifyContext",
-                                                            "args": [
-                                                                "editClient",
-                                                                "isLoading",
-                                                                true
-                                                            ]
+                                                            "args": ["editClient", "isLoading", true]
                                                         },
                                                         {
                                                             "$type": "$action",
                                                             "path": "$context.form.submit",
                                                             "finally": {
                                                                 "path": "$page.modifyContext",
-                                                                "args": [
-                                                                    "editClient",
-                                                                    "isLoading",
-                                                                    false
-                                                                ]
+                                                                "args": ["editClient", "isLoading", false]
                                                             }
                                                         },
                                                         {
                                                             "$type": "$action",
                                                             "path": "$page.closeModal",
-                                                            "args": [
-                                                                "editClient"
-                                                            ]
+                                                            "args": ["editClient"]
                                                         }
                                                     ]
                                                 }

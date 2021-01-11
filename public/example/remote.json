@@ -1,13 +1,13 @@
 {
     "components": [
         {
-            "name": "div",
+            "type": "div",
             "props": {
                 "children": "Remote component"
             }
         },
         {
-            "name": "Remote",
+            "type": "Remote",
             "props": {
                 "url": "https://raw.githubusercontent.com/Paciolan/remote-component/master/examples/remote-components/Time.js"
             }

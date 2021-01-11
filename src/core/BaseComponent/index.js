@@ -148,7 +148,7 @@ const BaseComponent = ({ component }) => {
     if (!component || !component.components) return null
     return component.components.map((childComponent) => {
       if (!childComponent) return null
-      const Component = coreComponents[childComponent.name] || childComponent.name
+      const Component = coreComponents[childComponent.type] || childComponent.type
       const childBaseComponent = <BaseComponent key="Base" component={childComponent} />
       const connectedProps = childComponent.props
         ? connectProps(childComponent.props, $data, childBaseComponent)
@@ -156,7 +156,7 @@ const BaseComponent = ({ component }) => {
       if (!connectedProps.children && childComponent.components.length) {
         connectedProps.children = [childBaseComponent]
       }
-
+      
       return <Component key={childComponent.id} {...connectedProps} />
     })
   })
