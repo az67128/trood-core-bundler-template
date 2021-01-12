@@ -145,17 +145,17 @@ const BaseComponent = ({ component }) => {
   const $data = { $store, $route: { history, params, location, searchParams }, $context, $page }
 
   return useObserver(() => {
-    if (!component || !component.components) return null
-    return component.components.map((childComponent) => {
+    if (!component || !component.nodes) return null
+    return component.nodes.map((childComponent) => {
       if (!childComponent) return null
-      const Component = coreComponents[childComponent.name] || childComponent.name
+      const Component = coreComponents[childComponent.type] || childComponent.type
       const childBaseComponent = <BaseComponent key="Base" component={childComponent} />
       const connectedProps = childComponent.props
         ? connectProps(childComponent.props, $data, childBaseComponent)
         : {}
       if (typeof childComponent !== 'object') {
         return childComponent
-      } else if (!connectedProps.children && childComponent.components.length) {
+      } else if (!connectedProps.children && childComponent.nodes.length) {
         connectedProps.children = [childBaseComponent]
       }
 

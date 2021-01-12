@@ -10,10 +10,10 @@ const Conditional = ({
   ifFalse,
   ...props
 }) => {
-  const componentsIfTrue = Component.create({ components: ifTrue })
-  const componentsIfFalse = Component.create({ components: ifFalse })
+  const nodesIfTrue = Component.create({ nodes: ifTrue })
+  const nodesIfFalse = Component.create({ nodes: ifFalse })
   
-  return useObserver(() =>  <BaseComponent component={condition ? componentsIfTrue : componentsIfFalse } {...props} /> )
+  return useObserver(() =>  <BaseComponent component={condition ? nodesIfTrue : nodesIfFalse } {...props} /> )
   
 }
 

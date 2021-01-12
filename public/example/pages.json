@@ -1,15 +1,15 @@
 {
-    "components": [
+    "nodes": [
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/",
                 "title": "Root",
                 "exact": true
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "div",
+                    "type": "div",
                     "props": {
                         "children": "Main"
                     }
@@ -17,20 +17,20 @@
             ]
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/clients",
                 "title": "Clients"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "Block",
+                    "type": "Block",
                     "props": {
                         "transparent": true
                     },
-                    "components": [
+                    "nodes": [
                         {
-                            "name": "Menu",
+                            "type": "Menu",
                             "props": {
                                 "style": {
                                     "color": "var(--trood-blue)"
@@ -57,99 +57,99 @@
             ]
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/clients/list",
                 "title": "Clients List"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "LoadingIndicator"
+                    "type": "LoadingIndicator"
                 }
             ],
             "chunk": "example/clients.json"
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/clients/table",
                 "title": "Clients Table"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "LoadingIndicator"
+                    "type": "LoadingIndicator"
                 }
             ],
             "chunk": "example/clientsTable.json"
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/client/:id",
                 "title": "Client"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "LoadingIndicator"
+                    "type": "LoadingIndicator"
                 }
             ],
             "chunk": "example/client.json"
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/matters/list",
                 "title": "Matters List",
                 "exact": true
             },
-            "components": [
+            "nodes": [
                 "Matters List"
             ]
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/matters/table",
                 "title": "Matters Table",
                 "exact": true
             },
-            "components": [
+            "nodes": [
                 "Matters Table"
             ]
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/remote"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "LoadingIndicator"
+                    "type": "LoadingIndicator"
                 }
             ],
             "chunk": "example/remote.json"
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/components"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "LoadingIndicator"
+                    "type": "LoadingIndicator"
                 }
             ],
             "chunk": "example/components.json"
         },
         {
-            "name": "Route",
+            "type": "Route",
             "props": {
                 "path": "/activity/:id",
                 "title": "Activity"
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "LoadingIndicator"
+                    "type": "LoadingIndicator"
                 }
             ],
             "chunk": "example/activity.json"

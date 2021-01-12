@@ -29,15 +29,15 @@ const Menu = ({
   let redirectTo
 
   const menuItems = items.map(item => {
-    const components = []
+    const nodes = []
     let to
     if (!item.path) {
-      components.push({
-        name: 'div',
+      nodes.push({
+        type: 'div',
         props: {
           className: styles.link,
         },
-        components: item.title,
+        nodes: item.title,
       })
     } else {
       to = getPathname(item.path, basePath, location)
@@ -46,8 +46,8 @@ const Menu = ({
         redirectTo = getPathname(item.redirectTo, basePath, location)
       }
 
-      components.push({
-        name: 'NavLink',
+      nodes.push({
+        type: 'NavLink',
         props: {
           to,
           className: styles.link,
@@ -55,12 +55,12 @@ const Menu = ({
           activeStyle: itemActiveStyle,
           children: item.children,
         },
-        components: [item.title || item.path],
+        nodes: [item.title || item.path],
       })
     }
     if (item.items) {
-      components.push({
-        name: 'Menu',
+      nodes.push({
+        type: 'Menu',
         props: {
           className: styles.subMenu,
           basePath: to,
@@ -68,18 +68,18 @@ const Menu = ({
           items: item.items,
           itemActiveStyle,
         },
-        components: [item.title || item.path],
+        nodes: [item.title || item.path],
       })
     }
     return {
-      name: 'div',
+      type: 'div',
       props: {
         className: styles.menuItem,
       },
-      components,
+      nodes,
     }
   })
-  const menuItemsStore = Component.create({ components: menuItems })
+  const menuItemsStore = Component.create({ nodes: menuItems })
 
   return (
     <div className={classNames(className, styles.root, styles[type])}>

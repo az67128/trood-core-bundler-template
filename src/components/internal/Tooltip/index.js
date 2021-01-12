@@ -13,7 +13,7 @@ import styles from './index.module.css'
 const getTooltip = tooltip => {
   if (typeof tooltip === 'object') {
     const componentsStore = Component.create({
-      components: Array.isArray(tooltip) ? tooltip : [tooltip],
+      nodes: Array.isArray(tooltip) ? tooltip : [tooltip],
     })
     return <BaseComponent component={componentsStore} />
   }

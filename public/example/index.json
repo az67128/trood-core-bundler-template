@@ -1,13 +1,13 @@
 {
-    "components": [
+    "nodes": [
         {
-            "name": "Container",
+            "type": "Container",
             "props": {
                 "fluid": true
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "Row",
+                    "type": "Row",
                     "props": {
                         "style": {
                             "height": "100vh",
@@ -15,18 +15,18 @@
                         },
                         "noGutters": true
                     },
-                    "components": [
+                    "nodes": [
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "xsAuto": true,
                                 "style": {
                                     "zIndex": 1
                                 }
                             },
-                            "components": [
+                            "nodes": [
                                 {
-                                    "name": "div",
+                                    "type": "div",
                                     "props": {
                                         "style": {
                                             "height": "100%",
@@ -34,9 +34,9 @@
                                             "backgroundColor": "var(--trood-white)"
                                         }
                                     },
-                                    "components": [
+                                    "nodes": [
                                         {
-                                            "name": "Menu",
+                                            "type": "Menu",
                                             "props": {
                                                 "itemActiveStyle": {
                                                     "color": "var(--trood-green)"
@@ -45,7 +45,7 @@
                                                     {
                                                         "path": "/",
                                                         "title": {
-                                                            "name": "img",
+                                                            "type": "img",
                                                             "props": {
                                                                 "src": "/images/logo.svg"
                                                             }
@@ -91,7 +91,7 @@
                             ]
                         },
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "style": {
                                     "overflowX": "hidden",
@@ -100,30 +100,30 @@
                                 },
                                 "id": "MAIN_SCROLL_CONTAINER"
                             },
-                            "components": [
+                            "nodes": [
                                 {
-                                    "name": "Row",
+                                    "type": "Row",
                                     "props": {
                                         "style": {
                                             "backgroundColor": "var(--trood-white)"
                                         }
                                     },
-                                    "components": [
+                                    "nodes": [
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "xsAuto": true,
                                                 "children": "back"
                                             }
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "children": "tabs"
                                             }
                                         },
                                         {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "xsAuto": true,
                                                 "children": "avatar"
@@ -132,16 +132,16 @@
                                     ]
                                 },
                                 {
-                                    "name": "Row",
-                                    "components": [
+                                    "type": "Row",
+                                    "nodes": [
                                         {
-                                            "name": "Cell",
-                                            "components": [
+                                            "type": "Cell",
+                                            "nodes": [
                                                 {
-                                                    "name": "Switch",
-                                                    "components": [
+                                                    "type": "Switch",
+                                                    "nodes": [
                                                         {
-                                                            "name": "LoadingIndicator"
+                                                            "type": "LoadingIndicator"
                                                         }
                                                     ],
                                                     "chunk": "example/pages.json"

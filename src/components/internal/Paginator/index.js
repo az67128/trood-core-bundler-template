@@ -124,7 +124,7 @@ class Paginator extends PureComponent {
     }
 
     if ((topControls && !bottom) || (bottomControls && bottom)) {
-      const controlsStore = Component.create({ components: (bottom ? bottomControls : topControls) })
+      const controlsStore = Component.create({ nodes: (bottom ? bottomControls : topControls) })
       return (
         <Context context={{
           pagesCount,
@@ -203,7 +203,7 @@ class Paginator extends PureComponent {
     if (nextPage === undefined) return null
 
     if (infinityControls) {
-      const controlsStore = Component.create({ components: infinityControls })
+      const controlsStore = Component.create({ nodes: infinityControls })
       return (
         <Context context={{
           loadNextPage: () => entity.getInfinityNextPage(pageSize, queryOptions),
