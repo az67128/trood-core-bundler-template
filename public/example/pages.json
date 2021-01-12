@@ -20,8 +20,47 @@
             "type": "Route",
             "props": {
                 "path": "/clients",
-                "title": "Clients",
-                "exact": true
+                "title": "Clients"
+            },
+            "nodes": [
+                {
+                    "type": "Block",
+                    "props": {
+                        "transparent": true
+                    },
+                    "nodes": [
+                        {
+                            "type": "Menu",
+                            "props": {
+                                "style": {
+                                    "color": "var(--trood-blue)"
+                                },
+                                "itemActiveStyle": {
+                                    "color": "var(--trood-black)"
+                                },
+                                "type": "horizontal",
+                                "basePath": "/clients",
+                                "items": [
+                                    {
+                                        "path": "/list",
+                                        "title": "List"
+                                    },
+                                    {
+                                        "path": "/table",
+                                        "title": "Table"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Route",
+            "props": {
+                "path": "/clients/list",
+                "title": "Clients List"
             },
             "nodes": [
                 {
@@ -33,9 +72,8 @@
         {
             "type": "Route",
             "props": {
-                "path": "/clients_table",
-                "title": "Clients Table",
-                "exact": true
+                "path": "/clients/table",
+                "title": "Clients Table"
             },
             "nodes": [
                 {
@@ -60,16 +98,23 @@
         {
             "type": "Route",
             "props": {
-                "path": "/matters",
-                "title": "Matters"
+                "path": "/matters/list",
+                "title": "Matters List",
+                "exact": true
             },
             "nodes": [
-                {
-                    "type": "div",
-                    "props": {
-                        "children": "matters"
-                    }
-                }
+                "Matters List"
+            ]
+        },
+        {
+            "type": "Route",
+            "props": {
+                "path": "/matters/table",
+                "title": "Matters Table",
+                "exact": true
+            },
+            "nodes": [
+                "Matters Table"
             ]
         },
         {

@@ -1,0 +1,66 @@
+.root {
+  display: flex;
+}
+
+.activeLink {
+  color: var(--trood-text-gray);
+}
+
+.menuItem {
+  display: flex;
+  flex-flow: inherit;
+}
+
+.vertical {
+  flex-flow: column nowrap;
+}
+
+.vertical .link {
+  padding: 8px;
+}
+
+.vertical.subMenu {
+  display: none;
+  padding-left: 8px;
+}
+
+.activeLink + .vertical.subMenu {
+  display: flex;
+}
+
+.horizontal {
+  flex-flow: row nowrap;
+}
+
+.horizontal .menuItem {
+  position: relative;
+}
+
+.horizontal .menuItem {
+  padding: 8px 0;
+}
+
+.horizontal .menuItem:not(:first-child) {
+  margin-left: 8px;
+}
+
+.horizontal.subMenu {
+  display: none;
+  position: absolute;
+  z-index: 100000;
+  top: 100%;
+  flex-flow: column nowrap;
+  background-color: var(--trood-background);
+}
+
+.horizontal .menuItem:hover .subMenu {
+  display: flex;
+}
+
+.horizontal.subMenu .menuItem {
+  padding: 4px;
+}
+
+.horizontal.subMenu .menuItem:not(:first-child) {
+  margin-left: 0;
+}
