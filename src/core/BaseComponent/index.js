@@ -153,7 +153,9 @@ const BaseComponent = ({ component }) => {
       const connectedProps = childComponent.props
         ? connectProps(childComponent.props, $data, childBaseComponent)
         : {}
-      if (!connectedProps.children && childComponent.components.length) {
+      if (typeof childComponent !== 'object') {
+        return childComponent
+      } else if (!connectedProps.children && childComponent.components.length) {
         connectedProps.children = [childBaseComponent]
       }
 

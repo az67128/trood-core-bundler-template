@@ -36,103 +36,55 @@
                                     },
                                     "components": [
                                         {
-                                            "name": "Cell",
+                                            "name": "Menu",
                                             "props": {
-                                                "style": {
-                                                    "padding": "8px"
-                                                }
-                                            },
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
-                                                        "to": "/"
-                                                    },
-                                                    "components": [
-                                                        {
+                                                "itemActiveStyle": {
+                                                    "color": "var(--trood-green)"
+                                                },
+                                                "items": [
+                                                    {
+                                                        "path": "/",
+                                                        "title": {
                                                             "name": "img",
                                                             "props": {
                                                                 "src": "/images/logo.svg"
                                                             }
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "Cell",
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
-                                                        "to": "/clients",
-                                                        "children": {
-                                                            "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/clients\" ? \"Clients*\" : \"Clients\""
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "Cell",
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
-                                                        "to": "/clients_table",
-                                                        "children": {
-                                                            "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/clients_table\" ? \"Clients Table*\" : \"Clients Table\""
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "Cell",
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
-                                                        "to": "/matters",
-                                                        "children": {
-                                                            "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/matters\" ? \"Matters*\" : \"Matters\""
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "Cell",
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
-                                                        "to": "/remote",
-                                                        "children": {
-                                                            "$type": "$expression",
-                                                            "expression": "data(\"$route.location.pathname\") == \"/remote\" ? \"Remote*\" : \"Remote\""
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "Cell",
-                                            "components": [
-                                                {
-                                                    "name": "Link",
-                                                    "props": {
-                                                        "to": "/components",
+                                                        },
+                                                        "redirectTo": "/components"
+                                                    },
+                                                    {
+                                                        "path": "/clients",
+                                                        "title": "Clients",
+                                                        "redirectTo": "/clients/list"
+                                                    },
+                                                    {
+                                                        "path": "/matters",
+                                                        "title": "Matters",
+                                                        "redirectTo": "/matters/list",
+                                                        "items": [
+                                                            {
+                                                                "path": "/list",
+                                                                "title": "List"
+                                                            },
+                                                            {
+                                                                "path": "/table",
+                                                                "title": "Table"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "path": "/remote",
+                                                        "title": "Remote"
+                                                    },
+                                                    {
+                                                        "path": "/components",
                                                         "children": {
                                                             "$type": "$expression",
                                                             "expression": "data(\"$route.location.pathname\") == \"/components\" ? \"Components*\" : \"Components\""
                                                         }
                                                     }
-                                                }
-                                            ]
+                                                ]
+                                            }
                                         }
                                     ]
                                 }

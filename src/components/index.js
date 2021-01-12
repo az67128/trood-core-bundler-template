@@ -7,7 +7,7 @@ import Cell from './Grids/Cell'
 import Conditional from './Conditional'
 import Container from './Grids/Container'
 
-import { Link, Switch } from 'react-router-dom'
+import { Link, NavLink, Switch } from 'react-router-dom'
 
 import Block from './Block'
 import Button from './Button'
@@ -18,6 +18,7 @@ import Input from './Input'
 import Label from './Label'
 import List from './List'
 import LoadingIndicator from './LoadingIndicator'
+import Menu from './Menu'
 import Modal from './Modal'
 import PeriodSelector from './PeriodSelector'
 import Popup from './Popup'
@@ -37,6 +38,7 @@ const components = {
   Conditional,
   Container,
   Link,
+  NavLink,
   Switch,
   Block,
   Button,
@@ -47,6 +49,7 @@ const components = {
   Label,
   List,
   LoadingIndicator,
+  Menu,
   Modal,
   PeriodSelector,
   Popup,
