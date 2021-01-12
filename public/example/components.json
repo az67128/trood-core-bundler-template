@@ -1,22 +1,22 @@
 {
-    "components": [
+    "nodes": [
         {
-            "name": "Label",
+            "type": "Label",
             "props": {
                 "label": "Components"
             }
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "DateTimePicker",
+                    "type": "DateTimePicker",
                     "props": {
                         "tooltip": "DateTimePicker tooltip",
                         "label": "DateTimePicker",
@@ -26,16 +26,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Checkbox",
+                    "type": "Checkbox",
                     "props": {
                         "tooltip": "Checkbox tooltip",
                         "label": "Checkbox",
@@ -45,22 +45,22 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Icon",
+                    "type": "Icon",
                     "props": {
                         "label": "Icon",
                         "type": "edit",
                         "size": 20,
                         "tooltip": {
-                            "name": "Typography",
+                            "type": "Typography",
                             "props": {
                                 "type": "h1",
                                 "value": "Icon tooltip"
@@ -71,27 +71,27 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Input",
+                    "type": "Input",
                     "props": {
                         "tooltip": [
                             {
-                                "name": "Typography",
+                                "type": "Typography",
                                 "props": {
                                     "type": "h3",
                                     "value": "Input"
                                 }
                             },
                             {
-                                "name": "Typography",
+                                "type": "Typography",
                                 "props": {
                                     "type": "h4",
                                     "value": "tooltip"
@@ -106,16 +106,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Label",
+                    "type": "Label",
                     "props": {
                         "label": "Label",
                         "required": true
@@ -124,16 +124,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "PeriodSelector",
+                    "type": "PeriodSelector",
                     "props": {
                         "label": "Period Selector",
                         "periodType": "custom",
@@ -143,16 +143,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "RadioButton",
+                    "type": "RadioButton",
                     "props": {
                         "label": "Radio button",
                         "value": true,
@@ -162,16 +162,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Range",
+                    "type": "Range",
                     "props": {
                         "value": true,
                         "tooltip": "Range tooltip"
@@ -180,16 +180,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Modal",
+                    "type": "Modal",
                     "props": {
                         "children": "modal",
                         "isOpen": {
@@ -206,7 +206,7 @@
                     }
                 },
                 {
-                    "name": "Button",
+                    "type": "Button",
                     "props": {
                         "tooltip": "Button tooltip",
                         "label": "open modal",
@@ -222,16 +222,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Popup",
+                    "type": "Popup",
                     "props": {
                         "children": "popup",
                         "bottom": 80,
@@ -242,7 +242,7 @@
                     }
                 },
                 {
-                    "name": "Button",
+                    "type": "Button",
                     "props": {
                         "label": "open popup",
                         "onClick": {
@@ -257,16 +257,16 @@
             ]
         },
         {
-            "name": "Spacer",
+            "type": "Spacer",
             "props": {
                 "size": 16
             }
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "h1",
                         "value": "Title"
@@ -275,10 +275,10 @@
             ]
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "h2",
                         "value": "Title",
@@ -288,10 +288,10 @@
             ]
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "h3",
                         "value": "Title"
@@ -300,10 +300,10 @@
             ]
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "h4",
                         "value": "Title",
@@ -315,10 +315,10 @@
             ]
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "h5",
                         "value": "Title"
@@ -327,10 +327,10 @@
             ]
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "h6",
                         "value": "Title",
@@ -340,17 +340,17 @@
             ]
         },
         {
-            "name": "Cell",
-            "components": [
+            "type": "Cell",
+            "nodes": [
                 {
-                    "name": "Typography",
+                    "type": "Typography",
                     "props": {
                         "type": "label",
                         "bold": true
                     },
-                    "components": [
+                    "nodes": [
                         {
-                            "name": "Typography",
+                            "type": "Typography",
                             "props": {
                                 "type": "h2",
                                 "value": "Title"

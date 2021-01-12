@@ -1,19 +1,19 @@
 {
-    "components": [
+    "nodes": [
         {
-            "name": "Context",
+            "type": "Context",
             "props": {
                 "context": {
                     "$type": "$data",
                     "path": "$store.apis.custodian.activity.getByPk[{\"$type\":\"$expression\",\"expression\":\"+data('$route.params.id')\"}]"
                 }
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "Cell",
-                    "components": [
+                    "type": "Cell",
+                    "nodes": [
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "children": {
                                     "$type": "$data",
@@ -22,7 +22,7 @@
                             }
                         },
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "children": {
                                     "$type": "$data",

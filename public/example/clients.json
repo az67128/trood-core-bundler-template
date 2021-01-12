@@ -1,19 +1,19 @@
 {
-    "components": [
+    "nodes": [
         {
-            "name": "Block",
+            "type": "Block",
             "props": {
                 "transparent": true
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "Row",
-                    "components": [
+                    "type": "Row",
+                    "nodes": [
                         {
-                            "name": "Cell",
-                            "components": [
+                            "type": "Cell",
+                            "nodes": [
                                 {
-                                    "name": "div",
+                                    "type": "div",
                                     "props": {
                                         "children": "Clients",
                                         "style": {
@@ -24,13 +24,13 @@
                             ]
                         },
                         {
-                            "name": "Cell",
+                            "type": "Cell",
                             "props": {
                                 "xsAuto": true
                             },
-                            "components": [
+                            "nodes": [
                                 {
-                                    "name": "Button",
+                                    "type": "Button",
                                     "props": {
                                         "label": "New",
                                         "onClick": {
@@ -55,10 +55,10 @@
             ]
         },
         {
-            "name": "Block",
-            "components": [
+            "type": "Block",
+            "nodes": [
                 {
-                    "name": "Cell",
+                    "type": "Cell",
                     "props": {
                         "style": {
                             "borderRadius": "3px",
@@ -66,9 +66,9 @@
                             "padding": "16px"
                         }
                     },
-                    "components": [
+                    "nodes": [
                         {
-                            "name": "List",
+                            "type": "List",
                             "props": {
                                 "queryOptions": {
                                     "$type": "$data",
@@ -92,12 +92,12 @@
                                     "$type": "$data",
                                     "path": "$store.apis.custodian.client"
                                 },
-                                "components": [
+                                "nodes": [
                                     {
-                                        "name": "Row",
-                                        "components": [
+                                        "type": "Row",
+                                        "nodes": [
                                             {
-                                                "name": "Cell",
+                                                "type": "Cell",
                                                 "props": {
                                                     "xsAuto": true,
                                                     "children": {
@@ -107,10 +107,10 @@
                                                 }
                                             },
                                             {
-                                                "name": "Cell",
-                                                "components": [
+                                                "type": "Cell",
+                                                "nodes": [
                                                     {
-                                                        "name": "Link",
+                                                        "type": "Link",
                                                         "props": {
                                                             "to": {
                                                                 "$type": "$expression",
@@ -125,7 +125,7 @@
                                                 ]
                                             },
                                             {
-                                                "name": "Cell",
+                                                "type": "Cell",
                                                 "props": {
                                                     "children": {
                                                         "$type": "$data",
@@ -134,10 +134,10 @@
                                                 }
                                             },
                                             {
-                                                "name": "Cell",
-                                                "components": [
+                                                "type": "Cell",
+                                                "nodes": [
                                                     {
-                                                        "name": "Button",
+                                                        "type": "Button",
                                                         "props": {
                                                             "label": "edit",
                                                             "type": "text",
@@ -168,7 +168,7 @@
             ]
         },
         {
-            "name": "Modal",
+            "type": "Modal",
             "props": {
                 "type": "right",
                 "isOpen": {
@@ -183,9 +183,9 @@
                     ]
                 }
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "div",
+                    "type": "div",
                     "props": {
                         "children": "Create Client",
                         "style": {
@@ -194,20 +194,20 @@
                     }
                 },
                 {
-                    "name": "Spacer",
+                    "type": "Spacer",
                     "size": 16
                 },
                 {
-                    "name": "Context",
+                    "type": "Context",
                     "props": {
                         "context": {
                             "$type": "$data",
                             "path": "$page.getContext[\"editClient\"]"
                         }
                     },
-                    "components": [
+                    "nodes": [
                         {
-                            "name": "Input",
+                            "type": "Input",
                             "props": {
                                 "label": "Name",
                                 "value": {
@@ -232,11 +232,11 @@
                             }
                         },
                         {
-                            "name": "Spacer",
+                            "type": "Spacer",
                             "size": 8
                         },
                         {
-                            "name": "Select",
+                            "type": "Select",
                             "props": {
                                 "label": "Type",
                                 "values": {
@@ -267,11 +267,11 @@
                             }
                         },
                         {
-                            "name": "Spacer",
+                            "type": "Spacer",
                             "size": 8
                         },
                         {
-                            "name": "Select",
+                            "type": "Select",
                             "props": {
                                 "label": "Responsible",
                                 "values": {
@@ -302,22 +302,22 @@
                             }
                         },
                         {
-                            "name": "Spacer",
+                            "type": "Spacer",
                             "size": 800
                         },
                         {
-                            "name": "Row",
+                            "type": "Row",
                             "props": {
                                 "style": {
                                     "marginTop": "auto"
                                 }
                             },
-                            "components": [
+                            "nodes": [
                                 {
-                                    "name": "Cell",
-                                    "components": [
+                                    "type": "Cell",
+                                    "nodes": [
                                         {
-                                            "name": "Button",
+                                            "type": "Button",
                                             "props": {
                                                 "label": "Close",
                                                 "type": "text",
@@ -331,7 +331,7 @@
                                             }
                                         },
                                         {
-                                            "name": "Conditional",
+                                            "type": "Conditional",
                                             "props": {
                                                 "condition": {
                                                     "$type": "$expression",
@@ -339,7 +339,7 @@
                                                 },
                                                 "ifTrue": [
                                                     {
-                                                        "name": "Button",
+                                                        "type": "Button",
                                                         "props": {
                                                             "label": "Delete",
                                                             "color": "red",
@@ -384,13 +384,13 @@
                                     ]
                                 },
                                 {
-                                    "name": "Cell",
+                                    "type": "Cell",
                                     "props": {
                                         "xsAuto": true
                                     },
-                                    "components": [
+                                    "nodes": [
                                         {
-                                            "name": "Conditional",
+                                            "type": "Conditional",
                                             "props": {
                                                 "condition": {
                                                     "$type": "$data",
@@ -398,13 +398,13 @@
                                                 },
                                                 "ifTrue": [
                                                     {
-                                                        "name": "LoadingIndicator"
+                                                        "type": "LoadingIndicator"
                                                     }
                                                 ]
                                             }
                                         },
                                         {
-                                            "name": "Button",
+                                            "type": "Button",
                                             "props": {
                                                 "label": "Save",
                                                 "onClick": {

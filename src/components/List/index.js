@@ -10,10 +10,10 @@ const List = ({
   className,
   entity,
   queryOptions,
-  components,
+  nodes,
   pagination = {},
 }) => {
-  const componentsStore = Component.create({ components })
+  const componentsStore = Component.create({ nodes })
 
   return (
     <Paginator {...pagination} className={className} entity={entity} queryOptions={queryOptions}>
@@ -43,7 +43,7 @@ List.propTypes = {
     cacheMaxAgeMs: PropTypes.number,
     filters: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
-  components: PropTypes.arrayOf(PropTypes.object),
+  nodes: PropTypes.arrayOf(PropTypes.object),
   pagination: PropTypes.shape({
     type: PropTypes.oneOf(['classic', 'infinity', 'disabled']),
     defaultPageSize: PropTypes.number,

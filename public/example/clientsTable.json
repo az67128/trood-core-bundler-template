@@ -1,13 +1,13 @@
 {
-    "components": [
+    "nodes": [
         {
-            "name": "Block",
+            "type": "Block",
             "props": {
                 "transparent": true
             },
-            "components": [
+            "nodes": [
                 {
-                    "name": "div",
+                    "type": "div",
                     "props": {
                         "children": "Clients",
                         "style": {
@@ -18,27 +18,27 @@
             ]
         },
         {
-            "name": "Block",
-            "components": [
+            "type": "Block",
+            "nodes": [
                 {
-                    "name": "Cell",
+                    "type": "Cell",
                     "props": {
                         "style": {
                             "borderRadus": "16px",
                             "backgroundColor": "#fff"
                         }
                     },
-                    "components": [
+                    "nodes": [
                         {
-                            "name": "Table",
+                            "type": "Table",
                             "props": {
                                 "pagination": {
                                     "topControls": [
                                         {
-                                            "name": "Row",
-                                            "components": [
+                                            "type": "Row",
+                                            "nodes": [
                                                 {
-                                                    "name": "Conditional",
+                                                    "type": "Conditional",
                                                     "props": {
                                                         "condition": {
                                                             "$type": "$expression",
@@ -46,7 +46,7 @@
                                                         },
                                                         "ifTrue": [
                                                             {
-                                                                "name": "Button",
+                                                                "type": "Button",
                                                                 "props": {
                                                                     "specialType": "arrowLeft",
                                                                     "type": "text",
@@ -67,7 +67,7 @@
                                                     }
                                                 },
                                                 {
-                                                    "name": "Conditional",
+                                                    "type": "Conditional",
                                                     "props": {
                                                         "condition": {
                                                             "$type": "$expression",
@@ -75,7 +75,7 @@
                                                         },
                                                         "ifTrue": [
                                                             {
-                                                                "name": "Button",
+                                                                "type": "Button",
                                                                 "props": {
                                                                     "specialType": "arrowRight",
                                                                     "type": "text",
@@ -106,14 +106,14 @@
                                 "columnComponents": [
                                     {
                                         "headerCell": {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "xsAuto": true,
                                                 "children": "Id"
                                             }
                                         },
                                         "bodyCell": {
-                                            "name": "Cell",
+                                            "type": "Cell",
                                             "props": {
                                                 "xsAuto": true,
                                                 "children": {
@@ -125,7 +125,7 @@
                                     },
                                     {
                                         "bodyCell": {
-                                            "name": "Link",
+                                            "type": "Link",
                                             "props": {
                                                 "to": {
                                                     "$type": "$expression",

@@ -8,23 +8,23 @@ const normalizeApiPath = (path) => {
 export const Component = types
   .model('Component', {
     id: types.optional(types.string, () => nanoid()),
-    name: types.optional(types.string, ''),
-    components: types.array(types.maybeNull(types.late(() => Component))),
+    type: types.optional(types.string, ''),
+    nodes: types.array(types.maybeNull(types.late(() => Component))),
     props: types.optional(types.frozen({}), {}),
     chunk: types.maybeNull(types.string),
     isLoading: types.optional(types.boolean, false),
   })
   .actions((model) => ({
     setComponents(data) {
-      model.components = data.components
+      model.nodes = data.nodes
     },
 
     loadChunk: flow(function* ajax() {
       if (!model.chunk) return
       try {
         model.isLoading = true
-        const { components } = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
-        model.components = components
+        const { nodes } = yield fetch(normalizeApiPath(model.chunk)).then((res) => res.json())
+        model.nodes = nodes
       } catch (err) {
         console.error(err)
       }

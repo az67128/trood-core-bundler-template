@@ -12,10 +12,10 @@ import PropTypes from 'prop-types'
 const getComponents = (columnComponents, componentKey = 'bodyCell', wrapper = 'td') =>
   columnComponents.map(c => {
     let component = c[componentKey]
-    if (!component || component.name !== wrapper) {
+    if (!component || component.type !== wrapper) {
       component = {
-        name: wrapper,
-        components: [c[componentKey]],
+        type: wrapper,
+        nodes: [c[componentKey]],
       }
     }
     return component
@@ -30,8 +30,8 @@ const Table = ({
 }) => {
   const headerComponents = getComponents(columnComponents, 'headerCell', 'th')
   const bodyComponents = getComponents(columnComponents)
-  const headerComponentsStore = Component.create({ components: headerComponents })
-  const bodyComponentsStore = Component.create({ components: bodyComponents })
+  const headerComponentsStore = Component.create({ nodes: headerComponents })
+  const bodyComponentsStore = Component.create({ nodes: bodyComponents })
 
   return (
     <Paginator {...pagination} className={className} entity={entity} queryOptions={queryOptions}>

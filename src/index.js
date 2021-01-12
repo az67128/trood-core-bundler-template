@@ -80,7 +80,7 @@ const meta = {
     },
   },
 }
-const store = getStore(meta, () => 'Token 96ac1d5e7ed24ab8b7dba9f8b0cb9b37')
+const store = getStore(meta, () => 'Token 421bf155247746dfb6d1de32528ec364')
 //TODO remove after debug
 window.store = store
 ReactDOM.render(
