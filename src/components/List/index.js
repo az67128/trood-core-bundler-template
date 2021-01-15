@@ -17,8 +17,8 @@ const List = ({
 
   return (
     <Paginator {...pagination} className={className} entity={entity} queryOptions={queryOptions}>
-      {({ items }) => items.map((item) => (
-        <Context key={item.id} context={item}>
+      {({ items }) => items.map((item, i) => (
+        <Context key={i} context={item}>
           <BaseComponent  $context={item} component={componentsStore} />
         </Context>
       ))}

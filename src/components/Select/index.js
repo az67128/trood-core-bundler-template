@@ -11,6 +11,10 @@ import Label from '../Label'
 
 import { SELECT_TYPES } from './constants'
 
+import BaseComponent, { getData } from 'core/BaseComponent'
+import { Component } from 'core/pageStore'
+import Context from 'components/Context'
+
 import useTooltip from '../internal/Tooltip'
 
 import List, { LIST_ORIENTATION, LIST_TYPES } from './components/List'
@@ -31,8 +35,21 @@ const valueTypes = PropTypes.oneOfType([
 
 class Select extends PureComponent {
   static propTypes = {
-    labelProp: PropTypes.string,
-    valueProp: PropTypes.string,
+    valuePath: PropTypes.string,
+    labelNodes: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        type: PropTypes.string,
+      }),
+      PropTypes.arrayOf(
+        PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.shape({
+            type: PropTypes.string.isRequired,
+          }),
+        ]),
+      ),
+    ]),
     /** class name for styling component */
     className: PropTypes.string,
     /** class name for styling label */
@@ -143,8 +160,16 @@ class Select extends PureComponent {
   }
 
   static defaultProps = {
-    labelProp: 'label',
-    valueProp: 'value',
+    valuePath: '$context.value',
+    labelNodes: [{
+      type: 'div',
+      props: {
+        children: {
+          $type: '$data',
+          path: '$context.label',
+        },
+      },
+    }],
     type: SELECT_TYPES.dropdown,
     values: [],
 
@@ -194,13 +219,27 @@ class Select extends PureComponent {
       clearable,
       listType,
       items,
-      labelProp,
-      valueProp,
+      valuePath,
+      labelNodes,
     } = this.props
+
+    const labelStore = Component.create({ nodes: labelNodes })
 
     const generalProps = {
       ...this.props,
-      items: items.map(item => ({ label: item[labelProp], value:item[valueProp] })),
+      items: items.map((item, i) => ({
+        label: (
+          <Context key={i} context={item}>
+            <BaseComponent  $context={item} component={labelStore} />
+          </Context>
+        ),
+        value: getData(
+          valuePath,
+          {
+            $context: item,
+          },
+        ),
+      })),
       className: undefined,
       type: listType,
       clearable: clearable === undefined ? multi : clearable,

@@ -61,7 +61,7 @@ const meta = {
       },
       client_type:{
         pk: 'id',
-        endpoint: '/custodian/data/activity',
+        endpoint: '/custodian/data/client_type',
         fields: {
           id: 'number',
           name: 'string',
