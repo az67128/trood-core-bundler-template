@@ -57,7 +57,7 @@ available $data storage
 * $route: { history, params, location, searchParams } - react router data
 * $context - any data passed to context. List item in list, for example
 * $page - page entites data such modals
-* $window - window object
+* $global: { window, moment } - window object & moment.js object
 
 ## Using expression
 ```
