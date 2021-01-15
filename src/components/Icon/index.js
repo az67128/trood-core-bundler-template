@@ -12,6 +12,8 @@ import {
   ROTATE_VALUES,
 } from './constants'
 
+import CustomSvg from './customSvg'
+
 import style from './index.module.css'
 
 
@@ -30,6 +32,7 @@ const Icon = ({
   disabled,
   onClick,
   dataAttributes,
+
   ...other
 }) => {
 
@@ -59,7 +62,7 @@ const Icon = ({
         className: style.svgWrapper,
         style: inlineStyle,
       }} >
-        {!!type && React.createElement(ICON_COMPS[type], other)}
+        {!(!type && !other.svgNodes) && React.createElement(other.svgNodes ? CustomSvg : ICON_COMPS[type], other)}
       </div>
       {label && (
         <div {...{
@@ -79,6 +82,23 @@ Icon.propTypes = {
   size: PropTypes.number,
   /** all types you can see below in example */
   type: PropTypes.oneOf(Object.keys(ICONS_TYPES)),
+  /** viewBox size for customSvg */
+  svgViewBox: PropTypes.arrayOf(PropTypes.number),
+  /** components for customSvg */
+  svgNodes: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      type: PropTypes.string,
+    }),
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+        }),
+      ]),
+    ),
+  ]),
   /** default type for rotate you can see in constants, or send number in deg */
   rotate: PropTypes.oneOfType([
     PropTypes.oneOf(Object.values(ROTATE_TYPES)),

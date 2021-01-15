@@ -84,7 +84,7 @@ class Tile extends PureComponent {
       placeHolder,
       missingValueResolver,
     } = this.props
-    if (!values.length && placeHolder) return placeHolder
+    if (!values.length) return placeHolder
     if (values.length === 1) {
       const item = items.find(el => el.value === values[0]) || {}
       return item.selectedLabel || item.label || missingValueResolver(values[0])
