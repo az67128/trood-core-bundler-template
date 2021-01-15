@@ -7,32 +7,33 @@ import { useObserver } from 'mobx-react-lite'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Parser } from 'expr-eval'
 
-const connectProps = (props, $data, childBaseComponent) => {
-  const getData = (path, $data) => {
-    const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
-      const parsedParams = JSON.parse(replacement)
-      const connectedParams = parsedParams.map((param) => {
-        return param.$type ? connectProps([param], $data)[0] : connectProps(param, $data)
-      })
 
-      return JSON.stringify(Object.values(connectedParams))
+const getData = (path, $data) => {
+  const connectedPath = path.replace(/\[.*?\]/g, (replacement) => {
+    const parsedParams = JSON.parse(replacement)
+    const connectedParams = parsedParams.map((param) => {
+      return param.$type ? connectProps([param], $data)[0] : connectProps(param, $data)
     })
 
-    const paths = connectedPath.split('.')
+    return JSON.stringify(Object.values(connectedParams))
+  })
 
-    return paths.reduce((memo, key) => {
-      if (memo === undefined) return memo
-      if (memo[key] !== undefined) return memo[key]
-      const params = /\[.*\]/g.exec(key)
-      if (params && params[0]) {
-        const action = key.split('[')[0]
-        const parsedParams = JSON.parse(params)
-        return memo[action](...parsedParams)
-      }
-      return undefined
-    }, $data)
-  }
+  const paths = connectedPath.split('.')
 
+  return paths.reduce((memo, key) => {
+    if (memo === undefined) return memo
+    if (memo[key] !== undefined) return memo[key]
+    const params = /\[.*\]/g.exec(key)
+    if (params && params[0]) {
+      const action = key.split('[')[0]
+      const parsedParams = JSON.parse(params)
+      return memo[action](...parsedParams)
+    }
+    return undefined
+  }, $data)
+}
+
+const connectProps = (props, $data, childBaseComponent) => {
   if (typeof props !== 'object') return props
   if (!props) return {}
   return Object.keys(props).reduce(
@@ -142,7 +143,13 @@ const BaseComponent = ({ component }) => {
   const params = useParams()
   const searchParams = new URLSearchParams(location.search)
 
-  const $data = { $store, $route: { history, params, location, searchParams }, $context, $page }
+  const $data = {
+    $store,
+    $route: { history, params, location, searchParams },
+    $context,
+    $page,
+    $window: window,
+  }
 
   return useObserver(() => {
     if (!component || !component.nodes) return null
@@ -163,4 +170,6 @@ const BaseComponent = ({ component }) => {
     })
   })
 }
+
 export default BaseComponent
+export { getData }

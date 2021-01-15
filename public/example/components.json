@@ -152,6 +152,49 @@
             "type": "Cell",
             "nodes": [
                 {
+                    "type": "Select",
+                    "props": {
+                        "label": "Select",
+                        "items": {
+                            "$type": "$data",
+                            "path": "$store.apis.custodian.client_type.getPage[0, 10]"
+                        },
+                        "valuePath": "$context.id",
+                        "labelNodes": [
+                            {
+                                "type": "div",
+                                "props": {
+                                    "children": {
+                                        "$type": "$data",
+                                        "path": "$context.name"
+                                    }
+                                }
+                            }
+                        ],
+                        "onChange": {
+                            "$type": "$action",
+                            "path": "$window.console.log",
+                            "args": [
+                                {
+                                    "$type": "$data",
+                                    "path": "$event"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Spacer",
+            "props": {
+                "size": 16
+            }
+        },
+        {
+            "type": "Cell",
+            "nodes": [
+                {
                     "type": "RadioButton",
                     "props": {
                         "label": "Radio button",

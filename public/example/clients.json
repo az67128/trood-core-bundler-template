@@ -247,8 +247,18 @@
                                     "$type": "$data",
                                     "path": "$store.apis.custodian.client_type.getPage[0, 10]"
                                 },
-                                "labelProp": "name",
-                                "valueProp": "id",
+                                "valuePath": "$context.id",
+                                "labelNodes": [
+                                    {
+                                        "type": "div",
+                                        "props": {
+                                            "children": {
+                                                "$type": "$data",
+                                                "path": "$context.name"
+                                            }
+                                        }
+                                    }
+                                ],
                                 "onChange": {
                                     "$type": "$action",
                                     "path": "$context.form.changeFields",
@@ -282,8 +292,18 @@
                                     "$type": "$data",
                                     "path": "$store.apis.custodian.employee.getPage[0, 10]"
                                 },
-                                "labelProp": "name",
-                                "valueProp": "id",
+                                "valuePath": "$context.id",
+                                "labelNodes": [
+                                    {
+                                        "type": "div",
+                                        "props": {
+                                            "children": {
+                                                "$type": "$data",
+                                                "path": "$context.name"
+                                            }
+                                        }
+                                    }
+                                ],
                                 "onChange": {
                                     "$type": "$action",
                                     "path": "$context.form.changeFields",
