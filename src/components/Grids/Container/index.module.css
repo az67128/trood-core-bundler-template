@@ -1,0 +1,34 @@
+.aa-Container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: border-box;
+}
+
+.aa-Container_withMaxWidth {
+  max-width: 288px;
+}
+
+@media (min-width: 768px) {
+  .aa-Container_withMaxWidth {
+    max-width: 672px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .aa-Container_withMaxWidth {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .aa-Container_withMaxWidth {
+    max-width: 1152px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .aa-Container_withMaxWidth {
+    max-width: 1728px;
+  }
+}

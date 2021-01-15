@@ -1,20 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
-import './index.css'
+import styles from './index.module.css'
 
 
 const Container = ({
   children,
   className = '',
   fluid = false,
-  bddmark = 'контейнер',
   ...other
 }) => (
   <div
     {...other}
-    className={`aa-Container ${!fluid ? 'aa-Container_withMaxWidth':''} ${className}`}
-    bddmark={bddmark}
+    className={classNames(
+      className,
+      styles['aa-Container'],
+      !fluid && styles['aa-Container_withMaxWidth'],
+    )}
   >
     {children}
   </div>
@@ -24,7 +27,6 @@ Container.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.array]).isRequired,
   className: PropTypes.string,
   fluid: PropTypes.bool,
-  bddmark: PropTypes.string,
 }
 
 export default Container

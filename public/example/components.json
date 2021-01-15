@@ -20,7 +20,10 @@
                     "props": {
                         "tooltip": "DateTimePicker tooltip",
                         "label": "DateTimePicker",
-                        "value": "2020-09-18"
+                        "value": {
+                            "$type": "$data",
+                            "path": "$global.moment[]"
+                        }
                     }
                 }
             ]
@@ -173,7 +176,7 @@
                         ],
                         "onChange": {
                             "$type": "$action",
-                            "path": "$window.console.log",
+                            "path": "$global.window.console.log",
                             "args": [
                                 {
                                     "$type": "$data",

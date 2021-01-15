@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
-import './index.css'
+import styles from './index.module.css'
 
 
 const Row = ({
@@ -11,7 +12,6 @@ const Row = ({
   verticalPadding,
   topPadding,
   bottomPadding,
-  bddmark = 'строка',
   ...other
 }) => {
   const style = {
@@ -23,8 +23,11 @@ const Row = ({
     <div
       {...other}
       style={style}
-      className={`aa-Row ${noGutters ? 'aa-Row_noGutters' : ''} ${className}`}
-      bddmark={bddmark}
+      className={classNames(
+        className,
+        styles['aa-Row'],
+        noGutters && styles['aa-Row_noGutters'],
+      )}
     >
       {children}
     </div>
@@ -38,7 +41,6 @@ Row.propTypes = {
   verticalPadding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   topPadding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   bottomPadding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  bddmark: PropTypes.string,
 }
 
 export default Row

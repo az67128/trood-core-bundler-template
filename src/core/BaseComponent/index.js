@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import coreComponents from 'components'
 import StoreContext from 'core/StoreContext'
 import PageStoreContext from 'core/PageStoreContext'
@@ -148,7 +149,10 @@ const BaseComponent = ({ component }) => {
     $route: { history, params, location, searchParams },
     $context,
     $page,
-    $window: window,
+    $global: {
+      window,
+      moment,
+    },
   }
 
   return useObserver(() => {

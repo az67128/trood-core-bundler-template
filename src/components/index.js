@@ -57,8 +57,8 @@ const components = {
   Range,
   Remote,
   Route,
-  Spacer,
   Select,
+  Spacer,
   Table,
   Typography,
 }

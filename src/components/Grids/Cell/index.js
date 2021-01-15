@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './index.css'
+import classNames from 'classnames'
+import styles from './index.module.css'
 
 
 const SIZES = ['xs', 'sm', 'md', 'lg', 'xl']
@@ -12,33 +13,35 @@ const Cell = (props) => {
     verticalPadding,
     topPadding,
     bottomPadding,
-    bddmark = 'ячейка',
     ...other
   } = props
 
-  const sizeClasses = SIZES.map((size) => {
+  const { sizeClasses, hiddenClasses, autoClasses, offsetClasses } = SIZES.reduce((memo, size) => {
+    const sizePrefix = size === 'xs' ? '' : '-' + size
+
     const sizeProp = props[size]
     delete other[size]
-    return sizeProp ? `aa-Cell${size === 'xs' ? '' : '-' + size}-${sizeProp}` : ''
-  }).join(' ')
-
-  const hiddenClasses = SIZES.map((size) => {
-    const sizeProp = props[`${size}Hidden`]
+    const sizeHiddenProp = props[`${size}Hidden`]
     delete other[`${size}Hidden`]
-    return sizeProp ? `aa-Cell-${size}-hidden` : ''
-  }).join(' ')
-
-  const autoClasses = SIZES.map((size) => {
-    const sizeProp = props[`${size}Auto`]
+    const sizeAutoProp = props[`${size}Auto`]
     delete other[`${size}Auto`]
-    return sizeProp ? `aa-Cell${size === 'xs' ? '' : '-' + size}-auto` : ''
-  }).join(' ')
-
-  const offsetClasses = SIZES.map((size) => {
-    const sizeProp = props[`${size}Offset`]
+    const sizeOffsetProp = props[`${size}Offset`]
     delete other[`${size}Offset`]
-    return sizeProp ? `aa-Cell-offset${size === 'xs' ? '' : '-' + size}-${sizeProp}` : ''
-  }).join(' ')
+
+    let { sizeClasses, hiddenClasses, autoClasses, offsetClasses } = memo
+
+    if (sizeProp) sizeClasses = [...sizeClasses, styles[`aa-Cell${sizePrefix}-${sizeProp}`]]
+    if (sizeHiddenProp) hiddenClasses = [...hiddenClasses, styles[`aa-Cell-${size}-hidden`]]
+    if (sizeAutoProp) autoClasses = [...autoClasses, styles[`aa-Cell${sizePrefix}-auto`]]
+    if (sizeOffsetProp) offsetClasses = [...offsetClasses, styles[`aa-Cell-offset${sizePrefix}-${sizeProp}`]]
+
+    return { sizeClasses, hiddenClasses, autoClasses, offsetClasses }
+  }, {
+    sizeClasses: [],
+    hiddenClasses: [],
+    autoClasses: [],
+    offsetClasses: [],
+  })
 
   const style = {
     paddingTop: `${verticalPadding || topPadding}px`,
@@ -48,9 +51,15 @@ const Cell = (props) => {
   return (
     <div
       {...other}
-      bddmark={bddmark}
       style={style}
-      className={`aa-Cell ${className || ''} ${sizeClasses} ${hiddenClasses} ${autoClasses} ${offsetClasses}`}
+      className={classNames(
+        className,
+        styles['aa-Cell'],
+        ...sizeClasses,
+        ...hiddenClasses,
+        ...autoClasses,
+        ...offsetClasses,
+      )}
     >
       {children}
     </div>
@@ -83,7 +92,6 @@ Cell.propTypes = {
   verticalPadding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   topPadding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   bottomPadding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  bddmark: PropTypes.string,
 }
 
 export default Cell
