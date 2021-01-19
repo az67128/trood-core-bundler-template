@@ -15,7 +15,7 @@ import BaseComponent, { getData } from 'core/BaseComponent'
 import { Component } from 'core/pageStore'
 import Context from 'components/Context'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 
 import List, { LIST_ORIENTATION, LIST_TYPES } from './components/List'
 import DropDown from './components/DropDown'
@@ -355,4 +355,4 @@ class Select extends PureComponent {
 export { SELECT_TYPES } from './constants'
 export { LIST_ORIENTATION, LIST_TYPES } from './components/List'
 
-export default useTooltip(Select)
+export default withTooltip(Select)

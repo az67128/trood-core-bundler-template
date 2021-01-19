@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 
 import { DEFAULT_MIN, DEFAULT_MAX, DEFAULT_STEP, DEFAULT_VALUE } from './constants'
 import style from './index.module.css'
@@ -62,4 +62,4 @@ class Range extends PureComponent {
   }
 }
 
-export default useTooltip(Range)
+export default withTooltip(Range)

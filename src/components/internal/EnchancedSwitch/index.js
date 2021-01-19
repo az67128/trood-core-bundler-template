@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import deepEqual from 'deep-equal'
 
-import useTooltip from '../Tooltip'
+import withTooltip from '../Tooltip'
 
 import style from './index.module.css'
 
@@ -216,4 +216,4 @@ class EnchancedSwitch extends PureComponent {
 
 export { INNER_INPUT_TYPES, LABEL_POSITION_TYPES } from './constants'
 
-export default useTooltip(EnchancedSwitch)
+export default withTooltip(EnchancedSwitch)

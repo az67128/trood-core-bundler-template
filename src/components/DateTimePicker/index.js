@@ -10,7 +10,7 @@ import style from './index.module.css'
 import DatePicker from './DatePicker'
 import TimePicker from './TimePicker'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 import { PICKER_TYPES, TIME_FORMAT, CALENDAR_POSITIONS } from './constants'
 import { DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_FORMAT } from '../internal/constants'
 
@@ -305,4 +305,4 @@ class DateTimePicker extends PureComponent {
 
 export * from './constants'
 
-export default useTooltip(DateTimePicker)
+export default withTooltip(DateTimePicker)

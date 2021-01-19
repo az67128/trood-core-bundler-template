@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 
 import style from './index.module.css'
 
@@ -197,4 +197,4 @@ export {
   BUTTON_TYPES,
 } from './constants'
 
-export default useTooltip(Button)
+export default withTooltip(Button)

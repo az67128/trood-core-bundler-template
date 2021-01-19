@@ -20,7 +20,7 @@ const getTooltip = tooltip => {
   return tooltip
 }
 
-export default WrappedComponent => ({
+const withTooltip = WrappedComponent => ({
   tooltip,
   ...other
 }) => {
@@ -47,3 +47,5 @@ export default WrappedComponent => ({
     </React.Fragment>
   )
 }
+
+export default withTooltip

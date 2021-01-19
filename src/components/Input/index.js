@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 
 import InnerInput from './input'
 import {
@@ -187,4 +187,4 @@ class Input extends PureComponent {
 
 export { INPUT_TYPES } from './constants'
 
-export default useTooltip(Input)
+export default withTooltip(Input)

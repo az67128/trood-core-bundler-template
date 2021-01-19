@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 
 import {
   ICONS_TYPES,
@@ -126,4 +126,4 @@ Icon.defaultProps = {
 
 export { ICONS_TYPES, ROTATE_TYPES, LABEL_POSITION_TYPES } from './constants'
 
-export default useTooltip(Icon)
+export default withTooltip(Icon)

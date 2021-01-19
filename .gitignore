@@ -34,6 +34,7 @@ src/layouts/manifest.js
 gulpfile.js
 *.js.map
 *.log
+.eslintcache
 
 # documentation
 /docs/components

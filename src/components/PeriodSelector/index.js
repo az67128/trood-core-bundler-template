@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 import style from './index.module.css'
 
-import useTooltip from '../internal/Tooltip'
+import withTooltip from '../internal/Tooltip'
 
 import Label from '../Label'
 import Select from '../Select'
@@ -154,4 +154,4 @@ class PeriodSelector extends PureComponent {
 
 export * from './constants'
 
-export default useTooltip(PeriodSelector)
+export default withTooltip(PeriodSelector)
